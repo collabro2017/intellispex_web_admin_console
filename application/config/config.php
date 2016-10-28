@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://54.226.128.69/';
+$config['base_url']	= 'http://intellispex.com/';
 
 /*
 |--------------------------------------------------------------------------
