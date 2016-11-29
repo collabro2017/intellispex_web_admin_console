@@ -31,7 +31,7 @@
   </head>
 
   <body class="login-layout">
-    <h2 class="col-sm-3"><img class="irc_mut iUyhD38Z_yik-HwpH6ZlgJaI" onload="google.aft&amp;&amp;google.aft(this)" src="<?php echo base_url('public') ?>/images/logo.JPG" width="60" height="60" style="margin-top: 0px;"></i> <span class="red">IntelliSpeX</span></h2>
+    <h2 class="col-sm-3"><img class="irc_mut iUyhD38Z_yik-HwpH6ZlgJaI" onload="google.aft&amp;&amp;google.aft(this)" src="<?php echo base_url('public') ?>/images/logo.JPG" width="60" height="60" style="margin-top: 0px;"></i> <span style="color : #00aaff;">IntelliSpeX</span></h2>
     <h2 class="col-sm-6"><span class="red"><?php echo $function_name; ?></span></h2>
     <h2 class="col-sm-3"></i> <span class="red"><?php echo $username; ?></span></h2>
   <div class="container-fluid" id="main-container">

@@ -30,7 +30,7 @@
 
   </head>
 
-  <h1 class="col-sm-4"><img class="irc_mut iUyhD38Z_yik-HwpH6ZlgJaI" onload="google.aft&amp;&amp;google.aft(this)" src="<?php echo base_url('public') ?>/images/logo.JPG" width="60" height="60" style="margin-top: 0px;"> <span class="red">IntelliSpeX</span></h1>
+  <h1 class="col-sm-4"><img class="irc_mut iUyhD38Z_yik-HwpH6ZlgJaI" onload="google.aft&amp;&amp;google.aft(this)" src="<?php echo base_url('public') ?>/images/logo.JPG" width="60" height="60" style="margin-top: 0px;"> <span style="color : #00aaff;">IntelliSpeX</span></h1>
   <body class="login-layout">
 
     <div class="container-fluid" id="main-container">

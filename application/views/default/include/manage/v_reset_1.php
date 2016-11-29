@@ -40,7 +40,7 @@
 
               <div class="row-fluid">
                 <div class="center">
-                  <h1><img class="irc_mut iUyhD38Z_yik-HwpH6ZlgJaI" onload="google.aft&amp;&amp;google.aft(this)" src="<?php echo base_url('public') ?>/images/logo.JPG" width="60" height="60" style="margin-top: 0px;"> <span class="red">IntelliSpeX</span>RESET CLIENT PASSWORD</h1>
+                  <h1><img class="irc_mut iUyhD38Z_yik-HwpH6ZlgJaI" onload="google.aft&amp;&amp;google.aft(this)" src="<?php echo base_url('public') ?>/images/logo.JPG" width="60" height="60" style="margin-top: 0px;"> <span style="color : #00aaff;">IntelliSpeX</span>RESET CLIENT PASSWORD</h1>
                 </div>
               </div>
 
