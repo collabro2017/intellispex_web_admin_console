@@ -24,6 +24,36 @@
     <link rel="stylesheet" href="<?php echo base_url('public') ?>/assets/css/ace.min.css" />
     <link rel="stylesheet" href="<?php echo base_url('public') ?>/assets/css/ace-responsive.min.css" />
     <link rel="stylesheet" href="<?php echo base_url('public') ?>/css/main.css" />
+    
+    <!---------------------------------------------------------------------->
+	<style>
+		ul{
+			list-style-type: none;
+			margin: 0;
+			padding: 0;
+			overflow: hidden;
+		}
+		li{
+			float: left;
+			margin-left:35px;
+		}
+		li a{
+			display: inline-block;
+			color: white;
+			text-align: center;
+			padding: 20px 22px;
+			text-decoration: none;
+			font-size :16px;
+		}
+		li a:hover{
+			background-color:#222;
+			color: #ff0000;
+		}
+		li a:focus{
+			color: #00aaff;
+		}
+	</style>
+	<!---------------------------------------------------------------------->
     <!--[if lt IE 9]>
       <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
     <![endif]-->
@@ -31,6 +61,18 @@
   </head>
 
   <h1 class="col-sm-4"><img class="irc_mut iUyhD38Z_yik-HwpH6ZlgJaI" onload="google.aft&amp;&amp;google.aft(this)" src="<?php echo base_url('public') ?>/images/logo.JPG" width="60" height="60" style="margin-top: 0px;"> <span style="color : #00aaff;">IntelliSpeX</span></h1>
+  <!-----------------//////////////////////////////------------------------>
+	<ul>
+		<li><a href="<?php echo base_url().'manage/home'; ?>">Home</a></li>
+		<li><a href="<?php echo base_url().'manage/management_team'; ?>">Management Team</a></li>
+		<li><a href="#contact">Contact Us</a></li>
+		<li><a href="#news">News</a></li>
+		<li><a href="#parners">Partners</a></li>
+		<li><a href="#login">Login</a></li>
+	</ul>
+	
+	<!-----------------//////////////////////////////------------------------>
+  
   <body class="login-layout">
 
     <div class="container-fluid" id="main-container">

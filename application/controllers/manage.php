@@ -481,6 +481,14 @@ class manage extends CI_Controller_EX {
     $this->check_login($data, $function_name);
   }
 
+	//-------------------------------------------------------------------//
+	public function management_team(){
+		$this->load->view('default/include/manage/v_management_team');
+	}
+	
+	public function home(){
+		$this->load->view('default/include/manage/v_home');
+
 }
 
 ?>
