@@ -39,7 +39,8 @@ class manage extends CI_Controller_EX {
         }
         else {
           //Go to private area
-          redirect('manage', 'refresh');
+          //redirect('manage', 'refresh');
+          redirect('manage/console_menu', 'refresh');
           //$this->load->view('default/layout_default');
         }
       }
@@ -70,7 +71,8 @@ class manage extends CI_Controller_EX {
   }
 
   public function index() {
-    $this->console_menu();
+    //$this->console_menu();
+    $this->home();
   }
 
   function login() {
