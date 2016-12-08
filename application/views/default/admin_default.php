@@ -42,7 +42,9 @@
   <div class="container-fluid" id="main-container">
 	<div id="main-content">
 		<?php  if ( isset($links) && array_key_exists( "logout", $links) ): ?>
-	  		<div class="widget-main"><a class=" btn btn-small btn-primary menu-button menu-logout-button" href="<?php echo base_url(); ?>manage/logout">Logout</a></div>
+	  		<div class="widget-main">
+	  			<a class=" btn btn-small btn-primary menu-button menu-logout-button" style="margin-top:10px" href="<?php echo base_url(); ?>manage/logout">Logout</a>
+	  		</div>
 		<?php endif; ?>
 
 	 	 <div class="row-fluid">
@@ -74,19 +76,121 @@
 
 
 
-					  <fieldset class="panel-admin">
-						  <?php if (isset($links)): ?>
+					  <div class="panel-admin">
+						<?php if (isset($links)): ?>
 							<?php foreach ($links as $key => $link): ?>
 								<?php if  ($link != "Logout") : ?>
-									<div><a class=" btn btn-small btn-primary menu-button" href="<?php echo base_url(); ?>manage/<?php echo $key; ?>"><?php echo $link; ?></a></div>
+									<div>
+										<a class=" btn btn-small btn-primary menu-button" href="<?php echo base_url(); ?>manage/<?php echo $key; ?>"><?php echo $link; ?></a>
+									</div>
 								<?php endif; ?>
-						  <?php endforeach; ?>
+							<?php endforeach; ?>
 						<?php endif; ?>
-						<?php if (isset($statistics)): ?>
-						  <div><h2><?php echo$statistics; ?></h2></div>
-						  <img src="<?php echo base_url('public') ?>/images/admin.png" />
-						  <div><h2>Client Statistics</h2></div>
-						  <img src="<?php echo base_url('public') ?>/images/admin1.png" />
+						<?php if ( isset( $statistics ) ): ?>
+
+							<div>
+  								<div class="span9">
+
+									<div class="section-title">
+										<h2><?php echo $statistics; ?></h2>
+									</div>
+
+									<table class="table table-striped statistics-table">
+										<tr>
+											<td># of App Administrators</td>
+											<td>100</td>
+										</tr>
+										<tr>
+											<td># of Clients</td>
+											<td>100</td>
+										</tr>
+										<tr>
+											<td># of Client Administrators (average)</td>
+											<td>100</td>
+										</tr>
+										<tr>
+											<td># of Users</td>
+											<td>100</td>
+										</tr>
+										<tr>
+											<td># of Activities</td>
+											<td>100</td>
+										</tr>
+										<tr>
+											<td># of Frames / Activity (averge)</td>
+											<td>100</td>
+										</tr>
+										<tr>
+											<td>Total Storage in Use</td>
+											<td>100</td>
+										</tr>
+										<tr>
+											<td>Average Storage / Activity</td>
+											<td>100</td>
+										</tr>
+										<tr>
+											<td>Average Simultaneous Data Calls / Seconds</td>
+											<td>100</td>
+										</tr>
+									</table>
+									<div class="section-title">
+										<h2>Client Statistics</h2>
+									</div>
+
+									<table class="table table-striped statistics-byuser-table">
+										<thead>
+											<tr>
+												<th style="width: 300px">Client Name</th>
+												<th># of users</th>
+												<th># of Activities</th>
+												<th># of Frames</th>
+												<th># of Audio Frames</th>
+												<th># of Video Frames</th>
+												<th># of Text Frames</th>
+												<th>Maximum Simultaneous Data Calls</th>
+												<th>Average Simultaneous Data Calls</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>Name</td>
+												<td>100</td>
+												<td>100</td>
+												<td>100</td>
+												<td>100</td>
+												<td>100</td>
+												<td>100</td>
+												<td>100</td>
+												<td>100</td>
+											</tr>
+											<tr>
+												<td>Name</td>
+												<td>100</td>
+												<td>100</td>
+												<td>100</td>
+												<td>100</td>
+												<td>100</td>
+												<td>100</td>
+												<td>100</td>
+												<td>100</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div class="span3">
+									<div class="span12">
+										<a class=" btn btn-small btn-primary menu-button menu-logout-button" href="<?php echo base_url(); ?>manage/logout">Logout</a>
+										<div class="clear"></div>
+										<a class=" btn btn-small btn-primary menu-button menu-logout-button" href="#">Print</a>
+										<div class="clear"></div>
+										<a class=" btn btn-small btn-primary menu-button menu-logout-button" href="#">Share PDF<br>Report</a>
+									</div>
+
+
+
+
+								</div>
+							</div>
 						<?php endif; ?>
 						<?php if (isset($create_client) || isset($edit_client)): ?>
 						  <label>
@@ -233,10 +337,10 @@
 							<?php endif ?>
 						  <?php endif ?>
 						  <?php if (isset($back)): ?>
-							<div><a href="<?php echo base_url(); ?>manage/console_menu"class=" btn btn-small btn-primary">Console Menu</a></div>
+						  	<div class="span12"><a href="<?php echo base_url(); ?>manage/console_menu" class="btn btn-small btn-primary menu-button">Console Menu</a></div>
 						  <?php endif; ?>
 
-					  </fieldset>
+					  </div>
 					</div><!--/widget-main-->
 				  </div><!--/widget-body-->
 
