@@ -490,7 +490,6 @@ class manage extends CI_Controller_EX {
 	
 	public function home(){
 		$this->load->view('default/include/manage/v_home');
-
+  }
 }
-
 ?>
