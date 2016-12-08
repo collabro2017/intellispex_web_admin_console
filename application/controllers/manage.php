@@ -400,7 +400,7 @@ class manage extends CI_Controller_EX {
     $data = new stdClass;
     $function_name = "APPLICATION ADMINISTRATOR - CLIENT SET UP AND MAINTENANCE";
     $data->back = TRUE;
-    $data->links = array('create_client' => 'Create a Client', 'edit_client' => 'Manage / Edit a Client');
+    $data->links = array('create_client' => 'Create a Client', 'edit_client' => 'Manage / Edit a Client', 'edit_event' => 'View or Edit Global Event List', 'logout' => 'Logout');
     $this->check_login($data, $function_name);
   }
 
@@ -487,7 +487,7 @@ class manage extends CI_Controller_EX {
 	public function management_team(){
 		$this->load->view('default/include/manage/v_management_team');
 	}
-	
+
 	public function home(){
 		$this->load->view('default/include/manage/v_home');
   }

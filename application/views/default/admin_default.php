@@ -41,7 +41,7 @@
 	</div>
   <div class="container-fluid" id="main-container">
 	<div id="main-content">
-		<?php  if ( isset($links) && array_key_exists( "logout", $links) ): ?>
+		<?php if ( isset($links) && ( array_key_exists( "logout", $links ) || array_key_exists( "Logout", $links ) ) ): ?>
 	  		<div class="widget-main">
 	  			<a class=" btn btn-small btn-primary menu-button menu-logout-button" style="margin-top:10px" href="<?php echo base_url(); ?>manage/logout">Logout</a>
 	  		</div>
@@ -337,7 +337,7 @@
 							<?php endif ?>
 						  <?php endif ?>
 						  <?php if (isset($back)): ?>
-						  	<div class="span12"><a href="<?php echo base_url(); ?>manage/console_menu" class="btn btn-small btn-primary menu-button">Console Menu</a></div>
+						  	<div class="clear"><a href="<?php echo base_url(); ?>manage/console_menu" class="btn btn-small btn-primary menu-button">Console Menu</a></div>
 						  <?php endif; ?>
 
 					  </div>
