@@ -31,7 +31,7 @@
 
   </head>
 
-  <body class="login-layout">
+  <body class="login-layout admin-body">
 	<div class="widget-main">
 		<div class="top-menu">
 			<h2 class="col-sm-3"><img class="irc_mut iUyhD38Z_yik-HwpH6ZlgJaI" onload="google.aft&amp;&amp;google.aft(this)" src="<?php echo base_url('public') ?>/images/logo.JPG" width="60" height="60" style="margin-top: 0px;"> <span style="color : #00aaff;">IntelliSpeX</span></h2>
@@ -183,7 +183,7 @@
 										<div class="clear"></div>
 										<a class=" btn btn-small btn-primary menu-button menu-logout-button" href="#">Print</a>
 										<div class="clear"></div>
-										<a class=" btn btn-small btn-primary menu-button menu-logout-button" href="#">Share PDF<br>Report</a>
+										<a class=" btn btn-small btn-primary menu-button menu-logout-button" href="#">Share PDF Report</a>
 									</div>
 
 

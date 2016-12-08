@@ -58,7 +58,7 @@
     <![endif]-->
 
   </head>
-  <h1 class="col-sm-4"><img class="irc_mut iUyhD38Z_yik-HwpH6ZlgJaI" onload="google.aft&amp;&amp;google.aft(this)" src="<?php echo base_url('public') ?>/images/logo.JPG" width="60" height="60" style="margin-top: 0px;"> <span style="color : #00aaff;">IntelliSpeX</span></h1> 
+  <h1 class="col-sm-4"><img class="irc_mut iUyhD38Z_yik-HwpH6ZlgJaI" onload="google.aft&amp;&amp;google.aft(this)" src="<?php echo base_url('public') ?>/images/logo.JPG" width="60" height="60" style="margin-top: 0px;"> <span style="color : #00aaff;">IntelliSpeX</span></h1>
 	<!-----------------//////////////////////////////------------------------>
 	<ul>
 		<li><a href="<?php echo base_url().'manage/home'; ?>">Home</a></li>
@@ -68,9 +68,9 @@
 		<li><a href="#parners">Partners</a></li>
 		<li><a href="<?php echo base_url().'manage/console_menu'; ?>">Login</a></li>
 	</ul>
-	
+
 	<!-----------------//////////////////////////////------------------------>
-  <body class="login-layout">
+  <body class="login-layout" >
 
     <div class="container-fluid" id="main-container">
       <div id="main-content">
@@ -91,7 +91,7 @@
 								<p>The IntelliSpeX app was created in December 2013.  In August 2014, the initial prototype was developed.  Between August 2014 and early 2016, the prototype was tested.  Key business attributes were identified and developed creating the business ready tool.  </p>
 								<br />
 								<p>Based on this, in early March 2016, IBTS began testing IntelliSpeX and by April was consistently testing and had demonstrated impressive industry value rooted in reduced timelines, better manageability, opportunities for centralization, more client participation.  A number of key supporters in the company began pushing very aggressively for its deployment.</p>
-							</div>	
+							</div>
 						</div>
 					</div>
 					<div style=" margin-left : 25px; width:24%; float:left;">
@@ -103,7 +103,7 @@
 		<!-------------------------------------------------------------------------------->
 		<div class="row-fluid" style = "margin-top : 10px;">
 			<div style="margin-top: 10px; margin-left : 70px; margin-right:70px;">
-				<div style = "width:100%;"> 
+				<div style = "width:100%;">
 					<div style="color : white; width : 50%; float:left;">
 						<div style = "border-radius:15px; background-color:#00aaff;">
 							<div style="padding:15px;">
@@ -148,7 +148,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<!-------------------------------------------------------------------------------->
 		<div class="row-fluid" style = "margin-top : 10px;">
 			<div style="margin-top: 10px; margin-left : 70px; margin-right:70px; color : white;">
@@ -174,13 +174,13 @@
 							<br />
 							<h5>Would you like to control access or participation?</h5>
 							<p>Tag users for the activity & give rights to fully participate or limit to commenting or only viewing the activity.</p>
-							
+
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		
+
 		<!-------------------------------------------------------------------------------->
 		<div class="row-fluid" style = "margin-top : 10px;">
 			<div style="margin-top: 10px; margin-left : 70px; margin-right:70px; color : white;">
@@ -190,7 +190,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<!-------------------------------------------------------------------------------->
 		<div class="row-fluid" style = "margin-top : 10px;">
 			<div style="margin-top: 10px; margin-left : 70px; margin-right:70px; color : white;">
@@ -199,10 +199,10 @@
 				</div>
 			</div>
 		</div>
-		
+
       </div>
     </div><!--/.fluid-container-->
-	
+
 
     <!-- basic scripts -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>

@@ -2679,10 +2679,6 @@ tr:nth-child(even) {
 }
 
 /*top-menu*/
-body.login-layout
-{
-	background: #fff;
-}
 .top-menu{
 	background: #ddd;
 	color:#000;
@@ -2766,4 +2762,7 @@ body.login-layout
 /* others */
 .clear{
 	clear: both;
+}
+body.login-layout.admin-body{
+	background-color: #fff;
 }
