@@ -10,11 +10,35 @@
 	<link rel="stylesheet" href="<?php echo base_url('public') ?>/css/support.css" />
 	<body>
 		<div class="container">
-		    <h1 class="title text-center mgb-2em">Support Page</h1>
+		<nav class="navbar navbar-inverse navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">IntelliSpex</a>
+				</div>
+				<div id="navbar" class="navbar-collapse collapse" aria-expanded="false">
+				<ul class="nav navbar-nav ">
+					<li><a href="<?php echo base_url().'manage/home'; ?>">Home</a></li>
+					<li><a href="<?php echo base_url().'manage/management_team'; ?>">Management Team</a></li>
+					<li><a href="#contact">Contact Us</a></li>
+					<li><a href="#news">News</a></li>
+					<li class="active"><a href="#support">Support</a></li>
+					<li><a href="#partners">Partners</a></li>
+					<li><a class="btn btn-md btn-success login-button" href="<?php echo base_url().'manage/console_menu'; ?>">Login</a></li>
+				</ul>
+				</div><!--/.nav-collapse -->
+			</div>
+		</nav>
+    		<h1 class="title text-center mgb-2em">Support Page</h1>
 			<div class="support-wrapper bg-color1">
 				<div id="main-menu">
 					<h2 class="title text-center mgb-1em">How Do You Want To Proceed?</h2>
-					<div class="description text-center mgb-2em">Excepteur sint occaecat cupidatat non proident, sunt n culpa que officia deserunt</div>
+					<div class="description text-center mgb-2em">We're here to help. Please select one option</div>
 					<div class="wrapper-box text-center">
 						<div class="dp-inline-block">
 							<div class="bg-blue fl-left box-property">
@@ -38,7 +62,7 @@
 									FAQ's didn't answer your question. Send us a message!
 								</div>
 								<a class="btn border-circle" href="mailto:support@vistechmgmt.zendesk.com">
-									Suppor Email
+									Support Email
 								</a>
 							</div>
 							<div class="clearfix marginbottom100"></div>

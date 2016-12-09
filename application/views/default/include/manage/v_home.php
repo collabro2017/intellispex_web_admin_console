@@ -65,6 +65,7 @@
 		<li><a href="<?php echo base_url().'manage/management_team'; ?>">Management Team</a></li>
 		<li><a href="#contact">Contact Us</a></li>
 		<li><a href="#news">News</a></li>
+		<li><a href="<?php echo base_url().'manage/management_support'; ?>">Support</a></li>
 		<li><a href="#parners">Partners</a></li>
 		<li><a href="<?php echo base_url().'manage/console_menu'; ?>">Login</a></li>
 	</ul>

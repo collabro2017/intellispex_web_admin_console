@@ -58,7 +58,7 @@ h1.mgb-2em
 @media (max-width: 767px) {
 	h1.mgb-2em
 	{
-		margin-top: 50px;
+		margin-top: 80px;
 	}
 }
 
@@ -144,4 +144,22 @@ h1.mgb-2em
 #accordion img.icon
 {
 	height: 20px;
+}
+
+.navbar-inverse .navbar-nav>li>a.login-button
+{
+	margin-top: 8px;
+	color: white !important;
+    padding: 7px !important;
+}
+.navbar-inverse .navbar-nav>li>a.login-button:hover
+{
+	background-color: #48cc83;
+}
+
+@media (min-width: 767px) {
+	.nav.navbar-nav
+	{
+		float:right;
+	}
 }
