@@ -19,7 +19,7 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="#">IntelliSpex</a>
+					<a class="navbar-brand" href="<?php echo base_url().'manage/home'; ?>">IntelliSpex</a>
 				</div>
 				<div id="navbar" class="navbar-collapse collapse" aria-expanded="false">
 				<ul class="nav navbar-nav ">
