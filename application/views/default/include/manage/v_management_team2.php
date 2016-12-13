@@ -60,62 +60,14 @@
 			<p class="mgb-15em">He is currently working for Santander where he successively held the Head of Major Risk Management position (San UK), the Head of Change and Consolidated Risk Management position (San UK), the Global Head of Advanced and Alternative Analytics position (Grupo Santander) and recently accepted the Global Head of Research and Innovation position for the Risk department (Grupo Santander).</p>
 		</div>
 		<footer id="footer-v6" class="footer-v6">
-			<div class="footer">
+		 	<div class="copyright">
 				<div class="container">
-					<h2 class="title mgt-2em">IntelliSpex</h2>
 					<div class="row">
-						<!-- About Us -->
-						<div class="col-md-3 sm-margin-bottom-40">
-							<div class="heading-footer"><h2>Follow us</h2></div>
-							<div class="media">
-								<img src="<?php echo base_url('public').'/img/facebook.svg';?>" alt="facebook">
-								<img src="<?php echo base_url('public').'/img/twitter.svg';?>" alt="twitter">
-								<img src="<?php echo base_url('public').'/img/instagram.svg';?>" alt="instagram">
-							</div>
+						<div class="col-md-12">
+							<p class="color-white center">Copyright © 2016 IntelliSpeX - <span data-localize="copyright.all_rights">All Rights Reserved</span></p>
 						</div>
-						<!-- End About Us -->
-
-							<div class="col-md-4 sm-margin-bottom-40">
-								<div class="heading-footer"><h2>Useful Links</h2></div>
-								<ul class="list-unstyled footer-link-list">
-
-									<li><a class="nav-link page-scroll" href="#">Home</a></li>
-									<li><a class="nav-link page-scroll" href="#">Management Team</a></li>
-									<li><a class="nav-link page-scroll" href="#">Contact Us</a></li>
-									<li><a class="nav-link page-scroll" href="#">News</a></li>
-									<li><a class="nav-link page-scroll" href="#">Support</a></li>
-									<li><a class="nav-link page-scroll" href="#">Partners</a></li>
-									<li><a class="nav-link page-scroll" href="#">Login</a></li>
-								</ul>
-							</div>
-						<!-- End Useful Links -->
-
-						<!-- Contacts -->
-						<div class="col-md-4">
-							<div class="heading-footer"><h2>Contacts</h2></div>
-							<ul class="list-unstyled contacts">
-								<li>
-									<a href="../contact/">
-										<i class="radius-3x fa fa-map-marker mgb-1em"></i>
-										795 Folsom Ave, Suite 600, San Francisco, CA 94107
-									</a>
-								</li>
-								<li>
-									<i class="radius-3x fa fa-phone"></i>
-									(+123) 456 7890
-									(+123) 456 7891
-								</li>
-								<li>
-									<i class="radius-3x fa fa-globe"></i>
-									<a href="mailto:toronto@gmail.com">
-										toronto@gmail.com
-									</a><br>
-								</li>
-							</ul>
-						</div>
-						<!-- End Contacts -->
 					</div>
-				</div><!--/container -->
+				</div>
 			</div>
 		</footer>
 	</body>
