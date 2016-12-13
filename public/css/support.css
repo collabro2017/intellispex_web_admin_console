@@ -7,49 +7,10 @@ h1.title
 {
 	color:#000;
 }
-.bg-color1
-{
-	background-color: #f1faff;
-}
-.bg-color2
-{
-	background-color: #e0fcff;
-}
-.bg-blue
-{
-	background-color: #3598db;
-}
-
-.bg-green
-{
-	background-color: #48cc83
-}
-
-.bg-green a
-{
-	color: #e6f0e9;
-}
-.dp-inline-block
-{
-	display: inline-block;
-}
-.dp-inline
-{
-	display: inline;
-}
-.fl-left
-{
-	float: left;
-}
 .box-property
 {
 	padding: 35px 49px;
 	color: #e6f0e9;
-}
-.mgb-2em
-{
-
-	margin-bottom: 2em;
 }
 h1.mgb-2em
 {
@@ -60,15 +21,6 @@ h1.mgb-2em
 	{
 		margin-top: 80px;
 	}
-}
-
-.mgb-15em
-{
-	margin-bottom: 1.5em;
-}
-.mgb-1em
-{
-	margin-bottom: 1em;
 }
 .box-property .btn
 {
@@ -87,8 +39,10 @@ h1.mgb-2em
 .box-property i
 {
 	background: rgba(20, 0, 0, 0.13);
-    padding: 6px 8px;
-    border-radius: 100px;
+	padding: 7px 8px;
+	border-radius: 100px;
+	width: 40px;
+	height: 40px;
 }
 .support-wrapper
 {
@@ -101,22 +55,6 @@ h1.mgb-2em
     padding: 0.7em 1.7em;
     color: #fff;
     background-color: #399cdd;
-	margin-bottom: 0.5em;
-}
-.bg-white
-{
-	background-color: #fff;
-}
-.pd-2em
-{
-	padding: 2em;
-}
-.pd-2em-i
-{
-    padding: 0 2em 2em;
-}
-.mgb-05em
-{
 	margin-bottom: 0.5em;
 }
 .title-box
@@ -144,30 +82,4 @@ h1.mgb-2em
 #accordion img.icon
 {
 	height: 20px;
-}
-
-.navbar-inverse .navbar-nav>li>a.login-button
-{
-	margin-top: 8px;
-	color: white !important;
-    padding: 7px !important;
-}
-.navbar-inverse .navbar-nav>li>a.login-button:hover
-{
-	background-color: #48cc83;
-}
-
-@media (min-width: 767px) {
-	.nav.navbar-nav
-	{
-		float:right;
-	}
-}
-@media (max-width: 767px) {
-	.login-button
-	{
-		margin-left: 10px;
-		margin-right: 10px;
-		margin-bottom: 10px;
-	}
 }

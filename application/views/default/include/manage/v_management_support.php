@@ -6,34 +6,36 @@
 	<meta name="description" content="Support page" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
-	<link rel="stylesheet" href="<?php echo base_url('public') ?>/assets/css/font-awesome.min.css" />
+	<!-- <link rel="stylesheet" href="<?php echo base_url('public') ?>/assets/css/font-awesome.min.css" /> -->
+	<script src="https://use.fontawesome.com/3d7f954615.js"></script>
+	<link rel="stylesheet" href="<?php echo base_url('public') ?>/css/general.css" />
 	<link rel="stylesheet" href="<?php echo base_url('public') ?>/css/support.css" />
 	<body>
 		<div class="container">
-		<nav class="navbar navbar-inverse navbar-fixed-top">
-			<div class="container">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-						<span class="sr-only">Toggle navigation</span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
-					<a class="navbar-brand" href="<?php echo base_url().'manage/home'; ?>">IntelliSpex</a>
+			<nav class="navbar navbar-inverse navbar-fixed-top">
+				<div class="container">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="<?php echo base_url().'manage/home'; ?>">IntelliSpex</a>
+					</div>
+					<div id="navbar" class="navbar-collapse collapse" aria-expanded="false">
+					<ul class="nav navbar-nav ">
+						<li><a href="<?php echo base_url().'manage/home'; ?>">Home</a></li>
+						<li><a href="<?php echo base_url().'manage/management_team'; ?>">Management Team</a></li>
+						<li><a href="#contact">Contact Us</a></li>
+						<li><a href="#news">News</a></li>
+						<li class="active"><a href="#support">Support</a></li>
+						<li><a href="#partners">Partners</a></li>
+						<li><a class="btn btn-md btn-success login-button" href="<?php echo base_url().'manage/console_menu'; ?>">Login</a></li>
+					</ul>
+					</div><!--/.nav-collapse -->
 				</div>
-				<div id="navbar" class="navbar-collapse collapse" aria-expanded="false">
-				<ul class="nav navbar-nav ">
-					<li><a href="<?php echo base_url().'manage/home'; ?>">Home</a></li>
-					<li><a href="<?php echo base_url().'manage/management_team'; ?>">Management Team</a></li>
-					<li><a href="#contact">Contact Us</a></li>
-					<li><a href="#news">News</a></li>
-					<li class="active"><a href="#support">Support</a></li>
-					<li><a href="#partners">Partners</a></li>
-					<li><a class="btn btn-md btn-success login-button" href="<?php echo base_url().'manage/console_menu'; ?>">Login</a></li>
-				</ul>
-				</div><!--/.nav-collapse -->
-			</div>
-		</nav>
+			</nav>
     		<h1 class="title text-center mgb-2em">Support Page</h1>
 			<div class="support-wrapper bg-color1">
 				<div id="main-menu">
@@ -43,7 +45,7 @@
 						<div class="dp-inline-block">
 							<div class="bg-blue fl-left box-property">
 								<h3 class="title mgb-1em">
-									<i class="icon-save"></i>
+									<i class="fa fa-floppy-o" aria-hidden="true"></i>
 									Help Desk
 								</h3>
 								<div class="description mgb-15em">
@@ -55,7 +57,7 @@
 							</div>
 							<div class="bg-green fl-left box-property">
 								<h3 class="title mgb-1em">
-									<i class="icon-envelope-alt"></i>
+									<i class="fa fa-envelope" aria-hidden="true"></i>
 									Contact Us
 								</h3>
 								<div class="description mgb-15em">

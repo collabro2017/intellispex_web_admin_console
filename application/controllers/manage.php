@@ -484,16 +484,19 @@ class manage extends CI_Controller_EX {
   }
 
 	//-------------------------------------------------------------------//
-	public function management_team(){
-		$this->load->view('default/include/manage/v_management_team');
-	}
+
+
+  public function management_team(){
+    $this->load->view('default/include/manage/v_management_team2');
+  }
 
   public function management_support(){
     $this->load->view('default/include/manage/v_management_support');
   }
 
-	public function home(){
-		$this->load->view('default/include/manage/v_home');
+
+  public function home(){
+    $this->load->view('default/include/manage/v_home2');
   }
 }
 ?>
