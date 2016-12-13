@@ -117,7 +117,7 @@
 											<td>100</td>
 										</tr>
 										<tr>
-											<td># of Frames / Activity (averge)</td>
+											<td># of Frames / Activity (average)</td>
 											<td>100</td>
 										</tr>
 										<tr>
