@@ -276,7 +276,14 @@
 								<tr>
 								  <td><?php echo $value['name'] ?></td>
 								  <td><?php echo $value['created'] ?></td>
-								  <td><?php echo $value['status'] ?></td>
+								  <td>
+								  	<select>
+										<option value="0" disabled <?php if ( $value['status'] == '' ){ echo "selected"; } ?>></option>
+										<option value="1" <?php if ( $value['status'] == 'Active' ){ echo "selected"; } ?>>Active</option>
+										<option value="2" <?php if ( $value['status'] == 'Inactive' ){ echo "selected"; } ?>>Inactive</option>
+										<option value="3" <?php if ( $value['status'] == 'Closed' ){ echo "selected"; } ?>>Closed</option>
+								  	</select>
+								  </td>
 								  <td><?php echo $value['phone'] ?></td>
 								  <td><?php echo $value['email'] ?></td>
 								  <td><a class=" btn btn-small btn-primary" href="<?php echo base_url(); ?>manage/edit/<?php echo $value['id']; ?>">Edit</a></td>
