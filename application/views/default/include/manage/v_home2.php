@@ -226,7 +226,7 @@
 									</div>
 								</blockquote>
 							</div>
-							<div class="item ">
+<!-- 							<div class="item ">
 								<blockquote>
 									<div class="row">
 										<div class="col-sm-12 text-center">
@@ -238,13 +238,13 @@
 										</div>
 									</div>
 								</blockquote>
-							</div>
+							</div> -->
 						</div>
 
 						<!-- <a data-slide="prev" href="#quote-carousel" class="left carousel-control"><i class="fa fa-chevron-left"></i></a> -->
 						<!-- <a data-slide="next" href="#quote-carousel" class="right carousel-control"><i class="fa fa-chevron-right"></i></a> -->
-						<a data-slide="prev" href="#quote-carousel" class="left carousel-control"><img src="<?php echo base_url('public') ?>/img/arrow-left.png" class="icon"/></a>
-						<a data-slide="next" href="#quote-carousel" class="right carousel-control"><img src="<?php echo base_url('public') ?>/img/arrow-right.png" class="icon"/></a>
+						<!-- <a data-slide="prev" href="#quote-carousel" class="left carousel-control"><img src="<?php echo base_url('public') ?>/img/arrow-left.png" class="icon"/></a> -->
+						<!-- <a data-slide="next" href="#quote-carousel" class="right carousel-control"><img src="<?php echo base_url('public') ?>/img/arrow-right.png" class="icon"/></a> -->
 					</div>
 				</div>
 			</div>
