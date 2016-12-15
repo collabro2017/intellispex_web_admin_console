@@ -193,73 +193,87 @@
 							</div>
 						<?php endif; ?>
 						<?php if (isset($create_client) || isset($edit_client)): ?>
-						  <label>
-							<span class="block input-icon input-icon-right">
-								<?php echo validation_errors(); ?>
-							</span>
-						  </label>
-						  <?php echo $message; ?>
-						  <?php if (isset($create_client)): ?>
-							<form action='<?php echo base_url(); ?>manage/create_client/' method='post'>
-							  <?php endif; ?>
-							  <?php if (isset($edit_client)): ?>
-							  <form action='<?php echo base_url(); ?>manage/edit/<?php echo $client_data[0]['id']; ?>' method='post'>
-								<?php endif; ?>
-							  <table>
-								<tr>
-								  <th>Client Name</th>
-								  <th><input type="text" class="span12" name='name' <?php if (isset($client_data[0]['name'])): ?> value="<?php echo $client_data[0]['name']; ?>" <?php endif; ?>/></th>
-								</tr>
-								<tr>
-								  <td>Address Line 1</td>
-								  <td><input type="text" class="span12" name='address1'<?php if (isset($client_data[0]['address1'])): ?> value="<?php echo $client_data[0]['address1']; ?>" <?php endif; ?>/></td>
-								</tr>
-								<tr>
-								  <td>Address Line 2</td>
-								  <td><input type="text" class="span12" name='address2'<?php if (isset($client_data[0]['address2'])): ?> value="<?php echo $client_data[0]['address2']; ?>" <?php endif; ?>/></td>
-								</tr>
-								<tr>
-								  <td>City</td>
-								  <td><input type="text" class="span12" name='city'<?php if (isset($client_data[0]['city'])): ?> value="<?php echo $client_data[0]['city']; ?>" <?php endif; ?>/></td>
-								</tr>
-								<tr>
-								  <td>Province / State</td>
-								  <td><input type="text" class="span12" name='province'<?php if (isset($client_data[0]['province'])): ?> value="<?php echo $client_data[0]['province']; ?>" <?php endif; ?>/></td>
-								</tr>
-								<tr>
-								  <td>Postal Code</td>
-								  <td><input type="text" class="span12" name='postal'<?php if (isset($client_data[0]['postal'])): ?> value="<?php echo $client_data[0]['postal']; ?>" <?php endif; ?>/></td>
-								</tr>
-								<tr>
-								  <td>Phone</td>
-								  <td><input type="text" class="span12" name='phone'<?php if (isset($client_data[0]['phone'])): ?> value="<?php echo $client_data[0]['phone']; ?>" <?php endif; ?>/></td>
-								</tr>
-								<tr>
-								  <td>Mobile Phone</td>
-								  <td><input type="text" class="span12" name='mobile'<?php if (isset($client_data[0]['mobile'])): ?> value="<?php echo $client_data[0]['mobile']; ?>" <?php endif; ?>/></td>
-								</tr>
-								<tr>
-								  <td>Email</td>
-								  <td><input type="text" class="span12" name='email'<?php if (isset($client_data[0]['email'])): ?> value="<?php echo $client_data[0]['email']; ?>" <?php endif; ?>/></td>
-								</tr>
-								<tr>
-								  <td>Date Created</td>
-								  <td><input type="date" class="span12" name='created'<?php if (isset($client_data[0]['created'])): ?> value="<?php echo $client_data[0]['created']; ?>" <?php endif; ?>/></td>
-								</tr>
-								<tr>
-								  <td>Date Modified</td>
-								  <td><input type="date" class="span12" name='updated'<?php if (isset($client_data[0]['updated'])): ?> value="<?php echo $client_data[0]['updated']; ?>" <?php endif; ?>/></td>
-								</tr>
-								<tr>
-								  <td>Administrator Email</td>
-								  <td><input type="text" class="span12" name='admin_email'<?php if (isset($client_data[0]['admin_email'])): ?> value="<?php echo $client_data[0]['admin_email']; ?>" <?php endif; ?>/></td>
-								</tr>
-							  </table>
-							  <div class="row-fluid">
-								<input type="submit" name="submit" value="Submit" class=" btn btn-small btn-primary"></input>
-							  </div>
-							</form>
+						<div class="panel-admin">
+							<div class="span9">
+  								<label>
+									<span class="block input-icon input-icon-right">
+										<?php echo validation_errors(); ?>
+									</span>
+								</label>
+						  		<?php echo $message; ?>
+						 		 <?php if (isset($create_client)): ?>
+									<form action='<?php echo base_url(); ?>manage/create_client/' method='post' style="margin-bottom:0">
+									  <?php endif; ?>
+									  <?php if (isset($edit_client)): ?>
+									  <form action='<?php echo base_url(); ?>manage/edit/<?php echo $client_data[0]['id']; ?>' method='post' style="margin-bottom:0">
+										<?php endif; ?>
+									  <table class="table table-striped create-client-table">
+										<tr>
+										  <th>Client Name</th>
+										  <th><input type="text" class="span12" name='name' <?php if (isset($client_data[0]['name'])): ?> value="<?php echo $client_data[0]['name']; ?>" <?php endif; ?>/></th>
+										</tr>
+										<tr>
+										  <td>Address Line 1</td>
+										  <td><input type="text" class="span12" name='address1'<?php if (isset($client_data[0]['address1'])): ?> value="<?php echo $client_data[0]['address1']; ?>" <?php endif; ?>/></td>
+										</tr>
+										<tr>
+										  <td>Address Line 2</td>
+										  <td><input type="text" class="span12" name='address2'<?php if (isset($client_data[0]['address2'])): ?> value="<?php echo $client_data[0]['address2']; ?>" <?php endif; ?>/></td>
+										</tr>
+										<tr>
+										  <td>City</td>
+										  <td><input type="text" class="span12" name='city'<?php if (isset($client_data[0]['city'])): ?> value="<?php echo $client_data[0]['city']; ?>" <?php endif; ?>/></td>
+										</tr>
+										<tr>
+										  <td>Province / State</td>
+										  <td><input type="text" class="span12" name='province'<?php if (isset($client_data[0]['province'])): ?> value="<?php echo $client_data[0]['province']; ?>" <?php endif; ?>/></td>
+										</tr>
+										<tr>
+										  <td>Postal Code</td>
+										  <td><input type="text" class="span12" name='postal'<?php if (isset($client_data[0]['postal'])): ?> value="<?php echo $client_data[0]['postal']; ?>" <?php endif; ?>/></td>
+										</tr>
+										<tr>
+										  <td>Phone</td>
+										  <td><input type="text" class="span12" name='phone'<?php if (isset($client_data[0]['phone'])): ?> value="<?php echo $client_data[0]['phone']; ?>" <?php endif; ?>/></td>
+										</tr>
+										<tr>
+										  <td>Mobile Phone</td>
+										  <td><input type="text" class="span12" name='mobile'<?php if (isset($client_data[0]['mobile'])): ?> value="<?php echo $client_data[0]['mobile']; ?>" <?php endif; ?>/></td>
+										</tr>
+										<tr>
+										  <td>Email</td>
+										  <td><input type="text" class="span12" name='email'<?php if (isset($client_data[0]['email'])): ?> value="<?php echo $client_data[0]['email']; ?>" <?php endif; ?>/></td>
+										</tr>
+										<tr>
+										  <td>Date Created</td>
+										  <td><input type="date" class="span12" name='created'<?php if (isset($client_data[0]['created'])): ?> value="<?php echo $client_data[0]['created']; ?>" <?php endif; ?>/></td>
+										</tr>
+										<tr>
+										  <td>Date Modified</td>
+										  <td><input type="date" class="span12" name='updated'<?php if (isset($client_data[0]['updated'])): ?> value="<?php echo $client_data[0]['updated']; ?>" <?php endif; ?>/></td>
+										</tr>
+										<tr>
+										  <td>Administrator Email</td>
+										  <td><input type="text" class="span12" name='admin_email'<?php if (isset($client_data[0]['admin_email'])): ?> value="<?php echo $client_data[0]['admin_email']; ?>" <?php endif; ?>/></td>
+										</tr>
+									  </table>
+									  <div class="row-fluid">
 
+										<input type="submit" name="submit" value="Submit" class=" btn btn-small btn-primary menu-button"></input>
+									  </div>
+									</form>
+							</div>
+							<div class="span3">
+								<div class="span12">
+									<a class=" btn btn-small btn-primary menu-button menu-logout-button" href="<?php echo base_url(); ?>/manage/logout">Logout</a>
+									<div class="clear"></div>
+									<a class=" btn btn-small btn-primary menu-button menu-logout-button" href="<?php echo base_url(); ?>/manage/scan">Scan Business Card</a>
+									<div class="clear"></div>
+									<a class=" btn btn-small btn-primary menu-button menu-logout-button" href="<?php echo base_url(); ?>/manage/upload">Upload Doc</a>
+									<div class="clear"></div>
+								</div>
+							</div>
+						</div>
 						  <?php endif; ?>
 						  <?php if (isset($client_setup)): ?>
 							<table>
@@ -343,9 +357,24 @@
 							  The key is not valid
 							<?php endif ?>
 						  <?php endif ?>
-						  <?php if (isset($back)): ?>
+						  <?php if ( isset($back) && !( isset($create_client) ) ): ?>
 						  	<div class="clear"><a href="<?php echo base_url(); ?>manage/console_menu" class="btn btn-small btn-primary menu-button">Console Menu</a></div>
 						  <?php endif; ?>
+
+						  <?php if ( isset( $create_client ) ): ?>
+							<div>
+								<div class="span9">
+									<?php if (isset($back)): ?>
+									  	<div class="clear"><a href="<?php echo base_url(); ?>manage/console_menu" class="btn btn-small btn-primary menu-button">Console Menu</a></div>
+									<?php endif; ?>
+								</div>
+								<div class="span3">
+									<div class="span12">
+										<a class=" btn btn-small btn-primary menu-button menu-logout-button menu-button-small" href="<?php echo base_url(); ?>/manage/sqlserver">SQL Server</a>
+									</div>
+								</div>
+							<div>
+						  <?php endif?>
 
 					  </div>
 					</div><!--/widget-main-->
