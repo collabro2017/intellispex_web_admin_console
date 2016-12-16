@@ -24,14 +24,12 @@ class M_user extends CI_Model {
     }
   }
 
-  public function temp_reset_password($temp_pass) {
+  public function temp_reset_password($temp_pass,  $username) {
     $data = array(
-      'username' => $this->input->post('username'),
       'reset_password' => $temp_pass);
-    $email = $data['username'];
 
     if ($data) {
-      $this->db->where('username', $email);
+      $this->db->where('email', $username);
       $this->db->update('res_users', $data);
       return TRUE;
     }
@@ -39,7 +37,7 @@ class M_user extends CI_Model {
       return FALSE;
     }
   }
-  
+
   public function temp_reset_client_password($temp_pass, $id) {
     $data = array(
       'reset_password' => $temp_pass);
@@ -53,7 +51,7 @@ class M_user extends CI_Model {
       return FALSE;
     }
   }
-  
+
   public function reset_password($temp_pass) {
     $data = array(
       'password' => md5($this->input->post('password')),
@@ -67,7 +65,7 @@ class M_user extends CI_Model {
       return FALSE;
     }
   }
-  
+
   public function reset_client_password($temp_pass) {
     $data = array(
       'password' => md5($this->input->post('password')),
@@ -91,7 +89,7 @@ class M_user extends CI_Model {
     else
       return FALSE;
   }
-  
+
   public function is_client_pass_valid($temp_pass) {
     $this->db->where('reset_password', $temp_pass);
     $query = $this->db->get('client');

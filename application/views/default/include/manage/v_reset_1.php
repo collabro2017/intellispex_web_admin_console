@@ -55,12 +55,12 @@
 
                     <div class="widget-body">
                       <div class="widget-main">
-                        
+
                         <div class="space-6"></div>
 
                         <form action='<?php echo base_url(); ?>manage/reset' method='post'>
 
-                          <fieldset>                            
+                          <fieldset>
                             <div class="row-fluid">
                               <input type="submit" name="reset" value="Reset the Application Administrator Password" class=" btn btn-small btn-primary"></input>
                             </div>

@@ -164,11 +164,12 @@ class manage extends CI_Controller_EX {
           $ci->email->message($message);
           //$ci->email->send();
 
+
+          $this->load->model('m_user');
+          $this->m_user->temp_reset_password($temp_pass, $this->input->post('username'));
+
           if ($ci->email->send()) {
-            $this->load->model('m_user');
-            if ($this->m_user->temp_reset_password($temp_pass)) {
               $this->load->view('default/include/manage/v_reset_message');
-            }
           }
           else {
             $data['message'] = 'Email was not sent, please contact your administrator';

@@ -55,12 +55,12 @@
 
                     <div class="widget-body">
                       <div class="widget-main">
-                        
+
                         <div class="space-6"></div>
 
                         <form action='<?php echo base_url(); ?>manage/reset' method='post'>
 
-                          <fieldset>  
+                          <fieldset>
                             Enter the Administrator Email Address:
                               <span class="block input-icon input-icon-right">
                                 <input type="text" class="span12"  name='username'/>
