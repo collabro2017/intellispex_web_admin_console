@@ -104,6 +104,21 @@
 {
     color: #3598db;
     font-weight: 700;
+    padding: 0;
+}
+.navbar-inverse .navbar-brand img
+{
+	display: inline-block;
+	width: 43px;
+	top: 4px;
+	margin-left: 15px;
+	position: relative;
+	margin-right: 5px;
+}
+.navbar-inverse .navbar-brand span
+{
+	position: relative;
+	top: 6px;
 }
 .navbar-inverse .navbar-nav>li>a.login-button
 {
