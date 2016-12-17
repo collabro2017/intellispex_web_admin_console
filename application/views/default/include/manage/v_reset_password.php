@@ -48,11 +48,11 @@
                   <?php echo validation_errors(); ?>
                 </div>
               <?php endif; ?>
-                <?php if (isset($message) && $message != ''): ?>
+              <?php if (isset($message) && $message != ''): ?>
                 <div class="alert alert-warning" role="alert">
                   <?php echo $message; ?>
                 </div>
-              <? endif;?>
+              <?php endif;?>
               <fieldset>
                 Enter the Administrator Email Address:
                 <span class="block input-icon input-icon-right">
