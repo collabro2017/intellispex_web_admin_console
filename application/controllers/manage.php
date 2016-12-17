@@ -140,6 +140,7 @@ class manage extends CI_Controller_EX {
       else {
         try {
           $temp_pass = md5(uniqid());
+          $email_to_reset = $this->input->post('username');
           $message = "<p>This email has been sent as a request to reset our password</p>";
           $message .= "<p><a href='" . base_url() . "manage/reset_password_form/$temp_pass'>Click here </a>if you want to reset your password,
                         if not, then ignore</p>";
@@ -157,32 +158,36 @@ class manage extends CI_Controller_EX {
           $ci->email->initialize($config);
 
           $ci->email->from('test.IntelliSpeX@gmail.com', 'IntelliSpeX');
-          $list = array($this->input->post('username'));
+          $list = array($email_to_reset);
           $ci->email->to($list);
           $this->email->reply_to('test.IntelliSpeX@gmail.com', 'Explendid Videos');
           $ci->email->subject('Reset your Password');
           $ci->email->message($message);
-          //$ci->email->send();
+          $ci->email->send();
 
 
           $this->load->model('m_user');
-          $this->m_user->temp_reset_password($temp_pass, $this->input->post('username'));
+          $this->m_user->temp_reset_password( $temp_pass, $email_to_reset );
 
           if ($ci->email->send()) {
               $this->load->view('default/include/manage/v_reset_message');
           }
-          else {
+          else
+          {
             $data['message'] = 'Email was not sent, please contact your administrator';
             $this->load->view('default/include/manage/v_reset_password', $data);
           }
         }
-        catch (Exception $e) {
+        catch (Exception $e)
+        {
           $this->load->view('default/include/manage/v_reset_password');
         }
       }
     }
     else
+    {
       $this->load->view('default/include/manage/v_reset_password');
+    }
   }
 
   public function reset_pw($id) {

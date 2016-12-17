@@ -24,12 +24,11 @@ class M_user extends CI_Model {
     }
   }
 
-  public function temp_reset_password($temp_pass,  $username) {
-    $data = array(
-      'reset_password' => $temp_pass);
+  public function temp_reset_password( $temp_pass, $email_to_reset ) {
+    $data = array('reset_password' => $temp_pass);
 
     if ($data) {
-      $this->db->where('email', $username);
+      $this->db->where('email', $email_to_reset);
       $this->db->update('res_users', $data);
       return TRUE;
     }
