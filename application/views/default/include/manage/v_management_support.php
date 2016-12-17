@@ -12,30 +12,10 @@
 	<link rel="stylesheet" href="<?php echo base_url('public') ?>/css/support.css" />
 	<body>
 		<div class="container">
-			<nav class="navbar navbar-inverse navbar-fixed-top">
-				<div class="container">
-					<div class="navbar-header">
-						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-							<span class="sr-only">Toggle navigation</span>
-							<span class="icon-bar"></span>
-							<span class="icon-bar"></span>
-							<span class="icon-bar"></span>
-						</button>
-						<a class="navbar-brand" href="<?php echo base_url().'manage/home'; ?>"><img class="img-responsive" src="<?php echo base_url('public') ?>/images/logo.png" alt="logo"><span>IntelliSpex</span></a>
-						<!-- <a class="navbar-brand" href="<?php echo base_url().'manage/home'; ?>">IntelliSpex</a> -->
-					</div>
-					<div id="navbar" class="navbar-collapse collapse" aria-expanded="false">
-					<ul class="nav navbar-nav ">
-						<li><a href="<?php echo base_url().'manage/home'; ?>">Home</a></li>
-						<li><a href="<?php echo base_url().'manage/management_team'; ?>">Management Team</a></li>
-						<li><a href="#contact">Contact Us</a></li>
-						<li><a href="#news">News</a></li>
-						<li class="active"><a href="#support">Support</a></li>
-						<li><a href="#partners">Partners</a></li>
-						<li><a class="btn btn-md btn-success login-button" href="<?php echo base_url().'manage/console_menu'; ?>">Login</a></li>
-					</ul>
-					</div><!--/.nav-collapse -->
-				</div>
+			<?php
+			$data["active_option"] = "support";
+			$this->load->view('default/nav/public_page.php', $data );
+			?>
 			</nav>
     		<h1 class="title text-center mgb-2em">Support Page</h1>
 			<div class="support-wrapper bg-color1">
@@ -193,17 +173,7 @@
 		<br/>
 		<br/>
 		<br/>
-		<footer id="footer-v6" class="footer-v6">
-		 	<div class="copyright">
-				<div class="container">
-					<div class="row">
-						<div class="col-md-12">
-							<p class="color-white center">Copyright © 2016 IntelliSpeX - <span data-localize="copyright.all_rights">All Rights Reserved</span></p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</footer>
+		<?php $this->load->view('default/footer/public_page.php');?>
 	</body>
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 	<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
