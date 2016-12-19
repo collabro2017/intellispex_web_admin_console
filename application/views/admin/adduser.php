@@ -53,7 +53,7 @@
         <div class="form-group">
           <label for="inputPassword" class="col-sm-2 control-label">Temporary Password</label>
           <div class="col-sm-5">
-            <input type="text" class="form-control" name="tempass" placeholder="Temporary Passwordl" value="<?php echo set_value('tempass'); ?>" >
+            <input type="text" class="form-control" name="tempass" placeholder="Temporary Password" value="<?php echo set_value('tempass'); ?>" >
           </div>
         </div>
 
