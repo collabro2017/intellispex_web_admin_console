@@ -6,6 +6,9 @@ class M_user extends CI_Model {
     parent::__construct();
   }
 
+
+
+
   function login($username, $password) {
     $this->db->select('id, username');
     $this->db->from('res_users');
@@ -98,6 +101,25 @@ class M_user extends CI_Model {
     else
       return FALSE;
   }
+
+  public function userslist()
+  {
+    $this->db->select('*');
+    $this->db->from('res_users');
+    $this->db->where('active', 1);
+    $query = $this->db->get();
+
+
+    return $query->result_array();
+
+  }
+
+  public function save($data)
+  {
+    $this->db->insert('res_users', $data);
+
+  }
+
 }
 
 ?>
