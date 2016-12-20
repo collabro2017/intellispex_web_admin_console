@@ -94,88 +94,34 @@
 									<div class="section-title">
 										<h2><?php echo $statistics; ?></h2>
 									</div>
-
-									<table class="table table-striped statistics-table">
-										<tr>
-											<td># of App Administrators</td>
-											<td>100</td>
-										</tr>
-										<tr>
-											<td># of Clients</td>
-											<td>100</td>
-										</tr>
-										<tr>
-											<td># of Client Administrators (average)</td>
-											<td>100</td>
-										</tr>
-										<tr>
-											<td># of Users</td>
-											<td>100</td>
-										</tr>
-										<tr>
-											<td># of Activities</td>
-											<td>100</td>
-										</tr>
-										<tr>
-											<td># of Frames / Activity (average)</td>
-											<td>100</td>
-										</tr>
-										<tr>
-											<td>Total Storage in Use</td>
-											<td>100</td>
-										</tr>
-										<tr>
-											<td>Average Storage / Activity</td>
-											<td>100</td>
-										</tr>
-										<tr>
-											<td>Average Simultaneous Data Calls / Seconds</td>
-											<td>100</td>
-										</tr>
-									</table>
-									<div class="section-title">
-										<h2>Client Statistics</h2>
+									<div class="table-wrapper">
+										<table class="table table-striped statistics-table ">
+											<tr>
+												<td># of Administrators</td>
+												<td>100</td>
+											</tr>
+											<tr>
+												<td># of Users</td>
+												<td>100</td>
+											</tr>
+											<tr>
+												<td># of Activities</td>
+												<td>100</td>
+											</tr>
+											<tr>
+												<td># of Frames / Activity (average)</td>
+												<td>100</td>
+											</tr>
+											<tr>
+												<td>Total Storage in Use</td>
+												<td>100</td>
+											</tr>
+											<tr>
+												<td>Average Storage / Activity</td>
+												<td>100</td>
+											</tr>
+										</table>
 									</div>
-
-									<table class="table table-striped statistics-byuser-table">
-										<thead>
-											<tr>
-												<th style="width: 300px">Client Name</th>
-												<th># of users</th>
-												<th># of Activities</th>
-												<th># of Frames</th>
-												<th># of Audio Frames</th>
-												<th># of Video Frames</th>
-												<th># of Text Frames</th>
-												<th>Maximum Simultaneous Data Calls</th>
-												<th>Average Simultaneous Data Calls</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr>
-												<td>Name</td>
-												<td>100</td>
-												<td>100</td>
-												<td>100</td>
-												<td>100</td>
-												<td>100</td>
-												<td>100</td>
-												<td>100</td>
-												<td>100</td>
-											</tr>
-											<tr>
-												<td>Name</td>
-												<td>100</td>
-												<td>100</td>
-												<td>100</td>
-												<td>100</td>
-												<td>100</td>
-												<td>100</td>
-												<td>100</td>
-												<td>100</td>
-											</tr>
-										</tbody>
-									</table>
 								</div>
 								<div class="span3">
 									<div class="span12">
@@ -185,9 +131,6 @@
 										<div class="clear"></div>
 										<a class=" btn btn-small btn-primary menu-button menu-logout-button" href="#">Share PDF Report</a>
 									</div>
-
-
-
 
 								</div>
 							</div>
@@ -358,11 +301,17 @@
 							<?php endif ?>
 						  <?php endif ?>
 						  <?php if ( isset($back) && !( isset($create_client) ) ): ?>
-						  	<div class="clear"><a href="<?php echo base_url(); ?>manage/console_menu" class="btn btn-small btn-primary menu-button">Console Menu</a></div>
+						  	<?php if ( isset( $statistics ) ): ?>
+						  		<div class="clear">
+						  		<a href="<?php echo base_url(); ?>manage/review_users" class="btn btn-small btn-primary menu-button">Review Users</a>
+							 <?php endif; ?>
+							 <div class="clear">
+							<a href="<?php echo base_url(); ?>manage/console_menu" class="btn btn-small btn-primary menu-button">Console Menu</a></div>
 						  <?php endif; ?>
 
 						  <?php if ( isset( $create_client ) ): ?>
 							<div>
+
 								<div class="span9">
 									<?php if (isset($back)): ?>
 									  	<div class="clear"><a href="<?php echo base_url(); ?>manage/console_menu" class="btn btn-small btn-primary menu-button">Console Menu</a></div>
