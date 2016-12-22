@@ -2795,3 +2795,15 @@ tr:nth-child(even) {
 body.login-layout.admin-body{
 	background-color: #fff;
 }
+
+.reset-form
+{
+	max-width: 500px;
+	margin: auto;
+
+}
+.reset-form input
+{
+	font-size: 20px;
+	padding: 20px;
+}

@@ -244,55 +244,64 @@
 								  <td><?php echo $value['phone'] ?></td>
 								  <td><?php echo $value['email'] ?></td>
 								  <td><a class=" btn btn-small btn-primary" href="<?php echo base_url(); ?>manage/edit/<?php echo $value['id']; ?>">Edit</a></td>
-								  <td><a class=" btn btn-small btn-primary" href="<?php echo base_url(); ?>manage/reset_pw/<?php echo $value['id']; ?>">Reset Pw</a></td>
+								  <td><a class=" btn btn-small btn-primary" href="<?php echo base_url(); ?>manage/reset_pw_email/<?php echo $value['id']; ?>">Reset Pw</a></td>
 								</tr>
 							  <?php endforeach; ?>
 							</table>
 						  <?php endif; ?>
-						  <?php if (isset($message) && $message != ''): echo $message; ?>
-						  <?php endif; ?>
-						  <?php if (isset($reset_pw_email)): ?>
-							<form action='<?php echo base_url(); ?>manage/reset_pw_send_mail/<?php echo $reset_pw_email; ?>' method='post'>
+							  <?php if (isset($reset_pw_email)): ?>
+							  	<div class="reset-form">
+								  	<?php if ( isset( $message ) && $message != '' ): ?>
+									<div class="alert alert-success" role="alert">
+							  			<?php echo $message; ?>
+									</div>
+									<?php endif; ?>
 
-							  <fieldset>
-								Enter the Administrator Email Address:
-								<span class="block input-icon input-icon-right">
-								  <input type="text" class="span12"  name='username'/>
-								  <i class="icon-user"></i>
-								</span>
-								<label>
-								  <span class="block input-icon input-icon-right">
-									  <?php echo validation_errors(); ?>
-								  </span>
-								</label>
-								<div class="row-fluid">
-								  <input type="submit" name="reset" value="Reset the Application Administrator Password" class=" btn btn-small btn-primary"></input>
+									<form action='<?php echo base_url(); ?>manage/reset_pw_send_mail/<?php echo $reset_pw_email; ?>' method='post'>
+
+									  <fieldset>
+										<h2>Enter the Administrator Email Address:</h2>
+										<span class="block input-icon input-icon-right " >
+										  <input type="text" class="span12"  name='username'/>
+										</span>
+										<?php if ( validation_errors() != "" ) : ?>
+										<div class="alert alert-danger" role="alert">
+											<?php echo validation_errors(); ?>
+										</div>
+										<?php endif; ?>
+										<br/>
+										<div class="row-fluid">
+										  <input type="submit" name="reset" value="Reset the Application Administrator Password" class="btn btn-small btn-primary menu-button"></input>
+										</div>
+
+									  </fieldset>
+									</form>
 								</div>
+							  <?php endif; ?>
 
-							  </fieldset>
-							</form>
-						  <?php endif; ?>
 						  <?php if (isset($reset_password_client_form)) : ?>
 							<?php if ($key) : ?>
-							  <?php if ($message_pw) : ?>
-								<span class="red">Password doesn’t meet criteria</span>
-							  <?php endif; ?>
-							  <form action='<?php echo base_url(); ?>manage/reset_password_client_form/<?php echo $pram; ?>' method='post'>
-								<div>Enter Your Password:</div>
+
+							  <form action='<?php echo base_url(); ?>manage/reset_password_client_form/<?php echo $pram; ?>' method='post' class="reset-form">
+								<h2>Enter Your Password:</h2>
 								<span class="block input-icon input-icon-right">
 								  <input type="password" class="span12"  name='password'/>
-								  <i class="icon-user"></i>
 								</span>
-								Confirm Your Password:
+								<h2>Confirm Your Password:</h2>
 								<span class="block input-icon input-icon-right">
 								  <input type="password" class="span12"  name='cpassword'/>
-								  <i class="icon-user"></i>
 								</span>
-								<label>
-								  A combination of at least one upper case letters, lower case letters, numbers, special characters; 8 - 12 characters
-								</label>
+								<br/>
+								<?php if ($message_pw) : ?>
+								<div class="alert alert-danger" role="alert">
+									Password doesn’t meet criteria... Re-enter your password.
+								</div>
+							  	<?php endif; ?>
+							  	<div class="alert alert-info" role="alert">
+								  (A combination of at least one upper case letters and lower case letters, numbers, special characters (optional); 8 - 12 characters)
+								</div>
 								<div class="row-fluid">
-								  <input type="submit" name="submit" value="Reset the Application Administrator Password" class=" btn btn-small btn-primary"></input>
+								  <input type="submit" name="submit" value="Reset the Application Administrator Password" class="btn btn-small btn-primary menu-button"></input>
 
 								</div>
 							  </form>
