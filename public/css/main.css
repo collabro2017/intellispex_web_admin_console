@@ -2767,6 +2767,14 @@ tr:nth-child(even) {
 	max-width: 900px;
 }
 
+/* Events */
+.events-table
+{
+	max-width: 800px;
+	margin:auto;
+	margin-bottom: 20px;
+}
+
 /* Create Client */
 .create-client-table{
 	max-width: 600px;
