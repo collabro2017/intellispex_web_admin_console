@@ -6,10 +6,12 @@ html
 
 #event_area
 {
-    overflow-y:scroll; height:500px; width: 800px;
+    overflow-y:scroll;
+    height:500px;
+    max-width: 800px;
     border: 1px solid #000;
     margin:auto;
-    margin-bottom: 20px
+    margin-bottom: 20px;
 }
 ul
 {
