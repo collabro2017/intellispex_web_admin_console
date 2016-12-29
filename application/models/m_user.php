@@ -9,12 +9,15 @@ class M_user extends CI_Model {
 
 
 
-  function login($username, $password) {
-    $this->db->select('id, username');
-    $this->db->from('res_users');
-    $this->db->where('username', $username);
-    $this->db->where('password', md5($password));
-    $this->db->where('active', 1);
+  function login($username, $password)
+  {
+    $this->db->select( 'id, username' );
+    $this->db->from( 'res_users' );
+    $sanitize_username = $this->db->escape( $username );
+    $where = "( username=" . $sanitize_username . " OR  email=". $sanitize_username . ")";
+    $this->db->where( $where );
+    $this->db->where( 'password', md5( $password ) );
+    $this->db->where( 'active', 1 );
     $this->db->limit(1);
 
     $query = $this->db->get();
