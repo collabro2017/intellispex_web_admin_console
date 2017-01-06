@@ -15,10 +15,6 @@ class manage extends CI_Controller_EX {
     $this->load->library("session");
     $this->load->library('form_validation');
     $this->load->library('grocery_CRUD');
-
-
-    //$this->output->enable_profiler(TRUE);
-
   }
 
   public function check_login($data = '', $function_name = ' ') {
