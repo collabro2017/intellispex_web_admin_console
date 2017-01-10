@@ -2,7 +2,11 @@
 <html lang="en">
   <head>
 	<meta charset="utf-8" />
-	<title>IntelliSpeX</title>
+    <?php if (ENVIRONMENT=="production") : ?>
+		<title>IntelliSpeX</title>
+	<?php else : ?>
+		<title>ICYMI</title>
+	<?php endif; ?>
 	<meta name="description" content="User login page" />
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
