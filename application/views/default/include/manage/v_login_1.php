@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>IntelliSpeX</title>
+    <?php $this->load->view('default/head/title.php' ); ?>
     <meta name="description" content="User login page" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -55,7 +55,7 @@
 
                     <div class="widget-body">
                       <div class="widget-main">
-                        
+
                         <div class="space-6"></div>
 
                         <form action='<?php echo base_url(); ?>manage/login' method='post'>
