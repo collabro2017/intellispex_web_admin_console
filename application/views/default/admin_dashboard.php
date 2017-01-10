@@ -63,7 +63,7 @@
 
                       <form action='<?php echo base_url(); ?>manage/reset_password_form/<?php echo $pram; ?>' method='post'>
 
-                        <fieldset> 
+                        <fieldset>
                         <?php foreach($links as $key => $link ): ?>
                           <div><a href="<?php echo base_url(); ?>manage/<?php echo $key ?>"><?php echo $link ?></a></div>
                         <?php endforeach; ?>

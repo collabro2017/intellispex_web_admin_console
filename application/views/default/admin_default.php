@@ -32,13 +32,7 @@
   </head>
 
   <body class="login-layout admin-body">
-	<div class="widget-main">
-		<div class="top-menu">
-			<h2 class="col-sm-3"><img class="irc_mut iUyhD38Z_yik-HwpH6ZlgJaI" onload="google.aft&amp;&amp;google.aft(this)" src="<?php echo base_url('public') ?>/images/logo.JPG" width="60" height="60" style="margin-top: 0px;"> <span style="color : #00aaff;">IntelliSpeX</span></h2>
-			<h2 class="col-sm-6"><span><?php echo $function_name; ?></span></h2>
-			<h2 class="col-sm-3"></i> <span><?php echo $username; ?></span></h2>
-		</div>
-	</div>
+  <?php $this->load->view('default/nav/console_page.php'); ?>
   <div class="container-fluid" id="main-container">
 	<div id="main-content">
 		<?php if ( isset($links) && ( array_key_exists( "logout", $links ) || array_key_exists( "Logout", $links ) ) ): ?>
