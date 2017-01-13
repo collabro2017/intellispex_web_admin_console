@@ -20,46 +20,24 @@
 										</tr>
 									</thead>
 									<tbody>
+									<?php foreach($info as $key ) : ?>
 										<tr>
-											<td><a href="<?php echo base_url(); ?>manage/event/1">Coffee Mugs</a></td>
-											<td>Nancy</td>
-											<td>2016-23-12</td>
+											<td>
+												<a href="<?php echo base_url(); ?>events/event/<?php echo $key->objectId ?>">
+													<?php echo $key->eventname ?>
+												</a>
+											</td>
+											<td>
+												<?php echo $key->username ?>
+											</td>
+											<td>
+												<?php echo $key->createdAt ?>
+											</td>
 											<td>
 												<input type="checkbox" data-id="101" name="evet_delete" />
 											</td>
 										</tr>
-										<tr>
-											<td><a href="<?php echo base_url(); ?>manage/event/2">Coffee Mugs</a></td>
-											<td>Nancy</td>
-											<td>2016-23-12</td>
-											<td>
-												<input type="checkbox" data-id="102" name="evet_delete" />
-											</td>
-										</tr>
-										<tr>
-											<td><a href="<?php echo base_url(); ?>manage/event/3">Coffee Mugs</a></td>
-											<td>Nancy</td>
-											<td>2016-23-12</td>
-											<td>
-												<input type="checkbox" data-id="103" name="evet_delete" />
-											</td>
-										</tr>
-										<tr>
-											<td><a href="<?php echo base_url(); ?>manage/event/4">Coffee Mugs</a></td>
-											<td>Nancy</td>
-											<td>2016-23-12</td>
-											<td>
-												<input type="checkbox" data-id="104" name="evet_delete" />
-											</td>
-										</tr>
-										<tr>
-											<td><a href="<?php echo base_url(); ?>manage/event/5">Coffee Mugs</a></td>
-											<td>Nancy</td>
-											<td>2016-23-12</td>
-											<td>
-												<input type="checkbox" data-id="105" name="evet_delete" />
-											</td>
-										</tr>
+									<?php endforeach; ?>
 									</tbody>
 								</table>
 

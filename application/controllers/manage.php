@@ -406,7 +406,7 @@ class manage extends CI_Controller_EX {
     $data = new stdClass;
     $function_name = "APPLICATION ADMINISTRATOR - CLIENT SET UP AND MAINTENANCE";
     $data->back = TRUE;
-    $data->links = array('create_client' => 'Create a Client', 'edit_client' => 'Manage / Edit a Client', 'events' => 'View or Edit Global Event List', 'logout' => 'Logout');
+    $data->links = array('create_client' => 'Create a Client', 'edit_client' => 'Manage / Edit a Client', '../events' => 'View or Edit Global Event List', 'logout' => 'Logout');
     $this->check_login($data, $function_name);
   }
 
@@ -489,42 +489,6 @@ class manage extends CI_Controller_EX {
     $this->check_login($data, $function_name);
   }
 
-  public function events()
-  {
-    $data = new stdClass;
-    $session_data = $this->session->userdata('logged_in');
-    if ($session_data)
-    {
-        $data->username = $session_data['username'];
-        $data->role = $session_data['role'];
-        $data->id = $session_data['id'];
-        $data->function_name = "VIEW OR EDIT GLOBAL EVENT LIST";
-        $this->load->view('default/events/list', $data);
-    }
-    else
-    {
-        $this->check_login();
-    }
-  }
-
-  public function event( $event_id )
-  {
-    $data = new stdClass;
-    $session_data = $this->session->userdata('logged_in');
-    if ($session_data)
-    {
-        $data->username = $session_data['username'];
-        $data->role = $session_data['role'];
-        $data->id = $session_data['id'];
-        $data->function_name = "EVENT VIEWER";
-        $data->event_id = $event_id;
-        $this->load->view('default/events/view', $data);
-    }
-    else
-    {
-        $this->check_login();
-    }
-  }
   //-------------------------------------------------------------------//
 
 

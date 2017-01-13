@@ -23,11 +23,9 @@ ul
 li
 {
   -moz-user-select: none;
-  height: 350px;
   margin: 10px;
   border:1px solid #ccc;
   background: #c6c6c6;
-  padding: 10px;
 
 }
 li.selected

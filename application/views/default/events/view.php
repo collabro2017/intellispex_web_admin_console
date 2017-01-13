@@ -11,13 +11,15 @@
 					<div class="widget-main">
 						<div class="row-fluid">
 							<div class="span10">
-
 								<div id="event_area">
 									<ul>
-									    <li data-id="1">1</li>
-									    <li data-id="2">2</li>
-									    <li data-id="3">3</li>
-									    <li data-id="4">4</li>
+										<?php foreach($info as $key ) : ?>
+										    <?php if( isset($key->thumbImage->url) ) : ?>
+										    	<li data-id="1">
+										    	<img src="<?php echo $key->thumbImage->url ?>" width="100%" />
+										    </li>
+											<?php endif; ?>
+									    <?php endforeach; ?>
 									</ul>
 								</div>
 
