@@ -39,7 +39,7 @@ class events extends CI_Controller_EX
         			"objectId" => "Event",
         			//"query" => '{"eventname":"EC STAGE II"}'
         		)
-        	);
+        	)->results;
 
 			$this->load->view('default/events/list', $data);
 		}
@@ -68,7 +68,7 @@ class events extends CI_Controller_EX
 	                "objectId" => "Post",
 	                "query" =>  '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"'. $event_id . '"}}'
 	            )
-            );
+            )->results;
 
 			$this->load->view('default/events/view', $data);
 		}

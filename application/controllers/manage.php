@@ -15,6 +15,7 @@ class manage extends CI_Controller_EX {
     $this->load->library("session");
     $this->load->library('form_validation');
     $this->load->library('grocery_CRUD');
+    $this->load->library('ParseRestClient');
   }
 
   public function check_login($data = '', $function_name = ' ') {
@@ -25,6 +26,7 @@ class manage extends CI_Controller_EX {
       $data->role = $session_data['role'];
       $data->function_name = $function_name;
       $data->id = $session_data['id'];
+
       $this->load->view('default/admin_default', $data);
     }
     else {
@@ -399,7 +401,44 @@ class manage extends CI_Controller_EX {
     $function_name = "CLIENT MANAGEMENT DASHBOARD";
     $data->back = TRUE;
     $data->statistics = "Usage Statistics";
-    $this->check_login($data, $function_name);
+	$data->nrousers=$this->parserestclient->query
+      (
+          [
+              "objectId" => "_User",
+			  "limit"=>'0',
+			  'count'=>'1'
+
+          ]
+      )->count;
+	  $data->nroevent=$this->parserestclient->query
+	  (
+		  [
+			  "objectId" => "Event",
+			  "limit"=>'0',
+			  'count'=>'1'
+
+		  ]
+	  )->count;
+	  $data->averageframe=$this->parserestclient->query
+	  (
+		  [
+			  "objectId" => "Post",
+			  "limit"=>'0',
+			  'count'=>'1'
+
+		  ]
+	  )->count/$data->nroevent;
+	  $data->nroadmin=$this->parserestclient->query
+	  (
+		  [
+			  "objectId" => "_User",
+			  "query"=>'{"$relatedTo":{"object":{"__type":"Pointer","className":"_Role","objectId":"aDiZnlW1AX"},"key":"users"}}',
+			  "limit"=>'0',
+			  'count'=>'1'
+
+		  ]
+	  )->count;
+      $this->check_login($data, $function_name);
   }
 
   public function client_set_up() {

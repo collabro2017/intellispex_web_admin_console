@@ -34,7 +34,7 @@
 												<?php echo $key->createdAt ?>
 											</td>
 											<td>
-												<input type="checkbox" data-id="101" name="evet_delete" />
+												<input type="checkbox" data-id="<?= $key->objectId ?>" name="evet_delete" />
 											</td>
 										</tr>
 									<?php endforeach; ?>

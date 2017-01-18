@@ -83,6 +83,10 @@ class ParseRestClient{
 			{
 				$postData['skip'] = $args['skip'];
 			}
+			if(isset($args['count']))
+			{
+				$postData['count'] = $args['count'];
+			}
 			if(count($postData) > 0)
 			{
 
@@ -228,6 +232,9 @@ class ParseRestClient{
 		if(isset($args['skip'])){
 			$params['skip'] = $args['skip'];
 		}
+		if(isset($args['count'])){
+			$params['count'] = $args['count'];
+		}
 
 		$return = $this->request($params);
 
@@ -257,6 +264,28 @@ class ParseRestClient{
 		return $this->checkResponse($return,'200');
 	}
 
+	public function deleteBatch(array $args)
+	{
+
+		foreach ($args as $index=>$arg)
+		{
+			if($index<50)
+			{
+				$params = [
+					'url' => $this->parseUrl .'/'.$arg['objectId'],
+					'method' => 'DELETE'
+				];
+			}else
+			{
+				 $this->request($params);
+			}
+		}
+
+
+		$return = $this->request($params);
+
+		return $this->checkResponse($return,'200');
+	}
 
 /*
  * Checks for correct/expected response code.
@@ -279,7 +308,7 @@ class ParseRestClient{
 		}
 		else
 		{
-			return json_decode( $return['response'] )->results;
+			return json_decode( $return['response'] );
 		}
 	}
 

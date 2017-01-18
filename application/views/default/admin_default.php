@@ -96,19 +96,19 @@
 										<table class="table table-striped statistics-table ">
 											<tr>
 												<td># of Administrators</td>
-												<td>100</td>
+												<td><?=$nroadmin?></td>
 											</tr>
 											<tr>
 												<td># of Users</td>
-												<td>100</td>
+												<td><?=$nrousers?></td>
 											</tr>
 											<tr>
 												<td># of Activities</td>
-												<td>100</td>
+												<td><?=$nroevent?></td>
 											</tr>
 											<tr>
 												<td># of Frames / Activity (average)</td>
-												<td>100</td>
+												<td><?=$averageframe?></td>
 											</tr>
 											<tr>
 												<td>Total Storage in Use</td>
@@ -128,6 +128,8 @@
 										<a class=" btn btn-small btn-primary menu-button menu-logout-button" href="#">Print</a>
 										<div class="clear"></div>
 										<a class=" btn btn-small btn-primary menu-button menu-logout-button" href="#sharePDF" role="button" data-toggle="modal">Share PDF Report</a>
+										<div class="clear"></div>
+
 									</div>
 								</div>
 							</div>
@@ -149,6 +151,7 @@
 								<div class="modal-footer">
 									<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
 									<button id="bnt-share" class="btn btn-primary bnt-share">Share</button>
+									<button id="btn-download" type="button" class="btn btn-primary bnt-share">Download a PDF Report</button>
 								</div>
 							</div>
 
@@ -220,7 +223,7 @@
 									  </table>
 									  <div class="row-fluid">
 
-										<input type="submit" name="submit" value="Submit" class=" btn btn-small btn-primary menu-button"></input>
+										<input type="submit" name="submit" value="Submit" class=" btn btn-small btn-primary menu-button"/>
 									  </div>
 									</form>
 							</div>
@@ -371,7 +374,9 @@
 	</div>
   </div><!--/.fluid-container-->
 
-
+<form id="formdownload" method="post" target="_blank" action="<?= base_url('pdfs/download')?>">
+	<input id="table-content" name="html" type="hidden">
+</form>
   <!-- basic scripts -->
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script type="text/javascript">
@@ -385,62 +390,43 @@
   <!-- inline scripts related to this page -->
 
   <script type="text/javascript">
-
-	function show_box(id) {
-		$('.widget-box.visible').removeClass('visible');
-		$('#' + id).addClass('visible');
-	}
-
+		function getTable()
+		{
+			return 	"<style type=text/css>"+
+				"td{"+
+				"color:#000000;"+
+				"border-left: 2px solid #cccccc;"+
+				"border-right: 2px solid #cccccc;"+
+				"border-top: 2px solid #cccccc;"+
+				"border-bottom: 2px solid #cccccc;}"+
+				"table {"+
+				"font-family: helvetica;"+
+				"font-size: 11pt;"+
+				"border-left: 2px solid #cccccc;"+
+				"}"+
+				"</style>"+
+				"<h1>Usage Statistics</h1>"+
+				"<table border='1' cellpadding='3'>"+
+				$('.table-wrapper').html()+
+				"</table>";
+		}
+		function show_box(id) {
+			$('.widget-box.visible').removeClass('visible');
+			$('#' + id).addClass('visible');
+		}
+		$('#btn-download').click(function(){
+			var html=getTable();
+			$('#table-content').val(html);
+			$('#formdownload').trigger( "submit" );
+		});
 		$( "#bnt-share" ).click(
 		function()
 		{
 			if ( validate() )
 			{
+				var html=getTable();
 				var btnShare = $( "#bnt-share" );
-
 				btnShare.attr( 'disabled' , true );
-
-				var html = 	"<style type=text/css>"+
-								"td{"+
-									"color:#000000;"+
-									"border-left: 2px solid #cccccc;"+
-									"border-right: 2px solid #cccccc;"+
-									"border-top: 2px solid #cccccc;"+
-									"border-bottom: 2px solid #cccccc;}"+
-								"table {"+
-									"font-family: helvetica;"+
-									"font-size: 11pt;"+
-									"border-left: 2px solid #cccccc;"+
-								"}"+
-							"</style>"+
-							"<h1>Usage Statistics</h1>"+
-							"<table border='1' cellpadding='3'>"+
-								"<tr>"+
-									"<td>&nbsp;&nbsp;# of Administrators</td>"+
-									"<td>&nbsp;&nbsp;100</td>"+
-								"</tr>"+
-								"<tr>"+
-									"<td>&nbsp;&nbsp;# of Users</td>"+
-									"<td>&nbsp;&nbsp;100</td>"+
-								"</tr>"+
-								"<tr>"+
-									"<td>&nbsp;&nbsp;# of Activities</td>"+
-									"<td>&nbsp;&nbsp;100</td>"+
-								"</tr>"+
-								"<tr>"+
-									"<td>&nbsp;&nbsp;# of Frames / Activity (average)</td>"+
-									"<td>&nbsp;&nbsp;100</td>"+
-								"</tr>"+
-								"<tr>"+
-									"<td>&nbsp;&nbsp;Total Storage in Use</td>"+
-									"<td>&nbsp;&nbsp;100</td>"+
-								"</tr>"+
-								"<tr>"+
-									"<td>&nbsp;&nbsp;Average Storage / Activity</td>"+
-									"<td>&nbsp;&nbsp;100</td>"+
-								"</tr>"+
-							"</table>";
-
 				$.ajax({
 					url: "<?php echo base_url("/pdfs/init"); ?>",
 					method: "POST",
