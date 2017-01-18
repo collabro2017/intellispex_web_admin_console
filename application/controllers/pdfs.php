@@ -45,7 +45,7 @@ class Pdfs extends CI_Controller {
         $pdf->writeHTML($html, true, false, true, false, '');
  
         $name = FCPATH.'report/'. utf8_decode("report_usagestatistics.pdf");
-
+		header( "Content-Type: application/json");
         try{
 
             $pdf->Output($name, 'F');
