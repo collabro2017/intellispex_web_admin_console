@@ -77,4 +77,63 @@ class events extends CI_Controller_EX
 		    $this->load->view('default/include/manage/v_login');
 		}
 	}
+	public function ajax_delete_event()
+	{
+		$session_data = $this->session->userdata('logged_in');
+		if ($session_data)
+		{
+			$this->form_validation->set_rules('id[]', 'evento', 'required|xss_clean');
+			$response=[];
+			if ($this->form_validation->run() == true) {
+				$objecIds=$this->input->post('id');
+				$this->load->model('p_event', '', TRUE);
+				foreach ($objecIds as $objecId)
+				{
+					$event=new p_event();
+					$event->setParse( $this->parserestclient);
+					$event->setObjectId( $objecId);
+					$event->deleteEvent();
+					$response=['result'=>'success'];
+				}
+			}else{
+				$response= ['result'=>'fail','error'=>validation_errors() ];
+
+			}
+			header( 'Content-Type: application/json');
+			echo json_encode( $response);
+			exit;
+		}else{
+			$this->load->view('default/include/manage/v_login');
+		}
+	}
+
+	public function ajax_delete_post()
+	{
+		$session_data = $this->session->userdata('logged_in');
+		if ($session_data)
+		{
+			$this->form_validation->set_rules('id[]', 'post', 'required|xss_clean');
+			$response=[];
+			if ($this->form_validation->run() == true) {
+				$objecIds=$this->input->post('id');
+				$this->load->model('p_post', '', TRUE);
+				$post=new p_post();
+				$post->setParse( $this->parserestclient );
+				foreach ($objecIds as $objecId)
+				{
+					$post->setObjectId( $objecId );
+					$post->delete();
+				}
+				$response=['result'=>'success'];
+			}else{
+				$response= ['result'=>'fail','error'=>validation_errors() ];
+
+			}
+			header( 'Content-Type: application/json');
+			echo json_encode( $response);
+			exit;
+		}else{
+			$this->load->view('default/include/manage/v_login');
+		}
+	}
 }

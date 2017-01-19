@@ -74,14 +74,36 @@
 	<script type="text/javascript">
 		function deletevents()
 		{
+			var id=[];
 			$("table.events-table input[name=evet_delete]:checked").each
-			(
-				function( index )
+			   (
+				   function( index )
+				   {
+					   id.push($( this ).data("id"));
+					   console.log( index + ": " + $( this ).data("id") );
+				   }
+			   );
+
+			$.ajax({
+				url: "<?php echo base_url("/events/ajax_delete_event"); ?>",
+				method: "POST",
+				data: {id:id},
+				success:function(data)
 				{
-			  		console.log( index + ": " + $( this ).data("id") );
+
+					if(data.result=='success'){
+						$("table.events-table input[name=evet_delete]:checked").each(
+						   function( index )
+						   {
+							   $(this).attr('checked', false);
+						   }
+					   );
+						location.reload();
+					}else{
+						alert('the selected events could not be deleted');
+					}
 				}
-			);
-			alert("Delete events");
+			});
 		}
 	</script>
 	</body>

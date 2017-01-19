@@ -19,6 +19,7 @@ class ParseRestClient{
 		$this->restkey = '3N1GRIQCeUWvPaR2gn4yEgJG8BJoKjWMGKCAT7r2';
 		$this->parseUrl = 'http://eb-icymyi-parse-server.jegr4ium5p.us-east-1.elasticbeanstalk.com/parse/classes';
 		$this->pushUrl = 'http://eb-icymyi-parse-server.jegr4ium5p.us-east-1.elasticbeanstalk.com/parse';
+		$this->batchUrl= 'http://eb-icymyi-parse-server.jegr4ium5p.us-east-1.elasticbeanstalk.com/parse/batch';
 
 		/*if(isset($config['appid']) && isset($config['restkey'])){
 			$this->appid = $config['appid'];
@@ -62,6 +63,8 @@ class ParseRestClient{
 		if($args['method'] == 'PUT' || $args['method'] == "POST")
 		{
 			$postData = json_encode($args['payload']);
+			/*var_dump( $postData);
+			exit;*/
 			curl_setopt($c, CURLOPT_POSTFIELDS, $postData );
 		}
 		else
@@ -95,12 +98,8 @@ class ParseRestClient{
 			}
 
 		}
-
-
 		$response = curl_exec($c);
 		$httpCode = curl_getinfo($c, CURLINFO_HTTP_CODE);
-
-
 		return array('code'=>$httpCode, 'response'=>$response);
 	}
 
@@ -213,7 +212,16 @@ class ParseRestClient{
  * @return string $return
  *
  */
-
+	public function batch(array $args)
+	{
+		$params = [
+			'url' => $this->batchUrl,
+			'method' => 'POST',
+			'payload'=>['requests'=>$args]
+		];
+		$return = $this->request($params);
+		return $this->checkResponse($return,'200');
+	}
 	public function query($args){
 		$params = array(
 			'url' => $this->parseUrl.'/'.$args['objectId'],
@@ -255,7 +263,7 @@ class ParseRestClient{
  */
 	public function delete($args){
 		$params = array(
-			'url' => $this->parseUrl .'/'.$args['objectId'],
+			'url' => $this->parseUrl ."/{$args['classes']}/{$args['objectId']}",
 			'method' => 'DELETE'
 		);
 
@@ -264,28 +272,7 @@ class ParseRestClient{
 		return $this->checkResponse($return,'200');
 	}
 
-	public function deleteBatch(array $args)
-	{
 
-		foreach ($args as $index=>$arg)
-		{
-			if($index<50)
-			{
-				$params = [
-					'url' => $this->parseUrl .'/'.$arg['objectId'],
-					'method' => 'DELETE'
-				];
-			}else
-			{
-				 $this->request($params);
-			}
-		}
-
-
-		$return = $this->request($params);
-
-		return $this->checkResponse($return,'200');
-	}
 
 /*
  * Checks for correct/expected response code.

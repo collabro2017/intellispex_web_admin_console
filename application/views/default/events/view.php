@@ -15,8 +15,8 @@
 									<ul>
 										<?php foreach($info as $key ) : ?>
 										    <?php if( isset($key->thumbImage->url) ) : ?>
-										    	<li data-id="1">
-										    	<img src="<?php echo $key->thumbImage->url ?>" width="100%" />
+										    	<li data-id="<?=$key->objectId?>">
+										    	<img src="<?= $key->thumbImage->url ?>" width="100%" />
 										    </li>
 											<?php endif; ?>
 									    <?php endforeach; ?>
@@ -71,14 +71,30 @@
 
 		function deletesheets()
 		{
+			var id=[];
 			$("#event_area ul li.selected").each
 			(
 				function( index )
 				{
+					id.push($( this ).data("id"));
 					console.log( index + ": " + $( this ).data("id") );
 				}
 			);
-			alert("Delete Sheets");
+			$.ajax({
+				url: "<?php echo base_url("/events/ajax_delete_post"); ?>",
+				method: "POST",
+				data: {id:id},
+				success:function(data)
+				{
+
+					if(data.result=='success'){
+						
+						location.reload();
+					}else{
+						alert('the selected sheets could not be deleted');
+					}
+				}
+			});
 		}
 
 		$.fn.multiSelect = function(o)
