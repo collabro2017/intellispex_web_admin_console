@@ -377,8 +377,12 @@ class manage extends CI_Controller_EX {
     $data = new stdClass;
     if ($role == 1) {
       $function_name = "CLIENT ADMINISTRATOR CONSOLE MENU";
-      $data->links = array('c_dashboard' => 'Client Management Dashboard', 'client_set_up' => 'User Set Up / Upload / Editing',
-        'set_up_management' => 'Activity Set Up and Management', 'user_data_management' => 'User Data Management and Export',
+      $data->links = array(
+        'c_dashboard' => 'Client Management Dashboard',
+        'client_set_up' => 'User Set Up / Upload / Editing',
+        'set_up_management' => 'Activity Set Up and Management',
+        'user_data_management' => 'User Data Management and Export',
+        '../sys_contract' => 'Content Manager',
         'logout' => 'Logout');
     }
     else {
