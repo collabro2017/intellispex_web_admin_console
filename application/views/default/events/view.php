@@ -11,17 +11,51 @@
 					<div class="widget-main">
 						<div class="row-fluid">
 							<div class="span10">
-								<div id="event_area">
-									<ul>
-										<?php foreach($info as $key ) : ?>
-										    <?php if( isset($key->thumbImage->url) ) : ?>
-										    	<li data-id="<?=$key->objectId?>">
-										    	<img src="<?= $key->thumbImage->url ?>" width="100%" />
-										    </li>
-											<?php endif; ?>
-									    <?php endforeach; ?>
-									</ul>
+								<div class="row">
+									<div id="event_area">
+										<ul>
+											<?php foreach($info as $key ) : ?>
+												<?php if( isset($key->thumbImage->url) ) : ?>
+													<li data-id="<?=$key->objectId?>">
+														<div class="row">
+															<div class="span10">
+																<h4 class="post-title"><?=$key->title;?></h4>
+															</div>
+															<div class="span1" style="margin-left: 3em">
+																<button onclick="script:delete_title('<?=$key->objectId?>');">Delete</button>
+															</div>
+														</div>
+														<img src="<?= $key->thumbImage->url ?>" width="100%" />
+														<div class="row">
+															<h4 class="post-description">Description</h4>
+															<div class="span10 post-description" >
+																<?=$key->description;?>
+															</div>
+															<div class="span1">
+																<button onclick="script:delete_description('<?=$key->objectId?>')";>Delete</button>
+															</div>
+														</div>
+														<div class="row">
+															<?php if($key->comments):?>
+																<h4 class="post-description">Comments</h4>
+																<?php foreach ($key->comments as $comment):?>
+																		<div class="span10 post-title" >
+																			<?=$comment->Comments;?>
+																		</div>
+																		<div class="span1">
+																			<button onclick="script:delete_comment('<?=$comment->objectId;?>')">
+																				Delete</button>
+																		</div>
+																<?php endforeach;?>
+															<?php endif;?>
+														</div>
+													</li>
+												<?php endif; ?>
+											<?php endforeach; ?>
+										</ul>
+									</div>
 								</div>
+
 
 								<div class="clear">
 									<a href="#" onclick="script:deletesheets();" class="btn btn-small btn-primary menu-button">
@@ -68,7 +102,55 @@
 				);
 			}
 		);
+		function delete_title(id){
 
+			var url="<?php echo base_url("/events/ajax_delete_post_title"); ?>"+"/"+id;
+			$.ajax({
+				url: url,
+				method: "GET",
+				success:function(data)
+				{
+
+					if(data.result=='success'){
+
+						location.reload();
+					}else{
+						alert("the selected post's title could not be deleted");
+					}
+				}
+			});
+		}
+		function delete_comment(id){
+			var url="<?php echo base_url("/events/ajax_delete_comment"); ?>"+"/"+id;
+			$.ajax({
+				url: url,
+				method: "GET",
+				success:function(data)
+				{
+					if(data.result=='success'){
+						location.reload();
+					}else{
+						alert("the selected post's title could not be deleted");
+					}
+				}
+			});
+		}
+		function delete_description(id)
+		{
+			var url="<?php echo base_url("/events/ajax_delete_post_description"); ?>"+"/"+id;
+			$.ajax({
+				url: url,
+				method: "GET",
+				success:function(data)
+				{
+					if(data.result=='success'){
+						location.reload();
+					}else{
+						alert("the selected post's title could not be deleted");
+					}
+				}
+			});
+		}
 		function deletesheets()
 		{
 			var id=[];
@@ -86,7 +168,6 @@
 				data: {id:id},
 				success:function(data)
 				{
-
 					if(data.result=='success'){
 						
 						location.reload();
@@ -96,7 +177,6 @@
 				}
 			});
 		}
-
 		$.fn.multiSelect = function(o)
 		{
 		    var defaults = {

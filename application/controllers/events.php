@@ -70,6 +70,18 @@ class events extends CI_Controller_EX
 	            )
             )->results;
 
+			foreach ($data->info as &$post){
+				$post->comments=$this->parserestclient->query
+				(
+					array
+					(
+						"objectId" => "Comments",
+						"query" =>  '{"postMedia":{"__type":"Pointer","className":"Post","objectId":"'.$post->objectId.'"}}'
+					)
+				)->results;
+			}
+			/*echo '<pre>';var_dump( $data->info );'</pre>';
+			exit;*/
 			$this->load->view('default/events/view', $data);
 		}
 		else
@@ -135,5 +147,45 @@ class events extends CI_Controller_EX
 		}else{
 			$this->load->view('default/include/manage/v_login');
 		}
+	}
+
+	public function ajax_delete_post_title($id){
+		$this->load->model('p_post', '', TRUE);
+		$post=new p_post();
+		$post->setParse( $this->parserestclient );
+		$response=$post->delete_title( $id );
+		header( 'Content-Type: application/json' );
+		if($response){
+			echo json_encode( [ 'result' => 'success', 'message' => $response ] );
+		}else{
+			echo json_encode( [ 'result' => 'fail' ] );
+		}
+		exit;
+	}
+	public function ajax_delete_post_description($id){
+		$this->load->model('p_post', '', TRUE);
+		$post=new p_post();
+		$post->setParse( $this->parserestclient );
+		$response=$post->delete_description( $id );
+		header( 'Content-Type: application/json' );
+		if($response){
+			echo json_encode( [ 'result' => 'success', 'message' => $response ] );
+		}else{
+			echo json_encode( [ 'result' => 'fail' ] );
+		}
+		exit;
+	}
+	public function ajax_delete_comment($id){
+		$this->load->model('p_post', '', TRUE);
+		$post=new p_post();
+		$post->setParse( $this->parserestclient );
+		$response=$post->delete_comment( $id );
+		header( 'Content-Type: application/json' );
+		if($response){
+			echo json_encode( [ 'result' => 'success', 'message' => $response ] );
+		}else{
+			echo json_encode( [ 'result' => 'fail' ] );
+		}
+		exit;
 	}
 }

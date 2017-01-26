@@ -3,7 +3,10 @@ html
     overflow: -moz-scrollbars-vertical;
     overflow: scroll;
 }
-
+.post-title, .post-description{
+    padding-left: 2.5em;
+    text-align: left;
+}
 #event_area
 {
     overflow-y:scroll;

@@ -63,8 +63,6 @@ class ParseRestClient{
 		if($args['method'] == 'PUT' || $args['method'] == "POST")
 		{
 			$postData = json_encode($args['payload']);
-			/*var_dump( $postData);
-			exit;*/
 			curl_setopt($c, CURLOPT_POSTFIELDS, $postData );
 		}
 		else
@@ -188,7 +186,7 @@ class ParseRestClient{
  */
 	public function update($args){
 		$params = array(
-			'url' => $this->parseUrl .'/'.$args['objectId'],
+			'url' =>  "{$this->parseUrl}/{$args['classes']}/{$args['objectId']}",
 			'method' => 'PUT',
 			'payload' => $args['object']
 		);
