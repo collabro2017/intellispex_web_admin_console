@@ -13,6 +13,7 @@ class M_sys_contract extends CI_Model {
 	public $id;
 	public $name;
 	public $contract;
+	public $version;
 	const TABLE_NAME='sys_contract';
 	public function __construct()
 	{
@@ -67,12 +68,30 @@ class M_sys_contract extends CI_Model {
 		$this->contract = $contract;
 	}
 
+	/**
+	 * @return mixed
+	 */
+	public function getVersion()
+	{
+		return $this->version;
+	}
+
+	/**
+	 * @param mixed $version
+	 */
+	public function setVersion( $version )
+	{
+		$this->version = $version;
+	}
+
 	public function save(){
 		if ( $this->getId()  )
 		{
 			return $this->db->update( static::TABLE_NAME, $this, [ 'id' => $this->getId() ] );
 		}else{
-			$result = $this->db->insert( self::TABLE_NAME, [ 'name' => $this->name, 'contract' => $this->contract ] );
+			$result = $this->db->insert( self::TABLE_NAME, [ 'name' => $this->name,
+												'version'=>$this->version,
+												'contract' => $this->contract ] );
 			if($result){
 				$this->id=$this->db->insert_id();
 			}
@@ -96,6 +115,13 @@ class M_sys_contract extends CI_Model {
 		$ci->load->database();
 		$query=$ci->db->get_where(self::TABLE_NAME, ['name' => $name], 1);
 	
+		return $query->result('m_sys_contract');
+	}
+	public static function getByVersionName($name, $version){
+		$ci =&get_instance();
+		$ci->load->database();
+		$query=$ci->db->get_where(self::TABLE_NAME, ['name' => $name,'version'=>$version], 1);
+
 		return $query->result('m_sys_contract');
 	}
 

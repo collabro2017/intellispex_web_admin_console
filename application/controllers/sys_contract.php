@@ -14,8 +14,28 @@ class Sys_Contract extends CI_Controller
 	{
 		if( $this->db->table_exists('sys_contract') == FALSE )
 		{
-			$sql = "CREATE TABLE `sys_contract` (`id` int(10) unsigned NOT NULL AUTO_INCREMENT,`name` varchar(255) DEFAULT NULL,`contract` text,PRIMARY KEY (`id`))";
+			$sql = "CREATE TABLE `sys_contract` (
+								`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+								`name` varchar(255) DEFAULT NULL,
+								`contract` text,PRIMARY KEY (`id`),
+								`version` varchar(10) NULL 
+								)";
 			$this->db->query( $sql );
+		}else{
+			$sql="
+					SELECT * 
+					FROM information_schema.COLUMNS 
+					WHERE 
+						TABLE_SCHEMA = 'icymi' 
+					AND TABLE_NAME = 'sys_contract' 
+					AND COLUMN_NAME = 'version';";
+			$result=$this->db->query($sql);
+			if(!$result->result_array()){
+				$sql="
+					ALTER TABLE `sys_contract`
+					ADD COLUMN `version`  varchar(10) NULL AFTER `contract`;";
+				$this->db->query($sql);
+			}
 		}
 	}
 
@@ -104,11 +124,10 @@ class Sys_Contract extends CI_Controller
 			$data->username = $session_data[ 'username' ];
 			$data->role = $session_data[ 'role' ];
 			$data->id = $session_data[ 'id' ];
+			if ($this->input->post())
+			{
 
-		    if ($this->input->post())
-		    {
-
-		     	$this->load->helper('url');
+				$this->load->helper('url');
 				$this->load->library('form_validation');
 				$this->form_validation->set_rules( 'name', 'Contract Name', 'required|xss_clean' );
 				$this->form_validation->set_rules( 'contract', 'Contract Text', 'required' );
@@ -119,6 +138,7 @@ class Sys_Contract extends CI_Controller
    					$contract=new m_sys_contract();
    					$contract->setId( $id );
 					$contract->setName( $this->input->post( 'name' ) );
+					$contract->setVersion( $this->input->post( 'version' ) );
 					$contract->setContract( $this->input->post( 'contract' ) );
 
 					if($contract->save())

@@ -383,6 +383,7 @@ class manage extends CI_Controller_EX {
         'set_up_management' => 'Activity Set Up and Management',
         'user_data_management' => 'User Data Management and Export',
         '../sys_contract' => 'Content Manager',
+          '../user' => 'Users',
         'logout' => 'Logout');
     }
     else {

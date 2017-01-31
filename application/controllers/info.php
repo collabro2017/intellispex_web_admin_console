@@ -26,18 +26,30 @@ class Info extends CI_Controller {
 		{
 			$data = new stdClass;
 			$this->load->model('m_sys_contract', 'contract', TRUE);
-			$data->content = $this->contract->getByName( $name );
-			if( count($data->content) == 0)
-			{
+			$version=$this->getVersion();
+			if($version){
+				$data->content = $this->contract->getByVersionName( $name, $version );
+				if( count($data->content) == 0)
+				{
+					redirect( 'manage', 'refresh' );
+				}
+				else
+				{
+					$this->load->view('info/index', $data);
+				}
+			}else{
 				redirect( 'manage', 'refresh' );
 			}
-			else
-			{
-				
-				$this->load->view('info/index', $data);	
-			}
-			
 		}
+	}
+	private function getVersion(){
+		$this->load->library('ParseRestClient');
+		$result =$this->parserestclient->getConfig();
+		if($result['code']==200){
+			$param=json_decode( $result['response']);
+			return $param->params->version;
+		}
+		return null;
 	}
 
 	  //le pasamos un array como segundo argumento, estos son los parámetros

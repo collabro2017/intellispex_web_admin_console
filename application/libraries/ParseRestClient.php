@@ -6,6 +6,8 @@ class ParseRestClient{
 	private $restkey = '';
 	private $parseUrl = '';
 	private $pushUrl = '';
+	private $configUrl = '';
+	private $masterkey='';
 
 
 /**
@@ -20,6 +22,8 @@ class ParseRestClient{
 		$this->parseUrl = 'http://eb-icymyi-parse-server.jegr4ium5p.us-east-1.elasticbeanstalk.com/parse/classes';
 		$this->pushUrl = 'http://eb-icymyi-parse-server.jegr4ium5p.us-east-1.elasticbeanstalk.com/parse';
 		$this->batchUrl= 'http://eb-icymyi-parse-server.jegr4ium5p.us-east-1.elasticbeanstalk.com/parse/batch';
+		$this->configUrl='http://eb-icymyi-parse-server.jegr4ium5p.us-east-1.elasticbeanstalk.com/parse/config';
+		$this->masterkey='3N1GRIQCeUWvPaR2gn4yEgJG8BJoKjWMGKCAT7r2';
 
 		/*if(isset($config['appid']) && isset($config['restkey'])){
 			$this->appid = $config['appid'];
@@ -42,12 +46,22 @@ class ParseRestClient{
 		curl_setopt($c, CURLOPT_TIMEOUT, 15);
 		curl_setopt($c, CURLOPT_USERAGENT, 'parseRestClient/1.0');
 		curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($c, CURLOPT_HTTPHEADER, array(
-			'Content-Type: application/json',
-			'X-Parse-Application-Id: '.$this->appid,
-			'X-Parse-REST-API-Key: '.$this->restkey,
-			'Cache-Control: no-cache'
-		));
+		if(isset( $args['use_master']) && $args['use_master']==1){
+			curl_setopt($c, CURLOPT_HTTPHEADER, array(
+				'Content-Type: application/json',
+				'X-Parse-Application-Id: '.$this->appid,
+				'X-Parse-Master-Key: '.$this->masterkey,
+				'Cache-Control: no-cache'
+			));
+		}else{
+			curl_setopt($c, CURLOPT_HTTPHEADER, array(
+				'Content-Type: application/json',
+				'X-Parse-Application-Id: '.$this->appid,
+				'X-Parse-REST-API-Key: '.$this->restkey,
+				'Cache-Control: no-cache'
+			));
+		}
+
 		curl_setopt($c, CURLOPT_CUSTOMREQUEST, $args['method']);
 
 
@@ -172,6 +186,18 @@ class ParseRestClient{
 		return $this->checkResponse($return,'200');
 	}
 
+	/**
+	 *USED TO GET PARSE CONFIG
+	 * https://parseplatform.github.io//docs/rest/guide/#config
+	 */
+	public function getConfig(){
+		$params = array(
+			'url' => $this->configUrl,
+			'method' => 'GET'
+		);
+		return $this->request($params);
+	}
+
 /*
  * Used to update a parse.com object
  *
@@ -188,11 +214,41 @@ class ParseRestClient{
 		$params = array(
 			'url' =>  "{$this->parseUrl}/{$args['classes']}/{$args['objectId']}",
 			'method' => 'PUT',
-			'payload' => $args['object']
+			'payload' => $args['object'],
+
 		);
-
+		if(isset( $args['use_master'])){
+			$params['use_master']=$args['use_master'];
+		}
 		$return = $this->request($params);
+		/*echo '<pre>';var_dump( $args );'</pre>';
+		echo '<pre>';var_dump( $return );'</pre>';
+				exit;*/
+		return $this->checkResponse($return,'200');
+	}
 
+	/**
+	 * @param array $args
+	 * @param array $args['request']['method']
+	 * @param array $args['request']['path']
+	 * @param array $args['request']['body']
+	 * @param array $args['use_master'], enable to use master key
+	 * @return mixed
+	 */
+	public function batch( array $args)
+	{
+		$params = [
+			'url' => $this->batchUrl,
+			'method' => 'POST',
+			'payload'=>['requests'=>$args['request']],
+
+		];
+		if(isset( $args['use_master']) && $args['use_master']==1){
+			$params['use_master']=1;
+		}
+		$return = $this->request($params);/*
+		echo '<pre>';var_dump( $return );'</pre>';
+		exit;*/
 		return $this->checkResponse($return,'200');
 	}
 
@@ -210,16 +266,7 @@ class ParseRestClient{
  * @return string $return
  *
  */
-	public function batch(array $args)
-	{
-		$params = [
-			'url' => $this->batchUrl,
-			'method' => 'POST',
-			'payload'=>['requests'=>$args]
-		];
-		$return = $this->request($params);
-		return $this->checkResponse($return,'200');
-	}
+
 	public function query($args){
 		$params = array(
 			'url' => $this->parseUrl.'/'.$args['objectId'],
@@ -241,9 +288,9 @@ class ParseRestClient{
 		if(isset($args['count'])){
 			$params['count'] = $args['count'];
 		}
-
+		/*echo '<pre>';var_dump( $params );'</pre>';
+		exit;*/
 		$return = $this->request($params);
-
 		return $this->checkResponse($return,'200');
 
 	}

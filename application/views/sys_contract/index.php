@@ -16,6 +16,7 @@
 										<tr>
 											<th>ID</th>
 											<th style="width: 70%">Slug Name</th>
+											<th>Version</th>
 											<th>Action</th>
 										</tr>
 									</thead>
@@ -26,8 +27,12 @@
 										<td>
 										<?= $row->id?>
 										</td>
+
 										<td>
 										<?= $row->name?>
+										</td>
+										<td>
+											<?= $row->version?>
 										</td>
 										<td>
 										<a class=" btn btn-small btn-primary" href="<?php echo base_url(); ?>sys_contract/edit/<?php echo $row->id; ?>">Edit</a>

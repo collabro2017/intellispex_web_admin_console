@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<?php $this->load->view('default/head/console_page.php'); ?>
-	<link rel="stylesheet" href="<?php echo base_url('public') ?>/css/events.css" />
+	<link rel="stylesheet" href="<?= base_url('public') ?>/css/events.css" />
 	<body class="login-layout admin-body">
 	<?php $this->load->view('default/nav/console_page.php'); ?>
   	<div class="container-fluid" id="main-container">
@@ -17,30 +17,42 @@
 											<?php foreach($info as $key ) : ?>
 												<?php if( isset($key->thumbImage->url) ) : ?>
 													<li data-id="<?=$key->objectId?>">
-														<div class="row">
-															<div class="span10">
-																<h4 class="post-title"><?=$key->title;?></h4>
+														<?php if($key->title && $key->title!=" "):?>
+															<div class="row">
+																<div class="span10 post-title">
+																	<h4 class=""><?=$key->title;?></h4>
+																</div>
+																<div class="span1" style="margin-left: 3em">
+																	<button onclick="script:delete_title('<?=$key->objectId?>');"
+																			style="margin-top: 0.5em">Delete</button>
+																</div>
 															</div>
-															<div class="span1" style="margin-left: 3em">
-																<button onclick="script:delete_title('<?=$key->objectId?>');">Delete</button>
-															</div>
-														</div>
+														<?php endif;?>
 														<img src="<?= $key->thumbImage->url ?>" width="100%" />
 														<div class="row">
-															<h4 class="post-description">Description</h4>
-															<div class="span10 post-description" >
-																<?=$key->description;?>
-															</div>
-															<div class="span1">
-																<button onclick="script:delete_description('<?=$key->objectId?>')";>Delete</button>
-															</div>
+															<?php if($key->description && $key->description!=" "):?>
+																<div class="span10 post-description">
+																	<h4 >Description</h4>
+																</div>
+
+																<div class="span10 post-comment" >
+																	<p><?=$key->description;?></p>
+																</div>
+																<div class="span1">
+																	<button onclick="script:delete_description('<?=$key->objectId?>')";>Delete</button>
+																</div>
+															<?php endif;?>
 														</div>
 														<div class="row">
 															<?php if($key->comments):?>
-																<h4 class="post-description">Comments</h4>
+																<div class="span10 post-description">
+																	<h4  class="">Comments</h4>
+																</div>
+
 																<?php foreach ($key->comments as $comment):?>
-																		<div class="span10 post-title" >
-																			<?=$comment->Comments;?>
+																		<div class="span10 post-comment" >
+																			<p><?=$comment->Comments;?></p>
+																			<div class="comment-separator"></div>
 																		</div>
 																		<div class="span1">
 																			<button onclick="script:delete_comment('<?=$comment->objectId;?>')">
@@ -103,79 +115,95 @@
 			}
 		);
 		function delete_title(id){
-
-			var url="<?php echo base_url("/events/ajax_delete_post_title"); ?>"+"/"+id;
-			$.ajax({
-				url: url,
-				method: "GET",
-				success:function(data)
-				{
-
-					if(data.result=='success'){
-
-						location.reload();
-					}else{
-						alert("the selected post's title could not be deleted");
+			var result=confirm("Are you sure?");
+			if ( result==true )
+			{
+				var url="<?php echo base_url("/events/ajax_delete_post_title"); ?>"+"/"+id;
+				$.ajax({
+					url: url,
+					method: "GET",
+					success:function(data)
+					{
+						if(data.result=='success'){
+							location.reload();
+						}else{
+							alert("the selected post's title could not be deleted");
+						}
 					}
-				}
-			});
+				});
+			}
 		}
 		function delete_comment(id){
-			var url="<?php echo base_url("/events/ajax_delete_comment"); ?>"+"/"+id;
-			$.ajax({
-				url: url,
-				method: "GET",
-				success:function(data)
-				{
-					if(data.result=='success'){
-						location.reload();
-					}else{
-						alert("the selected post's title could not be deleted");
+			var result=confirm("Are you sure?");
+			if ( result==true )
+			{
+				var url = "<?php echo base_url( "/events/ajax_delete_comment" ); ?>" + "/" + id;
+				$.ajax ( {
+					url : url ,
+					method : "GET" ,
+					success : function ( data )
+					{
+						if ( data.result == 'success' )
+						{
+							location.reload ();
+						} else
+						{
+							alert ( "the selected post's title could not be deleted" );
+						}
 					}
-				}
-			});
+				} );
+			}
 		}
 		function delete_description(id)
 		{
-			var url="<?php echo base_url("/events/ajax_delete_post_description"); ?>"+"/"+id;
-			$.ajax({
-				url: url,
-				method: "GET",
-				success:function(data)
-				{
-					if(data.result=='success'){
-						location.reload();
-					}else{
-						alert("the selected post's title could not be deleted");
+			var result=confirm("Are you sure?");
+			if ( result==true )
+			{
+				var url = "<?php echo base_url( "/events/ajax_delete_post_description" ); ?>" + "/" + id;
+				$.ajax ( {
+					url : url ,
+					method : "GET" ,
+					success : function ( data )
+					{
+						if ( data.result == 'success' )
+						{
+							location.reload ();
+						} else
+						{
+							alert ( "the selected post's title could not be deleted" );
+						}
 					}
-				}
-			});
+				} );
+			}
 		}
 		function deletesheets()
 		{
-			var id=[];
-			$("#event_area ul li.selected").each
-			(
-				function( index )
-				{
-					id.push($( this ).data("id"));
-					console.log( index + ": " + $( this ).data("id") );
-				}
-			);
-			$.ajax({
-				url: "<?php echo base_url("/events/ajax_delete_post"); ?>",
-				method: "POST",
-				data: {id:id},
-				success:function(data)
-				{
-					if(data.result=='success'){
-						
-						location.reload();
-					}else{
-						alert('the selected sheets could not be deleted');
+			var result=confirm("Are you sure?");
+			if ( result==true )
+			{
+				var id = [];
+				$ ( "#event_area ul li.selected" ).each(function ( index )
+					  {
+						  id.push ( $ ( this ).data ( "id" ) );
+						  console.log ( index + ": " + $ ( this ).data ( "id" ) );
+					  }
+				  );
+				$.ajax ( {
+					url : "<?php echo base_url( "/events/ajax_delete_post" ); ?>" ,
+					method : "POST" ,
+					data : { id : id } ,
+					success : function ( data )
+					{
+						if ( data.result == 'success' )
+						{
+							location.reload ();
+						} else
+						{
+							alert ( 'the selected sheets could not be deleted' );
+						}
 					}
-				}
-			});
+				} );
+			}
 		}
 		$.fn.multiSelect = function(o)
 		{

@@ -31,6 +31,13 @@
 										</div>
 									</div>
 									<div class="control-group">
+										<label for="name-contract" class="control-label">Version</label>
+										<div class="controls">
+											<input id="name-contract" name="version" <?php if (isset($contract[0]->version)): ?> value="<?php echo $contract[0]->version; ?>" <?php endif; ?>>
+										</div>
+									</div>
+
+									<div class="control-group">
 										<label for="text-contract" class="control-label">Content</label>
 										<div class="controls">
 											<textarea  id="text-contract" name="contract" ><?php if (isset($contract[0]->contract)): ?> <?php echo $contract[0]->contract; ?> <?php endif; ?></textarea>
