@@ -21,7 +21,9 @@ class Sys_Contract extends CI_Controller
 								`version` varchar(10) NULL
 								)";
 			$this->db->query( $sql );
-		}else{
+		}
+		/*else
+		{
 			$sql="
 					SELECT *
 					FROM information_schema.COLUMNS
@@ -38,7 +40,7 @@ class Sys_Contract extends CI_Controller
 					ADD COLUMN `version`  varchar(10) NULL AFTER `contract`;";
 				$this->db->query($sql);
 			}
-		}
+		}*/
 	}
 
 	public function index()
