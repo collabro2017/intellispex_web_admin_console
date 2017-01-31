@@ -18,19 +18,21 @@ class Sys_Contract extends CI_Controller
 								`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 								`name` varchar(255) DEFAULT NULL,
 								`contract` text,PRIMARY KEY (`id`),
-								`version` varchar(10) NULL 
+								`version` varchar(10) NULL
 								)";
 			$this->db->query( $sql );
 		}else{
 			$sql="
-					SELECT * 
-					FROM information_schema.COLUMNS 
-					WHERE 
-						TABLE_SCHEMA = 'icymi' 
-					AND TABLE_NAME = 'sys_contract' 
+					SELECT *
+					FROM information_schema.COLUMNS
+					WHERE
+						TABLE_SCHEMA = 'icymi'
+					AND TABLE_NAME = 'sys_contract'
 					AND COLUMN_NAME = 'version';";
-			$result=$this->db->query($sql);
-			if(!$result->result_array()){
+			$result = $this->db->query( $sql );
+
+			if(  empty( $result->result_array() ) )
+			{
 				$sql="
 					ALTER TABLE `sys_contract`
 					ADD COLUMN `version`  varchar(10) NULL AFTER `contract`;";
