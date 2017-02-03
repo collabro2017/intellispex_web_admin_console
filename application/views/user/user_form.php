@@ -113,6 +113,12 @@
 									Logout
 								</a>
 							</div>
+							<div class="clear">
+								<a class="btn btn-small btn-primary menu-button menu-logout-button"
+								   href="<?= base_url('/user/index')?>">
+									Back
+								</a>
+							</div>
 						</div>
 					</div>
 				</div>

@@ -97,7 +97,6 @@ class M_sys_contract extends CI_Model {
 			}
 			return $this->id;
 		}
-
 	}
 	public static function getById($id)
 	{

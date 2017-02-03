@@ -24,7 +24,14 @@
 										<tr>
 											<td>
 												<a href="<?php echo base_url(); ?>events/event/<?php echo $key->objectId ?>">
-													<?php echo $key->eventname ?>
+													<?php
+														if($key->eventname)
+														{
+															echo $key->eventname;
+														}else{
+																echo 'No name';
+														}
+													?>
 												</a>
 											</td>
 											<td>

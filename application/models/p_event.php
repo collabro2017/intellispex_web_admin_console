@@ -100,4 +100,37 @@ class P_event extends CI_Model
 		}
 		$this->parse->delete(['classes'=>'Event','objectId'=>$this->objectId]);
 	}
+
+	public function countFlaggedEvent()
+	{
+		return $this->parse->query
+		(
+			[
+				"objectId" => 'Event',
+				'query' => '{"eventBadgeFlag":{"$ne":[],"$exists":true}}',
+				'limit' => 0,
+				'count' => 1
+			]
+		)->count;
+	}
+
+	public function get_data_table_flagged_events( $limit, $skip, $order, $dir )
+	{
+		if ( $dir == 'desc' )
+		{
+			$order = "-{$order}";
+		}
+		$response = $this->parse->query
+		(
+			[
+				"objectId" => self::CLASS_NAME,
+				'query' => '{"eventBadgeFlag":{"$ne":[],"$exists":true}}',
+				'skip' => $skip,
+				'limit' => $limit,
+				'order' => $order,
+				'include'=>"eventBadgeFlag"
+			]
+		)->results;
+		return $response;
+	}
 }

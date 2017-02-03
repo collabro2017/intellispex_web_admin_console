@@ -13,7 +13,6 @@ class User extends CI_Controller
 	{
 		$data = new stdClass;
 		$session_data = $this->session->userdata( 'logged_in' );
-
 		if( $session_data )
 		{
 			$data->username = $session_data[ 'username' ];
@@ -29,15 +28,12 @@ class User extends CI_Controller
 		{
 			redirect( 'manage/console_menu', 'refresh' );
 		}
-
 	}
 
 	public function ajax_user_datatable_parse(){
 
 		$this->load->library('Jquery_DataTable', $this->input->post() );
 		$this->load->model('p_user', 'user', TRUE);
-		/*echo '<pre>';var_dump( $this->input->post() );'</pre>';
-		exit;*/
 		$dt = new Jquery_DataTable( $this->input->post()  );
 
 		$this->user->setParse( $this->parserestclient );
@@ -45,8 +41,7 @@ class User extends CI_Controller
 		$recordsFiltered = $recordsTotal;
 
 		$resultArray = $this->user->getAll($dt->getLength(), $dt->getStart(), $dt->getOrderName( 0 ), $dt->getOrderDir( 0 ) );
-		/*var_dump( $resultArray);
-		exit;*/
+
 		foreach ($resultArray as &$result){
 			if(!isset($result->name)){
 				$result->name='';
@@ -145,6 +140,103 @@ class User extends CI_Controller
 		}
 		header( 'Content-Type: application/json' );
 		echo json_encode( $response );
+		exit;
+	}
+	public function delete_users(){
+		$response=[];
+		if($this->input->post()){
+			$this->load->model('p_user', 'user', TRUE);
+			$this->user->setParse( $this->parserestclient );
+			$ids=$this->input->post('id');
+			$this->user->delete_batch_user($ids);
+			$response['status']='success';
+
+		}else{
+			$response['status']='fail';
+			$response['error']='Fail to delete users';
+		}
+		header( 'Content-Type: application/json' );
+		echo json_encode( $response );
+		exit;
+	}
+	public function reset_password()
+	{
+		$response = [];
+		if ( $this->input->post() )
+		{
+			$user = $this->input->post('id');
+			$now = new DateTime();
+			$hash = hash( 'md5', $user . $now->getTimestamp() );
+			$this->load->model( 'm_reset_password', 'reset', TRUE );
+			$this->reset->setUser( $user );
+			$this->reset->setHash( $hash );
+			$this->reset->save();
+			$response[ 'status' ] = 'success';
+			$response[ 'hash' ] = $hash;
+		}
+		else
+		{
+			$response[ 'status' ] = 'fail';
+			$response[ 'error' ] = 'can not send mail';
+		}
+
+		header( 'Content-Type: application/json' );
+		echo json_encode( $response );
+		exit;
+	}
+
+	public function change_password( $user, $hash )
+	{
+		$data = new stdClass;
+		$this->load->model('m_reset_password', 'reset', TRUE);
+		$model=$this->reset->getUserHash($user, $hash);
+		if( $model )
+		{
+			$data->username = "";
+			$data->role = "";
+			$data->id = "";
+			$data->function_name = "Change Password";
+			$data->user=$user;
+			$data->hash=$hash;
+			$this->load->view( 'user/change_password_form' , $data);
+		}
+		else
+		{
+			echo 'Invalid link';
+		}
+
+	}
+	public function ajax_change_password(){
+		$response = [];
+		if ( $this->input->post() )
+		{
+			//$this->form_validation->set_rules( 'old-pass', 'Old Password', 'required' );
+			$this->form_validation->set_rules( 'new-pass', 'New Password', 'required|matches[confirm-pass]' );
+			$this->form_validation->set_rules( 'confirm-pass', 'Password Confirmation', 'required|matches[new-pass]' );
+			$this->form_validation->set_rules( 'user', 'User', 'required' );
+			$this->form_validation->set_rules( 'hash', 'Activation Code', 'required' );
+			if ( $this->form_validation->run() == true )
+			{
+				$params=$this->input->post();
+				$this->load->model('p_user', 'user', TRUE);
+				$this->load->model('m_reset_password', 'reset', TRUE);
+				$this->user->setParse( $this->parserestclient );
+				$this->user->setObjectId($params['user']);
+				$this->reset->delete($params['user']);
+				$response['update']=$this->user->updatePassword($params['new-pass']);
+				$response['status']='success';
+			}else{
+				$response[ 'status' ] = 'fail';
+				$response[ 'error' ] = validation_errors();
+			}
+		}
+		else
+		{
+			$response[ 'status' ] = 'fail';
+			$response[ 'error' ] = 'Could not change password';
+		}
+		header( 'Content-Type: application/json' );
+		echo json_encode( $response,JSON_PRETTY_PRINT);
 		exit;
 	}
 }
