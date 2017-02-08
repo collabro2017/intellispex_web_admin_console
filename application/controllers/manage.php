@@ -384,7 +384,7 @@ class manage extends CI_Controller_EX {
         'user_data_management' => 'User Data Management and Export',
         '../sys_contract' => 'Content Manager',
           '../user' => 'Users',
-          '../events/FlaggedEvents' => 'Flagged Events',
+          '../events/FlaggedEvents' => 'Manage Reported Content',
         'logout' => 'Logout');
     }
     else {

@@ -12,11 +12,45 @@
 						<div class="row-fluid">
 							<div class="span10">
 								<div class="row">
+									<h3 class="event-title" data-id="<?=$info[0]->objectId?>">Event <?php
+										if( isset( $info[0]->eventBadgeFlag) && $info[0]->eventBadgeFlag){
+											echo '<i class="icon-flag"></i>';
+										}
+										?></h3>
+									<div id="event_header">
+										<ul>
+											<li>
+												<div class="row">
+													<div class="span10 post-title">
+														<h4><?=$info[0]->eventname?></h4>
+													</div>
+												</div>
+
+												<img src="<?= $info[0]->postImage->url?>"  width="100%" />
+												<div class="row">
+													<div class="span10 post-description">
+														<h4>Description</h4>
+													</div>
+
+													<div class="span10 post-comment" >
+														<p><?=$info[0]->description;?></p>
+													</div>
+												</div>
+											</li>
+										</ul>
+
+									</div>
+									<h3 class="event-title">Posts</h3>
 									<div id="event_area">
 										<ul>
-											<?php foreach($info as $key ) : ?>
+											<?php foreach($info[0]->postedObjects as $key ) : ?>
 												<?php if( isset($key->thumbImage->url) ) : ?>
-													<li data-id="<?=$key->objectId?>">
+													<li data-id="<?=$key->objectId?>" style="text-align: left">
+														<?php
+														if( isset( $key->usersBadgeFlag) && $key->usersBadgeFlag){
+															echo '<i class="icon-flag" ></i>';
+														}
+														?>
 														<?php if($key->title && $key->title!=" "):?>
 															<div class="row">
 																<div class="span10 post-title">
@@ -34,7 +68,6 @@
 																<div class="span10 post-description">
 																	<h4 >Description</h4>
 																</div>
-
 																<div class="span10 post-comment" >
 																	<p><?=$key->description;?></p>
 																</div>
@@ -44,18 +77,24 @@
 															<?php endif;?>
 														</div>
 														<div class="row">
-															<?php if($key->comments):?>
+															<?php  if ( isset( $key->commentsArray ) ):?>
 																<div class="span10 post-description">
 																	<h4  class="">Comments</h4>
 																</div>
-
-																<?php foreach ($key->comments as $comment):?>
+																<?php foreach ($key->commentsArray as $comment):?>
 																		<div class="span10 post-comment" >
-																			<p><?=$comment->Comments;?></p>
+																			<?php
+																				if(isset($comment->Comments))
+																				{
+																					echo "<p>{$comment->Comments}</p>";
+																				}else{
+																						echo  "<p>{$comment}</p>";
+																				}
+																			?>
 																			<div class="comment-separator"></div>
 																		</div>
 																		<div class="span1">
-																			<button onclick="script:delete_comment('<?=$comment->objectId;?>')">
+																			<button onclick="script:delete_comment('<?=$key->objectId?>','<?=$comment->objectId;?>')">
 																				Delete</button>
 																		</div>
 																<?php endforeach;?>
@@ -133,11 +172,11 @@
 				});
 			}
 		}
-		function delete_comment(id){
+		function delete_comment(postId,commentId){
 			var result=confirm("Are you sure?");
 			if ( result==true )
 			{
-				var url = "<?php echo base_url( "/events/ajax_delete_comment" ); ?>" + "/" + id;
+				var url = "<?php echo base_url( "/events/ajax_delete_comment" ); ?>" + "/" + postId+"/"+commentId;
 				$.ajax ( {
 					url : url ,
 					method : "GET" ,
@@ -185,7 +224,6 @@
 				$ ( "#event_area ul li.selected" ).each(function ( index )
 					  {
 						  id.push ( $ ( this ).data ( "id" ) );
-						  console.log ( index + ": " + $ ( this ).data ( "id" ) );
 					  }
 				  );
 				$.ajax ( {

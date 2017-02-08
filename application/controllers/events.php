@@ -60,29 +60,9 @@ class events extends CI_Controller_EX
 			$data->id = $session_data[ 'id' ];
 			$data->function_name = "EVENT VIEWER";
 			$data->event_id = $event_id;
-
-			$data->info = $this->parserestclient->query
-			(
-				array
-				(
-					"objectId" => "Post",
-					"query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}'
-				)
-			)->results;
-
-			foreach ( $data->info as &$post )
-			{
-				$post->comments = $this->parserestclient->query
-				(
-					array
-					(
-						"objectId" => "Comments",
-						"query" => '{"postMedia":{"__type":"Pointer","className":"Post","objectId":"' . $post->objectId . '"}}'
-					)
-				)->results;
-			}
-			/*echo '<pre>';var_dump( $data->info );'</pre>';
-			exit;*/
+			$this->load->model( 'p_event', 'pevent', TRUE );
+			$this->pevent->setParse($this->parserestclient);
+			$data->info=$this->pevent->getEventById($event_id);
 			$this->load->view( 'default/events/view', $data );
 		}
 		else
@@ -131,19 +111,22 @@ class events extends CI_Controller_EX
 		$session_data = $this->session->userdata( 'logged_in' );
 		if ( $session_data )
 		{
-			$this->form_validation->set_rules( 'id[]', 'post', 'required|xss_clean' );
+
+
+			$this->form_validation->set_rules( 'id[]', 'Event', 'required|xss_clean' );
 			$response = [];
 			if ( $this->form_validation->run() == true )
 			{
-				$objecIds = $this->input->post( 'id' );
+				$listPostsIds = $this->input->post( 'id' );
 				$this->load->model( 'p_post', '', TRUE );
 				$post = new p_post();
 				$post->setParse( $this->parserestclient );
-				foreach ( $objecIds as $objecId )
+				$post->deletePosts($listPostsIds);
+				/*foreach ( $objecIds as $objecId )
 				{
 					$post->setObjectId( $objecId );
 					$post->delete();
-				}
+				}*/
 				$response = [ 'result' => 'success' ];
 			}
 			else
@@ -197,12 +180,12 @@ class events extends CI_Controller_EX
 		exit;
 	}
 
-	public function ajax_delete_comment( $id )
+	public function ajax_delete_comment( $postId, $commendId )
 	{
 		$this->load->model( 'p_post', '', TRUE );
 		$post = new p_post();
 		$post->setParse( $this->parserestclient );
-		$response = $post->delete_comment( $id );
+		$response = $post->deletePostComments( $postId, [$commendId] );
 		header( 'Content-Type: application/json' );
 		if ( $response )
 		{
@@ -241,10 +224,10 @@ class events extends CI_Controller_EX
 		$dt = new Jquery_DataTable( $this->input->post()  );
 
 		$this->event->setParse( $this->parserestclient );
-		$recordsTotal = $this->event->countFlaggedEvent();
+		$recordsTotal = $this->event->countFlaggedPostEvent();
 		$recordsFiltered = $recordsTotal;
 
-		$resultArray = $this->event->get_data_table_flagged_events($dt->getLength(), $dt->getStart(), $dt->getOrderName( 0 ), $dt->getOrderDir( 0 ) );
+		$resultArray = $this->event->get_data_table_flagged_post_events($dt->getLength(), $dt->getStart(), $dt->getOrderName( 0 ), $dt->getOrderDir( 0 ) );
 
 		echo $dt->getJsonResponseJsonData( $recordsTotal, $recordsFiltered, json_encode( $resultArray ) );
 		exit;

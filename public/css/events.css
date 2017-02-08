@@ -3,7 +3,12 @@ html
     overflow: -moz-scrollbars-vertical;
     overflow: scroll;
 }
-
+.event-title{
+    text-align: left;
+    font-weight: bold;
+    margin-left:10em ;
+    color: #0c0c0c;
+}
 .post-title h4{
     padding-left: 2.5em;
     text-align: left;
@@ -25,7 +30,7 @@ div.comment-separator{
     border-bottom-color: #a5a2a2;
     border-bottom-width: 2px;
 }
-#event_area
+#event_area, #event_header
 {
     overflow-y:scroll;
     height:500px;

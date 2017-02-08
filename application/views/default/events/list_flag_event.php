@@ -15,9 +15,10 @@
 							<table id="dataTable" class="display" width="100%" cellspacing="0">
 								<thead>
 								<tr>
-									<th>Event Name</th>
-									<th>Owner</th>
-									<th>Petitioner</th>
+									<th>User</th>
+									<th>Date Time reported</th>
+									<th>Feature User</th>
+									<th>Description</th>
 								</tr>
 								</thead>
 							</table>
@@ -45,7 +46,7 @@
 
 <?php $this->load->view('default/footer/console_page.php'); ?>
 </body>
-
+<script src="<?=base_url('/public/js/moment.min.js')?>"></script>
 <script src="<?=base_url('/public/js/DataTables-1.10.13/media/js/jquery.dataTables.min.js')?>"></script>
 <script src="<?=base_url('/public/js/DataTables-1.10.13/extensions/Select/js/dataTables.select.min.js')?>"></script>
 
@@ -66,44 +67,63 @@
 		} ,
 		"columns" : [
 			{
-				"data" : "eventname" ,
+				"data" : "objectId" ,
+				"render": function(data,type, row){
+					return row.targetEvent.username
+				}
+
+			},
+			{
+				"data" : "updatedAt" ,
+				"render":function(data, type, row){
+					if(type=='display'){
+						return moment(data).format('YYYY/MM/DD HH:mm:ss');
+					}
+					return data;
+				}
+			},
+			{
+				"data" : "targetEvent" ,
 				"render":function(data, type, row)
 				{
 					if(type=='display'){
-						if(data=="" || data==" "){
-							return '<a target="_blank" href="<?=base_url('events/event')?>/'+row.objectId+'">No Name</a>';
-						}else{
-							return '<a target="_blank" href="<?=base_url('events/event')?>/'+row.objectId+'">'+data+'</a>';
-						}
+						var url='<?= base_url()?>'+'/events/event/'+row.targetEvent.objectId;
+						if(!jQuery.isEmptyObject(row.usersBadgeFlag) && jQuery.isEmptyObject(row.targetEvent.eventBadgeFlag))
+						{
 
+							return '<a href="'+url+'" target="_blank">Post</a>';
+						}
+						if(jQuery.isEmptyObject(row.usersBadgeFlag) && !jQuery.isEmptyObject(row.targetEvent.eventBadgeFlag))
+						{
+							return '<a href="'+url+'" target="_blank">Event</a>';
+						}
+						if(!jQuery.isEmptyObject(row.usersBadgeFlag) && !jQuery.isEmptyObject(row.targetEvent.eventBadgeFlag))
+						{
+							return '<a href="'+url+'" target="_blank">Post, Event</a>';
+						}
 					}else{
 						return data;
 					}
 				}
 			},
 			{
-				"data" : "username" ,
-			},
-			{
-				"data" : "eventBadgeFlag" ,
-				"render" : function ( data , type , row )
-				{
-					if ( type == 'display' )
-					{
-						var names = '';
-						if ( jQuery.isPlainObject ( data[ 0 ] ) )
+				"data":"description",
+				"render":function(data, type, row){
+					if(type=='display'){
+						if(!jQuery.isEmptyObject(row.usersBadgeFlag && jQuery.isEmptyObject(row.targetEvent.eventBadgeFlag)))
 						{
-							$.each ( data , function ( index , value )
-							{
-								names += value.username + ',';
-							} );
-						} else
-						{
-							names = data + "";
+
+							return row.description;
 						}
-						return names;
-					} else
-					{
+						if(jQuery.isEmptyObject(row.usersBadgeFlag && !jQuery.isEmptyObject(row.targetEvent.eventBadgeFlag)))
+						{
+							return row.targetEvent.eventname;
+						}
+						if(!jQuery.isEmptyObject(row.usersBadgeFlag && !jQuery.isEmptyObject(row.targetEvent.eventBadgeFlag)))
+						{
+							return row.description+'</br>'+row,targetEvent.title;
+						}
+					}else{
 						return data;
 					}
 				}
@@ -119,7 +139,7 @@
 			{
 				table.rows ( '.selected' ).every ( function ( rowIdx )
 				{
-					table.row ( rowIdx ).data ().objectId;
+					table.row ( rowIdx ).data ().targetEvent.objectId;
 					id.push ( table.row ( rowIdx ).data ().objectId );
 				} );
 				var url = "<?= base_url( 'events/ajax_delete_event' )?>";

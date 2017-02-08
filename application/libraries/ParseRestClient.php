@@ -114,20 +114,34 @@ class ParseRestClient
 			{
 				$postData[ 'password' ] = $args[ 'password' ];
 			}
-			if ( isset( $args[ 'include' ] ) )
+			/*if ( isset( $args[ 'include' ] ) )
 			{
 				$postData[ 'include' ] = $args[ 'include' ];
-			}
-			if ( count( $postData ) > 0 )
+			}*/
+			$total_post_data=count( $postData );
+			if ( $total_post_data > 0 )
 			{
 				$query = http_build_query( $postData, '', '&' );
-
+				if ( isset( $args[ 'include' ] ) )
+				{
+					$query = "{$query}&include={$args[ 'include' ]}";
+				}
+				curl_setopt( $c, CURLOPT_URL, $args[ 'url' ] . '?' . $query );
+			}
+			elseif ( isset( $args[ 'include' ] ) )
+			{
+				$query = "include={$args[ 'include' ]}";
 				curl_setopt( $c, CURLOPT_URL, $args[ 'url' ] . '?' . $query );
 			}
 
 		}
 		$response = curl_exec( $c );
 		$httpCode = curl_getinfo( $c, CURLINFO_HTTP_CODE );
+		/*if ( isset( $args[ 'limit' ] ) && $args['limit']>0)
+		{
+			var_dump( $response);
+			exit;
+		}*/
 		return array( 'code' => $httpCode, 'response' => $response );
 	}
 
@@ -265,10 +279,27 @@ class ParseRestClient
 			$params[ 'headers' ] = [ "X-Parse-Master-Key: {$this->masterkey}" ];
 		}
 		$return = $this->request( $params );
-		/*echo '<pre>';var_dump( $args );'</pre>';
-		echo '<pre>';var_dump( $return );'</pre>';
-				exit;*/
 		return $this->checkResponse( $return, '200' );
+	}
+
+
+	/**http://parseplatform.github.io/docs/rest/guide/#relations
+	 * @param $op , could be "AddRelation" or "RemoveRelation"
+	 * @param $relation_class , pointer relation class
+	 * @param $objectId
+	 * @param array $relation_objectId ,
+	 * @param class
+	 * @return update response
+	 */
+	public function update_array_pointer_relation( $op, $relation_class, $objectId, array $relation_objectId, $class)
+	{
+		$objects='';
+		foreach ($relation_objectId as $pointer){
+			$objects.='[{"__type":"Pointer","className":"'.$relation_class.'","objectId":"'.$pointer.'"}]';
+		}
+		$params=['classes'=>$class, 'objectId'=>$objectId,
+			'payload'=>'{"opponents":{"__op":"RemoveRelation","objects":'.$objects.'}}'];
+		return $this->update( $params);
 	}
 
 	/**
@@ -297,6 +328,40 @@ class ParseRestClient
 		return $this->checkResponse( $return, '200' );
 	}
 
+	/**
+	 * @param $class_name
+	 * @param array $listIds, ids to delete
+	 * @param int $use_master_key,
+	 */
+	public function delete_batch( $class_name, array $listIds, $use_master_key=0)
+	{
+		$request = [ 'request' => [] ,'use_master' => $use_master_key ];
+		$counter = 0;
+		$response=[];
+		foreach ( $listIds as $index => $id )
+		{
+			if ( $counter >= 50 )
+			{
+				$response[]=$this->batch( $request );
+				$request = [ 'request' => [] ,'use_master' => $use_master_key];
+				$counter = 0;
+			}
+			else
+			{
+				$request[ 'request' ][] = [
+					'method' => 'DELETE',
+					'path' => "/parse/classes/{$class_name}/{$id}"
+				];
+				$counter++;
+			}
+		}
+		if ( $request )
+		{
+			$response[] = $this->batch( $request );
+		}
+		return $response;
+	}
+
 	/*
 	 * Used to query parse.com.
 	 *
@@ -319,30 +384,6 @@ class ParseRestClient
 			'method' => 'GET'
 		);
 		$params=array_merge( $params, $args);
-		/*if ( isset( $args[ 'query' ] ) )
-		{
-			$params[ 'query' ] = $args[ 'query' ];
-		}
-		if ( isset( $args[ 'order' ] ) )
-		{
-			$params[ 'order' ] = $args[ 'order' ];
-		}
-		if ( isset( $args[ 'limit' ] ) )
-		{
-			$params[ 'limit' ] = $args[ 'limit' ];
-		}
-		if ( isset( $args[ 'skip' ] ) )
-		{
-			$params[ 'skip' ] = $args[ 'skip' ];
-		}
-		if ( isset( $args[ 'count' ] ) )
-		{
-			$params[ 'count' ] = $args[ 'count' ];
-		}
-		if ( isset( $args[ 'include' ] ) )
-		{
-			$params[ 'include' ] = $args[ 'include' ];
-		}*/
 		$return = $this->request( $params );
 
 		return $this->checkResponse( $return, '200' );
@@ -471,6 +512,7 @@ class ParseRestClient
 
 		return $result;
 	}
+
 
 }
 

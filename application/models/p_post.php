@@ -10,7 +10,7 @@ class P_post extends CI_Model
 	private $parse;
 	private $objectId;
 
-	const CLASS_NAME='Event';
+	const CLASS_NAME='Post';
 
 	function __construct()
 	{
@@ -56,14 +56,83 @@ class P_post extends CI_Model
 	}
 	public function delete_title($id)
 	{
-		return $this->parserestclient->update(['classes'=>'Post','objectId'=>$id, 'object'=>['title'=>" "]]);
+		return $this->parse->update(['classes'=>'Post','objectId'=>$id, 'object'=>['title'=>" "]]);
 	}
 	public function delete_description($id)
 	{
-		return $this->parserestclient->update(['classes'=>'Post','objectId'=>$id, 'object'=>['description'=>" "]]);
+		return $this->parse->update(['classes'=>'Post','objectId'=>$id, 'object'=>['description'=>" "]]);
 	}
 	public function delete_comment($id)
 	{
-		return $this->parserestclient->delete(['classes'=>'Comments','objectId'=>$id]);
+		return $this->parse->delete(['classes'=>'Comments','objectId'=>$id]);
+	}
+	public function getListPost(array $postId)
+	{
+		$stringId="";
+		$total_id=count( $postId);
+		foreach ($postId as $position => $id)
+		{
+			if($position==$total_id-1)
+			{
+				$stringId.='"'.$id.'"';
+			}else{
+				$stringId.='"'.$id.'",';
+			}
+		}
+		$response=$this->parse->query(
+			[
+				'objectId'=>self::CLASS_NAME,
+				'query'=>'{"objectId":{"$in":['. $stringId.']}}',
+			]
+		)->results;
+		return  $response;
+	}
+	public function getPostById($objectId)
+	{
+		$response = $this->parse->query(
+			[
+				'objectId'=>self::CLASS_NAME,
+				'query'=>'{"objectId":"'.$objectId.'"}',
+			]
+		)->results;
+
+		return $response;
+	}
+
+	public function deletePostComments( $postId, array $listCommentsId )
+	{
+		$this->parse->delete_batch( "Comments", $listCommentsId );
+		$post = $this->getPostById( $postId );
+		if ( isset( $post->commentsArray ) && $post->commentsArray )
+		{
+			$commentsArray = $post->commentsArray;
+			$newCommentsArray = [];
+			foreach ( $commentsArray as $comment )
+			{
+				if ( !in_array( $comment->objectId, $listCommentsId ) )
+				{
+					$newCommentsArray[] = $comment;
+				}
+			}
+			$this->parse->update( [ 'classes' => 'Post', 'objectId' => $postId, 'object' => ['commentsArray'=>$newCommentsArray] ] );
+		}
+	}
+
+	public function deletePosts( array $postId )
+	{
+		$listPost = $this->getListPost( $postId );
+		foreach ( $listPost as $post )
+		{
+			if(isset( $post->commentsArray ) && $post->commentsArray )
+			{
+				$listCommentsId=[];
+				foreach ($post->commentsArray as $comment)
+				{
+						$listCommentsId[]=$comment->objectId;
+				}
+				$this->deletePostComments( $post->objectId, $listCommentsId);
+			}
+		}
+		$this->parse->delete_batch(self::CLASS_NAME, $postId);
 	}
 }
