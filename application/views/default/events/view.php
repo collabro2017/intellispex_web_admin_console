@@ -44,7 +44,7 @@
 									<div id="event_area">
 										<ul>
 											<?php foreach($info[0]->postedObjects as $key ) : ?>
-												<?php if( isset($key->thumbImage->url) ) : ?>
+
 													<li data-id="<?=$key->objectId?>" style="text-align: left">
 														<?php
 														if( isset( $key->usersBadgeFlag) && $key->usersBadgeFlag){
@@ -62,7 +62,34 @@
 																</div>
 															</div>
 														<?php endif;?>
-														<img src="<?= $key->thumbImage->url ?>" width="100%" />
+														<?php
+															if(isset($key->postType))
+															{
+																$html='';
+																switch ($key->postType){
+																	case 'audio':
+																		$html="<audio  controls>";
+																		$html.="<source src='{$key->postFile->url}' type='audio/wav'/>";
+																		$html.="<source src='{$key->postFile->url}' type='audio/mp3'/>";
+																		$html.="<source src='{$key->postFile->url}' type='audio/ogg'/>";
+																		$html.="Your browser does not support the audio element.";
+																		$html.="</audio>";
+																		break;
+																	case 'video':
+																		$html="<video width='320' height='240' controls>";
+																		$html.="<source src='{$key->postFile->url}' type='video/wav'/>";
+																		$html.="<source src='{$key->postFile->url}' type='video/mov'/>";
+																		$html.="<source src='{$key->postFile->url}' type='video/mp4'/>";
+																		$html.="</video>";
+																		break;
+																	case 'photo':
+																		$html="<img src='{$key->thumbImage->url}' width='100%'/>";
+																		break;
+																	default:break;
+																}
+																echo $html;
+															}
+														?>
 														<div class="row">
 															<?php if($key->description && $key->description!=" "):?>
 																<div class="span10 post-description">
@@ -77,7 +104,7 @@
 															<?php endif;?>
 														</div>
 														<div class="row">
-															<?php  if ( isset( $key->commentsArray ) ):?>
+															<?php  if ( isset( $key->commentsArray ) && $key->commentsArray ):?>
 																<div class="span10 post-description">
 																	<h4  class="">Comments</h4>
 																</div>
@@ -101,13 +128,11 @@
 															<?php endif;?>
 														</div>
 													</li>
-												<?php endif; ?>
+
 											<?php endforeach; ?>
 										</ul>
 									</div>
 								</div>
-
-
 								<div class="clear">
 									<a href="#" onclick="script:deletesheets();" class="btn btn-small btn-primary menu-button">
 										Delete Selected Sheets
@@ -187,7 +212,7 @@
 							location.reload ();
 						} else
 						{
-							alert ( "the selected post's title could not be deleted" );
+							alert ( "the selected post's comment could not be deleted" );
 						}
 					}
 				} );
@@ -209,7 +234,7 @@
 							location.reload ();
 						} else
 						{
-							alert ( "the selected post's title could not be deleted" );
+							alert ( "the selected post's description could not be deleted" );
 						}
 					}
 				} );

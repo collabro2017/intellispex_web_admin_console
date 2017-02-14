@@ -68,6 +68,9 @@
 		</div>
 	</div>
 </div>
+<div class="clear" style="text-align: center;">
+	<a href="<?php echo base_url(); ?>user/suspended_user" class="btn btn-small btn-primary menu-button">Suspended Users</a>
+</div>
 
 	<div class="clear" style="text-align: center;">
 		<a href="<?php echo base_url(); ?>manage/console_menu" class="btn btn-small btn-primary menu-button">Console Menu</a>

@@ -114,10 +114,6 @@ class ParseRestClient
 			{
 				$postData[ 'password' ] = $args[ 'password' ];
 			}
-			/*if ( isset( $args[ 'include' ] ) )
-			{
-				$postData[ 'include' ] = $args[ 'include' ];
-			}*/
 			$total_post_data=count( $postData );
 			if ( $total_post_data > 0 )
 			{
@@ -137,11 +133,6 @@ class ParseRestClient
 		}
 		$response = curl_exec( $c );
 		$httpCode = curl_getinfo( $c, CURLINFO_HTTP_CODE );
-		/*if ( isset( $args[ 'limit' ] ) && $args['limit']>0)
-		{
-			var_dump( $response);
-			exit;
-		}*/
 		return array( 'code' => $httpCode, 'response' => $response );
 	}
 
@@ -274,32 +265,39 @@ class ParseRestClient
 			'payload' => $args[ 'object' ],
 
 		);
+
 		if ( isset( $args[ 'use_master' ] ) )
 		{
 			$params[ 'headers' ] = [ "X-Parse-Master-Key: {$this->masterkey}" ];
+		}else{
+			$params[ 'headers' ] = [ "X-Parse-REST-API-Key: {$this->restkey}" ];
 		}
+
 		$return = $this->request( $params );
 		return $this->checkResponse( $return, '200' );
 	}
 
 
 	/**http://parseplatform.github.io/docs/rest/guide/#relations
-	 * @param $op , could be "AddRelation" or "RemoveRelation"
+	 * @param $op , could be "AddRelation" , "RemoveRelation","Add" ,"AddUnique", "Remove"
 	 * @param $relation_class , pointer relation class
 	 * @param $objectId
 	 * @param array $relation_objectId ,
-	 * @param class
+	 * @param class_name
+	 * @param fiel, column to update
 	 * @return update response
 	 */
-	public function update_array_pointer_relation( $op, $relation_class, $objectId, array $relation_objectId, $class)
+	public function update_array_pointer_relation( $op, $relation_class, $objectId, array $relation_objectId, $class_name , $field)
 	{
-		$objects='';
-		foreach ($relation_objectId as $pointer){
-			$objects.='[{"__type":"Pointer","className":"'.$relation_class.'","objectId":"'.$pointer.'"}]';
+		$objects = [$field=>['__op'=>$op]];
+		foreach ( $relation_objectId as $pointer )
+		{
+			$objects[$field]['objects'][] = ['__type'=>"Pointer",'className'=>$relation_class,'objectId'=>$pointer];
 		}
-		$params=['classes'=>$class, 'objectId'=>$objectId,
-			'payload'=>'{"opponents":{"__op":"RemoveRelation","objects":'.$objects.'}}'];
-		return $this->update( $params);
+
+		$params = [ 'classes' => $class_name, 'objectId' => $objectId,
+			'object' => $objects ];
+		return $this->update( $params );
 	}
 
 	/**

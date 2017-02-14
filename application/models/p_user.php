@@ -250,6 +250,26 @@ class P_user extends CI_Model
 		return $response;
 	}
 
+	public function getAllSuspendedUser( $limit, $skip, $order, $dir )
+	{
+		if ( $dir == 'desc' )
+		{
+			$order = "-{$order}";
+		}
+
+		$response = $this->parse->query
+		(
+			[
+				"objectId" => self::CLASS_NAME,
+				'query' => '{"Status":false}',
+				'skip' => $skip,
+				'limit' => $limit,
+				'order' => $order
+			]
+		)->results;
+		return $response;
+	}
+
 	public function countAll()
 	{
 		return $this->parse->query
@@ -257,6 +277,18 @@ class P_user extends CI_Model
 			[
 				"objectId" => self::CLASS_NAME,
 				'query' => '{"Status":{"$ne":false}}',
+				'limit' => 0,
+				'count' => 1,
+			]
+		)->count;
+	}
+
+	public function countAllSuspendedUser(){
+		return $this->parse->query
+		(
+			[
+				"objectId" => self::CLASS_NAME,
+				'query' => '{"Status":false}',
 				'limit' => 0,
 				'count' => 1,
 			]
@@ -338,6 +370,34 @@ class P_user extends CI_Model
 				$request[ 'request' ][] = [
 					'method' => 'DELETE',
 					'path' => '/parse/classes/_User/' . $id,
+				];
+				$counter++;
+			}
+		}
+		if ( $request )
+		{
+			$this->parse->batch( $request );
+		}
+	}
+
+	public function enable_batch_user( $ids )
+	{
+		$request = [ 'request' => [], 'use_master' => 1 ];
+		$counter = 0;
+		foreach ( $ids as $index => $id )
+		{
+			if ( $counter >= 50 )
+			{
+				$this->parse->batch( $request );
+				$request = [ 'request' => [], 'use_master' => 1 ];
+				$counter = 0;
+			}
+			else
+			{
+				$request[ 'request' ][] = [
+					'method' => 'PUT',
+					'path' => '/parse/classes/_User/' . $id,
+					'body' => [ 'Status' => true ]
 				];
 				$counter++;
 			}

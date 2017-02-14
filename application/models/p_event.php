@@ -171,6 +171,16 @@ class P_event extends CI_Model
 				'include' => "postedObjects.user,postedObjects.usersBadgeFlag,postedObjects.commentsArray.Comments,eventBadgeFlag,user"
 			]
 		)->results;
+/*		echo '<h2>event </h2><br>';
+		echo '<pre>';var_dump( $response);'</pre>';*/
+
+		if ( $response && !isset( $response[0]->postedObjects ) )
+		{
+			$post=new P_post();
+			$post->setParse( $this->parse );
+			$listPosts=$post->getPostByEvent( $id);
+			$response[0]->postedObjects=$listPosts;
+		}
 		return $response;
 
 	}

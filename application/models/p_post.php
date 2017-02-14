@@ -101,21 +101,23 @@ class P_post extends CI_Model
 
 	public function deletePostComments( $postId, array $listCommentsId )
 	{
+
 		$this->parse->delete_batch( "Comments", $listCommentsId );
 		$post = $this->getPostById( $postId );
-		if ( isset( $post->commentsArray ) && $post->commentsArray )
+		if ( isset( $post[0]->commentsArray ) && $post[0]->commentsArray )
 		{
-			$commentsArray = $post->commentsArray;
-			$newCommentsArray = [];
+			$commentsArray = $post[0]->commentsArray;
+			$deleteCommentsIds = [];
 			foreach ( $commentsArray as $comment )
 			{
-				if ( !in_array( $comment->objectId, $listCommentsId ) )
+				if ( in_array( $comment->objectId, $listCommentsId ) )
 				{
-					$newCommentsArray[] = $comment;
+					$deleteCommentsIds[] = $comment->objectId;
 				}
 			}
-			$this->parse->update( [ 'classes' => 'Post', 'objectId' => $postId, 'object' => ['commentsArray'=>$newCommentsArray] ] );
+			return $this->parse->update_array_pointer_relation("Remove", 'Comments', $postId, $deleteCommentsIds, self::CLASS_NAME,'commentsArray');
 		}
+		return ['code'=>200];
 	}
 
 	public function deletePosts( array $postId )
@@ -134,5 +136,17 @@ class P_post extends CI_Model
 			}
 		}
 		$this->parse->delete_batch(self::CLASS_NAME, $postId);
+	}
+	public function getPostByEvent($objecId)
+	{
+		$response = $this->parse->query(
+			[
+				'objectId'=>self::CLASS_NAME,
+				'query'=>'{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"'.$objecId.'"}}',
+				'include'=>'commentsArray,usersBadgeFlag'
+			]
+		)->results;
+
+		return $response;
 	}
 }

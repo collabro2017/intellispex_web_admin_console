@@ -63,7 +63,14 @@ class events extends CI_Controller_EX
 			$this->load->model( 'p_event', 'pevent', TRUE );
 			$this->pevent->setParse($this->parserestclient);
 			$data->info=$this->pevent->getEventById($event_id);
-			$this->load->view( 'default/events/view', $data );
+/*			echo '<pre>';var_dump( $data->info);'<pre>';
+			exit;*/
+			if($data->info){
+				$this->load->view( 'default/events/view', $data );
+			}else{
+				redirect( 'events', 'refresh' );
+			}
+
 		}
 		else
 		{
@@ -208,7 +215,7 @@ class events extends CI_Controller_EX
 			$data->username = $session_data[ 'username' ];
 			$data->role = $session_data[ 'role' ];
 			$data->id = $session_data[ 'id' ];
-			$data->function_name = "Flaged Events";
+			$data->function_name = "Flagged Events";
 
 			$this->load->view( 'default/events/list_flag_event', $data );
 		}

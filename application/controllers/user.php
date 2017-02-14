@@ -18,11 +18,28 @@ class User extends CI_Controller
 			$data->username = $session_data[ 'username' ];
 			$data->role = $session_data[ 'role' ];
 			$data->id = $session_data[ 'id' ];
-			$data->function_name = "Content Manager";
-			$this->load->model( 'm_sys_contract', 'contract' , TRUE);
-			;
+			$data->function_name = "User";
 
 			$this->load->view( 'user/index' , $data);
+		}
+		else
+		{
+			redirect( 'manage/console_menu', 'refresh' );
+		}
+	}
+
+	public function suspended_user()
+	{
+		$data = new stdClass;
+		$session_data = $this->session->userdata( 'logged_in' );
+		if( $session_data )
+		{
+			$data->username = $session_data[ 'username' ];
+			$data->role = $session_data[ 'role' ];
+			$data->id = $session_data[ 'id' ];
+			$data->function_name = "Suspended User";
+
+			$this->load->view( 'user/suspended_user' , $data);
 		}
 		else
 		{
@@ -41,6 +58,58 @@ class User extends CI_Controller
 		$recordsFiltered = $recordsTotal;
 
 		$resultArray = $this->user->getAll($dt->getLength(), $dt->getStart(), $dt->getOrderName( 0 ), $dt->getOrderDir( 0 ) );
+
+		foreach ($resultArray as &$result){
+			if(!isset($result->name)){
+				$result->name='';
+			}
+			if(!isset($result->LastName)){
+				$result->LastName='';
+			}
+			if(!isset($result->Gender)){
+				$result->Gender='';
+			}
+			if(!isset($result->City )){
+				$result->City ='';
+			}
+			if(!isset($result->State )){
+				$result->State ='';
+			}
+			if(!isset($result->zipcode )){
+				$result->zipcode ='';
+			}
+			if(!isset($result->email )){
+				$result->email ='';
+			}
+			if(!isset($result->email )){
+				$result->email ='';
+			}
+			if(!isset($result->company )){
+				$result->company ='';
+			}
+			if(!isset($result->phone )){
+				$result->phone ='';
+			}
+			if(!isset($result->country )){
+				$result->country ='';
+			}
+		}
+
+		echo $dt->getJsonResponseJsonData( $recordsTotal, $recordsFiltered, json_encode( $resultArray ) );
+		exit;
+	}
+
+	public function ajax_suspended_user_datatable_parse(){
+
+		$this->load->library('Jquery_DataTable', $this->input->post() );
+		$this->load->model('p_user', 'user', TRUE);
+		$dt = new Jquery_DataTable( $this->input->post()  );
+
+		$this->user->setParse( $this->parserestclient );
+		$recordsTotal = $this->user->countAllSuspendedUser();
+		$recordsFiltered = $recordsTotal;
+
+		$resultArray = $this->user->getAllSuspendedUser($dt->getLength(), $dt->getStart(), $dt->getOrderName( 0 ), $dt->getOrderDir( 0 ) );
 
 		foreach ($resultArray as &$result){
 			if(!isset($result->name)){
@@ -129,14 +198,31 @@ class User extends CI_Controller
 			$this->load->model('p_user', 'user', TRUE);
 			$this->user->setParse( $this->parserestclient );
 			$ids=$this->input->post('id');
-			/*echo '<pre>';var_dump( $ids );'</pre>';
-			exit;*/
-			$this->user->delete_batch_user($ids);
+			$this->user->suspend_batch_user($ids);
 			$response['status']='success';
 
 		}else{
 			$response['status']='fail';
 			$response['error']='Fail to delete users';
+		}
+		header( 'Content-Type: application/json' );
+		echo json_encode( $response );
+		exit;
+	}
+	public function enable_users(){
+		$response = [];
+		if ( $this->input->post() )
+		{
+			$this->load->model( 'p_user', 'user', TRUE );
+			$this->user->setParse( $this->parserestclient );
+			$ids = $this->input->post( 'id' );
+			$this->user->enable_batch_user( $ids );
+			$response[ 'status' ] = 'success';
+		}
+		else
+		{
+			$response[ 'status' ] = 'fail';
+			$response[ 'error' ] = 'Fail to delete users';
 		}
 		header( 'Content-Type: application/json' );
 		echo json_encode( $response );
