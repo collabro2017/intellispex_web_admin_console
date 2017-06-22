@@ -30,6 +30,12 @@
 							<?php endif; ?>
 							<div class="radio">
 								<label>
+									<input type="radio" checked="checked" value="3" name="role">
+									Client console
+								</label>
+							</div>
+							<div class="radio">
+								<label>
 									<input type="radio" checked="checked" value="1" name="role">
 									Corporation Administrator
 								</label>
