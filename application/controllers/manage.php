@@ -15,6 +15,7 @@ class manage extends CI_Controller_EX {
     $this->load->library("session");
     $this->load->library('form_validation');
     $this->load->library('grocery_CRUD');
+    $this->load->library('ParseRestClient');
   }
 
   public function check_login($data = '', $function_name = ' ') {
@@ -25,6 +26,7 @@ class manage extends CI_Controller_EX {
       $data->role = $session_data['role'];
       $data->function_name = $function_name;
       $data->id = $session_data['id'];
+
       $this->load->view('default/admin_default', $data);
     }
     else {
@@ -376,9 +378,21 @@ class manage extends CI_Controller_EX {
     $data = new stdClass;
     if ($role == 1) {
       $function_name = "CLIENT ADMINISTRATOR CONSOLE MENU";
+<<<<<<< HEAD
       $data->links = array('c_dashboard' => 'Client Management Dashboard', 'client_set_up' => 'User Set Up / Upload / Editing',
         'set_up_management' => 'Activity Set Up and Management', 'user_data_management' => 'User Data Management and Export',
         'logout' => 'Logo   ut');
+=======
+      $data->links = array(
+        'c_dashboard' => 'Client Management Dashboard',
+        'client_set_up' => 'User Set Up / Upload / Editing',
+        'set_up_management' => 'Activity Set Up and Management',
+        'user_data_management' => 'User Data Management and Export',
+        '../sys_contract' => 'Content Manager',
+          '../user' => 'Users',
+          '../events/FlaggedEvents' => 'Manage Reported Content',
+        'logout' => 'Logout');
+>>>>>>> master
     }
     else if($role == 2) {
       $function_name = "APPLICATION ADMINISTRATOR CONSOLE MENU";
@@ -404,14 +418,51 @@ class manage extends CI_Controller_EX {
     $function_name = "CLIENT MANAGEMENT DASHBOARD";
     $data->back = TRUE;
     $data->statistics = "Usage Statistics";
-    $this->check_login($data, $function_name);
+	$data->nrousers=$this->parserestclient->query
+      (
+          [
+              "objectId" => "_User",
+			  "limit"=>'0',
+			  'count'=>'1'
+
+          ]
+      )->count;
+	  $data->nroevent=$this->parserestclient->query
+	  (
+		  [
+			  "objectId" => "Event",
+			  "limit"=>'0',
+			  'count'=>'1'
+
+		  ]
+	  )->count;
+	  $data->averageframe=$this->parserestclient->query
+	  (
+		  [
+			  "objectId" => "Post",
+			  "limit"=>'0',
+			  'count'=>'1'
+
+		  ]
+	  )->count/$data->nroevent;
+	  $data->nroadmin=$this->parserestclient->query
+	  (
+		  [
+			  "objectId" => "_User",
+			  "query"=>'{"$relatedTo":{"object":{"__type":"Pointer","className":"_Role","objectId":"aDiZnlW1AX"},"key":"users"}}',
+			  "limit"=>'0',
+			  'count'=>'1'
+
+		  ]
+	  )->count;
+      $this->check_login($data, $function_name);
   }
 
   public function client_set_up() {
     $data = new stdClass;
     $function_name = "APPLICATION ADMINISTRATOR - CLIENT SET UP AND MAINTENANCE";
     $data->back = TRUE;
-    $data->links = array('create_client' => 'Create a Client', 'edit_client' => 'Manage / Edit a Client', 'events' => 'View or Edit Global Event List', 'logout' => 'Logout');
+    $data->links = array('create_client' => 'Create a Client', 'edit_client' => 'Manage / Edit a Client', '../events' => 'View or Edit Global Event List', 'logout' => 'Logout');
     $this->check_login($data, $function_name);
   }
 
@@ -494,42 +545,6 @@ class manage extends CI_Controller_EX {
     $this->check_login($data, $function_name);
   }
 
-  public function events()
-  {
-    $data = new stdClass;
-    $session_data = $this->session->userdata('logged_in');
-    if ($session_data)
-    {
-        $data->username = $session_data['username'];
-        $data->role = $session_data['role'];
-        $data->id = $session_data['id'];
-        $data->function_name = "VIEW OR EDIT GLOBAL EVENT LIST";
-        $this->load->view('default/events/list', $data);
-    }
-    else
-    {
-        $this->check_login();
-    }
-  }
-
-  public function event( $event_id )
-  {
-    $data = new stdClass;
-    $session_data = $this->session->userdata('logged_in');
-    if ($session_data)
-    {
-        $data->username = $session_data['username'];
-        $data->role = $session_data['role'];
-        $data->id = $session_data['id'];
-        $data->function_name = "EVENT VIEWER";
-        $data->event_id = $event_id;
-        $this->load->view('default/events/view', $data);
-    }
-    else
-    {
-        $this->check_login();
-    }
-  }
   //-------------------------------------------------------------------//
 
 

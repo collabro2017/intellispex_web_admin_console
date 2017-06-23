@@ -2,7 +2,11 @@
 <html lang="en">
   <head>
 	<meta charset="utf-8" />
-	<title>IntelliSpeX</title>
+    <?php if (ENVIRONMENT=="production") : ?>
+		<title>IntelliSpeX</title>
+	<?php else : ?>
+		<title>ICYMI</title>
+	<?php endif; ?>
 	<meta name="description" content="User login page" />
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -32,13 +36,7 @@
   </head>
 
   <body class="login-layout admin-body">
-	<div class="widget-main">
-		<div class="top-menu">
-			<h2 class="col-sm-3"><img class="irc_mut iUyhD38Z_yik-HwpH6ZlgJaI" onload="google.aft&amp;&amp;google.aft(this)" src="<?php echo base_url('public') ?>/images/logo.JPG" width="60" height="60" style="margin-top: 0px;"> <span style="color : #00aaff;">IntelliSpeX</span></h2>
-			<h2 class="col-sm-6"><span><?php echo $function_name; ?></span></h2>
-			<h2 class="col-sm-3"></i> <span><?php echo $username; ?></span></h2>
-		</div>
-	</div>
+  <?php $this->load->view('default/nav/console_page.php'); ?>
   <div class="container-fluid" id="main-container">
 	<div id="main-content">
 		<?php if ( isset($links) && ( array_key_exists( "logout", $links ) || array_key_exists( "Logout", $links ) ) ): ?>
@@ -142,19 +140,19 @@
 										<table class="table table-striped statistics-table ">
 											<tr>
 												<td># of Administrators</td>
-												<td>100</td>
+												<td><?=$nroadmin?></td>
 											</tr>
 											<tr>
 												<td># of Users</td>
-												<td>100</td>
+												<td><?=$nrousers?></td>
 											</tr>
 											<tr>
 												<td># of Activities</td>
-												<td>100</td>
+												<td><?=$nroevent?></td>
 											</tr>
 											<tr>
 												<td># of Frames / Activity (average)</td>
-												<td>100</td>
+												<td><?=$averageframe?></td>
 											</tr>
 											<tr>
 												<td>Total Storage in Use</td>
@@ -174,11 +172,38 @@
 										<div class="clear"></div>
 										<a class=" btn btn-small btn-primary menu-button menu-logout-button" href="#">Print</a>
 										<div class="clear"></div>
-										<a class=" btn btn-small btn-primary menu-button menu-logout-button" href="#">Share PDF Report</a>
+										<a class=" btn btn-small btn-primary menu-button menu-logout-button" href="#sharePDF" role="button" data-toggle="modal">Share PDF Report</a>
+										<div class="clear"></div>
+
 									</div>
+<<<<<<< HEAD
+=======
+								</div>
+							</div>
+
+							<!-- Modal Share-->
+							<div id="sharePDF" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="sharePDFLabel" aria-hidden="true">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+									<h3 id="sharePDFLabel">Share PDF Report</h3>
+								</div>
+								<div class="modal-body">
+									<div class="dp-inblock text-left width-80">
+										<label class="color-gray" for="s-email">Email:</label>
+										<input id="s-email" type="email" class="width-100" placeholder="Email">
+										<div id="container-error"></div>
+										<div id="container-success"></div>
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+									<button id="bnt-share" class="btn btn-primary bnt-share">Share</button>
+									<button id="btn-download" type="button" class="btn btn-primary bnt-share">Download a PDF Report</button>
+>>>>>>> master
 								</div>
 								
 							</div>
+
 						<?php endif; ?>
 						<?php if (isset($create_client) || isset($edit_client)): ?>
 						<div class="panel-admin">
@@ -247,7 +272,7 @@
 									  </table>
 									  <div class="row-fluid">
 
-										<input type="submit" name="submit" value="Submit" class=" btn btn-small btn-primary menu-button"></input>
+										<input type="submit" name="submit" value="Submit" class=" btn btn-small btn-primary menu-button"/>
 									  </div>
 									</form>
 							</div>
@@ -398,13 +423,15 @@
 	</div>
   </div><!--/.fluid-container-->
 
-
+<form id="formdownload" method="post" target="_blank" action="<?= base_url('pdfs/download')?>">
+	<input id="table-content" name="html" type="hidden">
+</form>
   <!-- basic scripts -->
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script type="text/javascript">
 	window.jQuery || document.write("<script src='assets/js/jquery-1.9.1.min.js'>\x3C/script>");
   </script>
-
+  <script src="<?php echo base_url('public') ?>/assets/js/bootstrap.min.js"></script>
 
   <!-- page specific plugin scripts -->
 
@@ -412,13 +439,118 @@
   <!-- inline scripts related to this page -->
 
   <script type="text/javascript">
+		function getTable()
+		{
+			return 	"<style type=text/css>"+
+				"td{"+
+				"color:#000000;"+
+				"border-left: 2px solid #cccccc;"+
+				"border-right: 2px solid #cccccc;"+
+				"border-top: 2px solid #cccccc;"+
+				"border-bottom: 2px solid #cccccc;}"+
+				"table {"+
+				"font-family: helvetica;"+
+				"font-size: 11pt;"+
+				"border-left: 2px solid #cccccc;"+
+				"}"+
+				"</style>"+
+				"<h1>Usage Statistics</h1>"+
+				"<table border='1' cellpadding='3'>"+
+				$('.table-wrapper').html()+
+				"</table>";
+		}
+		function show_box(id) {
+			$('.widget-box.visible').removeClass('visible');
+			$('#' + id).addClass('visible');
+		}
+		$('#btn-download').click(function(){
+			var html=getTable();
+			$('#table-content').val(html);
+			$('#formdownload').trigger( "submit" );
+		});
+		$( "#bnt-share" ).click(
+		function()
+		{
+			if ( validate() )
+			{
+				var html=getTable();
+				var btnShare = $( "#bnt-share" );
+				btnShare.attr( 'disabled' , true );
+				$.ajax({
+					url: "<?php echo base_url("/pdfs/init"); ?>",
+					method: "POST",
+					data: {'html': html}
+				}).done(function( response ) {
+					if ( response.status == true )
+					{
+						$.ajax({
+							url: "<?php echo base_url("/send_mail/sendMail"); ?>",
+							method: "POST",
+							data: 	{
+										'email': $( '#s-email' ).val(),
+										'from': 'ICYMI',
+										'fromDescription': 'Usage Statistics',
+										'cc': 'Icymi',
+										'bcc': 'bcc descripcion',
+										'subject': 'Report Usage Statistics',
+										'message': 'Usage Statistics',
+										'attach': '<?php echo FCPATH.'report/'. utf8_decode("report_usagestatistics.pdf") ?>'
+									}
+						}).done(function( responseEmail ) {
+							if ( responseEmail.status )
+							{
+								var containerSuccess = $( '#container-success' );
+								containerSuccess.text( 'Report Sent!' );
+								containerSuccess.css( "color", "#4CAF50" );
+								containerSuccess.delay( 3000 ).queue( function( next ) {
+									$('#sharePDF').modal('hide');
+									next();
+									containerSuccess.text('');
+									$( '#s-email' ).val('');
+								});
+							}
+							else
+							{
+								alert('Report can not be sent');
+							}
+							btnShare.attr( 'disabled' , false );
+						});
+					}
+					else
+					{
+						alert('Report can not be sent');
+						btnShare.attr( 'disabled' , false );
+					}
+				});
+			}
+		} );
 
-	function show_box(id) {
-		$('.widget-box.visible').removeClass('visible');
-		$('#' + id).addClass('visible');
-	}
+		function validateEmail( email )
+		{
+			var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+			return re.test(email);
+		}
 
-  </script>
+		function validate()
+		{
+			var containerError = $("#container-error");
+			containerError.text("");
+			var email = $("#s-email").val();
+			if ( !validateEmail(email) )
+			{
+				containerError.text( email + " is not valid" );
+				containerError.css( "color", "red" );
+				containerError.delay( 5000 ).fadeOut();
+				containerError.css( 'display' , 'block' );
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+		}
 
+		$("#validate").bind("click", validate);
+	</script>
 </body>
 </html>
