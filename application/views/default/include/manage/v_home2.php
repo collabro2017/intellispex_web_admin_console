@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
 	<meta charset="utf-8" />
-    <?php $this->load->view('default/head/title.php' ); ?>
+	<title>IntelliSpeX</title>
 	<meta name="description" content="Support page" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />

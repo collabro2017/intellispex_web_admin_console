@@ -20,31 +20,46 @@
 										</tr>
 									</thead>
 									<tbody>
-									<?php foreach($info as $key ) : ?>
 										<tr>
+											<td><a href="<?php echo base_url(); ?>manage/event/1">Coffee Mugs</a></td>
+											<td>Nancy</td>
+											<td>2016-23-12</td>
 											<td>
-												<a href="<?php echo base_url(); ?>events/event/<?php echo $key->objectId ?>">
-													<?php
-														if($key->eventname)
-														{
-															echo $key->eventname;
-														}else{
-																echo 'No name';
-														}
-													?>
-												</a>
-											</td>
-											<td>
-												<?php echo $key->username ?>
-											</td>
-											<td>
-												<?php echo $key->createdAt ?>
-											</td>
-											<td>
-												<input type="checkbox" data-id="<?= $key->objectId ?>" name="evet_delete" />
+												<input type="checkbox" data-id="101" name="evet_delete" />
 											</td>
 										</tr>
-									<?php endforeach; ?>
+										<tr>
+											<td><a href="<?php echo base_url(); ?>manage/event/2">Coffee Mugs</a></td>
+											<td>Nancy</td>
+											<td>2016-23-12</td>
+											<td>
+												<input type="checkbox" data-id="102" name="evet_delete" />
+											</td>
+										</tr>
+										<tr>
+											<td><a href="<?php echo base_url(); ?>manage/event/3">Coffee Mugs</a></td>
+											<td>Nancy</td>
+											<td>2016-23-12</td>
+											<td>
+												<input type="checkbox" data-id="103" name="evet_delete" />
+											</td>
+										</tr>
+										<tr>
+											<td><a href="<?php echo base_url(); ?>manage/event/4">Coffee Mugs</a></td>
+											<td>Nancy</td>
+											<td>2016-23-12</td>
+											<td>
+												<input type="checkbox" data-id="104" name="evet_delete" />
+											</td>
+										</tr>
+										<tr>
+											<td><a href="<?php echo base_url(); ?>manage/event/5">Coffee Mugs</a></td>
+											<td>Nancy</td>
+											<td>2016-23-12</td>
+											<td>
+												<input type="checkbox" data-id="105" name="evet_delete" />
+											</td>
+										</tr>
 									</tbody>
 								</table>
 
@@ -81,36 +96,14 @@
 	<script type="text/javascript">
 		function deletevents()
 		{
-			var id=[];
 			$("table.events-table input[name=evet_delete]:checked").each
-			   (
-				   function( index )
-				   {
-					   id.push($( this ).data("id"));
-					   console.log( index + ": " + $( this ).data("id") );
-				   }
-			   );
-
-			$.ajax({
-				url: "<?php echo base_url("/events/ajax_delete_event"); ?>",
-				method: "POST",
-				data: {id:id},
-				success:function(data)
+			(
+				function( index )
 				{
-
-					if(data.result=='success'){
-						$("table.events-table input[name=evet_delete]:checked").each(
-						   function( index )
-						   {
-							   $(this).attr('checked', false);
-						   }
-					   );
-						location.reload();
-					}else{
-						alert('the selected events could not be deleted');
-					}
+			  		console.log( index + ": " + $( this ).data("id") );
 				}
-			});
+			);
+			alert("Delete events");
 		}
 	</script>
 	</body>

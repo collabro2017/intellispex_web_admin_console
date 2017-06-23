@@ -40,10 +40,11 @@
   <div class="container-fluid" id="main-container">
 	<div id="main-content">
 		<?php if ( isset($links) && ( array_key_exists( "logout", $links ) || array_key_exists( "Logout", $links ) ) ): ?>
+			<?php if($function_name != "CLIENT MANAGEMENT CONSOLE"){ ?>
 	  		<div class="widget-main">
 	  			<a class=" btn btn-small btn-primary menu-button menu-logout-button" style="margin-top:10px" href="<?php echo base_url(); ?>manage/logout">Logout</a>
 	  		</div>
-		<?php endif; ?>
+		<?php } endif; ?>
 
 	 	 <div class="row-fluid">
 
@@ -75,7 +76,49 @@
 
 
 					  <div class="panel-admin">
-						<?php if (isset($links)): ?>
+					  	<?php
+					  		if($function_name == "CLIENT MANAGEMENT CONSOLE"){ ?>
+					  		<div class="row">
+					  			<div class="span6">
+						  			<div>
+										<input class="" type="text" placeholder="Username"></a>
+									</div>
+						  		</div>
+						  		<div class="span6">
+						  			<div>
+										<a class="btn btn-small btn-primary menu-button" href="#">Support</a>
+									</div>
+						  		</div>
+					  		</div>
+					  		<div class="row">
+					  			<div class="span6">
+						  			<div>
+										<input class="" type="password" placeholder="Password"></a>
+									</div>
+						  		</div>
+						  		<div class="span6">
+						  			<div>
+										<a class="btn btn-small btn-primary menu-button" href="#">Contact</a>
+									</div>
+						  		</div>
+					  		</div>
+					  		<div class="row">
+					  			<div class="span6">
+					  				<div>
+										<a style="min-width:222px;" class=" btn btn-small btn-primary menu-button" href="<?php echo base_url(); ?>manage/logout">Logout</a>
+									</div>
+					  			</div>
+					  		</div>
+					  		<div class="row">
+					  		<div class="span3"></div>
+						  		<div class="span6">
+						  			<img alt="Client Management's Images" src="<?php echo base_url('public') ?>/images/earth.jpg" />
+					  			</div>
+					  		</div>
+					  	<?php
+					  		}
+					  		else{
+					  		if (isset($links)): ?>
 							<?php foreach ($links as $key => $link): ?>
 								<?php if  ($link != "Logout") : ?>
 									<div>
@@ -83,7 +126,8 @@
 									</div>
 								<?php endif; ?>
 							<?php endforeach; ?>
-						<?php endif; ?>
+							<?php endif;
+							} ?>
 						<?php if ( isset( $statistics ) ): ?>
 
 							<div>
@@ -121,6 +165,7 @@
 										</table>
 									</div>
 								</div>
+								
 								<div class="span3">
 									<div class="span12">
 										<a class=" btn btn-small btn-primary menu-button menu-logout-button" href="<?php echo base_url(); ?>manage/logout">Logout</a>
@@ -131,6 +176,8 @@
 										<div class="clear"></div>
 
 									</div>
+<<<<<<< HEAD
+=======
 								</div>
 							</div>
 
@@ -152,7 +199,9 @@
 									<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
 									<button id="bnt-share" class="btn btn-primary bnt-share">Share</button>
 									<button id="btn-download" type="button" class="btn btn-primary bnt-share">Download a PDF Report</button>
+>>>>>>> master
 								</div>
+								
 							</div>
 
 						<?php endif; ?>

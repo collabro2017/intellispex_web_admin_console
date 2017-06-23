@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <?php $this->load->view('default/head/title.php' ); ?>
+    <title>IntelliSpeX</title>
     <meta name="description" content="User login page" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />

@@ -3,34 +3,8 @@ html
     overflow: -moz-scrollbars-vertical;
     overflow: scroll;
 }
-.event-title{
-    text-align: left;
-    font-weight: bold;
-    margin-left:10em ;
-    color: #0c0c0c;
-}
-.post-title h4{
-    padding-left: 2.5em;
-    text-align: left;
-}
-.post-description h4{
-    padding-left: 2.5em;
-    text-align: left;
-}
 
-.post-comment p{
-    padding-left: 1.7em;
-    text-align: left;
-    margin-bottom: 0;
-}
-div.comment-separator{
-    margin-left: 1.7em;
-    height: 2px;
-    border-bottom-style:  solid;
-    border-bottom-color: #a5a2a2;
-    border-bottom-width: 2px;
-}
-#event_area, #event_header
+#event_area
 {
     overflow-y:scroll;
     height:500px;
@@ -49,9 +23,11 @@ ul
 li
 {
   -moz-user-select: none;
+  height: 350px;
   margin: 10px;
   border:1px solid #ccc;
   background: #c6c6c6;
+  padding: 10px;
 
 }
 li.selected

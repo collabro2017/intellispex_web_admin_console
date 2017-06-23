@@ -373,10 +373,16 @@ class manage extends CI_Controller_EX {
 
   public function console_menu() {
     $session_data = $this->session->userdata('logged_in');
+    //var_dump($session_data);exit();
     $role = $session_data['role'];
     $data = new stdClass;
     if ($role == 1) {
       $function_name = "CLIENT ADMINISTRATOR CONSOLE MENU";
+<<<<<<< HEAD
+      $data->links = array('c_dashboard' => 'Client Management Dashboard', 'client_set_up' => 'User Set Up / Upload / Editing',
+        'set_up_management' => 'Activity Set Up and Management', 'user_data_management' => 'User Data Management and Export',
+        'logout' => 'Logo   ut');
+=======
       $data->links = array(
         'c_dashboard' => 'Client Management Dashboard',
         'client_set_up' => 'User Set Up / Upload / Editing',
@@ -386,10 +392,15 @@ class manage extends CI_Controller_EX {
           '../user' => 'Users',
           '../events/FlaggedEvents' => 'Manage Reported Content',
         'logout' => 'Logout');
+>>>>>>> master
     }
-    else {
+    else if($role == 2) {
       $function_name = "APPLICATION ADMINISTRATOR CONSOLE MENU";
       $data->links = array('dashboard' => 'Management Dashboard', 'client_set_up' => 'Client Set Up / Editing', 'logout' => 'Logout');
+    }
+    else{
+      $function_name = "CLIENT MANAGEMENT CONSOLE";
+      $data->links = array('logout' => 'Logout');
     }
     $this->check_login($data, $function_name);
   }

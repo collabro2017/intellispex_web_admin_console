@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<?php $this->load->view('default/head/console_page.php'); ?>
-	<link rel="stylesheet" href="<?= base_url('public') ?>/css/events.css" />
+	<link rel="stylesheet" href="<?php echo base_url('public') ?>/css/events.css" />
 	<body class="login-layout admin-body">
 	<?php $this->load->view('default/nav/console_page.php'); ?>
   	<div class="container-fluid" id="main-container">
@@ -11,128 +11,16 @@
 					<div class="widget-main">
 						<div class="row-fluid">
 							<div class="span10">
-								<div class="row">
-									<h3 class="event-title" data-id="<?=$info[0]->objectId?>">Event <?php
-										if( isset( $info[0]->eventBadgeFlag) && $info[0]->eventBadgeFlag){
-											echo '<i class="icon-flag"></i>';
-										}
-										?></h3>
-									<div id="event_header">
-										<ul>
-											<li>
-												<div class="row">
-													<div class="span10 post-title">
-														<h4><?=$info[0]->eventname?></h4>
-													</div>
-												</div>
 
-												<img src="<?= $info[0]->postImage->url?>"  width="100%" />
-												<div class="row">
-													<div class="span10 post-description">
-														<h4>Description</h4>
-													</div>
-
-													<div class="span10 post-comment" >
-														<p><?=$info[0]->description;?></p>
-													</div>
-												</div>
-											</li>
-										</ul>
-
-									</div>
-									<h3 class="event-title">Posts</h3>
-									<div id="event_area">
-										<ul>
-											<?php foreach($info[0]->postedObjects as $key ) : ?>
-
-													<li data-id="<?=$key->objectId?>" style="text-align: left">
-														<?php
-														if( isset( $key->usersBadgeFlag) && $key->usersBadgeFlag){
-															echo '<i class="icon-flag" ></i>';
-														}
-														?>
-														<?php if($key->title && $key->title!=" "):?>
-															<div class="row">
-																<div class="span10 post-title">
-																	<h4 class=""><?=$key->title;?></h4>
-																</div>
-																<div class="span1" style="margin-left: 3em">
-																	<button onclick="script:delete_title('<?=$key->objectId?>');"
-																			style="margin-top: 0.5em">Delete</button>
-																</div>
-															</div>
-														<?php endif;?>
-														<?php
-															if(isset($key->postType))
-															{
-																$html='';
-																switch ($key->postType){
-																	case 'audio':
-																		$html="<audio  controls>";
-																		$html.="<source src='{$key->postFile->url}' type='audio/wav'/>";
-																		$html.="<source src='{$key->postFile->url}' type='audio/mp3'/>";
-																		$html.="<source src='{$key->postFile->url}' type='audio/ogg'/>";
-																		$html.="Your browser does not support the audio element.";
-																		$html.="</audio>";
-																		break;
-																	case 'video':
-																		$html="<video width='320' height='240' controls>";
-																		$html.="<source src='{$key->postFile->url}' type='video/wav'/>";
-																		$html.="<source src='{$key->postFile->url}' type='video/mov'/>";
-																		$html.="<source src='{$key->postFile->url}' type='video/mp4'/>";
-																		$html.="</video>";
-																		break;
-																	case 'photo':
-																		$html="<img src='{$key->thumbImage->url}' width='100%'/>";
-																		break;
-																	default:break;
-																}
-																echo $html;
-															}
-														?>
-														<div class="row">
-															<?php if($key->description && $key->description!=" "):?>
-																<div class="span10 post-description">
-																	<h4 >Description</h4>
-																</div>
-																<div class="span10 post-comment" >
-																	<p><?=$key->description;?></p>
-																</div>
-																<div class="span1">
-																	<button onclick="script:delete_description('<?=$key->objectId?>')";>Delete</button>
-																</div>
-															<?php endif;?>
-														</div>
-														<div class="row">
-															<?php  if ( isset( $key->commentsArray ) && $key->commentsArray ):?>
-																<div class="span10 post-description">
-																	<h4  class="">Comments</h4>
-																</div>
-																<?php foreach ($key->commentsArray as $comment):?>
-																		<div class="span10 post-comment" >
-																			<?php
-																				if(isset($comment->Comments))
-																				{
-																					echo "<p>{$comment->Comments}</p>";
-																				}else{
-																						echo  "<p>{$comment}</p>";
-																				}
-																			?>
-																			<div class="comment-separator"></div>
-																		</div>
-																		<div class="span1">
-																			<button onclick="script:delete_comment('<?=$key->objectId?>','<?=$comment->objectId;?>')">
-																				Delete</button>
-																		</div>
-																<?php endforeach;?>
-															<?php endif;?>
-														</div>
-													</li>
-
-											<?php endforeach; ?>
-										</ul>
-									</div>
+								<div id="event_area">
+									<ul>
+									    <li data-id="1">1</li>
+									    <li data-id="2">2</li>
+									    <li data-id="3">3</li>
+									    <li data-id="4">4</li>
+									</ul>
 								</div>
+
 								<div class="clear">
 									<a href="#" onclick="script:deletesheets();" class="btn btn-small btn-primary menu-button">
 										Delete Selected Sheets
@@ -178,96 +66,19 @@
 				);
 			}
 		);
-		function delete_title(id){
-			var result=confirm("Are you sure?");
-			if ( result==true )
-			{
-				var url="<?php echo base_url("/events/ajax_delete_post_title"); ?>"+"/"+id;
-				$.ajax({
-					url: url,
-					method: "GET",
-					success:function(data)
-					{
-						if(data.result=='success'){
-							location.reload();
-						}else{
-							alert("the selected post's title could not be deleted");
-						}
-					}
-				});
-			}
-		}
-		function delete_comment(postId,commentId){
-			var result=confirm("Are you sure?");
-			if ( result==true )
-			{
-				var url = "<?php echo base_url( "/events/ajax_delete_comment" ); ?>" + "/" + postId+"/"+commentId;
-				$.ajax ( {
-					url : url ,
-					method : "GET" ,
-					success : function ( data )
-					{
-						if ( data.result == 'success' )
-						{
-							location.reload ();
-						} else
-						{
-							alert ( "the selected post's comment could not be deleted" );
-						}
-					}
-				} );
-			}
-		}
-		function delete_description(id)
-		{
-			var result=confirm("Are you sure?");
-			if ( result==true )
-			{
-				var url = "<?php echo base_url( "/events/ajax_delete_post_description" ); ?>" + "/" + id;
-				$.ajax ( {
-					url : url ,
-					method : "GET" ,
-					success : function ( data )
-					{
-						if ( data.result == 'success' )
-						{
-							location.reload ();
-						} else
-						{
-							alert ( "the selected post's description could not be deleted" );
-						}
-					}
-				} );
-			}
-		}
+
 		function deletesheets()
 		{
-			var result=confirm("Are you sure?");
-			if ( result==true )
-			{
-				var id = [];
-				$ ( "#event_area ul li.selected" ).each(function ( index )
-					  {
-						  id.push ( $ ( this ).data ( "id" ) );
-					  }
-				  );
-				$.ajax ( {
-					url : "<?php echo base_url( "/events/ajax_delete_post" ); ?>" ,
-					method : "POST" ,
-					data : { id : id } ,
-					success : function ( data )
-					{
-						if ( data.result == 'success' )
-						{
-							location.reload ();
-						} else
-						{
-							alert ( 'the selected sheets could not be deleted' );
-						}
-					}
-				} );
-			}
+			$("#event_area ul li.selected").each
+			(
+				function( index )
+				{
+					console.log( index + ": " + $( this ).data("id") );
+				}
+			);
+			alert("Delete Sheets");
 		}
+
 		$.fn.multiSelect = function(o)
 		{
 		    var defaults = {
