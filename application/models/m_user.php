@@ -11,7 +11,7 @@ class M_user extends CI_Model {
 
   function login($username, $password)
   {
-    $this->db->select( 'id, username' );
+    $this->db->select( 'id, username, email' );
     $this->db->from( 'res_users' );
     $sanitize_username = $this->db->escape( $username );
     $where = "( username=" . $sanitize_username . " OR  email=". $sanitize_username . ")";
