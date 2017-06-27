@@ -72,6 +72,16 @@
 		  height: 20%;
 		  color: #fff;		  
 		}
+
+		table, th, td {
+		    border: 1px solid black;
+		    border-collapse: collapse;
+		}
+		th, td {
+		    padding: 5px;
+		    text-align: left;
+		    background-color:#ffffff;
+		}
 		
 	</style>
 
@@ -176,12 +186,13 @@
 					  		<div class="row">
 					  			<div class="span1"></div>
 					  			<div class="span6">
-					  				<div class="table-wrapper">
-										<table class="table table-striped statistics-table ">
-											<tr>
-												<td></td>
-												<td></td>
-											</tr>
+					  				<div>
+										<table>
+											<thead>
+												<th style="width:50%;">&nbsp;</th>
+												<th style="width:50%;">&nbsp;</th>	
+											</thead>
+											
 											<tr>
 												<td># of Full Right Users</td>
 												<td></td>
@@ -274,7 +285,7 @@
 																					
 					  			</div>
 					  		</div>
-					  		<div class="row">
+					  		<div class="row" style="margin-top:30px;">
 					  			<div class="span3"></div>
 					  			<div class="span6">
 					  				<a class="btn btn-small btn-primary menu-button" href="<?php echo base_url(); ?>manage/clientmanagementconsole" style="width:100%;">Client Management Console</a>
@@ -314,6 +325,12 @@
 					  		<div class="row">
 					  			<div class="span3"></div>
 					  			<div class="span6" style="text-align: center;" >
+					  				<a class="btn btn-small btn-primary menu-button" href="#">Delete Users</a>
+					  			</div>					  			
+					  		</div>
+					  		<div class="row">
+					  			<div class="span3"></div>
+					  			<div class="span6" style="text-align: center;" >
 					  				<a class="btn btn-small btn-primary menu-button" href="#">User Customizable Delimited Data Lists</a>
 					  			</div>					  			
 					  		</div>	
@@ -329,7 +346,7 @@
 					  		if (isset($links)): ?>
 							<?php foreach ($links as $key => $link): ?>
 								<?php if  ($link != "Logout") : ?>
-									<div>
+									<div style="text-align: center;">
 										<a class=" btn btn-small btn-primary menu-button" href="<?php echo base_url(); ?>manage/<?php echo $key; ?>"><?php echo $link; ?></a>
 									</div>
 								<?php endif; ?>
