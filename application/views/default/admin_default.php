@@ -325,7 +325,7 @@
 					  		<div class="row">
 					  			<div class="span3"></div>
 					  			<div class="span6" style="text-align: center;" >
-					  				<a class="btn btn-small btn-primary menu-button" href="#">Delete Users</a>
+					  				<a class="btn btn-small btn-primary menu-button" href="#">Deleted Users</a>
 					  			</div>					  			
 					  		</div>
 					  		<div class="row">
