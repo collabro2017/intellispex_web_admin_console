@@ -82,7 +82,18 @@
 		    text-align: left;
 		    background-color:#ffffff;
 		}
-		
+		#frm_support .row .span6{
+			text-align:left;
+		}
+		#frm_support .row .span6 input{
+			width:100%;
+		}
+		#frm_support .row .span6 textarea{
+			width:100%;
+		}
+		input[type="file"]{
+			display:flex;			
+		}
 	</style>
 
   </head>
@@ -163,7 +174,7 @@
 					  		<div class="row">
 					  			<div class="span3"></div>
 					  			<div class="span6" style="text-align: center;">
-					  				<a class="btn btn-small btn-primary menu-button" style="min-width:350px;margin-top: 15px;" href="#">Support</a>
+					  				<a class="btn btn-small btn-primary menu-button" style="min-width:350px;margin-top: 15px;" href="<?php echo base_url(); ?>manage/clientmanagementconsolesupport">Support</a>
 					  			</div>					  			
 					  		</div>
 					  		<div class="row">
@@ -298,7 +309,7 @@
 					  		<div class="row">
 					  			<div class="span2"></div>
 					  			<div class="span4" style="text-align: left;">
-					  				<a class="btn btn-small btn-primary menu-button" style="min-width:250px;margin-top: 15px;" href="#">Support</a>
+					  				<a class="btn btn-small btn-primary menu-button" style="min-width:250px;margin-top: 15px;" href="<?php echo base_url(); ?>manage/clientmanagementconsolesupport">Support</a>
 					  			</div>
 					  			<div class="span4" style="text-align: right;">
 					  				<a class="btn btn-small btn-primary menu-button" style="min-width:250px;margin-top: 15px;" href="#">Download Complete</a>
@@ -325,7 +336,7 @@
 					  		<div class="row">
 					  			<div class="span3"></div>
 					  			<div class="span6" style="text-align: center;" >
-					  				<a class="btn btn-small btn-primary menu-button" href="#">Delete Users</a>
+					  				<a class="btn btn-small btn-primary menu-button" href="#">Deleted Users</a>
 					  			</div>					  			
 					  		</div>
 					  		<div class="row">
@@ -342,6 +353,63 @@
 					  		</div>					  		
 					  	<?php
 					  		}
+								else if($function_name == "SUPPORT REQUEST"){									
+							?>	
+							<div class="row">
+								<div class="span3"></div>
+								<div class="span6">
+									<!--form action="<?php echo base_url(); ?>manage/supportmsg" id="frm_support" method="post" enctype="multipart/form-data"-->
+									<?php   echo form_open_multipart(base_url().'manage/supportmsg', array('id'=>'frm_support', 'method'=>'post')); ?>
+										<div class="row">
+											<div class="span6">To:</div>
+											<div class="span6">
+												<input type="email" class="form-control" id="email" value="support@visitechmgmt.zendesk.com" name="email">
+											</div>											
+										</div>
+										<div class="row">
+											<div class="span6">Contact Email:</div>
+											<div class="span6">
+												<input type="email" class="form-control" id="emailto" name="emailto">
+											</div>											
+										</div>
+										<div class="row">
+											<div class="span6">Priority:</div>
+											<div class="span6">
+												<select name="priority">
+													<option value="Forget Password">Forget Password</option>
+													<option value="Forget Username">Forget Username</option>
+													<option value="Change Password">Change Password</option>
+													<option value="Page does not load">Page does not load</option>
+													<option value="Error Page">Error Page</option>
+													<option value="Other">Other</option>
+												</select>
+											</div>											
+										</div>
+										<div class="row">
+											<div class="span6">Description:</div>
+											<div class="span6">
+												<textarea class="form-control" rows="7" id="des" name="des"></textarea><br>	
+											</div>											
+										</div>
+										<div class="row">
+											<div class="span6">Attatchment:</div>
+											<div class="span6">
+												<input type="file" class="form-control" id="upload" name="upload">
+											</div>											
+										</div>
+										<div class="row">
+											<div class="span12">
+												<button type="submit" class="btn btn-default">Submit</button>												
+												<button type="button" class="btn btn-default">Cancel</button>
+											</div>																			
+										</div>
+									</form>		
+								</div>
+							</row>
+
+												
+							<?php
+								}
 					  		else{
 					  		if (isset($links)): ?>
 							<?php foreach ($links as $key => $link): ?>
