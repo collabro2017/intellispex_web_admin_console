@@ -324,7 +324,7 @@
 					  		<div class="row">
 					  			<div class="span3"></div>
 					  			<div class="span6" style="text-align: center;" >
-					  				<a class="btn btn-small btn-primary menu-button" href="#">Deleted Events</a>
+					  				<a class="btn btn-small btn-primary menu-button" href="<?php echo base_url(); ?>manage/deletedevents">Deleted Events</a>
 					  			</div>					  			
 					  		</div>	
 					  		<div class="row">
@@ -400,7 +400,7 @@
 										<div class="row">
 											<div class="span12">
 												<button type="submit" class="btn btn-default">Submit</button>												
-												<button type="button" class="btn btn-default">Cancel</button>
+												<button type="button" onclick="window.history.back();"  class="btn btn-default">Cancel</button>
 											</div>																			
 										</div>
 									</form>		
