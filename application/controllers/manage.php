@@ -461,13 +461,35 @@ class manage extends CI_Controller_EX {
     }
     else if($role == 2) {
       $function_name = "APPLICATION ADMINISTRATOR CONSOLE MENU";
-      $data->links = array('dashboard' => 'Management Dashboard', 'client_set_up' => 'Client Set Up / Editing', 'logout' => 'Logout');
+      $data->links = array('dashboard' => 'Management Dashboard', 'client_set_up' => 'Client Set Up/ Upload / Editing', 
+      'activity_setup_management' => 'Activity Setup and Management', 'user_data_management' => 'User Data Management and Export',
+      'console_manager' => 'Console Manager', 'app_administrator_user' => 'Users', 'manage_report_content' => 'Mange Reported Content', 'logout' => 'Logout');
     }
     else{
       $function_name = "CLIENT MANAGEMENT CONSOLE";
       $data->links = array('logout' => 'Logout');
     }
     $this->check_login($data, $function_name);
+  }
+
+  public function activity_setup_management(){
+
+  }
+
+  public function user_data_management(){
+
+  }
+
+  public function console_manager(){
+
+  }
+
+  public function app_administrator_user(){
+
+  }
+
+  public function manage_report_content(){
+
   }
 
   public function dashboard() {
