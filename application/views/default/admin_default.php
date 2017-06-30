@@ -651,7 +651,7 @@
 						  		<a href="<?php echo base_url(); ?>manage/review_users" class="btn btn-small btn-primary menu-button">Review Users</a>
 							 <?php endif; ?>
 							 <?php if(($function_name != "User Statistics") && ($function_name != "Content Manager")){ ?>
-							 	<div class="clear">
+							 	<div class="clear" style="text-align:center;">
 									<a href="<?php echo base_url(); ?>manage/console_menu" class="btn btn-small btn-primary menu-button">Console Menu</a>
 								</div>
 						  	<?php	} ?>
@@ -663,7 +663,7 @@
 
 								<div class="span9">
 									<?php if (isset($back)): ?>
-									  	<div class="clear"><a href="<?php echo base_url(); ?>manage/console_menu" class="btn btn-small btn-primary menu-button">Console Menu</a></div>
+									  	<div class="clear" style="text-align:center;"><a href="<?php echo base_url(); ?>manage/console_menu" class="btn btn-small btn-primary menu-button">Console Menu</a></div>
 									<?php endif; ?>
 								</div>
 								<div class="span3">
