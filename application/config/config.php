@@ -14,7 +14,8 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://intellispex.com/';
+//$config['base_url']	= 'http://intellispex.com/';
+$config['base_url']	= 'http://localhost/song';
 
 /*
 |--------------------------------------------------------------------------

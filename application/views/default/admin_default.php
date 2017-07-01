@@ -101,9 +101,9 @@
   <body class="login-layout admin-body">
 	<div class="widget-main">
 		<div class="top-menu">
-			<h2 class="col-sm-3"><img class="irc_mut iUyhD38Z_yik-HwpH6ZlgJaI" onload="google.aft&amp;&amp;google.aft(this)" src="<?php echo base_url('public') ?>/images/logo.JPG" width="60" height="60" style="margin-top: 0px;"> <span style="color : #00aaff;">IntelliSpeX</span></h2>
-			<h2 class="col-sm-6"><span><?php echo $function_name; ?></span></h2>
-			<h2 class="col-sm-3"></i> <span><?php echo $email; ?></span></h2>
+			<h2 class="span3"><img class="irc_mut iUyhD38Z_yik-HwpH6ZlgJaI" onload="google.aft&amp;&amp;google.aft(this)" src="<?php echo base_url('public') ?>/images/logo.JPG" width="60" height="60" style="margin-top: 0px;"> <span style="color : #00aaff;">IntelliSpeX</span></h2>
+			<h2 class="span7"><span><?php echo $function_name; ?></span></h2>
+			<h2 class="span2"></i> <span><?php echo $email; ?></span></h2>
 		</div>
 	</div>
   <div class="container-fluid" id="main-container">
@@ -318,7 +318,7 @@
 					  		<div class="row">
 					  			<div class="span3"></div>
 					  			<div class="span6" style="text-align: center;" >
-					  				<a class="btn btn-small btn-primary menu-button" href="#">View Events</a>
+					  				<a class="btn btn-small btn-primary menu-button" href="<?php echo base_url(); ?>events/index">View Events</a>
 					  			</div>					  			
 					  		</div>	
 					  		<div class="row">
@@ -409,6 +409,34 @@
 
 												
 							<?php
+								}
+								else if($function_name == "Deleted Events"){
+								?>
+								<div class="row">
+									<div class="span1">
+									</div>
+									<div class="span10">
+										<table>
+											<thead>
+												<th>User</th>
+												<th>Event Title</th>
+												<th>Date Created</th>
+												<th>Date Deleted</th>
+												<th>Time Left</th>
+											</thead>
+											<tbody>
+											</tbody>
+										</table>
+									</div>
+								</div>
+								<div class="row" style="text-align:center;margin-top:15%;">
+									<div class="span2">
+									</div>
+									<div class="span8">
+										<a class="btn btn-small btn-primary menu-button" href="<?php echo base_url(); ?>manage/contentmanager">Content Manager</a>
+									</div>
+								</div>
+								<?php
 								}
 					  		else{
 					  		if (isset($links)): ?>
@@ -650,7 +678,7 @@
 						  		<div class="clear">
 						  		<a href="<?php echo base_url(); ?>manage/review_users" class="btn btn-small btn-primary menu-button">Review Users</a>
 							 <?php endif; ?>
-							 <?php if(($function_name != "User Statistics") && ($function_name != "Content Manager")){ ?>
+							 <?php if(($function_name != "User Statistics") && ($function_name != "Content Manager") && ($function_name != "Deleted Events")){ ?>
 							 	<div class="clear" style="text-align:center;">
 									<a href="<?php echo base_url(); ?>manage/console_menu" class="btn btn-small btn-primary menu-button">Console Menu</a>
 								</div>

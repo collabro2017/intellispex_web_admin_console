@@ -15,6 +15,7 @@ class manage extends CI_Controller_EX {
     $this->load->library("session");
     $this->load->library('form_validation');
     $this->load->library('grocery_CRUD');
+    $this->load->library('ParseRestClient');
   }
 
   public function check_login($data = '', $function_name = ' ') {
@@ -163,6 +164,22 @@ class manage extends CI_Controller_EX {
     $data = new stdClass;
     $function_name = "Content Manager";
     $data->back = TRUE;
+    $this->check_login($data, $function_name);
+  }
+
+  function deletedevents(){
+    $data = new stdClass;
+    $function_name = "Deleted Events";
+    $data->back = TRUE;
+    $result = $this->parserestclient->query
+        	(
+        		array
+        		(
+        			"objectId" => "Event",
+        			//"query" => '{"eventname":"EC STAGE II"}'
+        		)
+        	);
+          var_dump($result);
     $this->check_login($data, $function_name);
   }
 
