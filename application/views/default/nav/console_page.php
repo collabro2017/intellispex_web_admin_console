@@ -12,7 +12,7 @@
 				IntelliSpeX
 			</span>
 		</h2>
-		<h2 class="span7">
+		<h2 class="span7" style="text-align:center;">
 			<span>
 				<?php echo $function_name; ?>
 			</span>

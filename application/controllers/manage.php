@@ -167,22 +167,6 @@ class manage extends CI_Controller_EX {
     $this->check_login($data, $function_name);
   }
 
-  function deletedevents(){
-    $data = new stdClass;
-    $function_name = "Deleted Events";
-    $data->back = TRUE;
-    $result = $this->parserestclient->query
-        	(
-        		array
-        		(
-        			"objectId" => "Event",
-        			//"query" => '{"eventname":"EC STAGE II"}'
-        		)
-        	);
-          var_dump($result);
-    $this->check_login($data, $function_name);
-  }
-
   public function supportmsg()
   {
     $session_data = $this->session->userdata('logged_in');

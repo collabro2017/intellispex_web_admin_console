@@ -123,6 +123,33 @@ class events extends CI_Controller_EX
 		}
 		
 	}
+	public function deletedevents(){
+		$data = new stdClass;
+		$session_data = $this->session->userdata('logged_in');
+		if ($session_data){
+			$temp = $this->parserestclient->query
+				(
+					array
+					(
+						"objectId" => "Event",	
+						//'query'=>'{"deletedAt":null}',	
+						'query'=>'{"deletedAt":{"$ne":null}}'		
+					)
+				);
+			$data->username = $session_data['username'];
+			$data->role = $session_data['role'];
+			$data->id = $session_data['id'];
+			$data->function_name = "Deleted Events";
+			$data->info = json_decode(json_encode($temp), true);
+			$this->load->view('default/events/deletedlist', $data);
+
+		}
+		else
+		{
+			$this->load->view('default/include/manage/v_login');
+		}
+		
+	}
 }
 
 ?>
