@@ -32,23 +32,15 @@ class events extends CI_Controller_EX
 			$data->id = $session_data['id'];
 			$data->function_name = "VIEW OR EDIT GLOBAL EVENT LIST";
 
-        	/*$data->info = $this->parserestclient->query
-        	(
-        		array
-        		(
-        			"objectId" => "Event",
-        			"query" =>  '{"targetEvent":{"__type":"Pointer","className":"Event"}}'                   
-
-        		)
-        	);*/
             $temp = $this->parserestclient->query
         	(
         		array
         		(
-        			"objectId" => "Event",
-        			//"query" => '{"eventname":"EC STAGE II"}'
+        			"objectId" => "Event",	
+					'query'=>'{"deletedAt":null}'				
         		)
         	);
+			
             $data->info = json_decode(json_encode($temp), true);
 			$this->load->view('default/events/list', $data);
 		}
@@ -85,6 +77,24 @@ class events extends CI_Controller_EX
 		{
 		    $this->load->view('default/include/manage/v_login');
 		}
+	}
+	
+	public function eventdelete()
+	{
+		$deletelist = $this->input->post('deletelist');
+		foreach($deletelist as $val){
+			//$data = array('deletedAt' => '2017-07-03T00:00:00','objectId'=>$val);
+			$this->parserestclient->update
+        	(
+        		array
+        		(
+        			"objectId" => "Event",
+        			'object' => [ 'deletedAt' => "2017-07-03"],
+					'where' => $val
+				)
+        	);
+		}
+		
 	}
 }
 

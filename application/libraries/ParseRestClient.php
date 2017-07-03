@@ -19,7 +19,8 @@ class ParseRestClient{
 		$this->restkey = '3N1GRIQCeUWvPaR2gn4yEgJG8BJoKjWMGKCAT7r2';
 		$this->parseUrl = 'http://eb-icymyi-parse-server.jegr4ium5p.us-east-1.elasticbeanstalk.com/parse/classes';
 		$this->pushUrl = 'http://eb-icymyi-parse-server.jegr4ium5p.us-east-1.elasticbeanstalk.com/parse';
-
+		//$this->parseUrl ='http://eb-icymyi-parse-server.jegr4ium5p.us-east-1.elasticbeanstalk.com/dashboard/apps/icymi/parse/classes';
+		//$this->pushUrl = 'http://eb-icymyi-parse-server.jegr4ium5p.us-east-1.elasticbeanstalk.com/parse';
 		/*if(isset($config['appid']) && isset($config['restkey'])){
 			$this->appid = $config['appid'];
 			$this->restkey = $config['restkey'];
@@ -59,9 +60,15 @@ class ParseRestClient{
 			curl_setopt($c, CURLOPT_URL,  $args['url']);
 		}
 
-		if($args['method'] == 'PUT' || $args['method'] == "POST")
+		if($args['method'] == "POST")
 		{
+			$postData = json_encode($args['payload']);			
+			curl_setopt($c, CURLOPT_POSTFIELDS, $postData );
+		}
+		else if($args['method'] == 'PUT')
+		{			
 			$postData = json_encode($args['payload']);
+			//$postData = $args['payload'];	
 			curl_setopt($c, CURLOPT_POSTFIELDS, $postData );
 		}
 		else
@@ -89,13 +96,10 @@ class ParseRestClient{
 				$query = http_build_query($postData, '', '&');
 				curl_setopt($c, CURLOPT_URL, $args['url'].'?'.$query);
 			}
-
 		}
-
-
+		
 		$response = curl_exec($c);
 		$httpCode = curl_getinfo($c, CURLINFO_HTTP_CODE);
-
 
 		return array('code'=>$httpCode, 'response'=>$response);
 	}
@@ -185,7 +189,7 @@ class ParseRestClient{
  */
 	public function update($args){
 		$params = array(
-			'url' => $this->parseUrl .'/'.$args['objectId'],
+			'url' => $this->parseUrl .'/'.$args['objectId'] . '/' . $args['where'],
 			'method' => 'PUT',
 			'payload' => $args['object']
 		);

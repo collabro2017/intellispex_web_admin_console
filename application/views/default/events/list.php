@@ -40,7 +40,7 @@
 										<td><img width="70px" src="<?php echo $val['postImage']['url']; ?>"></img></td>
 										<td><?php echo $val['eventname'] ?><br>
 											<b>Date Created:</b> <?php echo $val['createdAt'] ?><br>
-											<b>User:</b> <?php echo $val['username'] ?>
+											<b>User:</b> <?php echo $val['username'] ?><br>
 										</td>
 										<td>
 											<button onclick="metadataevents();">Download Metadata</button><br><br>
@@ -87,6 +87,15 @@
 		function deleteevent(){
 			if (window.confirm("Are you sure want to delete selected event(s)?")) { 
 				console.log("delete");
+				var deletelist = [];
+				$( "input:checkbox" ).each(function(){
+					if(this.checked == true)
+						deletelist.push(this.name);
+				});
+				$.post( "<?php echo base_url(); ?>events/eventdelete",{ deletelist: deletelist}, function( data ) {
+					//console.log(data);
+					window.location.href="<?php echo base_url(); ?>events/index";
+				});
 			}
 		}
 
