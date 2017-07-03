@@ -23,8 +23,13 @@ class events extends CI_Controller_EX
 
 	public function index()
 	{
+		$day=$this->input->get('day');
+		$asc=$this->input->get('asc');
+		
 		$data = new stdClass;
 		$session_data = $this->session->userdata('logged_in');
+		$data->asc = ($asc==FALSE)?0:1;
+        $asc= ($asc==FALSE) ?'createdAt' : '-createdAt';
 		if ($session_data)
 		{
 			$data->username = $session_data['username'];
@@ -32,16 +37,38 @@ class events extends CI_Controller_EX
 			$data->id = $session_data['id'];
 			$data->function_name = "VIEW OR EDIT GLOBAL EVENT LIST";
 
-            $temp = $this->parserestclient->query
-        	(
-        		array
-        		(
-        			"objectId" => "Event",	
-					'query'=>'{"deletedAt":null}'				
-        		)
-        	);
-			
-            $data->info = json_decode(json_encode($temp), true);
+			if(!$day || is_null($day) || $day=="" ){
+				$temp = $this->parserestclient->query
+				(
+					array
+					(
+						"objectId" => "Event",	
+						'query'=>'{"deletedAt":null}',
+						'order'=>$asc				
+					)
+				);
+				$data->day = "";				
+			}
+			else{
+				
+				$dayCount = -1 * $day;
+				$date = date(DateTime::ISO8601, strtotime($dayCount . ' days'));
+				//$date = "2017-06-01T00:00:00.000Z";
+				$temp = $this->parserestclient->query
+				(
+					array
+					(
+						"objectId" => "Event",	
+						//'query'=>'{"deletedAt":null, "createdAt":{"$gt":"'.$date.'"}}',
+						'query'=>'{"deletedAt":null, "createdAt":{"$gte":{"__type":"Date","iso":"' . $date .'"}}}',
+						'order'=>$asc,
+						//'limit'=>intval($day),
+					)
+				);
+				$data->day = $day;				
+			}
+
+			$data->info = json_decode(json_encode($temp), true);
 			$this->load->view('default/events/list', $data);
 		}
 		else

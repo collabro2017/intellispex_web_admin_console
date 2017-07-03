@@ -21,6 +21,34 @@
 		<div id="main-content">
 			<div class="row-fluid">
 				<div class="span1"></div>
+				
+				<div class="span3"><span>orderBy</span>
+					<select id="orderbyday" style="margin-bottom:0px;">
+						
+						<option value="">Beginning</option>
+						<option value="1">Last Day</option>
+						<option value="2">Last 2 Days</option>
+						<option value="7">Last Week</option>
+						<option value="10">Last 10 Days</option>
+						<option value="14">Last 2 Weeks</option>
+						<option value="30">Last Month</option>
+						<option value="45">Last 45 Days</option>						
+						<option value="60">Last 2 Months</option>
+						<option value="75">Last 75 Days</option>
+						<option value="100">Last 100 Days</option>
+						<option value="365">Last Years</option>						
+						
+					</select>
+				</div>
+				<div class="span3">
+					<select id="orderbyasc" style="margin-bottom:0px;">
+						<option value="0">ascending</option>
+						<option value="1">descending</option>
+					</select>
+				</div>
+			</div>
+			<div class="row-fluid" style="margin-top:20px;">
+				<div class="span1"></div>
 				<div class="span10">
 					<table class="table table-striped events-table" id="table_data">
 						<thead>
@@ -80,7 +108,9 @@
 	
 	<script type="text/javascript">		
 		
-		$('#table_data').DataTable();		
+		$('#table_data').DataTable();	
+		$('#orderbyday').val(<?php echo $day; ?>);
+		$('#orderbyasc').val(<?php echo $asc; ?>);	
 		function metadataevents(){
 			
 		};
@@ -98,6 +128,12 @@
 				});
 			}
 		}
+		$( "#orderbyday" ).change(function() {
+			window.location.href="<?php echo base_url(); ?>events/index?day="+$('#orderbyday').val()+"&asc="+$('#orderbyasc').val();
+		});
+		$( "#orderbyasc" ).change(function() {
+			window.location.href="<?php echo base_url(); ?>events/index?day="+$('#orderbyday').val()+"&asc="+$('#orderbyasc').val();
+		});
 
 	</script>
 	</body>
