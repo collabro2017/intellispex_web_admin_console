@@ -40,5 +40,3 @@
             <button onclick="" class="btn btn-small btn-primary menu-button">Select Metadata</button><br><br>
         </div>
     </div>
-
-<?php var_dump($special); ?>
