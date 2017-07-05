@@ -132,7 +132,8 @@ class events extends CI_Controller_EX
 					array
 					(
 						"objectId" => "Event",	
-						//'query'=>'{"deletedAt":null}',	
+						//'query'=>'{"deletedAt":null}',
+
 						'query'=>'{"deletedAt":{"$ne":null}}'		
 					)
 				);
@@ -149,6 +150,62 @@ class events extends CI_Controller_EX
 			$this->load->view('default/include/manage/v_login');
 		}
 		
+	}
+
+
+	public function eventmetadata(){
+		$metadatalist = $this->input->post('metaviewlist');
+		$id = $this->input->post('id');
+		$data = new stdClass;
+		$session_data = $this->session->userdata('logged_in');
+		if ($session_data){
+			$temp = $this->parserestclient->query
+				(
+					array
+					(
+						"objectId" => "EventComment",	
+						//'query'=>'{"deletedAt":null}',	
+						//'query'=>'{"targetEvent":"'.$id.'"}'
+						"query" =>  '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"'. $id . '"}}'		
+					)
+				);
+			$temp_event = $this->parserestclient->query
+				(
+					array
+					(
+						"objectId" => "Event",
+						//'query'=>'{"objectId":{"$all":"'.$id.'"}}',
+						//'query'=>'{"deletedAt":null}',	
+						'query'=>'{"objectId":"'.$id.'"}'
+						//"query" =>  '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"'. $id . '","__op":"Add","objects":["totalCount","location"]}}'
+					)
+				);
+			$temp_special = $this->parserestclient->query
+				(
+					array
+					(
+						"objectId" => "Event",
+						//'query'=>'{"objectId":{"$all":"'.$id.'"}}',
+						//'query'=>'{"deletedAt":null}',	
+						//'query'=>'{"objectId":"'.$id.'"}'
+						"query" =>  '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"'. $id . '","__op":"Add","objects":["totalCount","location"]}}'
+					)
+			);
+			$data->username = $session_data['username'];
+			$data->role = $session_data['role'];
+			$data->id = $session_data['id'];
+			$data->function_name = "Metadata Viewer/Editor";
+			$data->info = json_decode(json_encode($temp), true);
+			$data->event = json_decode(json_encode($temp_event), true);
+			$data->special = json_decode(json_encode($temp_special), true);
+			$data->list = $metadatalist;
+			$this->load->view('default/events/downloadlist', $data);
+		}
+		else
+		{
+			$this->load->view('default/include/manage/v_login');
+		}
+
 	}
 }
 
