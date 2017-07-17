@@ -18,7 +18,7 @@
 			?>
 		</div>
 		<div class="container mgt-12x color-white">
-			<div class="bg-blue 123">
+			<div class="bg-blue">
 				<div class="col-md-8 pd-0">
 					<div class="col-md-12 bg-green pd-4em">
 						<h2 class="title-v2">VISION</h2>
