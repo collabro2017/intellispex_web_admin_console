@@ -12,7 +12,6 @@
 	<link rel="stylesheet" href="<?php echo base_url('public') ?>/assets/css/ace.min.css" />
 	<link rel="stylesheet" href="<?php echo base_url('public') ?>/assets/css/ace-responsive.min.css" />
 	<link rel="stylesheet" href="<?php echo base_url('public') ?>/css/main.css" />
-    <link rel="stylesheet" href="<?php echo base_url('public') ?>/css/main1.css" />
 	<!--[if lt IE 9]>
 	  <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
 	<![endif]-->
