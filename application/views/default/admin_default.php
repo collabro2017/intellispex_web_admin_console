@@ -206,15 +206,15 @@
 											
 											<tr>
 												<td># of Full Right Users</td>
-												<td></td>
+												<td><?php echo $full; ?></td>
 											</tr>
 											<tr>
 												<td># of Comment-View Users</td>
-												<td></td>
+												<td><?php echo $commentOnly; ?></td>
 											</tr>
 											<tr>
 												<td># of View Only Users</td>
-												<td></td>
+												<td><?php echo $viewOnly; ?></td>
 											</tr>
 											<tr>
 												<td>Total Data</td>

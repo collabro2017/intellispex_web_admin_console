@@ -28,8 +28,7 @@ class manage extends CI_Controller_EX {
       $data->id = $session_data['id'];
       $data->email = $session_data['email'];
       $this->load->view('default/admin_default', $data);
-    }
-    else {
+    }else {
       if ($this->input->post('submit')) {
         //This method will have the credentials validation
         $this->form_validation->set_rules('username', 'Username', 'trim|required|xss_clean');
@@ -138,6 +137,36 @@ class manage extends CI_Controller_EX {
     $data = new stdClass;
     $function_name = "User Statistics";
     $data->back = TRUE;
+    $temp = $this->parserestclient->query
+    (
+        array
+        (
+            "objectId" => "Event",	
+            'query'=>'{"deletedAt":null}',
+        )
+    );
+    $events = json_decode(json_encode($temp), true);
+    $fullCount = 0;
+    $commentOnly = 0;
+    $viewOnly = 0;
+    foreach ($events as $event){
+        if(isset($event['TagFriendAuthorities'])){
+            $TagFriendAuthorities = $event['TagFriendAuthorities'];
+//            $TagFriends = $event['TagFriends'];
+            for($i = 0; $i< count($TagFriendAuthorities);$i++){
+                if($TagFriendAuthorities[$i] == 'Full'){
+                    $fullCount = $fullCount+1;
+                }elseif($TagFriendAuthorities[$i] == 'Comment Only'){
+                    $commentOnly = $commentOnly+1;
+                }else{
+                    $viewOnly = $viewOnly+1;
+                }
+            } 
+        }
+    }
+    $data->full = $fullCount;
+    $data->commentOnly = $commentOnly;
+    $data->viewOnly = $viewOnly;
     $this->check_login($data, $function_name);
   }
 
