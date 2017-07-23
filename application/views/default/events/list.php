@@ -32,6 +32,11 @@
                 border-radius: 6px;
             	display:inline-block;
             }
+            input{
+            background: url("http://localhost/cip/public/img/search.png") center left     no-repeat;
+            height:30px;
+            padding-left:25px;
+            }
 
 		</style>
 
@@ -70,9 +75,9 @@
 						<option value="0">ascending</option>
 						<option value="1">descending</option>
 					</select>
-				</div><div class="span3">
+				</div><div class="span3" style="float: right;">
 					<form id="event_search" method="post" action ="#">
-					   <input type="text" class="search event_search" placeholder="input the event name">
+					   <input type="text" class="search event_search" style="height: 15px;" placeholder="    input the event name">
 					</form>
 				</div>
 			</div>
