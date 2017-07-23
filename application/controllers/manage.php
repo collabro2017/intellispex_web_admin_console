@@ -26,7 +26,7 @@ class manage extends CI_Controller_EX {
       $data->role = $session_data['role'];
       $data->function_name = $function_name;
       $data->id = $session_data['id'];
-
+      $data->email = $session_data['email'];
       $this->load->view('default/admin_default', $data);
     }
     else {
@@ -109,7 +109,8 @@ class manage extends CI_Controller_EX {
         $sess_array = array(
           'id' => $row->id,
           'username' => $row->username,
-          'role' => $role
+          'role' => $role,
+          'email' => $row->email
         );
         $this->session->set_userdata('logged_in', $sess_array);
       }
@@ -131,6 +132,83 @@ class manage extends CI_Controller_EX {
     }
     $this->session->sess_destroy();
     redirect('manage');
+  }
+
+  function userstatistics(){
+    $data = new stdClass;
+    $function_name = "User Statistics";
+    $data->back = TRUE;
+    $this->check_login($data, $function_name);
+  }
+
+  function clientmanagementconsole(){
+    $session_data = $this->session->userdata('logged_in');
+    //var_dump($session_data);exit();
+    $role = $session_data['role'];
+    $data = new stdClass;
+    $function_name = "CLIENT MANAGEMENT CONSOLE";
+    $data->links = array('logout' => 'Logout');
+
+    $this->check_login($data, $function_name);
+  }
+
+  function clientmanagementconsolesupport(){
+    $session_data = $this->session->userdata('logged_in');
+    $data = new stdClass;
+    $function_name = "SUPPORT REQUEST";
+
+    $this->check_login($data, $function_name);
+  }
+
+  function contentmanager(){
+    $data = new stdClass;
+    $function_name = "Content Manager";
+    $data->back = TRUE;
+    $this->check_login($data, $function_name);
+  }
+
+  public function supportmsg()
+  {
+    $session_data = $this->session->userdata('logged_in');
+    $ci = get_instance();
+    $ci->load->library('email');
+    $config['protocol'] = "smtp";
+    $config['smtp_host'] = "ssl://smtp.gmail.com";
+    $config['smtp_port'] = "465";
+    $config['smtp_user'] = "test.IntelliSpeX@gmail.com";
+    $config['smtp_pass'] = "Test123456789";
+
+    $config['charset'] = "utf-8";
+    $config['mailtype'] = "html";
+    $config['newline'] = "\r\n";
+
+    $ci->email->initialize($config);
+    $ci->email->from($this->input->post('emailto'), $session_data['username']);
+    $ci->email->to('support@visitechmgmt.zendesk.com');
+    $this->email->reply_to($this->input->post('emailto'), $session_data['username']);
+    $ci->email->subject($this->input->post('priority'));
+    $ci->email->message($this->input->post('des'));
+
+    if($_FILES['upload']['size'] > 0) { // upload is the name of the file field in the form
+      $aConfig['upload_path']      = 'public/images';
+      // chmod('public/images', 777);
+      $aConfig['allowed_types']    = 'doc|docx|pdf|jpg|png';
+      $aConfig['max_size']     = '3000';
+      $aConfig['max_width']        = '1280';
+      $aConfig['max_height']       = '1024';
+      $this->load->library('upload',$aConfig);
+      $this->upload->do_upload('upload');
+      $ret = $this->upload->data();
+      $pathToUploadedFile = $ret['full_path'];
+      $this->email->attach($pathToUploadedFile);
+    }
+
+    $this->email->send();
+//var_dump($this->email->print_debugger());
+    $data = new stdClass;
+    $function_name = "Content Manager";
+    $data->back = TRUE;
+    $this->check_login($data, $function_name);
   }
 
   public function reset_password() {
@@ -373,36 +451,48 @@ class manage extends CI_Controller_EX {
 
   public function console_menu() {
     $session_data = $this->session->userdata('logged_in');
-    //var_dump($session_data);exit();
+    // var_dump($session_data);exit();
     $role = $session_data['role'];
+//     echo $role;
+//     exit();
     $data = new stdClass;
     if ($role == 1) {
       $function_name = "CLIENT ADMINISTRATOR CONSOLE MENU";
-<<<<<<< HEAD
       $data->links = array('c_dashboard' => 'Client Management Dashboard', 'client_set_up' => 'User Set Up / Upload / Editing',
         'set_up_management' => 'Activity Set Up and Management', 'user_data_management' => 'User Data Management and Export',
-        'logout' => 'Logo   ut');
-=======
-      $data->links = array(
-        'c_dashboard' => 'Client Management Dashboard',
-        'client_set_up' => 'User Set Up / Upload / Editing',
-        'set_up_management' => 'Activity Set Up and Management',
-        'user_data_management' => 'User Data Management and Export',
-        '../sys_contract' => 'Content Manager',
-          '../user' => 'Users',
-          '../events/FlaggedEvents' => 'Manage Reported Content',
         'logout' => 'Logout');
->>>>>>> master
     }
     else if($role == 2) {
       $function_name = "APPLICATION ADMINISTRATOR CONSOLE MENU";
-      $data->links = array('dashboard' => 'Management Dashboard', 'client_set_up' => 'Client Set Up / Editing', 'logout' => 'Logout');
+      $data->links = array('dashboard' => 'Management Dashboard', 'client_set_up' => 'Client Set Up/ Upload / Editing',
+      'activity_setup_management' => 'Activity Setup and Management', 'user_data_management' => 'User Data Management and Export',
+      'console_manager' => 'Console Manager', 'app_administrator_user' => 'Users', 'manage_report_content' => 'Mange Reported Content', 'logout' => 'Logout');
     }
     else{
       $function_name = "CLIENT MANAGEMENT CONSOLE";
       $data->links = array('logout' => 'Logout');
     }
     $this->check_login($data, $function_name);
+  }
+
+  public function activity_setup_management(){
+
+  }
+
+  public function user_data_management(){
+
+  }
+
+  public function console_manager(){
+
+  }
+
+  public function app_administrator_user(){
+
+  }
+
+  public function manage_report_content(){
+
   }
 
   public function dashboard() {
@@ -418,51 +508,14 @@ class manage extends CI_Controller_EX {
     $function_name = "CLIENT MANAGEMENT DASHBOARD";
     $data->back = TRUE;
     $data->statistics = "Usage Statistics";
-	$data->nrousers=$this->parserestclient->query
-      (
-          [
-              "objectId" => "_User",
-			  "limit"=>'0',
-			  'count'=>'1'
-
-          ]
-      )->count;
-	  $data->nroevent=$this->parserestclient->query
-	  (
-		  [
-			  "objectId" => "Event",
-			  "limit"=>'0',
-			  'count'=>'1'
-
-		  ]
-	  )->count;
-	  $data->averageframe=$this->parserestclient->query
-	  (
-		  [
-			  "objectId" => "Post",
-			  "limit"=>'0',
-			  'count'=>'1'
-
-		  ]
-	  )->count/$data->nroevent;
-	  $data->nroadmin=$this->parserestclient->query
-	  (
-		  [
-			  "objectId" => "_User",
-			  "query"=>'{"$relatedTo":{"object":{"__type":"Pointer","className":"_Role","objectId":"aDiZnlW1AX"},"key":"users"}}',
-			  "limit"=>'0',
-			  'count'=>'1'
-
-		  ]
-	  )->count;
-      $this->check_login($data, $function_name);
+    $this->check_login($data, $function_name);
   }
 
   public function client_set_up() {
     $data = new stdClass;
     $function_name = "APPLICATION ADMINISTRATOR - CLIENT SET UP AND MAINTENANCE";
     $data->back = TRUE;
-    $data->links = array('create_client' => 'Create a Client', 'edit_client' => 'Manage / Edit a Client', '../events' => 'View or Edit Global Event List', 'logout' => 'Logout');
+    $data->links = array('create_client' => 'Create a Client', 'edit_client' => 'Manage / Edit a Client', 'events' => 'View or Edit Global Event List', 'logout' => 'Logout');
     $this->check_login($data, $function_name);
   }
 
@@ -545,6 +598,44 @@ class manage extends CI_Controller_EX {
     $this->check_login($data, $function_name);
   }
 
+  public function events()
+  {
+    $data = new stdClass;
+    $session_data = $this->session->userdata('logged_in');
+    if ($session_data)
+    {
+        $data->username = $session_data['username'];
+        $data->role = $session_data['role'];
+        $data->id = $session_data['id'];
+        $this->load->model('M_events');
+        $data->info = $this->M_events->get_all();
+        $data->function_name = "VIEW OR EDIT GLOBAL EVENT LIST";
+        $this->load->view('default/events/list', $data);
+    }
+    else
+    {
+        $this->check_login();
+    }
+  }
+
+  public function event( $event_id )
+  {
+    $data = new stdClass;
+    $session_data = $this->session->userdata('logged_in');
+    if ($session_data)
+    {
+        $data->username = $session_data['username'];
+        $data->role = $session_data['role'];
+        $data->id = $session_data['id'];
+        $data->function_name = "EVENT VIEWER";
+        $data->event_id = $event_id;
+        $this->load->view('default/events/view', $data);
+    }
+    else
+    {
+        $this->check_login();
+    }
+  }
   //-------------------------------------------------------------------//
 
 
