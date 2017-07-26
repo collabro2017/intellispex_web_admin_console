@@ -19,7 +19,7 @@ class manage extends CI_Controller_EX {
   }
 
   public function check_login($data = '', $function_name = ' ') {
-
+     
     $session_data = $this->session->userdata('logged_in');
     if ($session_data) {
       $data->username = $session_data['username'];
@@ -56,7 +56,6 @@ class manage extends CI_Controller_EX {
   }
 
   public function check_login1($data = '', $function_name = ' ') {
-
     $session_data = $this->session->userdata('logged_in');
     if ($session_data) {
       $data->username = $session_data['username'];
@@ -98,10 +97,20 @@ class manage extends CI_Controller_EX {
     //Field validation succeeded.&nbsp; Validate against database
     $username = $this->input->post('username');
     $role = $this->input->post('role');
-
     //query the database
-    $result = $this->M_user->login($username, $password);
-
+    $temp = $this->parserestclient->query
+    (
+        array
+        (
+            "objectId" => "_User",	
+            'query'=>'{"email":"'.$username.'"}',
+        )
+    );
+    $users = json_decode(json_encode($temp), true);
+    $current_user = $users[0];
+    $mongoRolerId = $current_user['user_type']['objectId'];
+//    print_r($current_user);exit;
+    $result = $this->M_user->login($username, $password,$mongoRolerId);
     if ($result) {
       $sess_array = array();
       foreach ($result as $row) {
@@ -109,7 +118,9 @@ class manage extends CI_Controller_EX {
           'id' => $row->id,
           'username' => $row->username,
           'role' => $role,
-          'email' => $row->email
+          'email' => $row->email,
+          'mongodb_id' => $current_user['objectId'],
+          'mongodb_role_id' => $row->mongodb_role_id
         );
         $this->session->set_userdata('logged_in', $sess_array);
       }
@@ -482,6 +493,29 @@ class manage extends CI_Controller_EX {
     $session_data = $this->session->userdata('logged_in');
     //var_dump($session_data);exit();
     $role = $session_data['role'];
+
+//    print_r($users);exit;
+//    $date = date(DateTime::ISO8601, time());
+//    foreach ($users as $user){
+//        print_r($user);continue;
+//        print_r($this->parserestclient->update
+//        (
+//                array
+//                (
+//                        "objectId" => "_User",
+//                        'object' => [ 'updatedAt' =>  [
+//                                        "__type" => "Date",
+//                                        "iso" => $date, 
+//                                       ],'user_type' => [
+//                                        "__type" => "Pointer",
+//                                        "className" =>"_Role",
+//                                        "objectId" => "XVr1sAmAQl"
+//                                        ] ],
+//					'where' => $user['objectId']
+//                        )
+//        ));
+//    }
+//    exit;
     $data = new stdClass;
     if ($role == 1) {
       $function_name = "CLIENT ADMINISTRATOR CONSOLE MENU";
@@ -547,7 +581,9 @@ class manage extends CI_Controller_EX {
   }
 
   public function create_client() {
+     
     $data = new stdClass;
+    $this->load->model('m_user');
     $function_name = "CREATE CLIENT";
     $data->back = TRUE;
     $data->create_client = TRUE;
@@ -555,20 +591,57 @@ class manage extends CI_Controller_EX {
     if ($this->input->post('submit')) {
       $this->form_validation->set_rules('name', 'Client Name', 'required|trim');
       if ($this->form_validation->run()) {
-        $client['name'] = $this->input->post('name');
-        $client['address1'] = $this->input->post('address1');
-        $client['address2'] = $this->input->post('address2');
-        $client['city'] = $this->input->post('city');
-        $client['province'] = $this->input->post('province');
-        $client['postal'] = $this->input->post('postal');
-        $client['phone'] = $this->input->post('phone');
-        $client['mobile'] = $this->input->post('mobile');
-        $client['email'] = $this->input->post('email');
-        $client['created'] = $this->input->post('created');
-        $client['updated'] = $this->input->post('updated');
-        $client['admin_email'] = $this->input->post('admin_email');
-        $this->load->model('m_client');
-        if ($this->m_client->create_client($client))
+            $client['name'] = $this->input->post('name');
+            $client['password'] = md5($this->input->post('password'));
+            $client['username'] = $this->input->post('email');
+            $client['phone_number'] = $this->input->post('phone_number');
+            $client['email'] = $this->input->post('email');
+            $client['user_type'] = 3;
+            $client['active'] = 1;
+        $name = $this->input->post('name');
+        $address1 = $this->input->post('address1');
+        $password = $this->input->post('password');
+        $city = $this->input->post('city');
+        $province = $this->input->post('province');
+        $postal = $this->input->post('postal');
+        $phone = $this->input->post('phone');
+        $mobile = $this->input->post('mobile');
+        $email = $this->input->post('email');
+        $client_mongo_role = $this->m_user->getMongoRoleById(3); 
+        $client_mongo_role = $client_mongo_role->mongodb_role_id;
+        $session_data = $this->session->userdata('logged_in');
+        $mongodb_id = $session_data['mongodb_id'];
+        $date = date(DateTime::ISO8601, time());
+        $this->parserestclient->create
+        (
+                array
+                (
+                        "objectId" => "_User",
+                        'object' => ['username' => "$name",'password' => "$password",'email' => "$email",'email' => "$email", 
+                                        'phone' => "$phone",
+                                        'loginType' => 'email',
+                                        'telephone' => "$phone",
+                                        'emailVerified' => TRUE,
+                                        'city' => "$city",
+                                        'zipcode' => "$postal",
+                                        'phone' => "$mobile",
+                                        'state' => "$province",
+                                        'Status' => true,
+                                        'createdAt' =>  [
+                                        "__type" => "Date",
+                                        "iso" => $date, 
+                                       ],'user_type' => [
+                                        "__type" => "Pointer",
+                                        "className" =>"_Role",
+                                        "objectId" => "$client_mongo_role"
+                                        ],'created_by' => [
+                                        "__type" => "Pointer",
+                                        "className" =>"_User",
+                                        "objectId" => "$mongodb_id"
+                                        ] ]
+                        )
+        );
+        if ($this->m_user->save($client))
           $data->message = "Create sucessfully";
         else
           $data->message = "Create false";
@@ -578,12 +651,22 @@ class manage extends CI_Controller_EX {
   }
 
   public function edit_client() {
+    $this->load->model('m_user');
+    $client_mongo_role = $this->m_user->getMongoRoleById(3); 
+    $client_mongo_role = $client_mongo_role->mongodb_role_id;
+    $temp = $this->parserestclient->query
+    (
+            array
+            (
+                    "objectId" => "_User",	
+                    //'query'=>'{"deletedAt":null, "createdAt":{"$gt":"'.$date.'"}}',
+                    'query'=>'{"user_type":{"__type":"Pointer","className":"_Role","objectId":"' . $client_mongo_role .'"}}',
+            )
+    );
     $data = new stdClass;
     $function_name = "MANAGE CLIENTS";
     $this->load->model('m_client');
-    if ($client = $this->m_client->get_all()) {
-      $data->client = $client;
-    }
+    $data->client = json_decode(json_encode($temp), true);//$client;
     $data->back = TRUE;
     $data->client_setup = TRUE;
     $this->check_login($data, $function_name);

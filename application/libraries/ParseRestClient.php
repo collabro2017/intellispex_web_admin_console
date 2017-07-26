@@ -6,6 +6,7 @@ class ParseRestClient{
 	private $restkey = '';
 	private $parseUrl = '';
 	private $pushUrl = '';
+        private $masterKey  = '';
 
 
 /**
@@ -19,6 +20,7 @@ class ParseRestClient{
 		$this->restkey = '3N1GRIQCeUWvPaR2gn4yEgJG8BJoKjWMGKCAT7r2';
 		$this->parseUrl = 'http://eb-icymyi-parse-server.jegr4ium5p.us-east-1.elasticbeanstalk.com/parse/classes';
 		$this->pushUrl = 'http://eb-icymyi-parse-server.jegr4ium5p.us-east-1.elasticbeanstalk.com/parse';
+                $this->masterKey = '3N1GRIQCeUWvPaR2gn4yEgJG8BJoKjWMGKCAT7r2';
 		//$this->parseUrl ='http://eb-icymyi-parse-server.jegr4ium5p.us-east-1.elasticbeanstalk.com/dashboard/apps/icymi/parse/classes';
 		//$this->pushUrl = 'http://eb-icymyi-parse-server.jegr4ium5p.us-east-1.elasticbeanstalk.com/parse';
 		/*if(isset($config['appid']) && isset($config['restkey'])){
@@ -46,6 +48,8 @@ class ParseRestClient{
 			'Content-Type: application/json',
 			'X-Parse-Application-Id: '.$this->appid,
 			'X-Parse-REST-API-Key: '.$this->restkey,
+			'X-Parse-Master-Key: '.$this->masterKey,
+                        'X-Parse-Revocable-Session: 1',
 			'Cache-Control: no-cache'
 		));
 		curl_setopt($c, CURLOPT_CUSTOMREQUEST, $args['method']);
@@ -100,7 +104,6 @@ class ParseRestClient{
 		
 		$response = curl_exec($c);
 		$httpCode = curl_getinfo($c, CURLINFO_HTTP_CODE);
-
 		return array('code'=>$httpCode, 'response'=>$response);
 	}
 
@@ -117,13 +120,12 @@ class ParseRestClient{
  */
 	public function create($args){
 		$params = array(
-			'url' => $this->parseUrl,
+			'url' => $this->parseUrl.'/'.$args['objectId'],
 			'method' => 'POST',
 			'payload' => $args['object']
 		);
 
 		$return = $this->request($params);
-
 		return $this->checkResponse($return,'201');
 
 	}
@@ -166,7 +168,7 @@ class ParseRestClient{
  */
 	public function get($args){
 		$params = array(
-			'url' => $this->parseUrl  .'/'.$args['objectId'],
+			'url' => $this->pushUrl  .'/'.$args['objectId'],
 			'method' => 'GET'
 		);
 
@@ -195,7 +197,6 @@ class ParseRestClient{
 		);
 
 		$return = $this->request($params);
-
 		return $this->checkResponse($return,'200');
 	}
 
@@ -283,7 +284,12 @@ class ParseRestClient{
 		}
 		else
 		{
+                    $response = json_decode( $return['response'] );
+                    if(isset($response->results)){
 			return json_decode( $return['response'] )->results;
+                    }else{
+                        return $response;
+                    }
 		}
 	}
 

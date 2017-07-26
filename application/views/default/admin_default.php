@@ -520,12 +520,16 @@
 										  <th><input type="text" class="span12" name='name' <?php if (isset($client_data[0]['name'])): ?> value="<?php echo $client_data[0]['name']; ?>" <?php endif; ?>/></th>
 										</tr>
 										<tr>
-										  <td>Address Line 1</td>
-										  <td><input type="text" class="span12" name='address1'<?php if (isset($client_data[0]['address1'])): ?> value="<?php echo $client_data[0]['address1']; ?>" <?php endif; ?>/></td>
+										  <td>Email</td>
+										  <td><input type="text" class="span12" name='email'<?php if (isset($client_data[0]['email'])): ?> value="<?php echo $client_data[0]['email']; ?>" <?php endif; ?>/></td>
 										</tr>
 										<tr>
-										  <td>Address Line 2</td>
-										  <td><input type="text" class="span12" name='address2'<?php if (isset($client_data[0]['address2'])): ?> value="<?php echo $client_data[0]['address2']; ?>" <?php endif; ?>/></td>
+										  <td>Password</td>
+                                                                                  <td><input type="password" class="span12" name='password'<?php if (isset($client_data[0]['password'])): ?> value="<?php echo $client_data[0]['password']; ?>" <?php endif; ?>/></td>
+										</tr>
+										<tr>
+										  <td>Location</td>
+										  <td><input type="text" class="span12" name='address1'<?php if (isset($client_data[0]['address1'])): ?> value="<?php echo $client_data[0]['address1']; ?>" <?php endif; ?>/></td>
 										</tr>
 										<tr>
 										  <td>City</td>
@@ -541,28 +545,20 @@
 										</tr>
 										<tr>
 										  <td>Phone</td>
-										  <td><input type="text" class="span12" name='phone'<?php if (isset($client_data[0]['phone'])): ?> value="<?php echo $client_data[0]['phone']; ?>" <?php endif; ?>/></td>
+										  <td><input type="text" class="span12" name='phone_number'<?php if (isset($client_data[0]['phone_number'])): ?> value="<?php echo $client_data[0]['phone_number']; ?>" <?php endif; ?>/></td>
 										</tr>
 										<tr>
 										  <td>Mobile Phone</td>
 										  <td><input type="text" class="span12" name='mobile'<?php if (isset($client_data[0]['mobile'])): ?> value="<?php echo $client_data[0]['mobile']; ?>" <?php endif; ?>/></td>
 										</tr>
-										<tr>
-										  <td>Email</td>
-										  <td><input type="text" class="span12" name='email'<?php if (isset($client_data[0]['email'])): ?> value="<?php echo $client_data[0]['email']; ?>" <?php endif; ?>/></td>
-										</tr>
-										<tr>
+<!--										<tr>
 										  <td>Date Created</td>
 										  <td><input type="date" class="span12" name='created'<?php if (isset($client_data[0]['created'])): ?> value="<?php echo $client_data[0]['created']; ?>" <?php endif; ?>/></td>
 										</tr>
 										<tr>
 										  <td>Date Modified</td>
 										  <td><input type="date" class="span12" name='updated'<?php if (isset($client_data[0]['updated'])): ?> value="<?php echo $client_data[0]['updated']; ?>" <?php endif; ?>/></td>
-										</tr>
-										<tr>
-										  <td>Administrator Email</td>
-										  <td><input type="text" class="span12" name='admin_email'<?php if (isset($client_data[0]['admin_email'])): ?> value="<?php echo $client_data[0]['admin_email']; ?>" <?php endif; ?>/></td>
-										</tr>
+										</tr>-->
 									  </table>
 									  <div class="row-fluid">
 
@@ -582,7 +578,8 @@
 							</div>
 						</div>
 						  <?php endif; ?>
-						  <?php if (isset($client_setup)): ?>
+						  <?php if (isset($client_setup)): 
+                                                      ?>
 							<table>
 							  <tr>
 								<th>Client</th>
@@ -590,28 +587,28 @@
 								<th>Status</th>
 								<th>Phone #</th>
 								<th>Email</th>
-								<th></th>
-								<th></th>
+								<th>Edit</th>
+								<th>Add Associate Users</th>
 							  </tr>
 							  <?php foreach ($client as $value): ?>
 								<tr>
-								  <td><?php echo $value['name'] ?></td>
-								  <td><?php echo $value['created'] ?></td>
+								  <td><?php echo $value['username'] ?></td>
+                                                                  <td><?php echo date('Y-m-d',strtotime($value['createdAt'])) ?></td>
 								  <td>
 								  	<select>
-										<option value="0" disabled <?php if ( $value['status'] == '' ){ echo "selected"; } ?>></option>
-										<option value="1" <?php if ( $value['status'] == 'Active' ){ echo "selected"; } ?>>Active</option>
-										<option value="2" <?php if ( $value['status'] == 'Inactive' ){ echo "selected"; } ?>>Inactive</option>
-										<option value="3" <?php if ( $value['status'] == 'Closed' ){ echo "selected"; } ?>>Closed</option>
+										<option value="0" disabled <?php if ( $value['Status'] == '' ){ echo "selected"; } ?>></option>
+										<option value="True" <?php if ( $value['Status'] == '1' ){ echo "selected"; } ?>>Active</option>
+										<option value="False" <?php if ( $value['Status'] == '0' ){ echo "selected"; } ?>>Closed</option>
 								  	</select>
 								  </td>
 								  <td><?php echo $value['phone'] ?></td>
 								  <td><?php echo $value['email'] ?></td>
-								  <td><a class=" btn btn-small btn-primary" href="<?php echo base_url(); ?>manage/edit/<?php echo $value['id']; ?>">Edit</a></td>
-								  <td><a class=" btn btn-small btn-primary" href="<?php echo base_url(); ?>manage/reset_pw_email/<?php echo $value['id']; ?>">Reset Pw</a></td>
+								  <td><a class=" btn btn-small btn-primary" href="<?php echo base_url(); ?>manage/edit/<?php echo $value['objectId']; ?>">Edit</a></td>
+								  <td><a class=" btn btn-small btn-primary" href="<?php echo base_url(); ?>manage/add_associate_users/<?php echo $value['objectId']; ?>">Add Associate Users</a></td>
 								</tr>
 							  <?php endforeach; ?>
 							</table>
+                                                        <div style="clear:both"></div>
 						  <?php endif; ?>
 							  <?php if (isset($reset_pw_email)): ?>
 							  	<div class="reset-form">
