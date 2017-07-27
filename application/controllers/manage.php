@@ -717,6 +717,8 @@ class manage extends CI_Controller_EX {
         $this->check_login($data, $function_name);
     }
     public function edit_user($user_id,$client_id) {
+        $session_data = $this->session->userdata('logged_in');
+        $mongodb_id = $session_data['mongodb_id'];
         $this->load->model('m_user');
         $client_mongo_role = $this->m_user->getMongoRoleById(3);
         $client_mongo_role = $client_mongo_role->mongodb_role_id;
@@ -725,19 +727,74 @@ class manage extends CI_Controller_EX {
                 array
                     (
                     "objectId" => "_User",
-                    //'query'=>'{"deletedAt":null, "createdAt":{"$gt":"'.$date.'"}}',
-                    'query' => '{"user_type":{"__type":"Pointer","className":"_Role","objectId":"' . $client_mongo_role . '"}}',
+                    'query' => '{"objectId":"'.$user_id.'"}',
                 )
         );
         $data = new stdClass;
-        $function_name = "MANAGE CLIENTS";
-        $this->load->model('m_client');
-        $data->client = json_decode(json_encode($temp), true); //$client;
+        $data->client_id = $client_id;
+        if ($this->input->post('submit')) {
+            $this->form_validation->set_rules('name', 'User Name', 'required|trim');
+            if ($this->form_validation->run()) {
+                $name = $this->input->post('name');
+                $address1 = $this->input->post('address1');
+                $password = $this->input->post('password');
+                $city = $this->input->post('city');
+                $province = $this->input->post('province');
+                $postal = $this->input->post('postal');
+                $phone = $this->input->post('phone_number');
+                $mobile = $this->input->post('mobile');
+                $email = $this->input->post('email');
+                $client_mongo_role = $this->m_user->getMongoRoleById(3);
+                $client_mongo_role = $client_mongo_role->mongodb_role_id;
+                $date = date(DateTime::ISO8601, time());
+                $response = $this->parserestclient->update
+                        (
+                        array
+                            (
+                            "objectId" => "_User",
+                            'object' => ['username' => "$name", 'password' => "$password", 'email' => "$email", 'email' => "$email",
+                                'phone' => "$phone",
+                                'loginType' => 'email',
+                                'telephone' => "$phone",
+                                'emailVerified' => TRUE,
+                                'city' => "$city",
+                                'zipcode' => "$postal",
+                                'phone' => "$mobile",
+                                'state' => "$province",
+                                'Status' => true,
+                                'createdAt' => [
+                                    "__type" => "Date",
+                                    "iso" => $date,
+                                ], 'user_type' => [
+                                    "__type" => "Pointer",
+                                    "className" => "_Role",
+                                    "objectId" => "XVr1sAmAQl"
+                                ], 'created_by' => [
+                                    "__type" => "Pointer",
+                                    "className" => "_User",
+                                    "objectId" => "$mongodb_id"
+                                ], 'associated_with' => [
+                                    "__type" => "Pointer",
+                                    "className" => "_User",
+                                    "objectId" => "$client_id"
+                                ]],
+                                'where' => $user_id
+                        )
+                );
+                if (isset($response->updatedAt))
+                    $data->message = "Updated sucessfully";
+                else
+                    $data->message = "Updated have issues";
+            }
+        }
+        $function_name = "Edit Associated User";
+        $data->user = json_decode(json_encode($temp), true); //$client;
         $data->back = TRUE;
-        $data->client_setup = TRUE;
+        $data->edit_associated_user = TRUE;
         $this->check_login($data, $function_name);
     }
-    public function add_associate_users($id) {
+    public function add_associate_users($id) {        
+        $session_data = $this->session->userdata('logged_in');
         $temp = $this->parserestclient->query
                 (
                 array
@@ -753,9 +810,16 @@ class manage extends CI_Controller_EX {
         $data->back = TRUE;
         $data->associated_setup = TRUE;
         $data->client_id = $id;
+        $data->role = $session_data['role'];
         $this->check_login($data, $function_name);
     }
-
+    
+    public function user_management() {
+        
+        $session_data = $this->session->userdata('logged_in');
+        $mongodb_id = $session_data['mongodb_id'];
+        $this->add_associate_users($mongodb_id);
+    }
     public function edit($id) {
         $this->load->model('m_user');
         $this->load->model('m_client');
