@@ -514,7 +514,26 @@
 									  <?php if (isset($edit_associated_user)): ?>
 									  <form action='<?php echo base_url(); ?>manage/edit_user/<?php echo $user[0]['objectId']; ?>/<?php echo $client_id?>' method='post' style="margin-bottom:0">
 										<?php endif; ?>
-									  <table class="table table-striped create-client-table">
+									  <table class="table table-striped create-client-table"><tr>
+										  <th>First Name</th>
+										  <th><input type="text" class="span12" name='Firstname' <?php if (isset($user[0]['Firstname'])): ?> value="<?php echo $user[0]['Firstname']; ?>" <?php endif; ?>/></th>
+										</tr><tr>
+										  <th>Last Name</th>
+										  <th><input type="text" class="span12" name='LastName' <?php if (isset($user[0]['LastName'])): ?> value="<?php echo $user[0]['LastName']; ?>" <?php endif; ?>/></th>
+										</tr>
+                                                                                <tr>
+										  <th>Gender</th>
+										  <th>
+                                                                                      <select name="Gender">
+                                                                                          <option <?php if (isset($user[0]['Gender'])): if($user[0]['Gender'] == 'male'){ echo 'selected'; } endif;?>  value="male">Male</option>
+                                                                                          <option <?php if (isset($user[0]['Gender'])): if($user[0]['Gender'] == 'female'){ echo 'selected'; } endif;?> value="female">Fe-Male</option>
+                                                                                      </select>
+                                                                                  </th>
+										</tr>
+										<tr>
+										  <th>Company</th>
+										  <th><input type="text" class="span12" name='company' <?php if (isset($user[0]['company'])): ?> value="<?php echo $user[0]['company']; ?>" <?php endif; ?>/></th>
+										</tr>
 										<tr>
 										  <th>User Name</th>
 										  <th><input type="text" class="span12" name='name' <?php if (isset($user[0]['username'])): ?> value="<?php echo $user[0]['username']; ?>" <?php endif; ?>/></th>
@@ -533,6 +552,10 @@
 										  <td>Location</td>
 										  <td><input type="text" class="span12" name='address1'<?php if (isset($user[0]['address1'])): ?> value="<?php echo $user[0]['address1']; ?>" <?php endif; ?>/></td>
 										</tr>-->
+										<tr>
+										  <th>Country</th>
+										  <th><input type="text" class="span12" name='country' <?php if (isset($user[0]['country'])): ?> value="<?php echo $user[0]['country']; ?>" <?php endif; ?>/></th>
+										</tr>
 										<tr>
 										  <td>City</td>
 										  <td><input type="text" class="span12" name='city'<?php if (isset($user[0]['city'])): ?> value="<?php echo $user[0]['city']; ?>" <?php endif; ?>/></td>

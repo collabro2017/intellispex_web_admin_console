@@ -570,6 +570,11 @@ class manage extends CI_Controller_EX {
             $this->form_validation->set_rules('name', 'User Name', 'required|trim');
             if ($this->form_validation->run()) {
                 $name = $this->input->post('name');
+                $Firstname = $this->input->post('Firstname');
+                $LastName = $this->input->post('LastName');
+                $Gender = $this->input->post('Gender');
+                $company = $this->input->post('company');
+                $country = $this->input->post('country');
                 $address1 = $this->input->post('address1');
                 $password = $this->input->post('password');
                 $city = $this->input->post('city');
@@ -589,6 +594,11 @@ class manage extends CI_Controller_EX {
                             (
                             "objectId" => "_User",
                             'object' => ['username' => "$name", 'password' => "$password", 'email' => "$email", 'email' => "$email",
+                                'Firstname' => "$Firstname",
+                                'LastName' => "$LastName",
+                                'Gender' => "$Gender",
+                                'company' => "$company",
+                                'country' => "$country",
                                 'phone' => "$phone",
                                 'loginType' => 'email',
                                 'telephone' => "$phone",
@@ -617,7 +627,12 @@ class manage extends CI_Controller_EX {
                         )
                 );
                 if (isset($response->objectId))
-                    $data->message = "Create sucessfully";
+                    if($session_data['role'] == 3){
+                        redirect('/manage/user_management/', 'refresh');
+                    }else{
+                        redirect('/manage/add_associate_users/'.$client_id, 'refresh');
+                    }
+//                    $data->message = "Create sucessfully";
                 else
                     $data->message = "Create false";
             }
@@ -716,6 +731,23 @@ class manage extends CI_Controller_EX {
         $data->client_setup = TRUE;
         $this->check_login($data, $function_name);
     }
+    
+    public function userdelete(){
+        $deletelist = $this->input->post('deletelist');
+        $date = date('Y-m-d');
+        foreach($deletelist as $val){
+            //$data = array('deletedAt' => '2017-07-03T00:00:00','objectId'=>$val);
+            $this->parserestclient->update
+            (
+                array
+                (
+                    "objectId" => "_User",
+                    'object' => [ 'deletedAt' => "$date"],
+                            'where' => $val
+                )
+            );
+        }
+    }
     public function edit_user($user_id,$client_id) {
         $session_data = $this->session->userdata('logged_in');
         $mongodb_id = $session_data['mongodb_id'];
@@ -736,6 +768,11 @@ class manage extends CI_Controller_EX {
             $this->form_validation->set_rules('name', 'User Name', 'required|trim');
             if ($this->form_validation->run()) {
                 $name = $this->input->post('name');
+                $Firstname = $this->input->post('Firstname');
+                $LastName = $this->input->post('LastName');
+                $Gender = $this->input->post('Gender');
+                $company = $this->input->post('company');
+                $country = $this->input->post('country');
                 $address1 = $this->input->post('address1');
                 $password = $this->input->post('password');
                 $city = $this->input->post('city');
@@ -753,6 +790,11 @@ class manage extends CI_Controller_EX {
                             (
                             "objectId" => "_User",
                             'object' => ['username' => "$name", 'password' => "$password", 'email' => "$email", 'email' => "$email",
+                                'Firstname' => "$Firstname",
+                                'LastName' => "$LastName",
+                                'Gender' => "$Gender",
+                                'company' => "$company",
+                                'country' => "$country",
                                 'phone' => "$phone",
                                 'loginType' => 'email',
                                 'telephone' => "$phone",
@@ -782,7 +824,11 @@ class manage extends CI_Controller_EX {
                         )
                 );
                 if (isset($response->updatedAt))
-                    $data->message = "Updated sucessfully";
+                    if($session_data['role'] == 3){
+                        redirect('/manage/user_management/', 'refresh');
+                    }else{
+                        redirect('/manage/add_associate_users/'.$client_id, 'refresh');
+                    }
                 else
                     $data->message = "Updated have issues";
             }
@@ -793,25 +839,33 @@ class manage extends CI_Controller_EX {
         $data->edit_associated_user = TRUE;
         $this->check_login($data, $function_name);
     }
-    public function add_associate_users($id) {        
-        $session_data = $this->session->userdata('logged_in');
-        $temp = $this->parserestclient->query
-                (
-                array
-                    (
-                    "objectId" => "_User",
-                    'query' => '{"user_type":{"__type":"Pointer","className":"_Role","objectId":"XVr1sAmAQl"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $id . '"}}',
-                )
-        );
+    public function add_associate_users($id) { 
         $data = new stdClass;
-        $function_name = "MANAGE ASSOCIATED USERS";
-        $this->load->model('m_client');
-        $data->associated_user = json_decode(json_encode($temp), true); //$client;
-        $data->back = TRUE;
-        $data->associated_setup = TRUE;
-        $data->client_id = $id;
-        $data->role = $session_data['role'];
-        $this->check_login($data, $function_name);
+        $session_data = $this->session->userdata('logged_in');
+        if ($session_data){
+            $data->username = $session_data['username'];
+            $data->role = $session_data['role'];
+            $data->id = $session_data['id'];
+            $data->function_name = "Client View: User Management";
+            $temp = $this->parserestclient->query
+                    (
+                    array
+                        (
+                        "objectId" => "_User",
+                        'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"XVr1sAmAQl"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $id . '"}}',
+                    )
+            );
+            $this->load->model('m_client');
+            $data->associated_user = json_decode(json_encode($temp), true); //$client;
+            $data->back = TRUE;
+            $data->associated_setup = TRUE;
+            $data->client_id = $id;
+            $data->role = $session_data['role'];
+            $this->load->view('default/users/list', $data);
+        }else{
+            $this->load->view('default/include/manage/v_login');
+        }
+//        $this->check_login($data, $function_name);
     }
     
     public function user_management() {
@@ -820,6 +874,7 @@ class manage extends CI_Controller_EX {
         $mongodb_id = $session_data['mongodb_id'];
         $this->add_associate_users($mongodb_id);
     }
+    
     public function edit($id) {
         $this->load->model('m_user');
         $this->load->model('m_client');
