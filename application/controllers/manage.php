@@ -847,7 +847,7 @@ class manage extends CI_Controller_EX {
             $data->role = $session_data['role'];
             $data->id = $session_data['id'];
             $data->function_name = "Client View: User Management";
-            $temp = $this->parserestclient->query
+            $user = $this->parserestclient->query
                     (
                     array
                         (
@@ -855,8 +855,16 @@ class manage extends CI_Controller_EX {
                         'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"XVr1sAmAQl"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $id . '"}}',
                     )
             );
-            $this->load->model('m_client');
-            $data->associated_user = json_decode(json_encode($temp), true); //$client;
+            $data->associated_user = json_decode(json_encode($user), true); 
+            $user_group = $this->parserestclient->query
+                    (
+                    array
+                        (
+                        "objectId" => "user_group",
+                        'query' => '{"created_by":{"__type":"Pointer","className":"_User","objectId":"' . $id . '"}}',
+                    )
+            );
+            $data->user_group = json_decode(json_encode($user_group), true); 
             $data->back = TRUE;
             $data->associated_setup = TRUE;
             $data->client_id = $id;
@@ -868,6 +876,43 @@ class manage extends CI_Controller_EX {
 //        $this->check_login($data, $function_name);
     }
     
+    public function create_grpup($client_id){
+        $group_name = $this->input->post('group_name');
+        $access_rights = $this->input->post('access_rights');
+        $users = $this->input->post('users');        
+        $session_data = $this->session->userdata('logged_in');
+        $mongodb_id = $session_data['mongodb_id'];
+        $date = date(DateTime::ISO8601, time());
+        $response = $this->parserestclient->create
+                        (
+                        array
+                            (
+                            "objectId" => "user_group",
+                            'object' => ['group_name' => "$group_name", 'access_rights' => "$access_rights",
+                                'createdAt' => [
+                                    "__type" => "Date",
+                                    "iso" => $date,
+                                ], 'users' => [
+                                    "__op" => "AddUnique",
+                                    "objects" => $users
+                                ], 'created_by' => [
+                                    "__type" => "Pointer",
+                                    "className" => "_User",
+                                    "objectId" => "$mongodb_id"
+                                ], 'client_id' => [
+                                    "__type" => "Pointer",
+                                    "className" => "_User",
+                                    "objectId" => "$client_id"
+                                ]]
+                        )
+                );
+        if($session_data['role'] == 3){
+            redirect('/manage/user_management/', 'refresh');
+        }else{
+            redirect('/manage/add_associate_users/'.$client_id, 'refresh');
+        }
+    }
+
     public function user_management() {
         
         $session_data = $this->session->userdata('logged_in');
