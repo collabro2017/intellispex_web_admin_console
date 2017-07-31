@@ -3,7 +3,9 @@ html
     overflow: -moz-scrollbars-vertical;
     overflow: scroll;
 }
-
+.row-fluid [class*="span"]:first-child {
+    text-align: left !important;
+}
 #event_area
 {
     overflow-y:scroll;
@@ -22,15 +24,61 @@ ul
 
 li
 {
-  -moz-user-select: none;
-  height: 350px;
-  margin: 10px;
-  border:1px solid #ccc;
-  background: #c6c6c6;
-  padding: 10px;
+    -moz-user-select: none;
+    margin: 10px;
+    padding: 10px;
 
 }
 li.selected
 {
     border:1px solid blue;
+}
+.list-group {
+    padding-left: 0;
+    margin-bottom: 20px;
+    margin: 0px;
+}
+.list-group-item:first-child {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+.list-group-item {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+    margin-bottom: -1px;
+    background-color: #fff;
+    cursor: pointer;
+    border: 1px solid #ddd;
+    margin-top: 0px !important;
+    position: relative;
+}
+.list-group-item > .badge {
+    float: right;
+}
+.list-group-item:hover{
+    background-color: aqua !important;
+    color:#000 !important;
+}
+.list-group selected{
+    background-color: #2e3192;
+    color:#FFF;
+}
+
+.list-group-item ul.children{
+    display:none;
+    position: absolute;
+    left: 135px;
+    top: 0px;
+    width: 170px;
+    z-index: 99999999999999;
+}
+
+.list-group-item ul.children li{
+    /*border:1px solid #ccc;*/
+    background-color: aqua !important;
+    border-radius: 2px;
+    color:#000;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
 }
