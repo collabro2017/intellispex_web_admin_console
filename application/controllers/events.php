@@ -183,6 +183,84 @@ class events extends CI_Controller_EX {
                 );
         redirect('/events/event/'.$event_id, 'refresh');
     }
+    
+    public function tag_user(){
+        $TagFriends = array();
+        $TagFriendAuthorities = array();
+        $user_id =  $this->input->post('user_id');
+        $event_id =  $this->input->post('event_id');
+        $access_rights = $this->input->post('access_rights');
+        $date = date(DateTime::ISO8601, time());
+        
+        $TagFriends[] = $user_id;
+        $TagFriendAuthorities[] = $access_rights;
+        
+        $response = $this->parserestclient->update
+                        (
+                        array
+                            (
+                            "objectId" => "Event",
+                            'object' => ['TagFriends' => [
+                                    "__op" => "Add",
+                                    "objects" => $TagFriends
+                                ],
+                                'TagFriendAuthorities' => [
+                                    "__op" => "Add",
+                                    "objects" => $TagFriendAuthorities
+                                ],
+                                'updatedAt' => [
+                                    "__type" => "Date",
+                                    "iso" => $date,
+                                ]],
+                                'where' => $event_id
+                        )
+                );
+        redirect('/events/event/'.$event_id, 'refresh');
+    }
+    
+    public function tag_user_group($group_id, $event_id){
+        $TagFriends = array();
+        $TagFriendAuthorities = array();
+        $date = date(DateTime::ISO8601, time());
+        $user_group = $this->parserestclient->query(
+                array(
+                    "objectId" => "user_group",
+                    'query' => '{"objectId":"'.$group_id.'"}',
+                )
+            );
+        $user_group = json_decode(json_encode($user_group), true);
+        if(count($user_group) > 0){
+            if(isset($user_group[0]['users'])){
+                $users = $user_group[0]['users'];
+                $access_rights = $user_group[0]['access_rights'];
+                foreach ($users as $key => $value) {
+                    $TagFriends[] = $value;
+                    $TagFriendAuthorities[] = $access_rights;
+                }
+                $response = $this->parserestclient->update
+                        (
+                        array
+                            (
+                            "objectId" => "Event",
+                            'object' => ['TagFriends' => [
+                                    "__op" => "Add",
+                                    "objects" => $TagFriends
+                                ],
+                                'TagFriendAuthorities' => [
+                                    "__op" => "Add",
+                                    "objects" => $TagFriendAuthorities
+                                ],
+                                'updatedAt' => [
+                                    "__type" => "Date",
+                                    "iso" => $date,
+                                ]],
+                                'where' => $event_id
+                        )
+                );
+            }
+        }
+        redirect('/events/event/'.$event_id, 'refresh');
+    }
     public function deletedevents() {
         $data = new stdClass;
         $session_data = $this->session->userdata('logged_in');
