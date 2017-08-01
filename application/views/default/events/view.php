@@ -134,11 +134,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <?php 
-                                echo '<pre>';
-                                print_r($event);
-                                ?>
-                                <div class="span2">
+                                <div class="span2"> 
                                     <h3>Tag Users/User Group</h3>
                                     <ul  class="list-group">
                                         <?php if (count($associated_user) > 0) { ?>
