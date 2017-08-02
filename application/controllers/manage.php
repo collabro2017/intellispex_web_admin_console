@@ -146,36 +146,54 @@ class manage extends CI_Controller_EX {
         $data = new stdClass;
         $function_name = "User Statistics";
         $data->back = TRUE;
+        $session_data = $this->session->userdata('logged_in');
+        $user = $this->parserestclient->query(
+                    array(
+                        "objectId" => "_User",
+                        'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"XVr1sAmAQl"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $session_data['mongodb_id'] . '"}}',
+                    )
+                );
+        $associated_user = json_decode(json_encode($user), true); 
+        $userArr = array();
+        foreach ($associated_user as $user) {
+            $userArr[] = $user['objectId'];
+        }
         $temp = $this->parserestclient->query
                 (
                 array
                     (
                     "objectId" => "Event",
-                    'query' => '{"deletedAt":null}',
+                    'query' => '{"TagFriends":{"$all":'.json_encode($userArr,true).'}}',
                 )
         );
         $events = json_decode(json_encode($temp), true);
         $fullCount = 0;
         $commentOnly = 0;
         $viewOnly = 0;
+        $totalData = 0;
         foreach ($events as $event) {
             if (isset($event['TagFriendAuthorities'])) {
                 $TagFriendAuthorities = $event['TagFriendAuthorities'];
-//            $TagFriends = $event['TagFriends'];
                 for ($i = 0; $i < count($TagFriendAuthorities); $i++) {
-                    if ($TagFriendAuthorities[$i] == 'Full') {
+                    if (strpos($TagFriendAuthorities[$i], 'Full') !== false) {
                         $fullCount = $fullCount + 1;
-                    } elseif ($TagFriendAuthorities[$i] == 'Comment Only') {
+                    } elseif (strpos($TagFriendAuthorities[$i], 'Comment') !== false) {
                         $commentOnly = $commentOnly + 1;
                     } else {
                         $viewOnly = $viewOnly + 1;
                     }
+                    $totalData = $totalData+1;
                 }
             }
         }
         $data->full = $fullCount;
         $data->commentOnly = $commentOnly;
         $data->viewOnly = $viewOnly;
+        $totalEvents = count($events);
+        $data->totalData = $totalData;
+        if($totalData > 0){
+            $data->averageData = ceil($totalData/$totalEvents);
+        }
         $this->check_login($data, $function_name);
     }
 

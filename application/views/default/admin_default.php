@@ -218,11 +218,11 @@
 											</tr>
 											<tr>
 												<td>Total Data</td>
-												<td></td>
+												<td><?php echo $totalData; ?></td>
 											</tr>
 											<tr>
 												<td>Average Data Per Event</td>
-												<td></td>
+												<td><?php echo $averageData; ?></td>
 											</tr>
 										</table>
 									</div>
