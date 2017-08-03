@@ -301,6 +301,16 @@ class events extends CI_Controller_EX {
                         "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $id . '"}}'
                     )
             );
+            $temp_activity = $this->parserestclient->query
+                    (
+                    array
+                        (
+                        "objectId" => "Post",
+                        //'query'=>'{"deletedAt":null}',	
+                        //'query'=>'{"targetEvent":"'.$id.'"}'
+                        "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $id . '"}}'
+                    )
+            );
             $temp_event = $this->parserestclient->query
                     (
                     array
@@ -327,7 +337,8 @@ class events extends CI_Controller_EX {
             $data->role = $session_data['role'];
             $data->id = $session_data['id'];
             $data->function_name = "Metadata Viewer/Editor";
-            $data->info = json_decode(json_encode($temp), true);
+            $data->eventComment = json_decode(json_encode($temp), true);
+            $data->eventActivity = json_decode(json_encode($temp_activity), true);
             $data->event = json_decode(json_encode($temp_event), true);
             $data->special = json_decode(json_encode($temp_special), true);
             $data->list = $metadatalist;
