@@ -33,6 +33,7 @@
                 <tr><td>Description</td><td>none<?php //echo $event[0]['description'] ?></td></tr>
             </table>
             <?php
+            if(count($eventActivity) > 0){
             $halfActivity = ceil(((count($eventActivity))/2));
             $halfActivity = $halfActivity-1;
             ?>
@@ -45,8 +46,12 @@
                     <tr><td>Desctiption</td><td><?php echo $eventActivity[0]['description']; ?></td></tr>
                 <?php } ?>
             </table>
+            <?php 
+            }
+            ?>
         </div>
         <div class="span5"><br><br><br><br>
+            <?php if(count($eventActivity) > 0){ ?>
             <table>
                 <?php for($i = $halfActivity; $i < count($eventActivity); $i++){ ?>
                     <tr><td>Activity Sheet <?php echo $i+1; ?></td><td>&nbsp;</td></tr>
@@ -56,6 +61,7 @@
                     <tr><td>Desctiption</td><td><?php echo $eventActivity[0]['description']; ?></td></tr>
                 <?php } ?>
             </table>
+            <?php } ?>
         </div>
         <div class="span2"><br><br><br><br>
             <button onclick="window.print();" class="btn btn-small btn-primary menu-button">Export</button><br><br>
