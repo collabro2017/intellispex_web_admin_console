@@ -39,11 +39,12 @@
             ?>
             <table>
                 <?php for($i = 0; $i < $halfActivity; $i++){ ?>
-                    <tr><td>Activity Sheet <?php echo $i+1; ?></td><td>&nbsp;</td></tr>
+                <tr><td colspan="2">Activity Sheet <?php echo $i+1; ?></td></tr>
                     <tr><td>Date</td><td><?php echo date('Y-m-d',strtotime($eventActivity[$i]['createdAt'])); ?></td></tr>
                     <tr><td>Time</td><td><?php echo date('g:i A',strtotime($eventActivity[$i]['createdAt'])); ?></td></tr>
                     <tr><td>Title</td><td><?php echo $eventActivity[$i]['title']; ?></td></tr>
                     <tr><td>Desctiption</td><td><?php echo $eventActivity[$i]['description']; ?></td></tr>
+                    
                 <?php } ?>
             </table>
             <?php 
@@ -54,11 +55,12 @@
             <?php if(count($eventActivity) > 0){ ?>
             <table>
                 <?php for($i = $halfActivity; $i < count($eventActivity); $i++){ ?>
-                    <tr><td>Activity Sheet <?php echo $i+1; ?></td><td>&nbsp;</td></tr>
+                    <tr><td colspan="2">Activity Sheet <?php echo $i+1; ?></td></tr>
                     <tr><td>Date</td><td><?php echo date('Y-m-d',time($eventActivity[$i]['createdAt'])); ?></td></tr>
                     <tr><td>Time</td><td><?php echo date('g:i A',time($eventActivity[$i]['createdAt'])); ?></td></tr>
                     <tr><td>Title</td><td><?php echo $eventActivity[$i]['title']; ?></td></tr>
                     <tr><td>Desctiption</td><td><?php echo $eventActivity[$i]['description']; ?></td></tr>
+                     
                 <?php } ?>
             </table>
             <?php } ?>
