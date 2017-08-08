@@ -33,23 +33,51 @@ class events extends CI_Controller_EX {
             $data->role = $session_data['role'];
             $data->id = $session_data['id'];
             $data->function_name = "VIEW OR EDIT GLOBAL EVENT LIST";
-
+            $user = $this->parserestclient->query(
+                        array(
+                            "objectId" => "_User",
+                            'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"XVr1sAmAQl"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $session_data['mongodb_id'] . '"}}',
+                        )
+                    );
+            $associated_user = json_decode(json_encode($user), true); 
+            $userArr = array();
+            foreach ($associated_user as $user) {
+                $userArr[] = $user['objectId'];
+            }
             if (!$day || is_null($day) || $day == "") {
-                $temp = $this->parserestclient->query
+                 $temp = $this->parserestclient->query
                         (
                         array
                             (
                             "objectId" => "Event",
-                            'query' => '{"deletedAt":null}',
+                            'query' => '{"TagFriends":{"$all":'.json_encode($userArr,true).'}}',
                             'order' => $asc
                         )
                 );
+//                $temp = $this->parserestclient->query
+//                        (
+//                        array
+//                            (
+//                            "objectId" => "Event",
+//                            'query' => '{"deletedAt":null}',
+//                            'order' => $asc
+//                        )
+//                );
                 $data->day = "";
             } else {
 
                 $dayCount = -1 * $day;
                 $date = date(DateTime::ISO8601, strtotime($dayCount . ' days'));
                 //$date = "2017-06-01T00:00:00.000Z";
+                $temp = $this->parserestclient->query
+                        (
+                        array
+                            (
+                            "objectId" => "Event",
+                            'query' => '{"TagFriends":{"$all":'.json_encode($userArr,true).'}, "createdAt":{"$gte":{"__type":"Date","iso":"' . $date . '"}}}',
+                            'order' => $asc
+                        )
+                );
                 $temp = $this->parserestclient->query
                         (
                         array

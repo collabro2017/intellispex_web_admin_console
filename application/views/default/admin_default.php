@@ -222,7 +222,7 @@
 											</tr>
 											<tr>
 												<td>Average Data Per Event</td>
-												<td><?php echo $averageData; ?></td>
+                                                                                                <td><?php if(isset($averageData)) echo $averageData; ?></td>
 											</tr>
 										</table>
 									</div>
@@ -441,11 +441,20 @@
 					  		else{
 					  		if (isset($links)): ?>
 							<?php foreach ($links as $key => $link): ?>
-								<?php if  ($link != "Logout") : ?>
+								<?php if  ($link != "Logout") : 
+                                                                    if($key == 'create_client' && $role == '2'){
+                                                                        ?>
+                                                        
+									<div style="text-align: center;">
+										<a class=" btn btn-small btn-primary menu-button" href="<?php echo base_url(); ?>clients/create"><?php echo $link; ?></a>
+									</div>
+                                                        <?php
+                                                                    }else{
+                                                                    ?>
 									<div style="text-align: center;">
 										<a class=" btn btn-small btn-primary menu-button" href="<?php echo base_url(); ?>manage/<?php echo $key; ?>"><?php echo $link; ?></a>
 									</div>
-								<?php endif; ?>
+                                                                    <?php } endif; ?>
 							<?php endforeach; ?>
 							<?php endif;
 							} ?>
@@ -707,7 +716,7 @@
 								  </td>
 								  <td><?php echo $value['phone'] ?></td>
 								  <td><?php echo $value['email'] ?></td>
-								  <td><a class=" btn btn-small btn-primary" href="<?php echo base_url(); ?>manage/edit/<?php echo $value['objectId']; ?>">Edit</a></td>
+								  <td><a class=" btn btn-small btn-primary" href="<?php echo base_url(); ?>clients/edit/<?php echo $value['objectId']; ?>">Edit</a></td>
 								  <td><a class=" btn btn-small btn-primary" href="<?php echo base_url(); ?>manage/add_associate_users/<?php echo $value['objectId']; ?>">Add Associate Users</a></td>
 								</tr>
 							  <?php endforeach; ?>

@@ -568,9 +568,13 @@ class manage extends CI_Controller_EX {
     }
 
     public function client_set_up() {
+        $session_data = $this->session->userdata('logged_in');
         $data = new stdClass;
         $function_name = "APPLICATION ADMINISTRATOR - CLIENT SET UP AND MAINTENANCE";
         $data->back = TRUE;
+        if(isset($session_data['role'])){
+            $data->role =  $session_data['role'];
+        }
         $data->links = array('create_client' => 'Create a Client', 'edit_client' => 'Manage / Edit a Client', 'events' => 'View or Edit Global Event List', 'logout' => 'Logout');
         $this->check_login($data, $function_name);
     }
@@ -658,97 +662,7 @@ class manage extends CI_Controller_EX {
         $this->check_login($data, $function_name);
     }
     
-    public function create_client() {
-
-        $data = new stdClass;
-        $this->load->model('m_user');
-        $function_name = "CREATE CLIENT";
-        $data->back = TRUE;
-        $data->create_client = TRUE;
-        $data->message = '';
-        if ($this->input->post('submit')) {
-            $this->form_validation->set_rules('name', 'Client Name', 'required|trim');
-            if ($this->form_validation->run()) {
-                $client['name'] = $this->input->post('name');
-                $client['password'] = md5($this->input->post('password'));
-                $client['username'] = $this->input->post('email');
-                $client['phone_number'] = $this->input->post('phone_number');
-                $client['email'] = $this->input->post('email');
-                $client['user_type'] = 3;
-                $client['active'] = 1;
-                $name = $this->input->post('name');
-                $address1 = $this->input->post('address1');
-                $password = $this->input->post('password');
-                $city = $this->input->post('city');
-                $province = $this->input->post('province');
-                $postal = $this->input->post('postal');
-                $phone = $this->input->post('phone_number');
-                $mobile = $this->input->post('mobile');
-                $email = $this->input->post('email');
-                $client_mongo_role = $this->m_user->getMongoRoleById(3);
-                $client_mongo_role = $client_mongo_role->mongodb_role_id;
-                $session_data = $this->session->userdata('logged_in');
-                $mongodb_id = $session_data['mongodb_id'];
-                $date = date(DateTime::ISO8601, time());
-                $this->parserestclient->create
-                        (
-                        array
-                            (
-                            "objectId" => "_User",
-                            'object' => ['username' => "$name", 'password' => "$password", 'email' => "$email", 'email' => "$email",
-                                'phone' => "$phone",
-                                'loginType' => 'email',
-                                'telephone' => "$phone",
-                                'emailVerified' => TRUE,
-                                'city' => "$city",
-                                'zipcode' => "$postal",
-                                'phone' => "$mobile",
-                                'state' => "$province",
-                                'Status' => true,
-                                'createdAt' => [
-                                    "__type" => "Date",
-                                    "iso" => $date,
-                                ], 'user_type' => [
-                                    "__type" => "Pointer",
-                                    "className" => "_Role",
-                                    "objectId" => "$client_mongo_role"
-                                ], 'created_by' => [
-                                    "__type" => "Pointer",
-                                    "className" => "_User",
-                                    "objectId" => "$mongodb_id"
-                                ]]
-                        )
-                );
-                if ($this->m_user->save($client))
-                    $data->message = "Create sucessfully";
-                else
-                    $data->message = "Create false";
-            }
-        }
-        $this->check_login($data, $function_name);
-    }
-
-    public function edit_client() {
-        $this->load->model('m_user');
-        $client_mongo_role = $this->m_user->getMongoRoleById(3);
-        $client_mongo_role = $client_mongo_role->mongodb_role_id;
-        $temp = $this->parserestclient->query
-                (
-                array
-                    (
-                    "objectId" => "_User",
-                    //'query'=>'{"deletedAt":null, "createdAt":{"$gt":"'.$date.'"}}',
-                    'query' => '{"user_type":{"__type":"Pointer","className":"_Role","objectId":"' . $client_mongo_role . '"}}',
-                )
-        );
-        $data = new stdClass;
-        $function_name = "MANAGE CLIENTS";
-        $this->load->model('m_client');
-        $data->client = json_decode(json_encode($temp), true); //$client;
-        $data->back = TRUE;
-        $data->client_setup = TRUE;
-        $this->check_login($data, $function_name);
-    }
+    
     
     public function userdelete(){
         $deletelist = $this->input->post('deletelist');
@@ -1013,7 +927,30 @@ class manage extends CI_Controller_EX {
         }
         $this->check_login($data, $function_name);
     }
-
+    
+    
+    public function edit_client() {
+        $this->load->model('m_user');
+        $client_mongo_role = $this->m_user->getMongoRoleById(3);
+        $client_mongo_role = $client_mongo_role->mongodb_role_id;
+        $temp = $this->parserestclient->query
+                (
+                array
+                    (
+                    "objectId" => "_User",
+                    //'query'=>'{"deletedAt":null, "createdAt":{"$gt":"'.$date.'"}}',
+                    'query' => '{"user_type":{"__type":"Pointer","className":"_Role","objectId":"' . $client_mongo_role . '"}}',
+                )
+        );
+        $data = new stdClass;
+        $function_name = "MANAGE CLIENTS";
+        $this->load->model('m_client');
+        $data->client = json_decode(json_encode($temp), true); //$client;
+        $data->back = TRUE;
+        $data->client_setup = TRUE;
+        $this->check_login($data, $function_name);
+    }
+    
     public function events() {
         $data = new stdClass;
         $session_data = $this->session->userdata('logged_in');

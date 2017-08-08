@@ -272,25 +272,29 @@ class ParseRestClient{
  *
  */
 	private function checkResponse($return,$code){
-		//TODO: Need to also check for response for a correct result from parse.com
-		if( $return['code'] != $code )
-		{
-			$error = json_decode($return['response']);
-
-			if ( $error )
-				die('ERROR: response code was '.$return['code'].' with message: '.$error->message);
-			else
-				die('ERROR: response code was '.$return['code']);
-		}
-		else
-		{
-                    $response = json_decode( $return['response'] );
-                    if(isset($response->results)){
-			return json_decode( $return['response'] )->results;
-                    }else{
-                        return $response;
-                    }
-		}
+            //TODO: Need to also check for response for a correct result from parse.com
+            if( $return['code'] != $code )
+            {
+                $error = json_decode($return['response']);
+                if ( isset($error->error) ){
+                    $_SESSION['error'] = $error->error;
+                    return -1;
+                }elseif ( isset($error->message) ){
+                    $_SESSION['error'] = $error->message;
+                    return -1;
+                }else{
+                    $_SESSION['error'] =  'ERROR: response code was '.$return['code'];
+                    return -1;
+                }
+            }else{
+                $_SESSION['error'] = '';
+                $response = json_decode( $return['response'] );
+                if(isset($response->results)){
+                    return json_decode( $return['response'] )->results;
+                }else{
+                    return $response;
+                }
+            }
 	}
 
 	public function prettyPrint( $json )
