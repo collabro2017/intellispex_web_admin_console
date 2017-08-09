@@ -40,59 +40,68 @@ class events extends CI_Controller_EX {
                         )
                     );
             $associated_user = json_decode(json_encode($user), true); 
-            $userArr = array();
-            foreach ($associated_user as $user) {
-                $userArr[] = $user['objectId'];
-            }
+            $events = array();
+            $eventId = array();
+            $i = 0;
             if (!$day || is_null($day) || $day == "") {
-                 $temp = $this->parserestclient->query
+                foreach ($associated_user as $user) {
+                    $temp = $this->parserestclient->query
                         (
                         array
                             (
                             "objectId" => "Event",
-                            'query' => '{"TagFriends":{"$all":'.json_encode($userArr,true).'}}',
+                            'query' => '{"deletedAt":null, "user":{"__type":"Pointer","className":"_User","objectId":"'.$user['objectId'].'"}}',
                             'order' => $asc
                         )
-                );
-//                $temp = $this->parserestclient->query
-//                        (
-//                        array
-//                            (
-//                            "objectId" => "Event",
-//                            'query' => '{"deletedAt":null}',
-//                            'order' => $asc
-//                        )
-//                );
+                    );
+                    $event = json_decode(json_encode($temp), true);{
+                    if(isset( $event[0])){
+                        if($i == 0){
+                            $eventId[$i] =  $event[0]['objectId'];
+                            $events[$i] = $event[0];
+                        }else
+                            if(!(in_array($event[0]->objectId, $eventId))){
+                                $eventId[$i] =  $event[0]['objectId'];
+                                $events[$i] = $event[0];
+                            }
+                        }
+                    }
+                }
                 $data->day = "";
             } else {
 
                 $dayCount = -1 * $day;
                 $date = date(DateTime::ISO8601, strtotime($dayCount . ' days'));
                 //$date = "2017-06-01T00:00:00.000Z";
-                $temp = $this->parserestclient->query
-                        (
-                        array
+                foreach ($associated_user as $user) {
+                    $temp = $this->parserestclient->query
                             (
-                            "objectId" => "Event",
-                            'query' => '{"TagFriends":{"$all":'.json_encode($userArr,true).'}, "createdAt":{"$gte":{"__type":"Date","iso":"' . $date . '"}}}',
-                            'order' => $asc
-                        )
-                );
-                $temp = $this->parserestclient->query
-                        (
-                        array
-                            (
-                            "objectId" => "Event",
-                            //'query'=>'{"deletedAt":null, "createdAt":{"$gt":"'.$date.'"}}',
-                            'query' => '{"deletedAt":null, "createdAt":{"$gte":{"__type":"Date","iso":"' . $date . '"}}}',
-                            'order' => $asc,
-                        //'limit'=>intval($day),
-                        )
-                );
+                            array
+                                (
+                                "objectId" => "Event",
+                                //'query'=>'{"deletedAt":null, "createdAt":{"$gt":"'.$date.'"}}',
+                                'query' => '{"deletedAt":null, "user":{"__type":"Pointer","className":"_User","objectId":"'.$user['objectId'].'"}, "createdAt":{"$gte":{"__type":"Date","iso":"' . $date . '"}}}',
+                                'order' => $asc,
+                            //'limit'=>intval($day),
+                            )
+                    );
+                     $event = json_decode(json_encode($temp), true);
+                    if(isset( $event[0])){
+                        if($i == 0){
+                            $eventId[$i] =  $event[0]->objectId;
+                            $events[$i] = $event[0];
+                        }else{
+                            if(!(in_array($event[0]['objectId'], $eventId))){
+                                $eventId[$i] =  $event[0]['objectId'];
+                                $events[$i] = $event[0];
+                            }
+                        }
+                    }
+                }
                 $data->day = $day;
             }
 
-            $data->info = json_decode(json_encode($temp), true);
+            $data->info = $events;//json_decode(json_encode($temp), true);
             $this->load->view('default/events/list', $data);
         } else {
             $this->load->view('default/include/manage/v_login');
