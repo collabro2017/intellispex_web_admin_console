@@ -44,13 +44,14 @@
                                 <div class="span8">
                                     <form class="form-horizontal" action='<?php echo base_url(); ?>events/update_event/<?php echo $event->objectId; ?>' method='post' style="margin-bottom:0">
                                         <ul style="list-style: none">
-                                            <li style="float:left;margin-left: 10px;">
+                                            <li style="float:left;margin-left: -10px;margin-right: 10px;">
                                                 <button type="submit" class="btn btn-small btn-primary">Update Event</button>	
                                             </li>
                                             <li style="float:left;margin-left: 10px;">
                                                 <a class="btn btn-small btn-primary"  href="javascript:deletevent();" class="btn btn-small btn-primary menu-button">Delete User</a> 	
                                             </li>
                                         </ul>
+                                       
                                         <div style="clear:both"></div>
                                         <div class="form-group">
                                             <div class="col-sm-10">
@@ -70,6 +71,60 @@
                                                 </textarea>
                                             </div>
                                         </div>
+                                         <div style="clear:both;height: 10px;"></div>
+                                        
+
+                                        <div class="span12">
+                                            <?php
+                                            if (isset($event->thumbImage) && isset($event->postImage)) {
+                                                $image = $event->thumbImage;
+                                                $imagePost = $event->postImage;
+                                                
+                                                ?>
+                                                <img style="cursor: pointer" id="eventImage" src="<?php echo $image->url; ?>" />
+                                                <div id="eventImageModal" class="modal" style="background: #FFF;">
+                                                    <span class="close" style="margin-right: 13px;margin-top: 10px;font-size: 34px;">&times;</span>
+                                                    <img style="width: 94%;" class="modal-content" src="<?php echo $imagePost->url; ?>">
+                                                    <div id="caption"></div>
+                                                </div>
+                                                <?php
+                                            }
+                                            ?>
+                                        </div>
+                                         <?php if (isset($event->audio)) { ?>
+                                         <div style="clear:both;height: 10px;"></div>
+                                        
+
+                                        <div class="span12">
+                                            <?php
+                                                $audio = $event->audio;
+                                                ?>
+                                                <audio controls>
+                                                    <source src="<?php echo $audio->url; ?>" type="audio/mpeg">
+                                                    Sorry, your browser does not support the audio element.
+                                                </audio>
+                                                
+                                        </div>
+                                         <?php
+                                            }
+                                        ?>
+                                         <?php if (isset($event->video)) { ?>
+                                         <div style="clear:both;height: 10px;"></div>
+                                        
+
+                                        <div class="span12">
+                                            <?php 
+                                                $video = $event->video;
+                                                $name = explode('.',basename( $video->url));
+                                                $extension = $name['1'];
+                                                ?>
+                                                <video width="320" height="240" controls autoplay>
+                                                    <source src="<?php echo $event->video; ?>" type="video/<?php echo $extension; ?>">
+                                                    Sorry, your browser doesn't support the video element.
+                                                </video>
+                                         
+                                        </div>
+                                        <?php } ?>
                                         <div style="clear:both"></div>
                                         <div class="span12">
                                             <?php if (count($event_comment)) { ?>
@@ -118,12 +173,15 @@
                                             <button type="submit" class="btn btn-small btn-primary">Add Comment</button>
                                         </div>
                                     </form>
-
                                     <div class="span12">
                                         <?php
-                                        $image = $event->postImage;
+                                        if (isset($event->postImage)) {
+                                            $image = $event->postImage;
+                                            ?>
+                                            <img height="200px" src="<?php echo $image->url; ?>" />
+                                            <?php
+                                        }
                                         ?>
-                                        <img width="100%" src="<?php echo $image->url; ?>" />
                                     </div>
                                     <div style="clear:both;height:10px"></div>
                                     <div class="span12">
@@ -154,15 +212,15 @@
                                                                 ?>
                                                             </a>
                                                         </li>
-                                                        
-                                                        
+
+
                                                         <?php
-                                                        }
-                                                        ?>
+                                                    }
+                                                    ?>
                                                 </ul>
                                             </li>
-                                            <?php } ?>
-                                            <?php if (count($associated_user) > 0) { ?>
+                                        <?php } ?>
+                                        <?php if (count($associated_user) > 0) { ?>
                                             <li class="list-group-item">
                                                 User Group
                                                 <ul class="children">
@@ -182,7 +240,7 @@
                                                     ?>
                                                 </ul>
                                             </li>
-                                            <?php } ?>
+                                        <?php } ?>
                                     </ul>
                                 </div>
                                 <div class="span2">
@@ -203,68 +261,69 @@
                 </div>
             </div>
         </div>
-        
+
         <?php $this->load->view('default/footer/console_page.php'); ?>
-        <?php if (count($associated_user) > 0) { 
+        <?php
+        if (count($associated_user) > 0) {
             foreach ($associated_user as $user) {
-        ?>
-        <div id="create_group_modal<?php echo $user['objectId']; ?>" class="modal">
-            <form class="form-horizontal" action='<?php echo base_url(); ?>events/tag_user/' method='post' style="margin-bottom:0">
-                <div class="modal-header">
-                    <span id="close<?php echo $user['objectId']; ?>" class="close">&times;</span>
-                    <h2>Tag User</h2>
-                </div>
-                <!-- Modal content -->
-                <div class="modal-content">
-                    <div class="row-fluid">
-                        <div class="form-group">
-                            <div class="col-sm-10">
-                                <label for="access_rights" style="text-align: left" class="col-sm-2 control-label">User Rights</label>
-                            </div>
-                            <div style="clear: both" class="col-sm-10">
-                                <select required="" id="access_rights" name="access_rights">
-                                    <option value="Full Rights">Full Rights</option>
-                                    <option value="View & Comments">View & Comments</option>
-                                    <option value="Comment">Comment</option>
-                                    <option value="View Only">View Only</option>
-                                </select>
+                ?>
+                <div id="create_group_modal<?php echo $user['objectId']; ?>" class="modal">
+                    <form class="form-horizontal" action='<?php echo base_url(); ?>events/tag_user/' method='post' style="margin-bottom:0">
+                        <div class="modal-header">
+                            <span id="close<?php echo $user['objectId']; ?>" class="close">&times;</span>
+                            <h2>Tag User</h2>
+                        </div>
+                        <!-- Modal content -->
+                        <div class="modal-content">
+                            <div class="row-fluid">
+                                <div class="form-group">
+                                    <div class="col-sm-10">
+                                        <label for="access_rights" style="text-align: left" class="col-sm-2 control-label">User Rights</label>
+                                    </div>
+                                    <div style="clear: both" class="col-sm-10">
+                                        <select required="" id="access_rights" name="access_rights">
+                                            <option value="Full Rights">Full Rights</option>
+                                            <option value="View & Comments">View & Comments</option>
+                                            <option value="Comment">Comment</option>
+                                            <option value="View Only">View Only</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <div style="float:right">
-                        <input type="hidden" name="user_id" value="<?php echo $user['objectId']; ?>" />
-                        <input type="hidden" name="event_id" value="<?php echo $event->objectId; ?>" />
-                        <button type="button" class="btn btn-small btn-primary btnClose<?php echo $user['objectId']; ?>" style="float:left;margin-right:20px;" >Close</button>
-                        <button type="submit" class="btn btn-small btn-primary" style="float:left;" >Submit</button>
-                    </div>
-                    <div style="clear:both"></div>
-                </div>
-            </form>
-            
-        </div>
-            <script>
+                        <div class="modal-footer">
+                            <div style="float:right">
+                                <input type="hidden" name="user_id" value="<?php echo $user['objectId']; ?>" />
+                                <input type="hidden" name="event_id" value="<?php echo $event->objectId; ?>" />
+                                <button type="button" class="btn btn-small btn-primary btnClose<?php echo $user['objectId']; ?>" style="float:left;margin-right:20px;" >Close</button>
+                                <button type="submit" class="btn btn-small btn-primary" style="float:left;" >Submit</button>
+                            </div>
+                            <div style="clear:both"></div>
+                        </div>
+                    </form>
 
-            // Get the create group Start
-            $('.btnClose<?php echo $user['objectId']; ?>').on('click', function () {
-                $('#create_group_modal<?php echo $user['objectId']; ?>').css('display','none');
-            });
-            $('#create_group<?php echo $user['objectId']; ?>').on('click', function () {
-                $('#create_group_modal<?php echo $user['objectId']; ?>').css('display','block');
-            });
-            $('#close<?php echo $user['objectId']; ?>').on('click', function () {
-                $('#create_group_modal<?php echo $user['objectId']; ?>').css('display','none');
-            });
-            // When the user clicks anywhere outside of the create_group, close it
-//            window.onclick = function (event) {
-//                if (event.target == create_group) {
-//                    create_group.style.display = "none";
-//                }
-//            }
-            // Create Group End
-            </script>
-        <?php
+                </div>
+                <script>
+
+                    // Get the create group Start
+                    $('.btnClose<?php echo $user['objectId']; ?>').on('click', function () {
+                        $('#create_group_modal<?php echo $user['objectId']; ?>').css('display', 'none');
+                    });
+                    $('#create_group<?php echo $user['objectId']; ?>').on('click', function () {
+                        $('#create_group_modal<?php echo $user['objectId']; ?>').css('display', 'block');
+                    });
+                    $('#close<?php echo $user['objectId']; ?>').on('click', function () {
+                        $('#create_group_modal<?php echo $user['objectId']; ?>').css('display', 'none');
+                    });
+                    // When the user clicks anywhere outside of the create_group, close it
+        //            window.onclick = function (event) {
+        //                if (event.target == create_group) {
+        //                    create_group.style.display = "none";
+        //                }
+        //            }
+                    // Create Group End
+                </script>
+                <?php
             }
         }
         ?>
@@ -444,6 +503,27 @@
                     o.stop($(list).find('.' + o.selected), $(element));
                 }
 
+            }
+
+            // Get the modal
+            var modal = document.getElementById('eventImageModal');
+
+// Get the image and insert it inside the modal - use its "alt" text as a caption
+            var img = document.getElementById('eventImage');
+            var modalImg = document.getElementById("img01");
+            var captionText = document.getElementById("caption");
+            img.onclick = function () {
+                modal.style.display = "block";
+                modalImg.src = this.src;
+                captionText.innerHTML = this.alt;
+            }
+
+// Get the <span> element that closes the modal
+            var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks on <span> (x), close the modal
+            span.onclick = function () {
+                modal.style.display = "none";
             }
         </script>
     </body>
