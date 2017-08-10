@@ -82,14 +82,17 @@ class events extends CI_Controller_EX {
                         )
                     );
                     $event = json_decode(json_encode($temp), true);
-                    if(isset( $event[0])){
-                        if($i == 0){
-                            $eventId[$i] =  $event[0]['objectId'];
-                            $events[$i] = $event[0];
-                        }elseif(!(in_array($event[0]['objectId'], $eventId))){
-                            $eventId[$i] =  $event[0]['objectId'];
-                            $events[$i] = $event[0];
+                    foreach ($event as $ev){
+                        if(isset( $ev)){
+                            if($i == 0){
+                                $eventId[$i] =  $ev['objectId'];
+                                $events[$i] = $ev;
+                            }elseif(!(in_array($ev['objectId'], $eventId))){
+                                $eventId[$i] =  $ev['objectId'];
+                                $events[$i] = $ev;
+                            }
                         }
+                        $i++;
                     }
                 }
                 $data->day = "";
@@ -111,16 +114,17 @@ class events extends CI_Controller_EX {
                             )
                     );
                     $event = json_decode(json_encode($temp), true);
-                    if(isset( $event[0])){
-                        if($i == 0){
-                            $eventId[$i] =  $event[0]['objectId'];
-                            $events[$i] = $event[0];
-                        }else{
-                            if(!(in_array($event[0]['objectId'], $eventId))){
-                                $eventId[$i] =  $event[0]['objectId'];
-                                $events[$i] = $event[0];
+                    foreach ($event as $ev){
+                        if(isset( $ev)){
+                            if($i == 0){
+                                $eventId[$i] =  $ev['objectId'];
+                                $events[$i] = $ev;
+                            }elseif(!(in_array($ev['objectId'], $eventId))){
+                                $eventId[$i] =  $ev['objectId'];
+                                $events[$i] = $ev;
                             }
                         }
+                        $i++;
                     }
                 }
                 $data->day = $day;
