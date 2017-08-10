@@ -43,7 +43,34 @@ class events extends CI_Controller_EX {
             $events = array();
             $eventId = array();
             $i = 0;
+            $userArr = array();
+            foreach ($associated_user as $user) {
+                $userArr[] = $user['objectId'];
+            }
+            $temp = $this->parserestclient->query
+                    (
+                    array
+                        (
+                        "objectId" => "Event",
+                        'query' => '{"deletedAt":null, "TagFriends":{"$all":'.json_encode($userArr,true).'}}',
+                        'order' => $asc
+                    )
+            );
+            $event = json_decode(json_encode($temp), true);
+            foreach ($event as $ev){
+                if(isset( $ev)){
+                    if($i == 0){
+                        $eventId[$i] =  $ev['objectId'];
+                        $events[$i] = $ev;
+                    }elseif(!(in_array($ev['objectId'], $eventId))){
+                        $eventId[$i] =  $ev['objectId'];
+                        $events[$i] = $ev;
+                    }
+                }
+                $i++;
+            }
             if (!$day || is_null($day) || $day == "") {
+               
                 foreach ($associated_user as $user) {
                     $temp = $this->parserestclient->query
                         (
@@ -54,16 +81,14 @@ class events extends CI_Controller_EX {
                             'order' => $asc
                         )
                     );
-                    $event = json_decode(json_encode($temp), true);{
+                    $event = json_decode(json_encode($temp), true);
                     if(isset( $event[0])){
                         if($i == 0){
                             $eventId[$i] =  $event[0]['objectId'];
                             $events[$i] = $event[0];
-                        }else
-                            if(!(in_array($event[0]->objectId, $eventId))){
-                                $eventId[$i] =  $event[0]['objectId'];
-                                $events[$i] = $event[0];
-                            }
+                        }elseif(!(in_array($event[0]['objectId'], $eventId))){
+                            $eventId[$i] =  $event[0]['objectId'];
+                            $events[$i] = $event[0];
                         }
                     }
                 }
@@ -85,10 +110,10 @@ class events extends CI_Controller_EX {
                             //'limit'=>intval($day),
                             )
                     );
-                     $event = json_decode(json_encode($temp), true);
+                    $event = json_decode(json_encode($temp), true);
                     if(isset( $event[0])){
                         if($i == 0){
-                            $eventId[$i] =  $event[0]->objectId;
+                            $eventId[$i] =  $event[0]['objectId'];
                             $events[$i] = $event[0];
                         }else{
                             if(!(in_array($event[0]['objectId'], $eventId))){
