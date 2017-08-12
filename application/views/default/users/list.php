@@ -113,6 +113,12 @@
                         </li>
                         <?php if (count($associated_user) > 0) { ?>
                             <li style="float:left;margin-left: 10px;">
+                                <a id="enable" class="btn btn-small btn-primary"  href="javascript:enableuser();" class="btn btn-small btn-primary menu-button">Enable</a>	
+                            </li>
+                            <li style="float:left;margin-left: 10px;">
+                                <a id="disable" class="btn btn-small btn-primary"  href="javascript:disableuser();" class="btn btn-small btn-primary menu-button">Disable</a>	
+                            </li>
+                            <li style="float:left;margin-left: 10px;">
                                 <a id="create_group" class="btn btn-small btn-primary" href="#" class="btn btn-small btn-primary menu-button">Create Group</a> 	
                             </li>
                             <li style="float:left;margin-left: 10px;">
@@ -279,10 +285,38 @@
             });
             $.post("<?php echo base_url(); ?>manage/userdelete", {deletelist: deletelist}, function (data) {
                 //console.log(data);
-                window.location.href = "<?php echo base_url(); ?>manage/user_management";
+                window.location.href = "<?php echo base_url(); ?>manage/add_associate_users/<?php echo $client_id; ?>";
             });
         }
     }
+    
+    function enableuser() {
+
+        var deletelist = [];
+        $(".deleteitem").each(function () {
+            if (this.checked == true)
+                deletelist.push(this.name);
+        });
+        $.post("<?php echo base_url(); ?>manage/userenable", {deletelist: deletelist}, function (data) {
+            //console.log(data);
+            window.location.href = "<?php echo base_url(); ?>manage/add_associate_users/<?php echo $client_id; ?>";
+        });
+    }
+    
+    function disableuser() {
+
+        var deletelist = [];
+        $(".deleteitem").each(function () {
+            if (this.checked == true)
+                deletelist.push(this.name);
+        });
+        $.post("<?php echo base_url(); ?>manage/useredisable", {deletelist: deletelist}, function (data) {
+            //console.log(data);
+            window.location.href = "<?php echo base_url(); ?>manage/add_associate_users/<?php echo $client_id; ?>";
+        });
+    }
+    
+    
     // Get the create group Start
     var create_group = document.getElementById('create_group_modal');
 

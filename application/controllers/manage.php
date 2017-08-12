@@ -680,6 +680,41 @@ class manage extends CI_Controller_EX {
             );
         }
     }
+    
+    public function userenable(){
+        $deletelist = $this->input->post('deletelist');
+        $date = date('Y-m-d');
+        foreach($deletelist as $val){
+            //$data = array('deletedAt' => '2017-07-03T00:00:00','objectId'=>$val);
+            $this->parserestclient->update
+            (
+                array
+                (
+                    "objectId" => "_User",
+                    'object' => [ 'Status' => true],
+                            'where' => $val
+                )
+            );
+        }
+    }
+    
+    public function useredisable(){
+        $deletelist = $this->input->post('deletelist');
+        $date = date('Y-m-d');
+        foreach($deletelist as $val){
+            //$data = array('deletedAt' => '2017-07-03T00:00:00','objectId'=>$val);
+            $this->parserestclient->update
+            (
+                array
+                (
+                    "objectId" => "_User",
+                    'object' => [ 'Status' => false],
+                            'where' => $val
+                )
+            );
+        }
+    }
+    
     public function edit_user($user_id,$client_id) {
         $session_data = $this->session->userdata('logged_in');
         $mongodb_id = $session_data['mongodb_id'];
