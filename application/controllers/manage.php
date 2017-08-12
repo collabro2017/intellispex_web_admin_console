@@ -656,7 +656,9 @@ class manage extends CI_Controller_EX {
                     }
 //                    $data->message = "Create sucessfully";
                 else
-                    $data->message = "Create false";
+                    if($response == -1){
+                        $data->message = $_SESSION['error'];
+                    }
             }
         }
         $this->check_login($data, $function_name);
@@ -956,8 +958,11 @@ class manage extends CI_Controller_EX {
                 if (isset($response->updatedAt)) {
                     $data->message = "Edit sucessfully";
                     redirect('manage/edit/' . $id, 'refresh');
-                } else
-                    $data->message = "Edit false";
+                } else{
+                    if($response == -1){
+                        $data->message = $_SESSION['error'];
+                    }
+                }
             }
         }
         $this->check_login($data, $function_name);
