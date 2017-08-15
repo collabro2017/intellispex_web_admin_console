@@ -162,6 +162,14 @@ class events extends CI_Controller_EX {
                         "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}'
                     )
             ), true));
+            $data->event_post = json_decode(json_encode($this->parserestclient->query
+                    (
+                    array
+                        (
+                        "objectId" => "Post",
+                        "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}'
+                    )
+            ), true));
             $user = $this->parserestclient->query(
                         array(
                             "objectId" => "_User",

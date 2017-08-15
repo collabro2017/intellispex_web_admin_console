@@ -2,6 +2,7 @@
 <html lang="en">
     <?php $this->load->view('default/head/console_page.php'); ?>
     <link rel="stylesheet" href="<?php echo base_url('public') ?>/css/events.css" />
+    <link rel="stylesheet" href="<?php echo base_url('public') ?>/colorbox/colorbox.css" />
     <style>
         .list-group {
             padding-left: 0;
@@ -74,22 +75,26 @@
                                          <div style="clear:both;height: 10px;"></div>
                                         
 
-                                        <div class="span12">
+                                         <div class="span12" style="margin: 0;">
+                                            <ul style="margin:0px; padding: 0px;">
                                             <?php
-                                            if (isset($event->thumbImage) && isset($event->postImage)) {
-                                                $image = $event->thumbImage;
-                                                $imagePost = $event->postImage;
+                                            
+                                            foreach ($event_post as $post){
+                                                if (isset($post->thumbImage) && isset($post->postFile)) {
+                                                $image = $post->thumbImage;
+                                                $imagePost = $post->postFile;
                                                 
                                                 ?>
-                                                <img style="cursor: pointer" id="eventImage" src="<?php echo $image->url; ?>" />
-                                                <div id="eventImageModal" class="modal" style="background: #FFF;">
-                                                    <span class="close" style="margin-right: 13px;margin-top: 10px;font-size: 34px;">&times;</span>
-                                                    <img style="width: 94%;" class="modal-content" src="<?php echo $imagePost->url; ?>">
-                                                    <div id="caption"></div>
-                                                </div>
+                                                <li style="float: left; margin-right: 20px;margin-left: 0px;padding: 0;width:46%">
+                                                    <a class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $post->description; ?>">
+                                                        <img style="width:100%;" style="cursor: pointer" id="eventImage" src="<?php echo $image->url; ?>" />
+                                                    </a>
+                                                </li>
                                                 <?php
+                                                }
                                             }
                                             ?>
+                                            </ul>
                                         </div>
                                          <?php if (isset($event->audio)) { ?>
                                          <div style="clear:both;height: 10px;"></div>
@@ -173,16 +178,6 @@
                                             <button type="submit" class="btn btn-small btn-primary">Add Comment</button>
                                         </div>
                                     </form>
-                                    <div class="span12">
-                                        <?php
-                                        if (isset($event->postImage)) {
-                                            $image = $event->postImage;
-                                            ?>
-                                            <img height="200px" src="<?php echo $image->url; ?>" />
-                                            <?php
-                                        }
-                                        ?>
-                                    </div>
                                     <div style="clear:both;height:10px"></div>
                                     <div class="span12">
                                         <div class="span4" style="text-align:center;margin-left: 300px"> 
@@ -328,6 +323,7 @@
         }
         ?>
         <script src="http://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
+        <script src="<?php echo base_url('public') ?>/js/jquery.colorbox.js"></script>
         <script type="text/javascript">
             function deletevent() {
                 if (window.confirm("Are you sure want to delete selected event?")) {
@@ -344,6 +340,7 @@
                     (
                             function ()
                             {
+                                $(".groupPhoto").colorbox({rel:'groupPhoto', transition:"fade"});
                                 $('#event_area ul').multiSelect
                                         (
                                                 {
@@ -504,27 +501,7 @@
                 }
 
             }
-
-            // Get the modal
-            var modal = document.getElementById('eventImageModal');
-
-// Get the image and insert it inside the modal - use its "alt" text as a caption
-            var img = document.getElementById('eventImage');
-            var modalImg = document.getElementById("img01");
-            var captionText = document.getElementById("caption");
-            img.onclick = function () {
-                modal.style.display = "block";
-                modalImg.src = this.src;
-                captionText.innerHTML = this.alt;
-            }
-
-// Get the <span> element that closes the modal
-            var span = document.getElementsByClassName("close")[0];
-
-// When the user clicks on <span> (x), close the modal
-            span.onclick = function () {
-                modal.style.display = "none";
-            }
         </script>
+        
     </body>
 </html>
