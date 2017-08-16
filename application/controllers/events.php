@@ -167,7 +167,8 @@ class events extends CI_Controller_EX {
                     array
                         (
                         "objectId" => "Post",
-                        "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}'
+                        "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}',
+                        'order' => 'postType'
                     )
             ), true));
             $user = $this->parserestclient->query(
@@ -208,6 +209,26 @@ class events extends CI_Controller_EX {
                     )
             );
         }
+    }
+    
+    public function download($event_id) {
+        $this->load->library('Pdf');
+        $pdf = new Pdf(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);   
+        // set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('Exclusive Private Sale Inc');
+        $pdf->SetTitle('Exclusive Private Sale Inc');
+        $pdf->SetSubject('Exclusive Private Sale Inc');
+        $pdf->SetKeywords('Exclusive, PDF');  
+        $pdf->SetTitle('Pdf Example');
+        $pdf->SetHeaderMargin(30);
+        $pdf->SetTopMargin(20);
+        $pdf->setFooterMargin(20);
+        $pdf->SetAutoPageBreak(true);
+        $pdf->SetAuthor('Author');
+        $pdf->SetDisplayMode('real', 'default');
+        $pdf->Write(5, 'CodeIgniter TCPDF Integration');
+        $pdf->Output('pdfexample.pdf', 'I');
     }
     
     public function add_event_comment() {

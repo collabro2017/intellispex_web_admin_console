@@ -80,16 +80,46 @@
                                             <?php
                                             
                                             foreach ($event_post as $post){
-                                                if (isset($post->thumbImage) && isset($post->postFile)) {
+                                                if (isset($post->thumbImage) && isset($post->postFile) && $post->postType == 'photo') {
                                                 $image = $post->thumbImage;
                                                 $imagePost = $post->postFile;
-                                                
                                                 ?>
                                                 <li style="float: left; margin-right: 20px;margin-left: 0px;padding: 0;width:46%">
-                                                    <a class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $post->description; ?>">
+                                                    <h3><?php echo $post->title; ?></h3>
+                                                    <a class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $post->title; ?>">
                                                         <img style="width:100%;" style="cursor: pointer" id="eventImage" src="<?php echo $image->url; ?>" />
+                                                        <p><?php echo $post->description; ?></p>
                                                     </a>
                                                 </li>
+                                                <?php
+                                                }elseif ($post->postType == 'video') {
+                                                $video = $post->postFile;
+                                                $name = explode('.',basename( $video->url));
+                                                $extension = $name['1'];
+                                                ?>
+                                                <li style="clear: left; margin-right: 20px;margin-left: 0px;padding: 0;width:100%">
+                                                    <h3><?php echo $post->title; ?></h3>
+                                                    <?php if($extension == 'mp4' || $extension == 'ogg'){ ?>
+                                                    <video name="<?php echo $post->title; ?>" style="width: 100%;" controls autoplay>
+                                                        <source src="<?php echo $video->url; ?>" type="video/<?php echo $extension; ?>" />
+                                                        Sorry, your browser doesn't support the video element.
+                                                    </video>
+                                                    <?php 
+                                                    }else{
+                                                        ?>
+                                                        <video style="width: 100%;" controls="controls" width="800" height="600" name="<?php echo $post->title; ?>" src="<?php echo $video->url; ?>"></video>
+                                                    <?php
+                                                    }
+                                                    ?>
+                                                    <p><?php echo $post->description; ?></p>
+                                                </li>
+                                                <?php
+                                                }elseif($post->postType == 'text'){
+                                                    ?>
+                                                    <li style="clear: left; margin-right: 20px;margin-left: 0px;padding: 0;width:100%">
+                                                        <h3><?php echo $post->title; ?></h3>
+                                                        <p><?php echo $post->description; ?></p>
+                                                    </li>
                                                 <?php
                                                 }
                                             }
@@ -123,6 +153,20 @@
                                                 $name = explode('.',basename( $video->url));
                                                 $extension = $name['1'];
                                                 ?>
+                                                <?php if($extension == 'mp4' || $extension == 'ogg'){ ?>
+                                                    <video style="width: 100%;" controls autoplay>
+                                                        <source src="<?php echo $video->url; ?>" type="video/<?php echo $extension; ?>" />
+                                                        Sorry, your browser doesn't support the video element.
+                                                    </video>
+                                                    <?php 
+                                                    }else{
+                                                        ?>
+                                                        <video style="width: 100%;" controls="controls" src="<?php echo $video->url; ?>">
+                                                            Sorry, your browser doesn't support the video element.
+                                                        </video>
+                                                    <?php
+                                                    }
+                                                    ?>
                                                 <video width="320" height="240" controls autoplay>
                                                     <source src="<?php echo $event->video; ?>" type="video/<?php echo $extension; ?>">
                                                     Sorry, your browser doesn't support the video element.
@@ -190,6 +234,11 @@
                                 <div class="span2"> 
                                     <h3>Tag Users/User Group</h3>
                                     <ul  class="list-group">
+                                        <li class="list-group-item">
+                                            <a href="<?php echo base_url(); ?>events/download/<?php echo $event->objectId; ?>">
+                                                Full Resolution PDF
+                                            </a>
+                                        </li>
                                         <?php if (count($associated_user) > 0) { ?>
                                             <li class="list-group-item">
                                                 Users
