@@ -212,23 +212,49 @@ class events extends CI_Controller_EX {
     }
     
     public function download($event_id) {
+        ob_clean();
+        $data = new stdClass();
+        $event = json_decode(json_encode($this->parserestclient->query
+                    (
+                    array
+                        (
+                        "objectId" => "Event",
+                        "query" => '{"objectId":"' . $event_id . '"}'
+                    )
+            ), true));
+        $event = $event[0];
+        $data->event = $event;
+        $data->event_comment = json_decode(json_encode($this->parserestclient->query
+                    (
+                    array
+                        (
+                        "objectId" => "EventComment",
+                        "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}'
+                    )
+            ), true));
+        
+        $data->event_post = json_decode(json_encode($this->parserestclient->query
+                    (
+                    array
+                        (
+                        "objectId" => "Post",
+                        "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}',
+                        'order' => 'postType'
+                    )
+            ), true));
+       
         $this->load->library('Pdf');
-        $pdf = new Pdf(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);   
-        // set document information
-        $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetAuthor('Exclusive Private Sale Inc');
-        $pdf->SetTitle('Exclusive Private Sale Inc');
-        $pdf->SetSubject('Exclusive Private Sale Inc');
-        $pdf->SetKeywords('Exclusive, PDF');  
-        $pdf->SetTitle('Pdf Example');
-        $pdf->SetHeaderMargin(30);
-        $pdf->SetTopMargin(20);
-        $pdf->setFooterMargin(20);
-        $pdf->SetAutoPageBreak(true);
-        $pdf->SetAuthor('Author');
-        $pdf->SetDisplayMode('real', 'default');
-        $pdf->Write(5, 'CodeIgniter TCPDF Integration');
-        $pdf->Output('pdfexample.pdf', 'I');
+        $pdf = new Pdf(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf->preferences($pdf);
+        $pdf->AddPage();
+        $html = $this->load->view('default/events/pdfDownload', $data,true);
+
+
+// output the HTML content
+$pdf->writeHTML($html, true, false, true, false, '');
+
+        $pdf->Output("$event->eventname.pdf", 'I');
+        ob_end_clean();
     }
     
     public function add_event_comment() {

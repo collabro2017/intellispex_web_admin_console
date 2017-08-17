@@ -56,63 +56,63 @@ class Pdf extends TCPDF {
 //		}
 //		$this->Cell(array_sum($w), 0, '', 'T');
 //	}
-//        public function preferences($pdf){
-//            // set font
-//            $pdf->SetFont('helvetica', '', 14);
-//
-//            // set document information
-//            $pdf->SetCreator(PDF_CREATOR);
-//            $pdf->SetAuthor('Muhammad Muzammil');
-//            $pdf->SetTitle('Boost2Business Auto Sales');
-//            $pdf->SetSubject('Boost2Business Auto Sales Employee Report');
-//            $pdf->SetKeywords('Boost2Business, PDF, Auto Sales, employee, report');
-//
-//            // set default header data
+        public function preferences($pdf){
+            // set font
+            $pdf->SetFont('helvetica', '', 14);
+
+            // set document information
+            $pdf->SetCreator(PDF_CREATOR);
+            $pdf->SetAuthor('Muhammad Muzammil');
+            $pdf->SetTitle('Boost2Business Auto Sales');
+            $pdf->SetSubject('Boost2Business Auto Sales Employee Report');
+            $pdf->SetKeywords('Boost2Business, PDF, Auto Sales, employee, report');
+
+            // set default header data
 //            $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH);
-//
-//            // set default monospaced font
-//            $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-//
-//            // set margins
-//            $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-//            $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-//
-//            // set auto page breaks
-//            $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-//
-//            // set image scale factor
-//            $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
-//
-//            // set some language-dependent strings (optional)
-//            if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
-//                    require_once(dirname(__FILE__).'/lang/eng.php');
-//                    $pdf->setLanguageArray($l);
-//            }
-//
-//            // ---------------------------------------------------------
-//
-//            // set array for viewer preferences
-//            $preferences = array(
-//                    'HideToolbar' => true,
-//                    'HideMenubar' => true,
-//                    'HideWindowUI' => true,
-//                    'FitWindow' => true,
-//                    'CenterWindow' => true,
-//                    'DisplayDocTitle' => true,
-//                    'NonFullScreenPageMode' => 'UseNone', // UseNone, UseOutlines, UseThumbs, UseOC
-//                    'ViewArea' => 'CropBox', // CropBox, BleedBox, TrimBox, ArtBox
-//                    'ViewClip' => 'CropBox', // CropBox, BleedBox, TrimBox, ArtBox
-//                    'PrintArea' => 'CropBox', // CropBox, BleedBox, TrimBox, ArtBox
-//                    'PrintClip' => 'CropBox', // CropBox, BleedBox, TrimBox, ArtBox
-//                    'PrintScaling' => 'AppDefault', // None, AppDefault
-//                    'Duplex' => 'DuplexFlipLongEdge', // Simplex, DuplexFlipShortEdge, DuplexFlipLongEdge
-//                    'PickTrayByPDFSize' => true,
-//                    'PrintPageRange' => array(1,1,2,3),
-//                    'NumCopies' => 2
-//            );
-//
-//            $pdf->setViewerPreferences($preferences);
-//        }
+
+            // set default monospaced font
+            $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+            // set margins
+            $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+            $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+
+            // set auto page breaks
+            $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+            // set image scale factor
+            $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+            // set some language-dependent strings (optional)
+            if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
+                    require_once(dirname(__FILE__).'/lang/eng.php');
+                    $pdf->setLanguageArray($l);
+            }
+
+            // ---------------------------------------------------------
+
+            // set array for viewer preferences
+            $preferences = array(
+                    'HideToolbar' => true,
+                    'HideMenubar' => true,
+                    'HideWindowUI' => true,
+                    'FitWindow' => true,
+                    'CenterWindow' => true,
+                    'DisplayDocTitle' => true,
+                    'NonFullScreenPageMode' => 'UseNone', // UseNone, UseOutlines, UseThumbs, UseOC
+                    'ViewArea' => 'CropBox', // CropBox, BleedBox, TrimBox, ArtBox
+                    'ViewClip' => 'CropBox', // CropBox, BleedBox, TrimBox, ArtBox
+                    'PrintArea' => 'CropBox', // CropBox, BleedBox, TrimBox, ArtBox
+                    'PrintClip' => 'CropBox', // CropBox, BleedBox, TrimBox, ArtBox
+                    'PrintScaling' => 'AppDefault', // None, AppDefault
+                    'Duplex' => 'DuplexFlipLongEdge', // Simplex, DuplexFlipShortEdge, DuplexFlipLongEdge
+                    'PickTrayByPDFSize' => true,
+                    'PrintPageRange' => array(1,1,2,3),
+                    'NumCopies' => 2
+            );
+
+            $pdf->setViewerPreferences($preferences);
+        }
 }
  
 //class Pdf extends TCPDF

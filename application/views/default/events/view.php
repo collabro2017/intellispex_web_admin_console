@@ -52,33 +52,25 @@
                                                 <a class="btn btn-small btn-primary"  href="javascript:deletevent();" class="btn btn-small btn-primary menu-button">Delete User</a> 	
                                             </li>
                                         </ul>
-                                       
-                                        <div style="clear:both"></div>
-                                        <div class="form-group">
-                                            <div class="col-sm-10">
-                                                <label for="e" style="text-align: left" class="col-sm-2 control-label">Event Name</label>
-                                            </div>
-                                            <div style="clear: both" class="col-sm-10">
-                                                <input required="" id="eventname" name="eventname" class="form-control" id="focusedInput" type="text" value="<?php echo $event->eventname; ?>" placeholder="Event Name">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="col-sm-10">
-                                                <label for="access_rights" style="text-align: left" class="col-sm-2 control-label">Description</label>
-                                            </div>
-                                            <div style="clear: both" class="col-sm-10">
-                                                <textarea style="width: 100%; height: 200px;" name="description" cols="10" rows="10">
-                                                    <?php echo $event->description; ?>
-                                                </textarea>
-                                            </div>
-                                        </div>
-                                         <div style="clear:both;height: 10px;"></div>
                                         
 
+                                        <div style="clear:both"></div>
                                          <div class="span12" style="margin: 0;">
                                             <ul style="margin:0px; padding: 0px;">
+                                                <?php
+                                                if (isset($event->thumbImage) && isset($event->postImage)) {
+                                                    $image = $event->thumbImage;
+                                                    $imagePost = $event->postImage;
+                                                ?>
+                                                    <li style="float: left; margin-right: 20px;margin-left: 0px;padding: 0;width:46%">
+                                                        <h3><?php echo $event->eventname; ?></h3>
+                                                        <a class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $event->eventname; ?>">
+                                                            <img style="width:100%;" style="cursor: pointer" id="eventImage" src="<?php echo $image->url; ?>" />
+                                                            <p><?php echo $event->description; ?></p>
+                                                        </a>
+                                                    </li>
                                             <?php
-                                            
+                                                }
                                             foreach ($event_post as $post){
                                                 if (isset($post->thumbImage) && isset($post->postFile) && $post->postType == 'photo') {
                                                 $image = $post->thumbImage;
@@ -174,6 +166,28 @@
                                          
                                         </div>
                                         <?php } ?>
+                                        
+                                       
+                                         <div style="clear:both;height: 10px;"></div>
+                                        <div class="form-group">
+                                            <div class="col-sm-10">
+                                                <label for="e" style="text-align: left" class="col-sm-2 control-label">Event Name</label>
+                                            </div>
+                                            <div style="clear: both" class="col-sm-10">
+                                                <input required="" id="eventname" name="eventname" class="form-control" id="focusedInput" type="text" value="<?php echo $event->eventname; ?>" placeholder="Event Name">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-10">
+                                                <label for="access_rights" style="text-align: left" class="col-sm-2 control-label">Description</label>
+                                            </div>
+                                            <div style="clear: both" class="col-sm-10">
+                                                <textarea style="width: 100%; height: 200px;" name="description" cols="10" rows="10">
+                                                    <?php echo $event->description; ?>
+                                                </textarea>
+                                            </div>
+                                        </div>
+                                         
                                         <div style="clear:both"></div>
                                         <div class="span12">
                                             <?php if (count($event_comment)) { ?>
