@@ -108,7 +108,6 @@ class manage extends CI_Controller_EX {
         $users = json_decode(json_encode($temp), true);
         $current_user = $users[0];
         $mongoRolerId = $current_user['user_type']['objectId'];
-//    print_r($current_user);exit;
         $result = $this->M_user->login($username, $password, $mongoRolerId);
         if ($result) {
             $sess_array = array();
@@ -555,6 +554,22 @@ class manage extends CI_Controller_EX {
         $data = new stdClass;
         $function_name = "APPLICATION ADMINISTRATOR - DASHBOARD";
         $data->back = TRUE;
+        $admin = $this->parserestclient->query(
+                        array(
+                            "objectId" => "_User",
+                            'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"aDiZnlW1AX"}}',
+                        )
+                    );
+         $users = $this->parserestclient->query(
+                        array(
+                            "objectId" => "_User",
+                            'query' => '{"deletedAt":null}',
+                            'count' => '1',
+                            'limit' => '1000000'
+                        )
+                    );
+        $data->admin_count = count($admin);
+        $data->user_count = count($users)-$data->admin_count;
         $data->statistics = "Global Application Statistics";
         $this->check_login($data, $function_name);
     }
@@ -577,6 +592,34 @@ class manage extends CI_Controller_EX {
         }
         $data->links = array('create_client' => 'Create a Client', 'edit_client' => 'Manage / Edit a Client', 'events' => 'View or Edit Global Event List', 'logout' => 'Logout');
         $this->check_login($data, $function_name);
+    }
+    
+    public function review_users() {
+        $data = new stdClass;
+        $session_data = $this->session->userdata('logged_in');
+        if ($session_data){
+            $data->username = $session_data['username'];
+            $data->role = $session_data['role'];
+            $data->id = $session_data['id'];
+            $data->function_name = "Review User";
+            $user = $this->parserestclient->query
+                    (
+                    array
+                        (
+                        "objectId" => "_User",
+                        'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"XVr1sAmAQl"}}',
+                        'limit' => '1000000',
+                        'order' => '-Status'
+                    )
+            );
+            $data->associated_user = json_decode(json_encode($user), true); 
+            $data->back = TRUE;
+            $data->associated_setup = TRUE;
+            $data->role = $session_data['role'];
+            $this->load->view('default/users/review', $data);
+        }else{
+            $this->load->view('default/include/manage/v_login');
+        }
     }
     public function add_user($client_id) {
 

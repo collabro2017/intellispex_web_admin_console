@@ -470,11 +470,11 @@
 										<table class="table table-striped statistics-table ">
 											<tr>
 												<td># of Administrators</td>
-												<td>100</td>
+												<td><?php echo $admin_count; ?></td>
 											</tr>
 											<tr>
 												<td># of Users</td>
-												<td>100</td>
+												<td><?php echo $user_count?></td>
 											</tr>
 											<tr>
 												<td># of Activities</td>
