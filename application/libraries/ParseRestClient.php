@@ -253,7 +253,7 @@ class ParseRestClient{
  */
 	public function delete($args){
 		$params = array(
-			'url' => $this->parseUrl .'/'.$args['objectId'],
+			'url' => $this->parseUrl .'/'.$args['className'].'/'.$args['objectId'],
 			'method' => 'DELETE'
 		);
 

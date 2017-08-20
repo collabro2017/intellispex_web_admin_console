@@ -3,6 +3,7 @@
     <?php $this->load->view('default/head/console_page.php'); ?>
     <link rel="stylesheet" href="<?php echo base_url('public') ?>/css/events.css" />
     <link rel="stylesheet" href="<?php echo base_url('public') ?>/colorbox/colorbox.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
     <style>
         .list-group {
             padding-left: 0;
@@ -33,6 +34,9 @@
             background-color: #2e3192;
             color:#FFF;
         }
+        .btn-primary{
+            padding: 2px 20px !important;
+        }
     </style>
     <body class="login-layout admin-body">
         <?php $this->load->view('default/nav/console_page.php'); ?>
@@ -43,199 +47,176 @@
                         <div class="widget-main">
                             <div class="row-fluid">
                                 <div class="span8">
-                                    <form class="form-horizontal" action='<?php echo base_url(); ?>events/update_event/<?php echo $event->objectId; ?>' method='post' style="margin-bottom:0">
-                                        <ul style="list-style: none">
-                                            <li style="float:left;margin-left: -10px;margin-right: 10px;">
-                                                <button type="submit" class="btn btn-small btn-primary">Update Event</button>	
-                                            </li>
-                                            <li style="float:left;margin-left: 10px;">
-                                                <a class="btn btn-small btn-primary"  href="javascript:deletevent();" class="btn btn-small btn-primary menu-button">Delete User</a> 	
-                                            </li>
-                                        </ul>
-                                        
 
-                                        <div style="clear:both"></div>
-                                         <div class="span12" style="margin: 0;">
-                                            <ul style="margin:0px; padding: 0px;">
-                                                <?php
-                                                if (isset($event->thumbImage) && isset($event->postImage)) {
-                                                    $image = $event->thumbImage;
-                                                    $imagePost = $event->postImage;
+
+                                    <div class="span12">
+                                        <h3><?php echo $event->eventname; ?></h3>
+                                        <?php
+                                        if (isset($event->thumbImage) && isset($event->postImage)) {
+                                            $image = $event->thumbImage;
+                                            $imagePost = $event->postImage;
+                                            ?>
+                                            <a class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $event->eventname; ?>">
+                                                <img style="width:100%;" style="cursor: pointer" id="eventImage" src="<?php echo $imagePost->url; ?>" />    
+                                            </a>
+                                            <?php
+                                        }
+                                        ?>
+                                        <div class="span8" style="margin: 0">
+                                            <div  style="background: #eee; border: 1px solid #b2b2b2;padding: 10px;margin: 0">
+                                                <h4>Description: </h4>
+                                                <p><?php echo $event->description; ?></p>
+                                            </div>
+                                            <div style="background: #eee; border: 1px solid #b2b2b2;padding: 10px;margin: 0;border-top: 0px;width: 85%;margin-left: 10.5%;">
+                                               
+                                                    <h4>Comments</h4>
+                                                    <a id="add_comment" class="btn btn-small btn-primary"  href="javascript:void(0)" class="btn btn-small btn-primary menu-button"> Add </a> 
+                                                    <div style="clear:both"></div>
+                                                   
+                                            <?php   if (count($event_comment)) { 
+                                                         foreach ($event_comment as $data) {
+                                                        $commenter = $data->Commenter;
+                                                        $user_details = $this->parserestclient->query(array(
+                                                            "objectId" => "_User",
+                                                            'query' => '{"deletedAt":null,"objectId":"' . $commenter->objectId . '"}',
+                                                                )
+                                                        );
+                                                        $user_details = json_decode(json_encode($user_details), true);
+                                                        ?>
+                                                        <div style="float:left">
+                                                            <span style="color: #444"><?php echo date('g:i A', strtotime($event->createdAt)) . ": "; ?></span>
+                                                            <b>
+                                                                <?php
+                                                                if (isset($user_details[0]['username'])):
+                                                                    echo $user_details[0]['username'] . ": ";
+                                                                endif;
+                                                                ?>
+                                                            </b>
+                                                            <?php echo $data->Comments; ?>
+                                                        </div>
+                                                        <div style="float:right">
+                                                            <a  href="javascript:updateComment('<?php echo $data->objectId; ?>')" style="background: transparent; border: none; font-size: 15px;color:#000;"> <i class="fa fa-pencil"></i> </a> 
+                                                            <a  href="javascript:deletComment('<?php echo $data->objectId; ?>');" style="background: transparent; border: none; font-size: 15px;color:#000;"> <i class="fa fa-remove"></i> </a> 
+                                                        </div>
+                                                        <div style="clear:both"></div>
+                                                        <?php
+                                                    }
+                                                }
                                                 ?>
+                                            </div>
+                                        </div>
+                                        <div class="span4" style="margin: 0">
+                                            <ul style="list-style: none">
+                                                <li style="float: left">
+                                                    <a id="add_event" class="btn btn-small btn-primary"  href="javascript:void(0)" class="btn btn-small btn-primary menu-button"> Edit </a> 	
+                                                </li>
+                                                <li style="float:left">
+                                                    <a class="btn btn-small btn-primary"  href="javascript:deletevent();" class="btn btn-small btn-primary menu-button"> Delete </a> 	
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div style="clear:both"></div>
+                                    <div class="span12" style="margin: 0;">
+                                        <ul style="margin:0px; padding: 0px;">
+                                            <?php
+                                            foreach ($event_post as $post) {
+                                                if (isset($post->thumbImage) && isset($post->postFile) && $post->postType == 'photo') {
+                                                    $image = $post->thumbImage;
+                                                    $imagePost = $post->postFile;
+                                                    ?>
                                                     <li style="float: left; margin-right: 20px;margin-left: 0px;padding: 0;width:46%">
-                                                        <h3><?php echo $event->eventname; ?></h3>
-                                                        <a class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $event->eventname; ?>">
+                                                        <h3><?php echo $post->title; ?></h3>
+                                                        <a class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $post->title; ?>">
                                                             <img style="width:100%;" style="cursor: pointer" id="eventImage" src="<?php echo $image->url; ?>" />
-                                                            <p><?php echo $event->description; ?></p>
+                                                            <p><?php echo $post->description; ?></p>
                                                         </a>
                                                     </li>
-                                            <?php
-                                                }
-                                            foreach ($event_post as $post){
-                                                if (isset($post->thumbImage) && isset($post->postFile) && $post->postType == 'photo') {
-                                                $image = $post->thumbImage;
-                                                $imagePost = $post->postFile;
-                                                ?>
-                                                <li style="float: left; margin-right: 20px;margin-left: 0px;padding: 0;width:46%">
-                                                    <h3><?php echo $post->title; ?></h3>
-                                                    <a class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $post->title; ?>">
-                                                        <img style="width:100%;" style="cursor: pointer" id="eventImage" src="<?php echo $image->url; ?>" />
-                                                        <p><?php echo $post->description; ?></p>
-                                                    </a>
-                                                </li>
-                                                <?php
-                                                }elseif ($post->postType == 'video') {
-                                                $video = $post->postFile;
-                                                $name = explode('.',basename( $video->url));
-                                                $extension = $name['1'];
-                                                ?>
-                                                <li style="clear: left; margin-right: 20px;margin-left: 0px;padding: 0;width:100%">
-                                                    <h3><?php echo $post->title; ?></h3>
-                                                    <?php if($extension == 'mp4' || $extension == 'ogg'){ ?>
-                                                    <video name="<?php echo $post->title; ?>" style="width: 100%;" controls autoplay>
-                                                        <source src="<?php echo $video->url; ?>" type="video/<?php echo $extension; ?>" />
-                                                        Sorry, your browser doesn't support the video element.
-                                                    </video>
-                                                    <?php 
-                                                    }else{
-                                                        ?>
-                                                        <video style="width: 100%;" controls="controls" width="800" height="600" name="<?php echo $post->title; ?>" src="<?php echo $video->url; ?>"></video>
                                                     <?php
-                                                    }
+                                                } elseif ($post->postType == 'video') {
+                                                    $video = $post->postFile;
+                                                    $name = explode('.', basename($video->url));
+                                                    $extension = $name['1'];
                                                     ?>
-                                                    <p><?php echo $post->description; ?></p>
-                                                </li>
-                                                <?php
-                                                }elseif($post->postType == 'text'){
+                                                    <li style="clear: left; margin-right: 20px;margin-left: 0px;padding: 0;width:100%">
+                                                        <h3><?php echo $post->title; ?></h3>
+                                                        <?php if ($extension == 'mp4' || $extension == 'ogg') { ?>
+                                                            <video name="<?php echo $post->title; ?>" style="width: 100%;" controls autoplay>
+                                                                <source src="<?php echo $video->url; ?>" type="video/<?php echo $extension; ?>" />
+                                                                Sorry, your browser doesn't support the video element.
+                                                            </video>
+                                                            <?php
+                                                        } else {
+                                                            ?>
+                                                            <video style="width: 100%;" controls="controls" width="800" height="600" name="<?php echo $post->title; ?>" src="<?php echo $video->url; ?>"></video>
+                                                            <?php
+                                                        }
+                                                        ?>
+                                                        <p><?php echo $post->description; ?></p>
+                                                    </li>
+                                                    <?php
+                                                } elseif ($post->postType == 'text') {
                                                     ?>
                                                     <li style="clear: left; margin-right: 20px;margin-left: 0px;padding: 0;width:100%">
                                                         <h3><?php echo $post->title; ?></h3>
                                                         <p><?php echo $post->description; ?></p>
                                                     </li>
-                                                <?php
+                                                    <?php
                                                 }
                                             }
                                             ?>
-                                            </ul>
-                                        </div>
-                                         <?php if (isset($event->audio)) { ?>
-                                         <div style="clear:both;height: 10px;"></div>
-                                        
+                                        </ul>
+                                    </div>
+                                    <?php if (isset($event->audio)) { ?>
+                                        <div style="clear:both;height: 10px;"></div>
+
 
                                         <div class="span12">
                                             <?php
-                                                $audio = $event->audio;
-                                                ?>
-                                                <audio controls>
-                                                    <source src="<?php echo $audio->url; ?>" type="audio/mpeg">
-                                                    Sorry, your browser does not support the audio element.
-                                                </audio>
-                                                
+                                            $audio = $event->audio;
+                                            ?>
+                                            <audio controls>
+                                                <source src="<?php echo $audio->url; ?>" type="audio/mpeg">
+                                                Sorry, your browser does not support the audio element.
+                                            </audio>
+
                                         </div>
-                                         <?php
-                                            }
-                                        ?>
-                                         <?php if (isset($event->video)) { ?>
-                                         <div style="clear:both;height: 10px;"></div>
-                                        
+                                        <?php
+                                    }
+                                    ?>
+                                    <?php if (isset($event->video)) { ?>
+                                        <div style="clear:both;height: 10px;"></div>
+
 
                                         <div class="span12">
-                                            <?php 
-                                                $video = $event->video;
-                                                $name = explode('.',basename( $video->url));
-                                                $extension = $name['1'];
-                                                ?>
-                                                <?php if($extension == 'mp4' || $extension == 'ogg'){ ?>
-                                                    <video style="width: 100%;" controls autoplay>
-                                                        <source src="<?php echo $video->url; ?>" type="video/<?php echo $extension; ?>" />
-                                                        Sorry, your browser doesn't support the video element.
-                                                    </video>
-                                                    <?php 
-                                                    }else{
-                                                        ?>
-                                                        <video style="width: 100%;" controls="controls" src="<?php echo $video->url; ?>">
-                                                            Sorry, your browser doesn't support the video element.
-                                                        </video>
-                                                    <?php
-                                                    }
-                                                    ?>
-                                                <video width="320" height="240" controls autoplay>
-                                                    <source src="<?php echo $event->video; ?>" type="video/<?php echo $extension; ?>">
+                                            <?php
+                                            $video = $event->video;
+                                            $name = explode('.', basename($video->url));
+                                            $extension = $name['1'];
+                                            ?>
+                                            <?php if ($extension == 'mp4' || $extension == 'ogg') { ?>
+                                                <video style="width: 100%;" controls autoplay>
+                                                    <source src="<?php echo $video->url; ?>" type="video/<?php echo $extension; ?>" />
                                                     Sorry, your browser doesn't support the video element.
                                                 </video>
-                                         
-                                        </div>
-                                        <?php } ?>
-                                        
-                                       
-                                         <div style="clear:both;height: 10px;"></div>
-                                        <div class="form-group">
-                                            <div class="col-sm-10">
-                                                <label for="e" style="text-align: left" class="col-sm-2 control-label">Event Name</label>
-                                            </div>
-                                            <div style="clear: both" class="col-sm-10">
-                                                <input required="" id="eventname" name="eventname" class="form-control" id="focusedInput" type="text" value="<?php echo $event->eventname; ?>" placeholder="Event Name">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="col-sm-10">
-                                                <label for="access_rights" style="text-align: left" class="col-sm-2 control-label">Description</label>
-                                            </div>
-                                            <div style="clear: both" class="col-sm-10">
-                                                <textarea style="width: 100%; height: 200px;" name="description" cols="10" rows="10">
-                                                    <?php echo $event->description; ?>
-                                                </textarea>
-                                            </div>
-                                        </div>
-                                         
-                                        <div style="clear:both"></div>
-                                        <div class="span12">
-                                            <?php if (count($event_comment)) { ?>
-                                                <h2>Event Comments</h2>
                                                 <?php
-                                                foreach ($event_comment as $data) {
-                                                    $commenter = $data->Commenter;
-                                                    $user_details = $this->parserestclient->query(array(
-                                                        "objectId" => "_User",
-                                                        'query' => '{"deletedAt":null,"objectId":"' . $commenter->objectId . '"}',
-                                                            )
-                                                    );
-                                                    $user_details = json_decode(json_encode($user_details), true);
-                                                    ?>
-                                                    <h3> <?php
-                                                        if (isset($user_details[0]['username'])): echo $user_details[0]['username'];
-                                                        endif;
-                                                        ?>
-                                                    </h3>
-                                                    <p>Created: <?php echo date('Y-m-d', strtotime($event->createdAt)); ?></p>
-                                                    <p>
-                                                        <?php echo $data->Comments; ?>
-                                                    </p>
-                                                    <?php
-                                                }
+                                            } else {
+                                                ?>
+                                                <video style="width: 100%;" controls="controls" src="<?php echo $video->url; ?>">
+                                                    Sorry, your browser doesn't support the video element.
+                                                </video>
+                                                <?php
                                             }
                                             ?>
-                                        </div>
-                                        <div style="clear:both;height:10px"></div>
+                                            <video width="320" height="240" controls autoplay>
+                                                <source src="<?php echo $event->video; ?>" type="video/<?php echo $extension; ?>">
+                                                Sorry, your browser doesn't support the video element.
+                                            </video>
 
-                                    </form>
-                                    <h2>Add New Comments</h2>
-                                    <form class="form-horizontal" action='<?php echo base_url(); ?>events/add_event_comment/<?php echo $event->objectId; ?>' method='post' style="margin-bottom:0">
-                                        <div class="form-group">
-                                            <div class="col-sm-10">
-                                                <label for="access_rights" style="text-align: left" class="col-sm-2 control-label">Description</label>
-                                            </div>
-                                            <div style="clear: both" class="col-sm-10">
-                                                <textarea style="width: 100%; height: 200px;" name="Comments" cols="10" rows="10">
-                                                    
-                                                </textarea>
-                                                <input type="hidden" name="Commenter" value="<?php echo $current_user; ?>" />
-                                                <input type="hidden" name="targetEvent" value="<?php echo $event->objectId; ?>" />
-                                            </div>
-                                            <div style="clear:both; height: 10px;"></div>
-                                            <button type="submit" class="btn btn-small btn-primary">Add Comment</button>
                                         </div>
-                                    </form>
+                                    <?php } ?>
+
+
                                     <div style="clear:both;height:10px"></div>
                                     <div class="span12">
                                         <div class="span4" style="text-align:center;margin-left: 300px"> 
@@ -373,6 +354,8 @@
                     $('#close<?php echo $user['objectId']; ?>').on('click', function () {
                         $('#create_group_modal<?php echo $user['objectId']; ?>').css('display', 'none');
                     });
+
+
                     // When the user clicks anywhere outside of the create_group, close it
         //            window.onclick = function (event) {
         //                if (event.target == create_group) {
@@ -385,9 +368,106 @@
             }
         }
         ?>
+
+        <!-- Update Event Modal Start -->
+        <div id="event_modal" class="modal">
+            <form class="form-horizontal" action='<?php echo base_url(); ?>events/update_event/<?php echo $event->objectId; ?>' method='post' style="margin-bottom:0">
+                <div class="modal-header">
+                    <span id="close" class="close">&times;</span>
+                    <h2>Update Event</h2>
+                </div>
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <div class="form-group">
+                        <div class="col-sm-10">
+                            <label for="e" style="text-align: left" class="col-sm-2 control-label">Event Name</label>
+                        </div>
+                        <div style="clear: both" class="col-sm-10">
+                            <input required="" id="eventname" name="eventname" class="form-control" id="focusedInput" type="text" value="<?php echo $event->eventname; ?>" placeholder="Event Name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-10">
+                            <label for="access_rights" style="text-align: left" class="col-sm-2 control-label">Description</label>
+                        </div>
+                        <div style="clear: both" class="col-sm-10">
+                            <textarea style="width: 97%; height: 120px;" name="description" cols="10" rows="10">
+                                <?php echo $event->description; ?>
+                            </textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div style="float:right">
+                            <input type="hidden" name="event_id" value="<?php echo $event->objectId; ?>" />
+                            <button type="button" class="btn btn-small btn-primary btnEventClose" style="float:left;margin-right:20px;" >Close</button>
+                            <button type="submit" class="btn btn-small btn-primary" style="float:left;" >Submit</button>
+                        </div>
+                        <div style="clear:both"></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- Update Event Modal End -->
+
+        <!-- Add Comment Modal -->
+
+        <div id="add_comment_modal" class="modal">
+            <form id='comment_form' class="form-horizontal" action='<?php echo base_url(); ?>events/add_event_comment/<?php echo $event->objectId; ?>' method='post' style="margin-bottom:0">
+                <div class="modal-header">
+                    <span id="close<?php echo $user['objectId']; ?>" class="close">&times;</span>
+                    <h2 id="headingComment">Add New Comment</h2>
+                </div>
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <div class="form-group">
+                        <div class="col-sm-10">
+                            <label for="access_rights" style="text-align: left" class="col-sm-2 control-label">Description</label>
+                        </div>
+                        <div style="clear: both" class="col-sm-10">
+                            <textarea id="comments" style="width: 100%; height: 200px;" name="Comments" cols="10" rows="10">
+
+                            </textarea>
+                        </div>
+                        <div style="clear:both; height: 10px;"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div style="float:right">
+                        <input type="hidden" name="Commenter" value="<?php echo $current_user; ?>" />
+                        <input type="hidden" name="commentId" id="commentId" value="" />
+                        <input type="hidden" name="targetEvent" value="<?php echo $event->objectId; ?>" />
+                        <button type="button" class="btn btn-small btn-primary btnCommentClose" style="float:left;margin-right:20px;" >Close</button>
+                        <button type="submit"  id="btnComment" class="btn btn-small btn-primary">Add Comment</button>
+                    </div>
+                    <div style="clear:both"></div>
+                </div>
+            </form>
+        </div>
+        <!-- Add Comment Modal End -->
+
+
         <script src="http://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
         <script src="<?php echo base_url('public') ?>/js/jquery.colorbox.js"></script>
         <script type="text/javascript">
+            $('.btnEventClose').on('click', function () {
+                $('#event_modal').fadeOut();
+            });
+            $('#add_event').on('click', function () {
+                $('#event_modal').fadeIn();
+            });
+            $('#close').on('click', function () {
+                $('#event_modal').fadeOut();
+            });
+            
+            $('.btnCommentClose').on('click', function () {
+                $('#add_comment_modal').fadeOut();
+            });
+            $('#add_comment').on('click', function () {
+                $('#add_comment_modal').fadeIn();
+            });
+            $('#close').on('click', function () {
+                $('#add_comment_modal').fadeOut();
+            });
             function deletevent() {
                 if (window.confirm("Are you sure want to delete selected event?")) {
 
@@ -399,11 +479,31 @@
                     });
                 }
             }
+            function deletComment(comment_id) {
+                if (window.confirm("Are you sure want to delete selected comment?")) {
+
+                    $.post("<?php echo base_url(); ?>events/commentdelete", {commentId: comment_id}, function (data) {
+                        //console.log(data);
+                        window.location.href = "<?php echo base_url(); ?>events/event/<?php echo $event->objectId; ?>";
+                    });
+                }
+            }
+            function updateComment(comment_id) {
+                $.post("<?php echo base_url(); ?>events/comments", {commentId: comment_id}, function (data) {
+                    $('#comment_form').attr('action','<?php echo base_url(); ?>events/update_event_comment/<?php echo $event->objectId; ?>');
+                    var obj = jQuery.parseJSON( data );
+                    $('#headingComment').html('Update Comment');
+                    $('#btnComment').html('Update Comment');
+                    $('#comments').val(obj.Comments);
+                    $('#commentId').val(comment_id);
+                    $('#add_comment_modal').fadeIn();
+                });
+            }
             $(document).ready
                     (
                             function ()
                             {
-                                $(".groupPhoto").colorbox({rel:'groupPhoto', transition:"fade"});
+                                $(".groupPhoto").colorbox({rel: 'groupPhoto', transition: "fade"});
                                 $('#event_area ul').multiSelect
                                         (
                                                 {
@@ -565,6 +665,6 @@
 
             }
         </script>
-        
+
     </body>
 </html>

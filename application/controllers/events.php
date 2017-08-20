@@ -151,7 +151,7 @@ class events extends CI_Controller_EX {
                     array
                         (
                         "objectId" => "Event",
-                        "query" => '{"objectId":"' . $event_id . '"}'
+                        "query" => '{"deletedAt":null,"objectId":"' . $event_id . '"}'
                     )
             ), true));
             $data->event_comment = json_decode(json_encode($this->parserestclient->query
@@ -159,7 +159,7 @@ class events extends CI_Controller_EX {
                     array
                         (
                         "objectId" => "EventComment",
-                        "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}'
+                        "query" => '{"deletedAt":null,"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}'
                     )
             ), true));
             $data->event_post = json_decode(json_encode($this->parserestclient->query
@@ -197,6 +197,7 @@ class events extends CI_Controller_EX {
 
     public function eventdelete() {
         $deletelist = $this->input->post('deletelist');
+        $data = date('Y-m-d');
         foreach ($deletelist as $val) {
             //$data = array('deletedAt' => '2017-07-03T00:00:00','objectId'=>$val);
             $this->parserestclient->update
@@ -204,13 +205,59 @@ class events extends CI_Controller_EX {
                     array
                         (
                         "objectId" => "Event",
-                        'object' => ['deletedAt' => "2017-07-03"],
+                        'object' => ['deletedAt' => "$data"],
                         'where' => $val
                     )
             );
         }
     }
     
+    public function update_event_comment($event_id) {
+        $Comments = $this->input->post('Comments');
+        $commentId = $this->input->post('commentId');
+        $date = date(DateTime::ISO8601, time());
+        print_r($this->parserestclient->update
+                    (
+                    array
+                        (
+                        "objectId" => "EventComment",
+                        'object' => ['updatedAt' => [
+                                    "__type" => "Date",
+                                    "iso" => $date,
+                                ],'Comments' => "$Comments"],
+                        'where' => $commentId
+                    )
+            ));
+        redirect(base_url()."events/event/".$event_id);
+    }
+    
+    public function commentdelete() {
+        $comment_id = $this->input->post('commentId');
+        $data = date('Y-m-d');
+        $this->parserestclient->delete
+                    (
+                    array
+                        (
+                        "className" => "EventComment",
+                        'objectId' => $comment_id
+                    )
+            );
+    }
+    
+    public function comments() {
+        $comment_id = $this->input->post('commentId');
+        $event = json_decode(json_encode($this->parserestclient->query
+                    (
+                    array
+                        (
+                        "objectId" => "EventComment",
+                        "query" => '{"deletedAt":null,"objectId": "'.$comment_id.'"}'
+                    )
+            ), true));
+        if(isset($event[0])){
+            echo json_encode($event[0]);
+        }
+    }
     public function download($event_id) {
         ob_clean();
         $data = new stdClass();
@@ -219,7 +266,7 @@ class events extends CI_Controller_EX {
                     array
                         (
                         "objectId" => "Event",
-                        "query" => '{"objectId":"' . $event_id . '"}'
+                        "query" => '{"deletedAt":null,"objectId":"' . $event_id . '"}'
                     )
             ), true));
         $event = $event[0];
@@ -229,7 +276,7 @@ class events extends CI_Controller_EX {
                     array
                         (
                         "objectId" => "EventComment",
-                        "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}'
+                        "query" => '{"deletedAt":null,"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}'
                     )
             ), true));
         
