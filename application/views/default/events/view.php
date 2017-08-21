@@ -116,30 +116,49 @@
                                             </ul>
                                         </div>
                                     </div>
-                                    <div style="clear:both"></div>
+                                    <div style="clear:both;height: 20px"></div>
                                     <div class="span12" style="margin: 0;">
                                         <ul style="margin:0px; padding: 0px;">
                                             <?php
                                             foreach ($event_post as $post) {
+                                                ?>
+                                                <li style="margin: 0px;padding: 0;position: relative;margin-top: 20px;">
+                                                        <div style="background: #eee;  border: 1px solid #b2b2b2;padding: 0px;margin: 0;">
+                                                            <div class="span3" style="padding: 0px;background: #FFF;padding-left: 15px;border-right: 1px solid #b2b2b2; ">
+                                                                <h3><?php echo $post->title; ?></h3>
+                                                                <?php 
+                                                                if(isset($post->countryLatLong)){
+                                                                    ?><p><i class="fa fa-map-marker"></i><?php echo $post->countryLatLong; ?></p> <?php
+                                                                }
+                                                                ?>
+                                                                <p>
+                                                                    <?php echo date('Y-m-d g:i A', strtotime($post->createdAt)); ?>
+                                                                </p>
+                                                            </div>
+                                                            <div style="background: #eee;margin: 0;padding: 10px;" class="span9">
+                                                                <div style="float:left;width: 90%;"><p><?php echo $post->description; ?></p></div>
+                                                                <div style="float:right;">
+                                                                    <a  href="javascript:updatePost('<?php echo $post->objectId; ?>')" style="background: transparent; border: none; font-size: 15px;color:#000;"> <i class="fa fa-pencil"></i> </a> 
+                                                                    <a  href="javascript:deletPost('<?php echo $post->objectId; ?>');" style="background: transparent; border: none; font-size: 15px;color:#000;"> <i class="fa fa-remove"></i> </a> 
+                                                                </div>
+                                                            </div>
+                                                <div style="clear: both;"></div>
+                                                        </div>
+                                                <?php
                                                 if (isset($post->thumbImage) && isset($post->postFile) && $post->postType == 'photo') {
                                                     $image = $post->thumbImage;
                                                     $imagePost = $post->postFile;
                                                     ?>
-                                                    <li style="float: left; margin-right: 20px;margin-left: 0px;padding: 0;width:46%">
-                                                        <h3><?php echo $post->title; ?></h3>
-                                                        <a class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $post->title; ?>">
-                                                            <img style="width:100%;" style="cursor: pointer" id="eventImage" src="<?php echo $image->url; ?>" />
-                                                            <p><?php echo $post->description; ?></p>
-                                                        </a>
-                                                    </li>
+                                                    
+                                                    <a  class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $post->title; ?>">
+                                                        <img style="width:100%;" style="cursor: pointer" id="eventImage" src="<?php echo $imagePost->url; ?>" />
+                                                    </a>
                                                     <?php
                                                 } elseif ($post->postType == 'video') {
                                                     $video = $post->postFile;
                                                     $name = explode('.', basename($video->url));
                                                     $extension = $name['1'];
                                                     ?>
-                                                    <li style="clear: left; margin-right: 20px;margin-left: 0px;padding: 0;width:100%">
-                                                        <h3><?php echo $post->title; ?></h3>
                                                         <?php if ($extension == 'mp4' || $extension == 'ogg') { ?>
                                                             <video name="<?php echo $post->title; ?>" style="width: 100%;" controls autoplay>
                                                                 <source src="<?php echo $video->url; ?>" type="video/<?php echo $extension; ?>" />
@@ -152,17 +171,11 @@
                                                             <?php
                                                         }
                                                         ?>
-                                                        <p><?php echo $post->description; ?></p>
-                                                    </li>
-                                                    <?php
-                                                } elseif ($post->postType == 'text') {
-                                                    ?>
-                                                    <li style="clear: left; margin-right: 20px;margin-left: 0px;padding: 0;width:100%">
-                                                        <h3><?php echo $post->title; ?></h3>
-                                                        <p><?php echo $post->description; ?></p>
-                                                    </li>
                                                     <?php
                                                 }
+                                                ?>
+                                                </li>
+                                            <?php
                                             }
                                             ?>
                                         </ul>
@@ -414,7 +427,7 @@
         <div id="add_comment_modal" class="modal">
             <form id='comment_form' class="form-horizontal" action='<?php echo base_url(); ?>events/add_event_comment/<?php echo $event->objectId; ?>' method='post' style="margin-bottom:0">
                 <div class="modal-header">
-                    <span id="close<?php echo $user['objectId']; ?>" class="close">&times;</span>
+                    <span id="close" class="close">&times;</span>
                     <h2 id="headingComment">Add New Comment</h2>
                 </div>
                 <!-- Modal content -->
@@ -445,7 +458,48 @@
         </div>
         <!-- Add Comment Modal End -->
 
+        <!-- Update Post Title & Description -->
 
+        <div id="update_post_modal" class="modal">
+            <form id='comment_form' class="form-horizontal" action='<?php echo base_url(); ?>events/update_event_post/<?php echo $event->objectId; ?>' method='post' style="margin-bottom:0">
+                <div class="modal-header">
+                    <span id="close" class="close">&times;</span>
+                    <h2 id="headingComment">Update Post</h2>
+                </div>
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <div class="form-group">
+                        <div class="col-sm-10">
+                            <label for="access_rights" style="text-align: left" class="col-sm-2 control-label">Title</label>
+                        </div>
+                        <div style="clear: both" class="col-sm-10">
+                            <input type="text" name="title" id="title" />
+                        </div>
+                        <div class="col-sm-10">
+                            <label for="access_rights" style="text-align: left" class="col-sm-2 control-label">Description</label>
+                        </div>
+                        <div style="clear: both" class="col-sm-10">
+                            <textarea id="description" style="width: 100%; height: 200px;" name="description" cols="10" rows="10">
+
+                            </textarea>
+                        </div>
+                        <div style="clear:both; height: 10px;"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div style="float:right">
+                        <input type="hidden" name="Commenter" value="<?php echo $current_user; ?>" />
+                        <input type="hidden" name="postId" id="postId" value="" />
+                        <input type="hidden" name="targetEvent" value="<?php echo $event->objectId; ?>" />
+                        <button type="button" class="btn btn-small btn-primary btnPostClose" style="float:left;margin-right:20px;" >Close</button>
+                        <button type="submit"  id="btnComment" class="btn btn-small btn-primary">Update Post</button>
+                    </div>
+                    <div style="clear:both"></div>
+                </div>
+            </form>
+        </div>
+        <!-- Update Post Title & Description Modal End -->
+        
         <script src="http://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
         <script src="<?php echo base_url('public') ?>/js/jquery.colorbox.js"></script>
         <script type="text/javascript">
@@ -468,6 +522,16 @@
             $('#close').on('click', function () {
                 $('#add_comment_modal').fadeOut();
             });
+            
+            $('.btnPostClose').on('click', function () {
+                $('#update_post_modal').fadeOut();
+            });
+            $('#add_comment').on('click', function () {
+                $('#update_post_modal').fadeIn();
+            });
+            $('#close').on('click', function () {
+                $('#update_post_modal').fadeOut();
+            });
             function deletevent() {
                 if (window.confirm("Are you sure want to delete selected event?")) {
 
@@ -488,6 +552,16 @@
                     });
                 }
             }
+            
+            function deletPost(post_id){
+                if (window.confirm("Are you sure want to delete selected post?")) {
+
+                    $.post("<?php echo base_url(); ?>events/postdelete", {postId: post_id}, function (data) {
+                        //console.log(data);
+                        window.location.href = "<?php echo base_url(); ?>events/event/<?php echo $event->objectId; ?>";
+                    });
+                }
+            }
             function updateComment(comment_id) {
                 $.post("<?php echo base_url(); ?>events/comments", {commentId: comment_id}, function (data) {
                     $('#comment_form').attr('action','<?php echo base_url(); ?>events/update_event_comment/<?php echo $event->objectId; ?>');
@@ -497,6 +571,15 @@
                     $('#comments').val(obj.Comments);
                     $('#commentId').val(comment_id);
                     $('#add_comment_modal').fadeIn();
+                });
+            }
+            function updatePost(post_id) {
+                $.post("<?php echo base_url(); ?>events/Post", {postId: post_id}, function (data) {
+                    var obj = jQuery.parseJSON( data );
+                    $('#description').val(obj.description);
+                    $('#title').val(obj.title);
+                    $('#postId').val(post_id);
+                    $('#update_post_modal').fadeIn();
                 });
             }
             $(document).ready

@@ -230,6 +230,25 @@ class events extends CI_Controller_EX {
             ));
         redirect(base_url()."events/event/".$event_id);
     }
+    public function update_event_post($event_id) {
+        $description = $this->input->post('description');
+        $title = $this->input->post('title');
+        $postId = $this->input->post('postId');
+        $date = date(DateTime::ISO8601, time());
+        print_r($this->parserestclient->update
+                    (
+                    array
+                        (
+                        "objectId" => "Post",
+                        'object' => ['updatedAt' => [
+                                    "__type" => "Date",
+                                    "iso" => $date,
+                                ],'title' => "$title",'description' => "$description"],
+                        'where' => $postId
+                    )
+            ));
+        redirect(base_url()."events/event/".$event_id);
+    }
     
     public function commentdelete() {
         $comment_id = $this->input->post('commentId');
@@ -244,6 +263,17 @@ class events extends CI_Controller_EX {
             );
     }
     
+    public function postdelete() {
+        $post_id = $this->input->post('postId');
+        $this->parserestclient->delete
+                    (
+                    array
+                        (
+                        "className" => "Post",
+                        'objectId' => $post_id
+                    )
+            );
+    }
     public function comments() {
         $comment_id = $this->input->post('commentId');
         $event = json_decode(json_encode($this->parserestclient->query
@@ -256,6 +286,21 @@ class events extends CI_Controller_EX {
             ), true));
         if(isset($event[0])){
             echo json_encode($event[0]);
+        }
+    }
+    
+    public function Post() {
+        $post_id = $this->input->post('postId');
+        $post = json_decode(json_encode($this->parserestclient->query
+                    (
+                    array
+                        (
+                        "objectId" => "Post",
+                        "query" => '{"objectId": "'.$post_id.'"}'
+                    )
+            ), true));
+        if(isset($post[0])){
+            echo json_encode($post[0]);
         }
     }
     public function download($event_id) {
