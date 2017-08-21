@@ -34,12 +34,12 @@ class events extends CI_Controller_EX {
             $data->id = $session_data['id'];
             $data->function_name = "VIEW OR EDIT GLOBAL EVENT LIST";
             $user = $this->parserestclient->query(
-                        array(
-                            "objectId" => "_User",
-                            'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"XVr1sAmAQl"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $session_data['mongodb_id'] . '"}}',
-                        )
-                    );
-            $associated_user = json_decode(json_encode($user), true); 
+                    array(
+                        "objectId" => "_User",
+                        'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"XVr1sAmAQl"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $session_data['mongodb_id'] . '"}}',
+                    )
+            );
+            $associated_user = json_decode(json_encode($user), true);
             $events = array();
             $eventId = array();
             $i = 0;
@@ -52,43 +52,43 @@ class events extends CI_Controller_EX {
                     array
                         (
                         "objectId" => "Event",
-                        'query' => '{"deletedAt":null, "TagFriends":{"$all":'.json_encode($userArr,true).'}}',
+                        'query' => '{"deletedAt":null, "TagFriends":{"$all":' . json_encode($userArr, true) . '}}',
                         'order' => $asc
                     )
             );
             $event = json_decode(json_encode($temp), true);
-            foreach ($event as $ev){
-                if(isset( $ev)){
-                    if($i == 0){
-                        $eventId[$i] =  $ev['objectId'];
+            foreach ($event as $ev) {
+                if (isset($ev)) {
+                    if ($i == 0) {
+                        $eventId[$i] = $ev['objectId'];
                         $events[$i] = $ev;
-                    }elseif(!(in_array($ev['objectId'], $eventId))){
-                        $eventId[$i] =  $ev['objectId'];
+                    } elseif (!(in_array($ev['objectId'], $eventId))) {
+                        $eventId[$i] = $ev['objectId'];
                         $events[$i] = $ev;
                     }
                 }
                 $i++;
             }
             if (!$day || is_null($day) || $day == "") {
-               
+
                 foreach ($associated_user as $user) {
                     $temp = $this->parserestclient->query
-                        (
-                        array
                             (
-                            "objectId" => "Event",
-                            'query' => '{"deletedAt":null, "user":{"__type":"Pointer","className":"_User","objectId":"'.$user['objectId'].'"}}',
-                            'order' => $asc
-                        )
+                            array
+                                (
+                                "objectId" => "Event",
+                                'query' => '{"deletedAt":null, "user":{"__type":"Pointer","className":"_User","objectId":"' . $user['objectId'] . '"}}',
+                                'order' => $asc
+                            )
                     );
                     $event = json_decode(json_encode($temp), true);
-                    foreach ($event as $ev){
-                        if(isset( $ev)){
-                            if($i == 0){
-                                $eventId[$i] =  $ev['objectId'];
+                    foreach ($event as $ev) {
+                        if (isset($ev)) {
+                            if ($i == 0) {
+                                $eventId[$i] = $ev['objectId'];
                                 $events[$i] = $ev;
-                            }elseif(!(in_array($ev['objectId'], $eventId))){
-                                $eventId[$i] =  $ev['objectId'];
+                            } elseif (!(in_array($ev['objectId'], $eventId))) {
+                                $eventId[$i] = $ev['objectId'];
                                 $events[$i] = $ev;
                             }
                         }
@@ -108,19 +108,19 @@ class events extends CI_Controller_EX {
                                 (
                                 "objectId" => "Event",
                                 //'query'=>'{"deletedAt":null, "createdAt":{"$gt":"'.$date.'"}}',
-                                'query' => '{"deletedAt":null, "user":{"__type":"Pointer","className":"_User","objectId":"'.$user['objectId'].'"}, "createdAt":{"$gte":{"__type":"Date","iso":"' . $date . '"}}}',
+                                'query' => '{"deletedAt":null, "user":{"__type":"Pointer","className":"_User","objectId":"' . $user['objectId'] . '"}, "createdAt":{"$gte":{"__type":"Date","iso":"' . $date . '"}}}',
                                 'order' => $asc,
                             //'limit'=>intval($day),
                             )
                     );
                     $event = json_decode(json_encode($temp), true);
-                    foreach ($event as $ev){
-                        if(isset( $ev)){
-                            if($i == 0){
-                                $eventId[$i] =  $ev['objectId'];
+                    foreach ($event as $ev) {
+                        if (isset($ev)) {
+                            if ($i == 0) {
+                                $eventId[$i] = $ev['objectId'];
                                 $events[$i] = $ev;
-                            }elseif(!(in_array($ev['objectId'], $eventId))){
-                                $eventId[$i] =  $ev['objectId'];
+                            } elseif (!(in_array($ev['objectId'], $eventId))) {
+                                $eventId[$i] = $ev['objectId'];
                                 $events[$i] = $ev;
                             }
                         }
@@ -130,7 +130,7 @@ class events extends CI_Controller_EX {
                 $data->day = $day;
             }
 
-            $data->info = $events;//json_decode(json_encode($temp), true);
+            $data->info = $events; //json_decode(json_encode($temp), true);
             $this->load->view('default/events/list', $data);
         } else {
             $this->load->view('default/include/manage/v_login');
@@ -147,45 +147,45 @@ class events extends CI_Controller_EX {
             $data->event_id = $event_id;
 
             $event = json_decode(json_encode($this->parserestclient->query
-                    (
-                    array
-                        (
-                        "objectId" => "Event",
-                        "query" => '{"deletedAt":null,"objectId":"' . $event_id . '"}'
-                    )
-            ), true));
+                                    (
+                                    array
+                                        (
+                                        "objectId" => "Event",
+                                        "query" => '{"deletedAt":null,"objectId":"' . $event_id . '"}'
+                                    )
+                            ), true));
             $data->event_comment = json_decode(json_encode($this->parserestclient->query
-                    (
-                    array
-                        (
-                        "objectId" => "EventComment",
-                        "query" => '{"deletedAt":null,"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}'
-                    )
-            ), true));
+                                    (
+                                    array
+                                        (
+                                        "objectId" => "EventComment",
+                                        "query" => '{"deletedAt":null,"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}'
+                                    )
+                            ), true));
             $data->event_post = json_decode(json_encode($this->parserestclient->query
-                    (
-                    array
-                        (
-                        "objectId" => "Post",
-                        "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}',
-                        'order' => 'postType'
-                    )
-            ), true));
+                                    (
+                                    array
+                                        (
+                                        "objectId" => "Post",
+                                        "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}',
+                                        'order' => 'postType'
+                                    )
+                            ), true));
             $user = $this->parserestclient->query(
-                        array(
-                            "objectId" => "_User",
-                            'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"XVr1sAmAQl"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $session_data['mongodb_id'] . '"}}',
-                        )
-                    );
-            $data->associated_user = json_decode(json_encode($user), true); 
+                    array(
+                        "objectId" => "_User",
+                        'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"XVr1sAmAQl"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $session_data['mongodb_id'] . '"}}',
+                    )
+            );
+            $data->associated_user = json_decode(json_encode($user), true);
             $user_group = $this->parserestclient->query(
-                        array(
-                            "objectId" => "user_group",
-                            'query' => '{"created_by":{"__type":"Pointer","className":"_User","objectId":"' . $session_data['mongodb_id'] . '"}}',
-                        )
-                    );
-            $data->user_group = json_decode(json_encode($user_group), true); 
-            
+                    array(
+                        "objectId" => "user_group",
+                        'query' => '{"created_by":{"__type":"Pointer","className":"_User","objectId":"' . $session_data['mongodb_id'] . '"}}',
+                    )
+            );
+            $data->user_group = json_decode(json_encode($user_group), true);
+
             $data->function_name = $event[0]->eventname;
             $data->event = $event[0];
             $data->current_user = $session_data['mongodb_id'];
@@ -211,239 +211,242 @@ class events extends CI_Controller_EX {
             );
         }
     }
-    
+
     public function update_event_comment($event_id) {
         $Comments = $this->input->post('Comments');
         $commentId = $this->input->post('commentId');
         $date = date(DateTime::ISO8601, time());
         print_r($this->parserestclient->update
-                    (
-                    array
                         (
-                        "objectId" => "EventComment",
-                        'object' => ['updatedAt' => [
+                        array
+                            (
+                            "objectId" => "EventComment",
+                            'object' => ['updatedAt' => [
                                     "__type" => "Date",
                                     "iso" => $date,
-                                ],'Comments' => "$Comments"],
-                        'where' => $commentId
-                    )
-            ));
-        redirect(base_url()."events/event/".$event_id);
+                                ], 'Comments' => "$Comments"],
+                            'where' => $commentId
+                        )
+        ));
+        redirect(base_url() . "events/event/" . $event_id);
     }
+
     public function update_event_post($event_id) {
         $description = $this->input->post('description');
         $title = $this->input->post('title');
         $postId = $this->input->post('postId');
         $date = date(DateTime::ISO8601, time());
         print_r($this->parserestclient->update
-                    (
-                    array
                         (
-                        "objectId" => "Post",
-                        'object' => ['updatedAt' => [
+                        array
+                            (
+                            "objectId" => "Post",
+                            'object' => ['updatedAt' => [
                                     "__type" => "Date",
                                     "iso" => $date,
-                                ],'title' => "$title",'description' => "$description"],
-                        'where' => $postId
-                    )
-            ));
-        redirect(base_url()."events/event/".$event_id);
+                                ], 'title' => "$title", 'description' => "$description"],
+                            'where' => $postId
+                        )
+        ));
+        redirect(base_url() . "events/event/" . $event_id);
     }
-    
+
     public function commentdelete() {
         $comment_id = $this->input->post('commentId');
         $data = date('Y-m-d');
         $this->parserestclient->delete
+                (
+                array
                     (
-                    array
-                        (
-                        "className" => "EventComment",
-                        'objectId' => $comment_id
-                    )
-            );
+                    "className" => "EventComment",
+                    'objectId' => $comment_id
+                )
+        );
     }
-    
+
     public function postdelete() {
         $post_id = $this->input->post('postId');
         $this->parserestclient->delete
+                (
+                array
                     (
-                    array
-                        (
-                        "className" => "Post",
-                        'objectId' => $post_id
-                    )
-            );
+                    "className" => "Post",
+                    'objectId' => $post_id
+                )
+        );
     }
+
     public function comments() {
         $comment_id = $this->input->post('commentId');
         $event = json_decode(json_encode($this->parserestclient->query
-                    (
-                    array
-                        (
-                        "objectId" => "EventComment",
-                        "query" => '{"deletedAt":null,"objectId": "'.$comment_id.'"}'
-                    )
-            ), true));
-        if(isset($event[0])){
+                                (
+                                array
+                                    (
+                                    "objectId" => "EventComment",
+                                    "query" => '{"deletedAt":null,"objectId": "' . $comment_id . '"}'
+                                )
+                        ), true));
+        if (isset($event[0])) {
             echo json_encode($event[0]);
         }
     }
-    
+
     public function Post() {
         $post_id = $this->input->post('postId');
         $post = json_decode(json_encode($this->parserestclient->query
-                    (
-                    array
-                        (
-                        "objectId" => "Post",
-                        "query" => '{"objectId": "'.$post_id.'"}'
-                    )
-            ), true));
-        if(isset($post[0])){
+                                (
+                                array
+                                    (
+                                    "objectId" => "Post",
+                                    "query" => '{"objectId": "' . $post_id . '"}'
+                                )
+                        ), true));
+        if (isset($post[0])) {
             echo json_encode($post[0]);
         }
     }
+
     public function download($event_id) {
         ob_clean();
         $data = new stdClass();
         $event = json_decode(json_encode($this->parserestclient->query
-                    (
-                    array
-                        (
-                        "objectId" => "Event",
-                        "query" => '{"deletedAt":null,"objectId":"' . $event_id . '"}'
-                    )
-            ), true));
+                                (
+                                array
+                                    (
+                                    "objectId" => "Event",
+                                    "query" => '{"deletedAt":null,"objectId":"' . $event_id . '"}'
+                                )
+                        ), true));
         $event = $event[0];
         $data->event = $event;
         $data->event_comment = json_decode(json_encode($this->parserestclient->query
-                    (
-                    array
-                        (
-                        "objectId" => "EventComment",
-                        "query" => '{"deletedAt":null,"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}'
-                    )
-            ), true));
-        
+                                (
+                                array
+                                    (
+                                    "objectId" => "EventComment",
+                                    "query" => '{"deletedAt":null,"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}'
+                                )
+                        ), true));
+
         $data->event_post = json_decode(json_encode($this->parserestclient->query
-                    (
-                    array
-                        (
-                        "objectId" => "Post",
-                        "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}',
-                        'order' => 'postType'
-                    )
-            ), true));
-       
+                                (
+                                array
+                                    (
+                                    "objectId" => "Post",
+                                    "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}',
+                                    'order' => 'postType'
+                                )
+                        ), true));
+
         $this->load->library('Pdf');
         $pdf = new Pdf(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->preferences($pdf);
         $pdf->AddPage();
-        $html = $this->load->view('default/events/pdfDownload', $data,true);
+        $html = $this->load->view('default/events/pdfDownload', $data, true);
 
 
 // output the HTML content
-$pdf->writeHTML($html, true, false, true, false, '');
+        $pdf->writeHTML($html, true, false, true, false, '');
 
         $pdf->Output("$event->eventname.pdf", 'I');
         ob_end_clean();
     }
-    
+
     public function add_event_comment() {
         $date = date(DateTime::ISO8601, time());
         $Comments = $this->input->post('Comments');
         $Commenter = $this->input->post('Commenter');
         $targetEvent = $this->input->post('targetEvent');
         $response = $this->parserestclient->create
-                        (
-                        array
-                            (
-                            "objectId" => "EventComment",
-                            'object' => ['Comments' => "$Comments",
-                                'createdAt' => [
-                                    "__type" => "Date",
-                                    "iso" => $date,
-                                ], 'Commenter' => [
-                                    "__type" => "Pointer",
-                                    "className" => "_User",
-                                    "objectId" => "$Commenter"
-                                ], 'targetEvent' => [
-                                    "__type" => "Pointer",
-                                    "className" => "Event",
-                                    "objectId" => "$targetEvent"
-                                ]]
-                        )
-                );
-        redirect('/events/event/'.$targetEvent, 'refresh');
+                (
+                array
+                    (
+                    "objectId" => "EventComment",
+                    'object' => ['Comments' => "$Comments",
+                        'createdAt' => [
+                            "__type" => "Date",
+                            "iso" => $date,
+                        ], 'Commenter' => [
+                            "__type" => "Pointer",
+                            "className" => "_User",
+                            "objectId" => "$Commenter"
+                        ], 'targetEvent' => [
+                            "__type" => "Pointer",
+                            "className" => "Event",
+                            "objectId" => "$targetEvent"
+                        ]]
+                )
+        );
+        redirect('/events/event/' . $targetEvent, 'refresh');
     }
-    
+
     public function update_event($event_id) {
         $date = date(DateTime::ISO8601, time());
         $name = $this->input->post('eventname');
         $description = $this->input->post('description');
         $response = $this->parserestclient->update
-                        (
-                        array
-                            (
-                            "objectId" => "Event",
-                            'object' => ['eventname' => "$name",'description' => "$description",
-                                'updatedAt' => [
-                                    "__type" => "Date",
-                                    "iso" => $date,
-                                ]],
-                                'where' => $event_id
-                        )
-                );
-        redirect('/events/event/'.$event_id, 'refresh');
+                (
+                array
+                    (
+                    "objectId" => "Event",
+                    'object' => ['eventname' => "$name", 'description' => "$description",
+                        'updatedAt' => [
+                            "__type" => "Date",
+                            "iso" => $date,
+                        ]],
+                    'where' => $event_id
+                )
+        );
+        redirect('/events/event/' . $event_id, 'refresh');
     }
-    
-    public function tag_user(){
+
+    public function tag_user() {
         $TagFriends = array();
         $TagFriendAuthorities = array();
-        $user_id =  $this->input->post('user_id');
-        $event_id =  $this->input->post('event_id');
+        $user_id = $this->input->post('user_id');
+        $event_id = $this->input->post('event_id');
         $access_rights = $this->input->post('access_rights');
         $date = date(DateTime::ISO8601, time());
-        
+
         $TagFriends[] = $user_id;
         $TagFriendAuthorities[] = $access_rights;
-        
+
         $response = $this->parserestclient->update
-                        (
-                        array
-                            (
-                            "objectId" => "Event",
-                            'object' => ['TagFriends' => [
-                                    "__op" => "Add",
-                                    "objects" => $TagFriends
-                                ],
-                                'TagFriendAuthorities' => [
-                                    "__op" => "Add",
-                                    "objects" => $TagFriendAuthorities
-                                ],
-                                'updatedAt' => [
-                                    "__type" => "Date",
-                                    "iso" => $date,
-                                ]],
-                                'where' => $event_id
-                        )
-                );
-        redirect('/events/event/'.$event_id, 'refresh');
+                (
+                array
+                    (
+                    "objectId" => "Event",
+                    'object' => ['TagFriends' => [
+                            "__op" => "Add",
+                            "objects" => $TagFriends
+                        ],
+                        'TagFriendAuthorities' => [
+                            "__op" => "Add",
+                            "objects" => $TagFriendAuthorities
+                        ],
+                        'updatedAt' => [
+                            "__type" => "Date",
+                            "iso" => $date,
+                        ]],
+                    'where' => $event_id
+                )
+        );
+        redirect('/events/event/' . $event_id, 'refresh');
     }
-    
-    public function tag_user_group($group_id, $event_id){
+
+    public function tag_user_group($group_id, $event_id) {
         $TagFriends = array();
         $TagFriendAuthorities = array();
         $date = date(DateTime::ISO8601, time());
         $user_group = $this->parserestclient->query(
                 array(
                     "objectId" => "user_group",
-                    'query' => '{"objectId":"'.$group_id.'"}',
+                    'query' => '{"objectId":"' . $group_id . '"}',
                 )
-            );
+        );
         $user_group = json_decode(json_encode($user_group), true);
-        if(count($user_group) > 0){
-            if(isset($user_group[0]['users'])){
+        if (count($user_group) > 0) {
+            if (isset($user_group[0]['users'])) {
                 $users = $user_group[0]['users'];
                 $access_rights = $user_group[0]['access_rights'];
                 foreach ($users as $key => $value) {
@@ -467,13 +470,14 @@ $pdf->writeHTML($html, true, false, true, false, '');
                                     "__type" => "Date",
                                     "iso" => $date,
                                 ]],
-                                'where' => $event_id
+                            'where' => $event_id
                         )
                 );
             }
         }
-        redirect('/events/event/'.$event_id, 'refresh');
+        redirect('/events/event/' . $event_id, 'refresh');
     }
+
     public function deletedevents() {
         $data = new stdClass;
         $session_data = $this->session->userdata('logged_in');
@@ -495,6 +499,104 @@ $pdf->writeHTML($html, true, false, true, false, '');
             $this->load->view('default/events/deletedlist', $data);
         } else {
             $this->load->view('default/include/manage/v_login');
+        }
+    }
+
+    public function downloadMeta($id, $type) {
+        ob_clean();
+        $data = new stdClass();
+        $temp = $this->parserestclient->query
+                (
+                array
+                    (
+                    "objectId" => "EventComment",
+                    //'query'=>'{"deletedAt":null}',	
+                    //'query'=>'{"targetEvent":"'.$id.'"}'
+                    "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $id . '"}}'
+                )
+        );
+        $temp_activity = $this->parserestclient->query
+                (
+                array
+                    (
+                    "objectId" => "Post",
+                    //'query'=>'{"deletedAt":null}',	
+                    //'query'=>'{"targetEvent":"'.$id.'"}'
+                    "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $id . '"}}'
+                )
+        );
+        $temp_event = $this->parserestclient->query
+                (
+                array
+                    (
+                    "objectId" => "Event",
+                    //'query'=>'{"objectId":{"$all":"'.$id.'"}}',
+                    //'query'=>'{"deletedAt":null}',	
+                    'query' => '{"objectId":"' . $id . '"}'
+                //"query" =>  '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"'. $id . '","__op":"Add","objects":["totalCount","location"]}}'
+                )
+        );
+        $temp_special = $this->parserestclient->query
+                (
+                array
+                    (
+                    "objectId" => "Event",
+                    //'query'=>'{"objectId":{"$all":"'.$id.'"}}',
+                    //'query'=>'{"deletedAt":null}',	
+                    //'query'=>'{"objectId":"'.$id.'"}'
+                    "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $id . '","__op":"Add","objects":["totalCount","location"]}}'
+                )
+        );
+        $event = json_decode(json_encode($temp_event), true);
+        $data->eventComment = json_decode(json_encode($temp), true);
+        $data->eventActivity = json_decode(json_encode($temp_activity), true);
+        $data->event = $event; // json_decode(json_encode($temp_event), true);
+        $data->special = json_decode(json_encode($temp_special), true);
+        if ($type == 'pdf') {
+            $this->load->library('Pdf');
+            $pdf = new Pdf(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+            $pdf->preferences($pdf);
+            $pdf->AddPage();
+            $html = $this->load->view('default/events/pdfDownloadMeta', $data, true);
+
+// output the HTML content
+            $pdf->writeHTML($html, true, false, true, false, '');
+            $name = $event[0]['eventname'];
+            $pdf->Output("$name.pdf", 'I');
+            ob_end_clean();
+        } else if($type == 'xls'){
+            $name = $event[0]['eventname'];
+            $filename =  'Data-'.Date('YmdGis')."-Event.$type";
+//            echo $filename;exit;
+            header("Content-type: application/vnd-ms-excel");
+            header("Content-Disposition: attachment; filename=" . $filename);
+            echo $this->load->view('default/events/pdfDownloadMeta', $data, true);
+        }else{
+            $name = $event[0]['eventname'];
+            $eventActivity = array();
+            $posts = json_decode(json_encode($temp_activity), true);
+             $eventActivity[] = 'Creator,'.$event[0]['username'];
+             $eventActivity[] = 'Data Created,'.date('Y-m-d',strtotime($event[0]['createdAt']));
+             $eventActivity[] = 'Time Created,'.date('g:i A',strtotime($event[0]['createdAt']));
+             if(isset($event[0]['commenters'])) {
+                $eventActivity[] = 'Number of Participants,'.count($event[0]['commenters']);
+             }
+             $eventActivity[] = 'Tagged Friends, '.count(implode(",",$event[0]['TagFriends']));
+             $eventActivity[] = 'Number of Activity Sheets,'.count($eventActivity);
+             $eventActivity[] = 'Title of Activity Sheet,'.$event[0]['eventname'];
+            $eventActivity[] = 'Date,Time,Title,Location,Description';
+            foreach ($posts as $post){
+                $eventActivity[] = date('Y-m-d',strtotime($post['createdAt'])).','.date('g:i A',strtotime($post['createdAt'])).','.$post['title'].','.$post['countryLatLong'].','.$post['description'];
+            }
+            header('Content-Type: application/excel');
+            header('Content-Disposition: attachment; filename="'.$name.'.csv"');
+            
+            $fp = fopen('php://output', 'w');
+            foreach ( $eventActivity as $line ) {
+                $val = explode(",", $line);
+                fputcsv($fp, $val);
+            }
+            fclose($fp);
         }
     }
 

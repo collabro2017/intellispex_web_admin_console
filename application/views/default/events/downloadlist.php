@@ -1,6 +1,8 @@
 <html lang="en">
 	<head>		
-		<link href="<?php echo base_url('public') ?>/css/datatable.css" rel="stylesheet" />	
+		<link href="<?php echo base_url('public') ?>/css/datatable.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
+    <link rel="stylesheet" href="<?php echo base_url('public') ?>/css/events.css" />	
 	</head>
 	<?php $this->load->view('default/head/console_page.php'); ?>
 	<body class="login-layout admin-body">
@@ -13,7 +15,6 @@
             background-color: #ffffff;
         }
     </style>
-  	
 	<div class="container-fluid" id="main-container">
         
 		<div id="main-content">
@@ -43,7 +44,8 @@
                     <tr><td>Date</td><td><?php echo date('Y-m-d',strtotime($eventActivity[$i]['createdAt'])); ?></td></tr>
                     <tr><td>Time</td><td><?php echo date('g:i A',strtotime($eventActivity[$i]['createdAt'])); ?></td></tr>
                     <tr><td>Title</td><td><?php echo $eventActivity[$i]['title']; ?></td></tr>
-                    <tr><td>Desctiption</td><td><?php echo $eventActivity[$i]['description']; ?></td></tr>
+                    <tr><td>Location</td><td><?php echo $eventActivity[$i]['countryLatLong']; ?></td></tr>
+                    <tr><td>Description</td><td><?php echo $eventActivity[$i]['description']; ?></td></tr>
                     
                 <?php } ?>
             </table>
@@ -59,7 +61,8 @@
                     <tr><td>Date</td><td><?php echo date('Y-m-d',time($eventActivity[$i]['createdAt'])); ?></td></tr>
                     <tr><td>Time</td><td><?php echo date('g:i A',time($eventActivity[$i]['createdAt'])); ?></td></tr>
                     <tr><td>Title</td><td><?php echo $eventActivity[$i]['title']; ?></td></tr>
-                    <tr><td>Desctiption</td><td><?php echo $eventActivity[$i]['description']; ?></td></tr>
+                    <tr><td>Location</td><td><?php echo $eventActivity[$i]['countryLatLong']; ?></td></tr>
+                    <tr><td>Description</td><td><?php echo $eventActivity[$i]['description']; ?></td></tr>
                      
                 <?php } ?>
             </table>
@@ -67,8 +70,55 @@
         </div>
         <div class="span2"><br><br><br><br>
             <button onclick="window.print();" class="btn btn-small btn-primary menu-button">Export</button><br><br>
-            <button onclick="" class="btn btn-small btn-primary menu-button">Save</button><br><br>
+            <button id="show_option" class="btn btn-small btn-primary menu-button">Save</button><br><br>
             <button onclick="" class="btn btn-small btn-primary menu-button">Analyse</button><br><br>
             <button onclick="" class="btn btn-small btn-primary menu-button">Select Metadata</button><br><br>
+            <a href="<?php echo base_url(); ?>events/index" class="btn btn-small btn-primary menu-button">
+                Back to Event Viewer
+            </a><br><br>
+            <a href="<?php echo base_url(); ?>manage/console_menu" class="btn btn-small btn-primary menu-button">
+                Console Menu
+            </a><br><br>
         </div>
     </div>
+            </div>
+
+        <?php $this->load->view('default/footer/console_page.php'); ?>
+    <div style="clear:both; height: 20px"></div>
+    <div id="download_metadata" class="modal">
+           <div class="modal-header">
+                    <span id="close" class="close">&times;</span>
+                    <h2 id="headingComment">Download Metadata</h2>
+                </div>
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <a class="btn btn-small btn-primary btn-info" href="<?php echo base_url();?>events/downloadMeta/<?php echo $event[0]['objectId']; ?>/pdf">
+                        PDF
+                    </a>
+                     <a class="btn btn-small btn-primary btn-info" href="<?php echo base_url();?>events/downloadMeta/<?php echo $event[0]['objectId']; ?>/xls">
+                        Excel
+                    </a>
+                     <a class="btn btn-small btn-primary btn-info" href="<?php echo base_url();?>events/downloadMeta/<?php echo $event[0]['objectId']; ?>/csv">
+                        CSV
+                    </a>
+                </div>
+                <div class="modal-footer">
+                    <div style="float:right">
+                        <button type="button" class="btn btn-small btn-primary btnMetaClose" style="float:left;margin-right:20px;" >Close</button>
+                    </div>
+                    <div style="clear:both"></div>
+                </div>
+        </div>
+    <script src="http://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
+        
+    <script>
+        $('.btnMetaClose').on('click', function () {
+            $('#download_metadata').fadeOut();
+        });
+        $('#show_option').on('click', function () {
+            $('#download_metadata').fadeIn();
+        });
+        $('#close').on('click', function () {
+            $('#download_metadata').fadeOut();
+        });
+    </script>

@@ -34,9 +34,6 @@
             background-color: #2e3192;
             color:#FFF;
         }
-        .btn-primary{
-            padding: 2px 20px !important;
-        }
     </style>
     <body class="login-layout admin-body">
         <?php $this->load->view('default/nav/console_page.php'); ?>
