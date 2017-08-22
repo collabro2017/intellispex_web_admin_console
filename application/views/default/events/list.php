@@ -71,8 +71,10 @@
 											<b>User:</b> <?php echo $val['username'] ?><br>
 										</td>
 										<td>
-											<button onclick="metadataevents('<?php echo $val['objectId']; ?>');">Download Metadata</button><br><br>
-											<button onclick="window.print();">Download PDF</button>									
+											<button class="btn btn-small btn-primary btn-info" onclick="metadataevents('<?php echo $val['objectId']; ?>');">Download Metadata</button><br><br>
+											<a class="btn btn-small btn-primary btn-info" href="<?php echo base_url();?>events/downloadMeta/<?php echo $val['objectId']; ?>/pdf">
+                                                                                        Download PDF
+                                                                                        </a>
 										</td>
 									</tr>
 									<?php
