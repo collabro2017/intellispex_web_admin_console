@@ -348,7 +348,7 @@
 					  		<div class="row">
 					  			<div class="span2"></div>
 					  			<div class="span8" style="text-align: center;" >
-					  				<a class="btn btn-small btn-primary menu-button" href="<?php echo base_url(); ?>manage/clientmanagementconsole" style="width:100%;">Client Management Console</a>
+					  				<a class="btn btn-small btn-primary menu-button" href="<?php echo base_url(); ?>manage/clientmanagementconsole">Client Management Console</a>
 					  			</div>					  			
 					  		</div>					  		
 					  	<?php
