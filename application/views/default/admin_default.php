@@ -25,6 +25,16 @@
 	<link rel="stylesheet" href="<?php echo base_url('public') ?>/assets/css/ace.min.css" />
 	<link rel="stylesheet" href="<?php echo base_url('public') ?>/assets/css/ace-responsive.min.css" />
 	<link rel="stylesheet" href="<?php echo base_url('public') ?>/css/main.css" />
+        <link href="<?php echo base_url('public') ?>/css/datatable.css" rel="stylesheet" />	
+
+        <style>
+                #DataTables_Table_0_wrapper{
+                        margin:auto;
+                }
+                #main-container{
+                        margin-top:10%;
+                }
+        </style>
 	<!--[if lt IE 9]>
 	  <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
 	<![endif]-->
@@ -693,8 +703,9 @@
 						  <?php endif; ?>
 						  <?php if (isset($client_setup)): 
                                                       ?>
-							<table>
-							  <tr>
+                                                        <table class="table table-striped events-table" id="table_data">
+							  <thead>
+                                                            <tr>
 								<th>Client</th>
 								<th>Date Established</th>
 								<th>Status</th>
@@ -702,7 +713,9 @@
 								<th>Email</th>
 								<th>Edit</th>
 								<th>Add Associate Users</th>
-							  </tr>
+                                                            </tr>
+							  </thead>
+                                                          <tbody>
 							  <?php foreach ($client as $value): ?>
 								<tr>
 								  <td><?php echo $value['username'] ?></td>
@@ -720,6 +733,7 @@
 								  <td><a class=" btn btn-small btn-primary" href="<?php echo base_url(); ?>manage/add_associate_users/<?php echo $value['objectId']; ?>">Add Associate Users</a></td>
 								</tr>
 							  <?php endforeach; ?>
+                                                          </tbody>
 							</table>
                                                         <div style="clear:both"></div>
 						  <?php endif; ?>
@@ -875,7 +889,11 @@
 
   <!-- inline scripts related to this page -->
 
-  <script type="text/javascript">
+ <script src="<?php echo base_url('public') ?>/js/datatable.js"></script>
+	
+	<script type="text/javascript">		
+		
+		$('#table_data').DataTable();	
 
 	function show_box(id) {
 		$('.widget-box.visible').removeClass('visible');
