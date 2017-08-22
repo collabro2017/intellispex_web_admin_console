@@ -135,7 +135,22 @@
                                                             </p>
                                                         </div>
                                                         <div style="background: #eee;margin: 0;padding: 10px;" class="span9">
-                                                            <div style="float:left;width: 90%;"><p><?php echo $post->description; ?></p></div>
+                                                            <div style="float:left;width: 90%;">
+                                                                <?php
+                                                                $commenter = $post->user;
+                                                                $user_details = $this->parserestclient->query(array(
+                                                                    "objectId" => "_User",
+                                                                    'query' => '{"deletedAt":null,"objectId":"' . $commenter->objectId . '"}',
+                                                                        )
+                                                                );
+                                                                $user_details = json_decode(json_encode($user_details), true);
+                                                                ?>
+                                                                <p><b>By:  <?php
+                                                                if (isset($user_details[0]['username'])):
+                                                                    echo $user_details[0]['username'] . ": ";
+                                                                endif;
+                                                                ?></b> </p>
+                                                                <p><?php echo $post->description; ?></p></div>
                                                             <div style="float:right;">
                                                                 <a  href="javascript:updatePost('<?php echo $post->objectId; ?>')" style="background: transparent; border: none; font-size: 15px;color:#000;"> <i class="fa fa-pencil"></i> </a> 
                                                                 <a  href="javascript:deletPost('<?php echo $post->objectId; ?>');" style="background: transparent; border: none; font-size: 15px;color:#000;"> <i class="fa fa-remove"></i> </a> 
