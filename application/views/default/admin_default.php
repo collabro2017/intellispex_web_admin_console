@@ -510,7 +510,7 @@
 									<div class="span12">
 										<a class=" btn btn-small btn-primary menu-button menu-logout-button" href="<?php echo base_url(); ?>manage/logout">Logout</a>
 										<div class="clear"></div>
-										<a class=" btn btn-small btn-primary menu-button menu-logout-button" href="#">Print</a>
+										<a class=" btn btn-small btn-primary menu-button menu-logout-button" onclick="window.print();" href="#">Print</a>
 										<div class="clear"></div>
 										<a class=" btn btn-small btn-primary menu-button menu-logout-button" href="#">Share PDF Report</a>
 									</div>
