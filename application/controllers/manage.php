@@ -106,6 +106,10 @@ class manage extends CI_Controller_EX {
                 )
         );
         $users = json_decode(json_encode($temp), true);
+        if(!isset($users[0])){
+            $this->form_validation->set_message('check_database', 'Invalid username or password');
+            return false;
+        }
         $current_user = $users[0];
         $mongoRolerId = $current_user['user_type']['objectId'];
         $result = $this->M_user->login($username, $password, $mongoRolerId);
@@ -489,29 +493,6 @@ class manage extends CI_Controller_EX {
         $session_data = $this->session->userdata('logged_in');
         //var_dump($session_data);exit();
         $role = $session_data['role'];
-
-//    print_r($users);exit;
-//    $date = date(DateTime::ISO8601, time());
-//    foreach ($users as $user){
-//        print_r($user);continue;
-//        print_r($this->parserestclient->update
-//        (
-//                array
-//                (
-//                        "objectId" => "_User",
-//                        'object' => [ 'updatedAt' =>  [
-//                                        "__type" => "Date",
-//                                        "iso" => $date, 
-//                                       ],'user_type' => [
-//                                        "__type" => "Pointer",
-//                                        "className" =>"_Role",
-//                                        "objectId" => "XVr1sAmAQl"
-//                                        ] ],
-//					'where' => $user['objectId']
-//                        )
-//        ));
-//    }
-//    exit;
         $data = new stdClass;
         if ($role == 1) {
             $function_name = "CLIENT ADMINISTRATOR CONSOLE MENU";
