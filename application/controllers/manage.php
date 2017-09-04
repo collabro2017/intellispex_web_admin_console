@@ -559,6 +559,22 @@ class manage extends CI_Controller_EX {
         $data = new stdClass;
         $function_name = "CLIENT MANAGEMENT DASHBOARD";
         $data->back = TRUE;
+        $admin = $this->parserestclient->query(
+                        array(
+                            "objectId" => "_User",
+                            'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"aDiZnlW1AX"}}',
+                        )
+                    );
+         $users = $this->parserestclient->query(
+                        array(
+                            "objectId" => "_User",
+                            'query' => '{"deletedAt":null}',
+                            'count' => '1',
+                            'limit' => '1000000'
+                        )
+                    );
+        $data->admin_count = count($admin);
+        $data->user_count = count($users)-$data->admin_count;
         $data->statistics = "Usage Statistics";
         $this->check_login($data, $function_name);
     }
