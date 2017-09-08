@@ -631,74 +631,39 @@ class manage extends CI_Controller_EX {
         if ($this->input->post('submit')) {
             $this->form_validation->set_rules('name', 'User Name', 'required|trim');
             if ($this->form_validation->run()) {
-                $name = $this->input->post('name');
-                $Firstname = $this->input->post('Firstname');
-                $LastName = $this->input->post('LastName');
-                $Gender = $this->input->post('Gender');
-                $company = $this->input->post('company');
-                $country = $this->input->post('country');
-                $address1 = $this->input->post('address1');
-                $password = $this->input->post('password');
-                $city = $this->input->post('city');
-                $province = $this->input->post('province');
-                $postal = $this->input->post('postal');
-                $phone = $this->input->post('phone_number');
-                $mobile = $this->input->post('mobile');
                 $email = $this->input->post('email');
-                $client_mongo_role = $this->m_user->getMongoRoleById(3);
-                $client_mongo_role = $client_mongo_role->mongodb_role_id;
-                $session_data = $this->session->userdata('logged_in');
-                $mongodb_id = $session_data['mongodb_id'];
-                $date = date(DateTime::ISO8601, time());
-                $response = $this->parserestclient->create
-                        (
-                        array
-                            (
-                            "objectId" => "_User",
-                            'object' => ['username' => "$name", 'password' => "$password", 'email' => "$email", 'email' => "$email",
-                                'Firstname' => "$Firstname",
-                                'LastName' => "$LastName",
-                                'Gender' => "$Gender",
-                                'company' => "$company",
-                                'country' => "$country",
-                                'phone' => "$phone",
-                                'loginType' => 'email',
-                                'telephone' => "$phone",
-                                'emailVerified' => TRUE,
-                                'city' => "$city",
-                                'zipcode' => "$postal",
-                                'phone' => "$mobile",
-                                'state' => "$province",
-                                'Status' => true,
-                                'createdAt' => [
-                                    "__type" => "Date",
-                                    "iso" => $date,
-                                ], 'user_type' => [
-                                    "__type" => "Pointer",
-                                    "className" => "_Role",
-                                    "objectId" => "XVr1sAmAQl"
-                                ], 'created_by' => [
-                                    "__type" => "Pointer",
-                                    "className" => "_User",
-                                    "objectId" => "$mongodb_id"
-                                ], 'associated_with' => [
-                                    "__type" => "Pointer",
-                                    "className" => "_User",
-                                    "objectId" => "$client_id"
-                                ]]
-                        )
-                );
-                if (isset($response->objectId))
+                $response = $this->m_user->create_client_user($client_id);
+                if (isset($response->objectId)){
                     if($session_data['role'] == 3){
                         redirect('/manage/user_management/', 'refresh');
                     }else{
                         redirect('/manage/add_associate_users/'.$client_id, 'refresh');
                     }
-//                    $data->message = "Create sucessfully";
-                else
-                    if($response == -1){
-                        $data->message = $_SESSION['error'];
+                }else{
+                    $temp = $this->parserestclient->query
+                                (
+                                array
+                                    (
+                                    "objectId" => "_User",
+                                    'query' => '{"email":"' . $email . '"}',
+                                )
+                        );
+                        $user = json_decode(json_encode($temp), true);
+                    if (isset($user[0]['email'])) {
+                        $response = $this->m_user->edit_client_user($client_id,$user[0]['objectId']);
                     }
+                    if(isset($response->updatedAt)){
+                        if($session_data['role'] == 3){
+                            redirect('/manage/user_management/', 'refresh');
+                        }else{
+                            redirect('/manage/add_associate_users/'.$client_id, 'refresh');
+                        }
+                    }else{
+                        if($response == -1){
+                            $data->message = $_SESSION['error'];
+                        }
+                    }
+                }
             }
         }
         $this->check_login($data, $function_name);
@@ -776,62 +741,63 @@ class manage extends CI_Controller_EX {
         if ($this->input->post('submit')) {
             $this->form_validation->set_rules('name', 'User Name', 'required|trim');
             if ($this->form_validation->run()) {
-                $name = $this->input->post('name');
-                $Firstname = $this->input->post('Firstname');
-                $LastName = $this->input->post('LastName');
-                $Gender = $this->input->post('Gender');
-                $company = $this->input->post('company');
-                $country = $this->input->post('country');
-                $address1 = $this->input->post('address1');
-                $password = $this->input->post('password');
-                $city = $this->input->post('city');
-                $province = $this->input->post('province');
-                $postal = $this->input->post('postal');
-                $phone = $this->input->post('phone_number');
-                $mobile = $this->input->post('mobile');
-                $email = $this->input->post('email');
-                $client_mongo_role = $this->m_user->getMongoRoleById(3);
-                $client_mongo_role = $client_mongo_role->mongodb_role_id;
-                $date = date(DateTime::ISO8601, time());
-                $response = $this->parserestclient->update
-                        (
-                        array
-                            (
-                            "objectId" => "_User",
-                            'object' => ['username' => "$name", 'password' => "$password", 'email' => "$email", 'email' => "$email",
-                                'Firstname' => "$Firstname",
-                                'LastName' => "$LastName",
-                                'Gender' => "$Gender",
-                                'company' => "$company",
-                                'country' => "$country",
-                                'phone' => "$phone",
-                                'loginType' => 'email',
-                                'telephone' => "$phone",
-                                'emailVerified' => TRUE,
-                                'city' => "$city",
-                                'zipcode' => "$postal",
-                                'phone' => "$mobile",
-                                'state' => "$province",
-                                'Status' => true,
-                                'createdAt' => [
-                                    "__type" => "Date",
-                                    "iso" => $date,
-                                ], 'user_type' => [
-                                    "__type" => "Pointer",
-                                    "className" => "_Role",
-                                    "objectId" => "XVr1sAmAQl"
-                                ], 'created_by' => [
-                                    "__type" => "Pointer",
-                                    "className" => "_User",
-                                    "objectId" => "$mongodb_id"
-                                ], 'associated_with' => [
-                                    "__type" => "Pointer",
-                                    "className" => "_User",
-                                    "objectId" => "$client_id"
-                                ]],
-                                'where' => $user_id
-                        )
-                );
+//                $name = $this->input->post('name');
+//                $Firstname = $this->input->post('Firstname');
+//                $LastName = $this->input->post('LastName');
+//                $Gender = $this->input->post('Gender');
+//                $company = $this->input->post('company');
+//                $country = $this->input->post('country');
+//                $address1 = $this->input->post('address1');
+//                $password = $this->input->post('password');
+//                $city = $this->input->post('city');
+//                $province = $this->input->post('province');
+//                $postal = $this->input->post('postal');
+//                $phone = $this->input->post('phone_number');
+//                $mobile = $this->input->post('mobile');
+//                $email = $this->input->post('email');
+//                $client_mongo_role = $this->m_user->getMongoRoleById(3);
+//                $client_mongo_role = $client_mongo_role->mongodb_role_id;
+//                $date = date(DateTime::ISO8601, time());
+//                $response = $this->parserestclient->update
+//                        (
+//                        array
+//                            (
+//                            "objectId" => "_User",
+//                            'object' => ['username' => "$name", 'password' => "$password", 'email' => "$email", 'email' => "$email",
+//                                'Firstname' => "$Firstname",
+//                                'LastName' => "$LastName",
+//                                'Gender' => "$Gender",
+//                                'company' => "$company",
+//                                'country' => "$country",
+//                                'phone' => "$phone",
+//                                'loginType' => 'email',
+//                                'telephone' => "$phone",
+//                                'emailVerified' => TRUE,
+//                                'city' => "$city",
+//                                'zipcode' => "$postal",
+//                                'phone' => "$mobile",
+//                                'state' => "$province",
+//                                'Status' => true,
+//                                'createdAt' => [
+//                                    "__type" => "Date",
+//                                    "iso" => $date,
+//                                ], 'user_type' => [
+//                                    "__type" => "Pointer",
+//                                    "className" => "_Role",
+//                                    "objectId" => "XVr1sAmAQl"
+//                                ], 'created_by' => [
+//                                    "__type" => "Pointer",
+//                                    "className" => "_User",
+//                                    "objectId" => "$mongodb_id"
+//                                ], 'associated_with' => [
+//                                    "__type" => "Pointer",
+//                                    "className" => "_User",
+//                                    "objectId" => "$client_id"
+//                                ]],
+//                                'where' => $user_id
+//                        )
+//                );
+                $response = $this->m_user->edit_client_user($client_id,$user_id);
                 if (isset($response->updatedAt))
                     if($session_data['role'] == 3){
                         redirect('/manage/user_management/', 'refresh');
