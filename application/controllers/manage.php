@@ -524,7 +524,31 @@ class manage extends CI_Controller_EX {
     }
 
     public function app_administrator_user() {
-        
+        $data = new stdClass;
+        $session_data = $this->session->userdata('logged_in');
+        if ($session_data){
+            $data->username = $session_data['username'];
+            $data->role = $session_data['role'];
+            $data->id = $session_data['id'];
+            $data->function_name = "Review User";
+            $user = $this->parserestclient->query
+                    (
+                    array
+                        (
+                        "objectId" => "_User",
+                        'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"XVr1sAmAQl"}}',
+                        'limit' => '1000000',
+                        'order' => '-Status'
+                    )
+            );
+            $data->associated_user = json_decode(json_encode($user), true); 
+            $data->back = TRUE;
+            $data->associated_setup = TRUE;
+            $data->role = $session_data['role'];
+            $this->load->view('default/users/review', $data);
+        }else{
+            $this->load->view('default/include/manage/v_login');
+        }
     }
 
     public function manage_report_content() {
