@@ -133,7 +133,7 @@
                                                             array
                                                                 (
                                                                 "objectId" => "_User",
-                                                                'query' => '{"deletedAt":null,"associated_with":{"__type":"Pointer","className":"_User","objectId":"'.$value['associated_with']['objectId'].'"}}',
+                                                                'query' => '{"deletedAt":null,"objectId":"'.$value['associated_with']['objectId'].'"}',
                                                             )
                                                     );
                                             $client_admin = $client_admin[0];
