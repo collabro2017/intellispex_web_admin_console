@@ -1022,16 +1022,113 @@ class manage extends CI_Controller_EX {
     }
     
     public function events() {
+       $day = $this->input->get('day');
+        $asc = $this->input->get('asc');
+
         $data = new stdClass;
         $session_data = $this->session->userdata('logged_in');
+        $data->asc = ($asc == FALSE) ? 0 : 1;
+        $asc = ($asc == FALSE) ? 'createdAt' : '-createdAt';
         if ($session_data) {
             $data->username = $session_data['username'];
             $data->role = $session_data['role'];
             $data->id = $session_data['id'];
             $data->function_name = "VIEW OR EDIT GLOBAL EVENT LIST";
+            $user = $this->parserestclient->query(
+                    array(
+                        "objectId" => "_User",
+                        'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"XVr1sAmAQl"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $session_data['mongodb_id'] . '"}}',
+                    )
+            );
+            $associated_user = json_decode(json_encode($user), true);
+            $events = array();
+            $eventId = array();
+            $i = 0;
+            $userArr = array();
+            foreach ($associated_user as $user) {
+                $userArr[] = $user['objectId'];
+            }
+            $temp = $this->parserestclient->query
+                    (
+                    array
+                        (
+                        "objectId" => "Event",
+                        'query' => '{"deletedAt":null, "TagFriends":{"$all":' . json_encode($userArr, true) . '}}',
+                        'order' => $asc
+                    )
+            );
+            $event = json_decode(json_encode($temp), true);
+            foreach ($event as $ev) {
+                if (isset($ev)) {
+                    if ($i == 0) {
+                        $eventId[$i] = $ev['objectId'];
+                        $events[$i] = $ev;
+                    } elseif (!(in_array($ev['objectId'], $eventId))) {
+                        $eventId[$i] = $ev['objectId'];
+                        $events[$i] = $ev;
+                    }
+                }
+                $i++;
+            }
+            if (!$day || is_null($day) || $day == "") {
+                $temp = $this->parserestclient->query
+                        (
+                        array
+                            (
+                            "objectId" => "Event",
+                            'query' => '{"deletedAt":null}',
+                            'order' => $asc
+                        )
+                );
+                $event = json_decode(json_encode($temp), true);
+                foreach ($event as $ev) {
+                    if (isset($ev)) {
+                        if ($i == 0) {
+                            $eventId[$i] = $ev['objectId'];
+                            $events[$i] = $ev;
+                        } elseif (!(in_array($ev['objectId'], $eventId))) {
+                            $eventId[$i] = $ev['objectId'];
+                            $events[$i] = $ev;
+                        }
+                    }
+                    $i++;
+                }
+                $data->day = "";
+            } else {
+                $dayCount = -1 * $day;
+                $date = date(DateTime::ISO8601, strtotime($dayCount . ' days'));
+                //$date = "2017-06-01T00:00:00.000Z";
+                $temp = $this->parserestclient->query
+                        (
+                        array
+                            (
+                            "objectId" => "Event",
+                            //'query'=>'{"deletedAt":null, "createdAt":{"$gt":"'.$date.'"}}',
+                            'query' => '{"deletedAt":null, "user":{"__type":"Pointer", "createdAt":{"$gte":{"__type":"Date","iso":"' . $date . '"}}}',
+                            'order' => $asc,
+                        //'limit'=>intval($day),
+                        )
+                );
+                $event = json_decode(json_encode($temp), true);
+                foreach ($event as $ev) {
+                    if (isset($ev)) {
+                        if ($i == 0) {
+                            $eventId[$i] = $ev['objectId'];
+                            $events[$i] = $ev;
+                        } elseif (!(in_array($ev['objectId'], $eventId))) {
+                            $eventId[$i] = $ev['objectId'];
+                            $events[$i] = $ev;
+                        }
+                    }
+                    $i++;
+                }
+                $data->day = $day;
+            }
+
+            $data->info = $events; //json_decode(json_encode($temp), true);
             $this->load->view('default/events/list', $data);
         } else {
-            $this->check_login();
+            $this->load->view('default/include/manage/v_login');
         }
     }
 

@@ -264,7 +264,6 @@
             </div>
             <div style="clear:both"></div>
         </div>
-    </form>
 </div>
 
 <?php $this->load->view('default/footer/console_page.php'); ?>
