@@ -82,7 +82,7 @@
                                                         $user_details = json_decode(json_encode($user_details), true);
                                                         ?>
                                                         <div style="float:left">
-                                                            <span style="color: #444"><?php echo date('g:i A', strtotime($event->createdAt)) . ": "; ?></span>
+                                                            <span style="color: #444"><?php echo date('d-m-Y', strtotime($event->createdAt)) . ": "; ?></span>
                                                             <b>
                                                                 <?php
                                                                 if (isset($user_details[0]['username'])):
@@ -211,7 +211,7 @@
                                                                             );
                                                                             $user_details = json_decode(json_encode($user_details), true);
                                                                             ?>
-                                                                            <p><?php echo date('g:i A', strtotime($data->createdAt)); ?>: <?php
+                                                                            <p><?php echo date('d-m-Y', strtotime($data->createdAt)); ?>: <?php
                                                                                 if (isset($user_details[0]['username'])): 
                                                                                     echo '<b>'.$user_details[0]['username'].': </b>';
                                                                                 endif;
