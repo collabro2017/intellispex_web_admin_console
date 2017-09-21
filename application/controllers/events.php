@@ -19,7 +19,117 @@ class events extends CI_Controller_EX {
         $this->load->library('grocery_CRUD');
         $this->load->library('ParseRestClient');
     }
+    
+    public function admin_content_search() {
+        $keyword = $this->input->post('keyword');
+        $temp = $this->parserestclient->query
+                    (
+                    array
+                        (
+                        "objectId" => "Event",
+                        'query' => '{"deletedAt":null,"description":{"$regex":"'.$keyword.'"}}'
+                    )
+            );
+        $results = array();
+        $i = 0;
+        $events = json_decode(json_encode($temp), true);
+        foreach ($events as $event){
+            $commenter = $event->user;
+            $results[$i]['objectId'] = $event['objectId'];
+            $results[$i]['createdAt'] = date('Y-m-d g:i A', strtotime($event['createdAt']));
+            $results[$i]['eventname'] = $event['eventname'];
+            $results[$i]['username'] = $event['username']; 
+            $results[$i]['description'] = $event['description']; 
+            $results[$i]['content_type'] = 'Event'; 
+            $results[$i]['user_id'] = $commenter->objectId; 
+            $results[$i]['post_id'] = ''; 
+            $i++;
+        }
+        $event_posts = json_decode(json_encode($this->parserestclient->query
+                                (
+                                array
+                                    (
+                                    "objectId" => "Post",
+                                    "query" => '{"description":{"$regex":"'.$keyword.'"}}',
+                                    'order' => 'postType'
+                                )
+                        ), true));
+        if(count($event_posts) > 0){
+            foreach ($event_posts as $post){
+                $targetEvent = $post->targetEvent;
 
+                $commenter = $post->user;
+                $user_details = $this->parserestclient->query(array(
+                    "objectId" => "_User",
+                    'query' => '{"deletedAt":null,"objectId":"' . $commenter->objectId . '"}',
+                        )
+                );
+                $user_details = json_decode(json_encode($user_details), true);
+                $results[$i]['objectId'] = $targetEvent->objectId;
+                $results[$i]['createdAt'] = date('Y-m-d g:i A', strtotime($post->createdAt));
+                $results[$i]['eventname'] = $post->title;
+                if (isset($user_details[0]['username'])){
+                    $results[$i]['username'] = $user_details[0]['username'];
+                }else{
+                    $results[$i]['username'] = '';
+                }
+                
+                $results[$i]['user_id'] = $commenter->objectId; 
+                $results[$i]['description'] = $post->description; 
+                $results[$i]['content_type'] = 'Event, Post'; 
+                $results[$i]['post_id'] = $post->objectId; 
+                $i++;
+            }
+        }
+        $data = new stdClass();
+        $data->page = 'admin_content_search';
+        $data->event = $results;// json_decode(json_encode($temp), true);
+        $html = $this->load->view('default/events/admin_content_result', $data, true);
+        echo $html;
+    }
+    public function FlaggedEvents() {
+        $day = $this->input->get('day');
+       $asc = $this->input->get('asc');
+
+       $data = new stdClass;
+       $session_data = $this->session->userdata('logged_in');
+       $data->asc = ($asc == FALSE) ? 0 : 1;
+       $asc = ($asc == FALSE) ? 'createdAt' : '-createdAt';
+       if ($session_data) {
+           $data->username = $session_data['username'];
+           $data->role = $session_data['role'];
+           $data->id = $session_data['id'];
+           $data->function_name = "Managed Report Content";
+            $temp = $this->parserestclient->query
+                    (
+                    array
+                        (
+                        "objectId" => "Event",
+                        'query' => '{"deletedAt":null}',
+                        'order' => $asc
+                    )
+            );
+            $i = 0;
+            $event = json_decode(json_encode($temp), true);
+            foreach ($event as $ev) {
+                if (isset($ev)) {
+                    if ($i == 0) {
+                        $eventId[$i] = $ev['objectId'];
+                        $events[$i] = $ev;
+                    } elseif (!(in_array($ev['objectId'], $eventId))) {
+                        $eventId[$i] = $ev['objectId'];
+                        $events[$i] = $ev;
+                    }
+                }
+                $i++;
+            }
+             $data->info = $events; //json_decode(json_encode($temp), true);
+            $this->load->view('default/events/reported_content', $data);
+        } else {
+            $this->load->view('default/include/manage/v_login');
+        }
+    }
+    
     public function index() {
         $day = $this->input->get('day');
         $asc = $this->input->get('asc');
@@ -274,6 +384,65 @@ class events extends CI_Controller_EX {
                     'objectId' => $post_id
                 )
         );
+    }
+    public function userdelete() {
+        $user_id = $this->input->post('user_id');
+        $this->parserestclient->delete
+                (
+                array
+                    (
+                    "className" => "_User",
+                    'objectId' => $user_id
+                )
+        );
+    }
+    
+    public function suspendUser() {
+        $user_id = $this->input->post('user_id');
+        $date = date('Y-m-d');
+        $this->parserestclient->update
+            (
+                array
+                (
+                    "objectId" => "_User",
+                    'object' => [ 'status' => FALSE],
+                            'where' => $val
+                )
+            );
+    }
+    
+    public function send_user_warning(){
+        $session_data = $this->session->userdata('logged_in');
+        $user_id = $this->input->post('user_id');
+        $user = $this->parserestclient->query(
+                array(
+                    "objectId" => "_User",
+                    'query' => '{"objectId":"'.$user_id.'"}',
+                )
+        );
+        $user = json_decode(json_encode($user), true);
+        $ci = get_instance();
+        $ci->load->library('email');
+        $config['protocol'] = "smtp";
+        $config['smtp_host'] = "ssl://smtp.gmail.com";
+        $config['smtp_port'] = "465";
+        $config['smtp_user'] = "test.IntelliSpeX@gmail.com";
+        $config['smtp_pass'] = "Test123456789";
+
+        $config['charset'] = "utf-8";
+        $config['mailtype'] = "html";
+        $config['newline'] = "\r\n";
+
+        $ci->email->initialize($config);
+        $ci->email->from($session_data['username']);
+        $ci->email->to($user->email);
+        $this->email->reply_to( $session_data['username']);
+        $ci->email->subject('Warning Message for prohibited text of your post.');
+        $message = 'Hi '.$user->username.", <br/>";
+        $message .= 'This is to notify that your post is having some prohibited words. Please becareful this is final warning. <br/>Next time we will take serious action against you. <br/><br/>';
+        $message .= 'Regards,<br/>';
+        $message .= 'IntelliSpeX';
+        $ci->email->message($message);
     }
 
     public function comments() {

@@ -106,7 +106,7 @@ class manage extends CI_Controller_EX {
                 )
         );
         $users = json_decode(json_encode($temp), true);
-        if(!isset($users[0])){
+        if (!isset($users[0])) {
             $this->form_validation->set_message('check_database', 'Invalid username or password');
             return false;
         }
@@ -151,12 +151,12 @@ class manage extends CI_Controller_EX {
         $data->back = TRUE;
         $session_data = $this->session->userdata('logged_in');
         $user = $this->parserestclient->query(
-                    array(
-                        "objectId" => "_User",
-                        'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"XVr1sAmAQl"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $session_data['mongodb_id'] . '"}}',
-                    )
-                );
-        $associated_user = json_decode(json_encode($user), true); 
+                array(
+                    "objectId" => "_User",
+                    'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"XVr1sAmAQl"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $session_data['mongodb_id'] . '"}}',
+                )
+        );
+        $associated_user = json_decode(json_encode($user), true);
         $userArr = array();
         foreach ($associated_user as $user) {
             $userArr[] = $user['objectId'];
@@ -166,7 +166,7 @@ class manage extends CI_Controller_EX {
                 array
                     (
                     "objectId" => "Event",
-                    'query' => '{"TagFriends":{"$all":'.json_encode($userArr,true).'}}',
+                    'query' => '{"TagFriends":{"$all":' . json_encode($userArr, true) . '}}',
                 )
         );
         $events = json_decode(json_encode($temp), true);
@@ -185,7 +185,7 @@ class manage extends CI_Controller_EX {
                     } else {
                         $viewOnly = $viewOnly + 1;
                     }
-                    $totalData = $totalData+1;
+                    $totalData = $totalData + 1;
                 }
             }
         }
@@ -194,8 +194,8 @@ class manage extends CI_Controller_EX {
         $data->viewOnly = $viewOnly;
         $totalEvents = count($events);
         $data->totalData = $totalData;
-        if($totalData > 0){
-            $data->averageData = ceil($totalData/$totalEvents);
+        if ($totalData > 0) {
+            $data->averageData = ceil($totalData / $totalEvents);
         }
         $this->check_login($data, $function_name);
     }
@@ -526,7 +526,7 @@ class manage extends CI_Controller_EX {
     public function app_administrator_user() {
         $data = new stdClass;
         $session_data = $this->session->userdata('logged_in');
-        if ($session_data){
+        if ($session_data) {
             $data->username = $session_data['username'];
             $data->role = $session_data['role'];
             $data->id = $session_data['id'];
@@ -541,18 +541,122 @@ class manage extends CI_Controller_EX {
                         'order' => '-Status'
                     )
             );
-            $data->associated_user = json_decode(json_encode($user), true); 
+            $data->associated_user = json_decode(json_encode($user), true);
             $data->back = TRUE;
             $data->associated_setup = TRUE;
             $data->role = $session_data['role'];
             $this->load->view('default/users/review', $data);
-        }else{
+        } else {
             $this->load->view('default/include/manage/v_login');
         }
     }
 
     public function manage_report_content() {
-        
+        $session_data = $this->session->userdata('logged_in');
+        //var_dump($session_data);exit();
+        $role = $session_data['role'];
+        $data = new stdClass;
+        $function_name = "Manage Flagged/Reported Content";
+        $data->links = array('admin_content_search' => 'Administrator Content Search', 'FlaggedEvents' => 'User Flagged Content Queue',
+            'logout' => 'Logout');
+        $this->check_login($data, $function_name);
+    }
+
+    public function admin_content_search() {
+        $data = new stdClass;
+        $session_data = $this->session->userdata('logged_in');
+        if ($session_data) {
+            $data->username = $session_data['username'];
+            $data->role = $session_data['role'];
+            $data->id = $session_data['id'];
+            $data->function_name = "Review User";
+            $this->load->view('default/events/admin_content_search', $data);
+        } else {
+            $this->load->view('default/include/manage/v_login');
+        }
+    }
+
+    public function FlaggedEvents() {
+        $data = new stdClass;
+        $session_data = $this->session->userdata('logged_in');
+        if ($session_data) {
+            $data->username = $session_data['username'];
+            $data->role = $session_data['role'];
+            $data->id = $session_data['id'];
+            $data->function_name = "Review User";
+            $temp = $this->parserestclient->query
+                    (
+                    array
+                        (
+                        "objectId" => "Event",
+                        'query' => '{"deletedAt":null}'
+                    )
+            );
+            $results = array();
+            $i = 0;
+            $events = json_decode(json_encode($temp), true);
+            foreach ($events as $event) {
+                if (isset($event['eventBadgeFlag'])) {
+                    if (count($event['eventBadgeFlag']) > 0) {
+                        if (isset($event['user'])) {
+                            $commenter = $event['user'];
+                            $results[$i]['objectId'] = $event['objectId'];
+                            $results[$i]['createdAt'] = date('Y-m-d g:i A', strtotime($event['createdAt']));
+                            $results[$i]['eventname'] = $event['eventname'];
+                            $results[$i]['username'] = $event['username'];
+                            $results[$i]['description'] = $event['description'];
+                            $results[$i]['content_type'] = 'Event';
+                            $results[$i]['user_id'] = $commenter['objectId'];
+                            $results[$i]['post_id'] = '';
+                            $i++;
+                        }
+                    }
+                }
+            }
+            $event_posts = json_decode(json_encode($this->parserestclient->query
+                                    (
+                                    array
+                                        (
+                                        "objectId" => "Post",
+                                        "query" => '{"description":{"$ne":"" }}',
+                                        'order' => 'postType'
+                                    )
+                            ), true));
+            if (count($event_posts) > 0) {
+                foreach ($event_posts as $post) {
+                    if (isset($post->usersBadgeFlag)) {
+                        if (count($post->usersBadgeFlag) > 0) {
+                            $targetEvent = $post->targetEvent;
+                            $commenter = $post->user;
+                            $user_details = $this->parserestclient->query(array(
+                                "objectId" => "_User",
+                                'query' => '{"deletedAt":null,"objectId":"' . $commenter->objectId . '"}',
+                                    )
+                            );
+                            $user_details = json_decode(json_encode($user_details), true);
+                            $results[$i]['objectId'] = $targetEvent->objectId;
+                            $results[$i]['createdAt'] = date('Y-m-d g:i A', strtotime($post->createdAt));
+                            $results[$i]['eventname'] = $post->title;
+                            if (isset($user_details[0]['username'])) {
+                                $results[$i]['username'] = $user_details[0]['username'];
+                            } else {
+                                $results[$i]['username'] = '';
+                            }
+                            $results[$i]['user_id'] = $commenter->objectId;
+                            $results[$i]['description'] = $post->description;
+                            $results[$i]['content_type'] = 'Event, Post';
+                            $results[$i]['post_id'] = $post->objectId;
+                            $i++;
+                        }
+                    }
+                }
+            }
+            $data->page = 'FlaggedEvents';
+            $data->event = $results; // json_decode(json_encode($temp), true);
+            $this->load->view('default/events/Flagged', $data);
+        } else {
+            $this->load->view('default/include/manage/v_login');
+        }
     }
 
     public function dashboard() {
@@ -560,21 +664,21 @@ class manage extends CI_Controller_EX {
         $function_name = "APPLICATION ADMINISTRATOR - DASHBOARD";
         $data->back = TRUE;
         $admin = $this->parserestclient->query(
-                        array(
-                            "objectId" => "_User",
-                            'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"aDiZnlW1AX"}}',
-                        )
-                    );
-         $users = $this->parserestclient->query(
-                        array(
-                            "objectId" => "_User",
-                            'query' => '{"deletedAt":null}',
-                            'count' => '1',
-                            'limit' => '1000000'
-                        )
-                    );
+                array(
+                    "objectId" => "_User",
+                    'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"aDiZnlW1AX"}}',
+                )
+        );
+        $users = $this->parserestclient->query(
+                array(
+                    "objectId" => "_User",
+                    'query' => '{"deletedAt":null}',
+                    'count' => '1',
+                    'limit' => '1000000'
+                )
+        );
         $data->admin_count = count($admin);
-        $data->user_count = count($users)-$data->admin_count;
+        $data->user_count = count($users) - $data->admin_count;
         $data->statistics = "Global Application Statistics";
         $this->check_login($data, $function_name);
     }
@@ -584,21 +688,21 @@ class manage extends CI_Controller_EX {
         $function_name = "CLIENT MANAGEMENT DASHBOARD";
         $data->back = TRUE;
         $admin = $this->parserestclient->query(
-                        array(
-                            "objectId" => "_User",
-                            'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"aDiZnlW1AX"}}',
-                        )
-                    );
-         $users = $this->parserestclient->query(
-                        array(
-                            "objectId" => "_User",
-                            'query' => '{"deletedAt":null}',
-                            'count' => '1',
-                            'limit' => '1000000'
-                        )
-                    );
+                array(
+                    "objectId" => "_User",
+                    'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"aDiZnlW1AX"}}',
+                )
+        );
+        $users = $this->parserestclient->query(
+                array(
+                    "objectId" => "_User",
+                    'query' => '{"deletedAt":null}',
+                    'count' => '1',
+                    'limit' => '1000000'
+                )
+        );
         $data->admin_count = count($admin);
-        $data->user_count = count($users)-$data->admin_count;
+        $data->user_count = count($users) - $data->admin_count;
         $data->statistics = "Usage Statistics";
         $this->check_login($data, $function_name);
     }
@@ -608,17 +712,17 @@ class manage extends CI_Controller_EX {
         $data = new stdClass;
         $function_name = "APPLICATION ADMINISTRATOR - CLIENT SET UP AND MAINTENANCE";
         $data->back = TRUE;
-        if(isset($session_data['role'])){
-            $data->role =  $session_data['role'];
+        if (isset($session_data['role'])) {
+            $data->role = $session_data['role'];
         }
         $data->links = array('create_client' => 'Create a Client', 'edit_client' => 'Manage / Edit a Client', 'events' => 'View or Edit Global Event List', 'logout' => 'Logout');
         $this->check_login($data, $function_name);
     }
-    
+
     public function review_users() {
         $data = new stdClass;
         $session_data = $this->session->userdata('logged_in');
-        if ($session_data){
+        if ($session_data) {
             $data->username = $session_data['username'];
             $data->role = $session_data['role'];
             $data->id = $session_data['id'];
@@ -633,15 +737,16 @@ class manage extends CI_Controller_EX {
                         'order' => '-Status'
                     )
             );
-            $data->associated_user = json_decode(json_encode($user), true); 
+            $data->associated_user = json_decode(json_encode($user), true);
             $data->back = TRUE;
             $data->associated_setup = TRUE;
             $data->role = $session_data['role'];
             $this->load->view('default/users/review', $data);
-        }else{
+        } else {
             $this->load->view('default/include/manage/v_login');
         }
     }
+
     public function add_user($client_id) {
 
         $data = new stdClass;
@@ -650,40 +755,40 @@ class manage extends CI_Controller_EX {
         $data->back = TRUE;
         $data->create_associated_user = TRUE;
         $data->message = '';
-        
+
         $data->client_id = $client_id;
         if ($this->input->post('submit')) {
             $this->form_validation->set_rules('name', 'User Name', 'required|trim');
             if ($this->form_validation->run()) {
                 $email = $this->input->post('email');
                 $response = $this->m_user->create_client_user($client_id);
-                if (isset($response->objectId)){
-                    if($session_data['role'] == 3){
+                if (isset($response->objectId)) {
+                    if ($session_data['role'] == 3) {
                         redirect('/manage/user_management/', 'refresh');
-                    }else{
-                        redirect('/manage/add_associate_users/'.$client_id, 'refresh');
+                    } else {
+                        redirect('/manage/add_associate_users/' . $client_id, 'refresh');
                     }
-                }else{
+                } else {
                     $temp = $this->parserestclient->query
+                            (
+                            array
                                 (
-                                array
-                                    (
-                                    "objectId" => "_User",
-                                    'query' => '{"email":"' . $email . '"}',
-                                )
-                        );
-                        $user = json_decode(json_encode($temp), true);
+                                "objectId" => "_User",
+                                'query' => '{"email":"' . $email . '"}',
+                            )
+                    );
+                    $user = json_decode(json_encode($temp), true);
                     if (isset($user[0]['email'])) {
-                        $response = $this->m_user->edit_client_user($client_id,$user[0]['objectId']);
+                        $response = $this->m_user->edit_client_user($client_id, $user[0]['objectId']);
                     }
-                    if(isset($response->updatedAt)){
-                        if($session_data['role'] == 3){
+                    if (isset($response->updatedAt)) {
+                        if ($session_data['role'] == 3) {
                             redirect('/manage/user_management/', 'refresh');
-                        }else{
-                            redirect('/manage/add_associate_users/'.$client_id, 'refresh');
+                        } else {
+                            redirect('/manage/add_associate_users/' . $client_id, 'refresh');
                         }
-                    }else{
-                        if($response == -1){
+                    } else {
+                        if ($response == -1) {
                             $data->message = $_SESSION['error'];
                         }
                     }
@@ -692,61 +797,59 @@ class manage extends CI_Controller_EX {
         }
         $this->check_login($data, $function_name);
     }
-    
-    
-    
-    public function userdelete(){
+
+    public function userdelete() {
         $deletelist = $this->input->post('deletelist');
         $date = date('Y-m-d');
-        foreach($deletelist as $val){
+        foreach ($deletelist as $val) {
             //$data = array('deletedAt' => '2017-07-03T00:00:00','objectId'=>$val);
             $this->parserestclient->update
-            (
-                array
-                (
-                    "objectId" => "_User",
-                    'object' => [ 'deletedAt' => "$date"],
-                            'where' => $val
-                )
+                    (
+                    array
+                        (
+                        "objectId" => "_User",
+                        'object' => ['deletedAt' => "$date"],
+                        'where' => $val
+                    )
             );
         }
     }
-    
-    public function userenable(){
+
+    public function userenable() {
         $deletelist = $this->input->post('deletelist');
         $date = date('Y-m-d');
-        foreach($deletelist as $val){
+        foreach ($deletelist as $val) {
             //$data = array('deletedAt' => '2017-07-03T00:00:00','objectId'=>$val);
             $this->parserestclient->update
-            (
-                array
-                (
-                    "objectId" => "_User",
-                    'object' => [ 'Status' => true],
-                            'where' => $val
-                )
+                    (
+                    array
+                        (
+                        "objectId" => "_User",
+                        'object' => ['Status' => true],
+                        'where' => $val
+                    )
             );
         }
     }
-    
-    public function useredisable(){
+
+    public function useredisable() {
         $deletelist = $this->input->post('deletelist');
         $date = date('Y-m-d');
-        foreach($deletelist as $val){
+        foreach ($deletelist as $val) {
             //$data = array('deletedAt' => '2017-07-03T00:00:00','objectId'=>$val);
             $this->parserestclient->update
-            (
-                array
-                (
-                    "objectId" => "_User",
-                    'object' => [ 'Status' => false],
-                            'where' => $val
-                )
+                    (
+                    array
+                        (
+                        "objectId" => "_User",
+                        'object' => ['Status' => false],
+                        'where' => $val
+                    )
             );
         }
     }
-    
-    public function edit_user($user_id,$client_id) {
+
+    public function edit_user($user_id, $client_id) {
         $session_data = $this->session->userdata('logged_in');
         $mongodb_id = $session_data['mongodb_id'];
         $this->load->model('m_user');
@@ -757,7 +860,7 @@ class manage extends CI_Controller_EX {
                 array
                     (
                     "objectId" => "_User",
-                    'query' => '{"objectId":"'.$user_id.'"}',
+                    'query' => '{"objectId":"' . $user_id . '"}',
                 )
         );
         $data = new stdClass;
@@ -821,14 +924,13 @@ class manage extends CI_Controller_EX {
 //                                'where' => $user_id
 //                        )
 //                );
-                $response = $this->m_user->edit_client_user($client_id,$user_id);
+                $response = $this->m_user->edit_client_user($client_id, $user_id);
                 if (isset($response->updatedAt))
-                    if($session_data['role'] == 3){
+                    if ($session_data['role'] == 3) {
                         redirect('/manage/user_management/', 'refresh');
-                    }else{
-                        redirect('/manage/add_associate_users/'.$client_id, 'refresh');
-                    }
-                else
+                    } else {
+                        redirect('/manage/add_associate_users/' . $client_id, 'refresh');
+                    } else
                     $data->message = "Updated have issues";
             }
         }
@@ -838,10 +940,11 @@ class manage extends CI_Controller_EX {
         $data->edit_associated_user = TRUE;
         $this->check_login($data, $function_name);
     }
-    public function add_associate_users($id) { 
+
+    public function add_associate_users($id) {
         $data = new stdClass;
         $session_data = $this->session->userdata('logged_in');
-        if ($session_data){
+        if ($session_data) {
             $data->username = $session_data['username'];
             $data->role = $session_data['role'];
             $data->id = $session_data['id'];
@@ -854,7 +957,7 @@ class manage extends CI_Controller_EX {
                         'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"XVr1sAmAQl"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $id . '"}}',
                     )
             );
-            $data->associated_user = json_decode(json_encode($user), true); 
+            $data->associated_user = json_decode(json_encode($user), true);
             $user_group = $this->parserestclient->query
                     (
                     array
@@ -863,62 +966,62 @@ class manage extends CI_Controller_EX {
                         'query' => '{"created_by":{"__type":"Pointer","className":"_User","objectId":"' . $id . '"}}',
                     )
             );
-            $data->user_group = json_decode(json_encode($user_group), true); 
+            $data->user_group = json_decode(json_encode($user_group), true);
             $data->back = TRUE;
             $data->associated_setup = TRUE;
             $data->client_id = $id;
             $data->role = $session_data['role'];
             $this->load->view('default/users/list', $data);
-        }else{
+        } else {
             $this->load->view('default/include/manage/v_login');
         }
 //        $this->check_login($data, $function_name);
     }
-    
-    public function create_grpup($client_id){
+
+    public function create_grpup($client_id) {
         $group_name = $this->input->post('group_name');
         $access_rights = $this->input->post('access_rights');
-        $users = $this->input->post('users');        
+        $users = $this->input->post('users');
         $session_data = $this->session->userdata('logged_in');
         $mongodb_id = $session_data['mongodb_id'];
         $date = date(DateTime::ISO8601, time());
         $response = $this->parserestclient->create
-                        (
-                        array
-                            (
-                            "objectId" => "user_group",
-                            'object' => ['group_name' => "$group_name", 'access_rights' => "$access_rights",
-                                'createdAt' => [
-                                    "__type" => "Date",
-                                    "iso" => $date,
-                                ], 'users' => [
-                                    "__op" => "AddUnique",
-                                    "objects" => $users
-                                ], 'created_by' => [
-                                    "__type" => "Pointer",
-                                    "className" => "_User",
-                                    "objectId" => "$mongodb_id"
-                                ], 'client_id' => [
-                                    "__type" => "Pointer",
-                                    "className" => "_User",
-                                    "objectId" => "$client_id"
-                                ]]
-                        )
-                );
-        if($session_data['role'] == 3){
+                (
+                array
+                    (
+                    "objectId" => "user_group",
+                    'object' => ['group_name' => "$group_name", 'access_rights' => "$access_rights",
+                        'createdAt' => [
+                            "__type" => "Date",
+                            "iso" => $date,
+                        ], 'users' => [
+                            "__op" => "AddUnique",
+                            "objects" => $users
+                        ], 'created_by' => [
+                            "__type" => "Pointer",
+                            "className" => "_User",
+                            "objectId" => "$mongodb_id"
+                        ], 'client_id' => [
+                            "__type" => "Pointer",
+                            "className" => "_User",
+                            "objectId" => "$client_id"
+                        ]]
+                )
+        );
+        if ($session_data['role'] == 3) {
             redirect('/manage/user_management/', 'refresh');
-        }else{
-            redirect('/manage/add_associate_users/'.$client_id, 'refresh');
+        } else {
+            redirect('/manage/add_associate_users/' . $client_id, 'refresh');
         }
     }
 
     public function user_management() {
-        
+
         $session_data = $this->session->userdata('logged_in');
         $mongodb_id = $session_data['mongodb_id'];
         $this->add_associate_users($mongodb_id);
     }
-    
+
     public function edit($id) {
         $this->load->model('m_user');
         $this->load->model('m_client');
@@ -982,14 +1085,14 @@ class manage extends CI_Controller_EX {
                                     "className" => "_User",
                                     "objectId" => "$mongodb_id"
                                 ]],
-                                'where' => $id
+                            'where' => $id
                         )
                 );
                 if (isset($response->updatedAt)) {
                     $data->message = "Edit sucessfully";
                     redirect('manage/edit/' . $id, 'refresh');
-                } else{
-                    if($response == -1){
+                } else {
+                    if ($response == -1) {
                         $data->message = $_SESSION['error'];
                     }
                 }
@@ -997,8 +1100,7 @@ class manage extends CI_Controller_EX {
         }
         $this->check_login($data, $function_name);
     }
-    
-    
+
     public function edit_client() {
         $this->load->model('m_user');
         $client_mongo_role = $this->m_user->getMongoRoleById(3);
@@ -1020,9 +1122,9 @@ class manage extends CI_Controller_EX {
         $data->client_setup = TRUE;
         $this->check_login($data, $function_name);
     }
-    
+
     public function events() {
-       $day = $this->input->get('day');
+        $day = $this->input->get('day');
         $asc = $this->input->get('asc');
 
         $data = new stdClass;
