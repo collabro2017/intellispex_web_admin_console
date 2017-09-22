@@ -27,7 +27,7 @@ class events extends CI_Controller_EX {
                     array
                         (
                         "objectId" => "Event",
-                        'query' => '{"deletedAt":null,"description":{"$regex":"'.$keyword.'"}}'
+                        'query' => '{"deletedAt":null,"openStatus":1,"description":{"$regex":"'.$keyword.'"}}'
                     )
             );
         $results = array();
@@ -105,7 +105,7 @@ class events extends CI_Controller_EX {
                     array
                         (
                         "objectId" => "Event",
-                        'query' => '{"deletedAt":null}',
+                        'query' => '{"deletedAt":null,"openStatus":1}',
                         'order' => $asc
                     )
             );
@@ -162,7 +162,7 @@ class events extends CI_Controller_EX {
                     array
                         (
                         "objectId" => "Event",
-                        'query' => '{"deletedAt":null, "TagFriends":{"$all":' . json_encode($userArr, true) . '}}',
+                        'query' => '{"deletedAt":null,"openStatus":1, "TagFriends":{"$all":' . json_encode($userArr, true) . '}}',
                         'order' => $asc
                     )
             );
@@ -187,7 +187,7 @@ class events extends CI_Controller_EX {
                             array
                                 (
                                 "objectId" => "Event",
-                                'query' => '{"deletedAt":null, "user":{"__type":"Pointer","className":"_User","objectId":"' . $user['objectId'] . '"}}',
+                                'query' => '{"deletedAt":null,"openStatus":1, "user":{"__type":"Pointer","className":"_User","objectId":"' . $user['objectId'] . '"}}',
                                 'order' => $asc
                             )
                     );
@@ -218,7 +218,7 @@ class events extends CI_Controller_EX {
                                 (
                                 "objectId" => "Event",
                                 //'query'=>'{"deletedAt":null, "createdAt":{"$gt":"'.$date.'"}}',
-                                'query' => '{"deletedAt":null, "user":{"__type":"Pointer","className":"_User","objectId":"' . $user['objectId'] . '"}, "createdAt":{"$gte":{"__type":"Date","iso":"' . $date . '"}}}',
+                                'query' => '{"deletedAt":null,"openStatus":1, "user":{"__type":"Pointer","className":"_User","objectId":"' . $user['objectId'] . '"}, "createdAt":{"$gte":{"__type":"Date","iso":"' . $date . '"}}}',
                                 'order' => $asc,
                             //'limit'=>intval($day),
                             )
@@ -261,7 +261,7 @@ class events extends CI_Controller_EX {
                                     array
                                         (
                                         "objectId" => "Event",
-                                        "query" => '{"deletedAt":null,"objectId":"' . $event_id . '"}'
+                                        "query" => '{"deletedAt":null,"openStatus":1,"objectId":"' . $event_id . '"}'
                                     )
                             ), true));
             $data->event_comment = json_decode(json_encode($this->parserestclient->query
@@ -315,7 +315,7 @@ class events extends CI_Controller_EX {
                     array
                         (
                         "objectId" => "Event",
-                        'object' => ['deletedAt' => "$data"],
+                        'object' => ['deletedAt' => "$data",'openStatus' => 0 ],
                         'where' => $val
                     )
             );

@@ -589,7 +589,7 @@ class manage extends CI_Controller_EX {
                     array
                         (
                         "objectId" => "Event",
-                        'query' => '{"deletedAt":null}'
+                        'query' => '{"deletedAt":null,"openStatus":1}'
                     )
             );
             $results = array();
