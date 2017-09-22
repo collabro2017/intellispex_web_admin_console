@@ -196,7 +196,7 @@
 <script type="text/javascript">
 
     $('#table_data').DataTable( {
-        "order": [[ 1, "desc" ]]
+        "order": [[ 1, "asc" ]]
     } );
     
 </script>
