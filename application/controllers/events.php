@@ -19,30 +19,30 @@ class events extends CI_Controller_EX {
         $this->load->library('grocery_CRUD');
         $this->load->library('ParseRestClient');
     }
-    
+
     public function admin_content_search() {
         $keyword = $this->input->post('keyword');
         $temp = $this->parserestclient->query
+                (
+                array
                     (
-                    array
-                        (
-                        "objectId" => "Event",
-                        'query' => '{"deletedAt":null,"openStatus":1,"description":{"$regex":"'.$keyword.'"}}'
-                    )
-            );
+                    "objectId" => "Event",
+                    'query' => '{"deletedAt":null,"openStatus":1,"description":{"$regex":"' . $keyword . '"}}'
+                )
+        );
         $results = array();
         $i = 0;
         $events = json_decode(json_encode($temp), true);
-        foreach ($events as $event){
+        foreach ($events as $event) {
             $commenter = $event->user;
             $results[$i]['objectId'] = $event['objectId'];
             $results[$i]['createdAt'] = date('Y-m-d g:i A', strtotime($event['createdAt']));
             $results[$i]['eventname'] = $event['eventname'];
-            $results[$i]['username'] = $event['username']; 
-            $results[$i]['description'] = $event['description']; 
-            $results[$i]['content_type'] = 'Event'; 
-            $results[$i]['user_id'] = $commenter->objectId; 
-            $results[$i]['post_id'] = ''; 
+            $results[$i]['username'] = $event['username'];
+            $results[$i]['description'] = $event['description'];
+            $results[$i]['content_type'] = 'Event';
+            $results[$i]['user_id'] = $commenter->objectId;
+            $results[$i]['post_id'] = '';
             $i++;
         }
         $event_posts = json_decode(json_encode($this->parserestclient->query
@@ -50,12 +50,12 @@ class events extends CI_Controller_EX {
                                 array
                                     (
                                     "objectId" => "Post",
-                                    "query" => '{"description":{"$regex":"'.$keyword.'"}}',
+                                    "query" => '{"description":{"$regex":"' . $keyword . '"}}',
                                     'order' => 'postType'
                                 )
                         ), true));
-        if(count($event_posts) > 0){
-            foreach ($event_posts as $post){
+        if (count($event_posts) > 0) {
+            foreach ($event_posts as $post) {
                 $targetEvent = $post->targetEvent;
 
                 $commenter = $post->user;
@@ -68,38 +68,39 @@ class events extends CI_Controller_EX {
                 $results[$i]['objectId'] = $targetEvent->objectId;
                 $results[$i]['createdAt'] = date('Y-m-d g:i A', strtotime($post->createdAt));
                 $results[$i]['eventname'] = $post->title;
-                if (isset($user_details[0]['username'])){
+                if (isset($user_details[0]['username'])) {
                     $results[$i]['username'] = $user_details[0]['username'];
-                }else{
+                } else {
                     $results[$i]['username'] = '';
                 }
-                
-                $results[$i]['user_id'] = $commenter->objectId; 
-                $results[$i]['description'] = $post->description; 
-                $results[$i]['content_type'] = 'Event, Post'; 
-                $results[$i]['post_id'] = $post->objectId; 
+
+                $results[$i]['user_id'] = $commenter->objectId;
+                $results[$i]['description'] = $post->description;
+                $results[$i]['content_type'] = 'Event, Post';
+                $results[$i]['post_id'] = $post->objectId;
                 $i++;
             }
         }
         $data = new stdClass();
         $data->page = 'admin_content_search';
-        $data->event = $results;// json_decode(json_encode($temp), true);
+        $data->event = $results; // json_decode(json_encode($temp), true);
         $html = $this->load->view('default/events/admin_content_result', $data, true);
         echo $html;
     }
+
     public function FlaggedEvents() {
         $day = $this->input->get('day');
-       $asc = $this->input->get('asc');
+        $asc = $this->input->get('asc');
 
-       $data = new stdClass;
-       $session_data = $this->session->userdata('logged_in');
-       $data->asc = ($asc == FALSE) ? 0 : 1;
-       $asc = ($asc == FALSE) ? 'createdAt' : '-createdAt';
-       if ($session_data) {
-           $data->username = $session_data['username'];
-           $data->role = $session_data['role'];
-           $data->id = $session_data['id'];
-           $data->function_name = "Managed Report Content";
+        $data = new stdClass;
+        $session_data = $this->session->userdata('logged_in');
+        $data->asc = ($asc == FALSE) ? 0 : 1;
+        $asc = ($asc == FALSE) ? 'createdAt' : '-createdAt';
+        if ($session_data) {
+            $data->username = $session_data['username'];
+            $data->role = $session_data['role'];
+            $data->id = $session_data['id'];
+            $data->function_name = "Managed Report Content";
             $temp = $this->parserestclient->query
                     (
                     array
@@ -123,13 +124,13 @@ class events extends CI_Controller_EX {
                 }
                 $i++;
             }
-             $data->info = $events; //json_decode(json_encode($temp), true);
+            $data->info = $events; //json_decode(json_encode($temp), true);
             $this->load->view('default/events/reported_content', $data);
         } else {
             $this->load->view('default/include/manage/v_login');
         }
     }
-    
+
     public function index() {
         $day = $this->input->get('day');
         $asc = $this->input->get('asc');
@@ -315,7 +316,7 @@ class events extends CI_Controller_EX {
                     array
                         (
                         "objectId" => "Event",
-                        'object' => ['deletedAt' => "$data",'openStatus' => 0 ],
+                        'object' => ['deletedAt' => "$data", 'openStatus' => 0],
                         'where' => $val
                     )
             );
@@ -385,6 +386,7 @@ class events extends CI_Controller_EX {
                 )
         );
     }
+
     public function userdelete() {
         $user_id = $this->input->post('user_id');
         $this->parserestclient->delete
@@ -396,28 +398,28 @@ class events extends CI_Controller_EX {
                 )
         );
     }
-    
+
     public function suspendUser() {
         $user_id = $this->input->post('user_id');
         $date = date('Y-m-d');
         $this->parserestclient->update
-            (
-                array
                 (
+                array
+                    (
                     "objectId" => "_User",
-                    'object' => [ 'status' => FALSE],
-                            'where' => $val
+                    'object' => ['status' => FALSE],
+                    'where' => $val
                 )
-            );
+        );
     }
-    
-    public function send_user_warning(){
+
+    public function send_user_warning() {
         $session_data = $this->session->userdata('logged_in');
         $user_id = $this->input->post('user_id');
         $user = $this->parserestclient->query(
                 array(
                     "objectId" => "_User",
-                    'query' => '{"objectId":"'.$user_id.'"}',
+                    'query' => '{"objectId":"' . $user_id . '"}',
                 )
         );
         $user = json_decode(json_encode($user), true);
@@ -436,9 +438,9 @@ class events extends CI_Controller_EX {
         $ci->email->initialize($config);
         $ci->email->from($session_data['username']);
         $ci->email->to($user->email);
-        $this->email->reply_to( $session_data['username']);
+        $this->email->reply_to($session_data['username']);
         $ci->email->subject('Warning Message for prohibited text of your post.');
-        $message = 'Hi '.$user->username.", <br/>";
+        $message = 'Hi ' . $user->username . ", <br/>";
         $message .= 'This is to notify that your post is having some prohibited words. Please becareful this is final warning. <br/>Next time we will take serious action against you. <br/><br/>';
         $message .= 'Regards,<br/>';
         $message .= 'IntelliSpeX';
@@ -544,6 +546,56 @@ class events extends CI_Controller_EX {
                             "className" => "Event",
                             "objectId" => "$targetEvent"
                         ]]
+                )
+        );
+        redirect('/events/event/' . $targetEvent, 'refresh');
+    }
+
+    public function add_post_comment($post_id) {
+        $date = date(DateTime::ISO8601, time());
+        $Comments = $this->input->post('Comments');
+        $Commenter = $this->input->post('Commenter');
+        $targetEvent = $this->input->post('targetEvent');
+        $response = $this->parserestclient->create
+                (
+                array
+                    (
+                    "objectId" => "Comments",
+                    'object' => ['Comments' => "$Comments",
+                        'createdAt' => [
+                            "__type" => "Date",
+                            "iso" => $date,
+                        ], 'Commenter' => [
+                            "__type" => "Pointer",
+                            "className" => "_User",
+                            "objectId" => "$Commenter"
+                        ], 'postMedia' => [
+                            "__type" => "Pointer",
+                            "className" => "Post",
+                            "objectId" => "$post_id"
+                        ]]
+                )
+        );
+        $comments = $response->objectId;
+        $commentsArray[] = [ "type" => "Pointer",
+    "className" => "Comments",
+    "objectId" => "$comments"
+  ];
+        $users[] = $comments;
+        $response = $this->parserestclient->update
+                (
+                array
+                    (
+                    "objectId" => "Post",
+                    'object' => ['commentsArray' =>[
+                            "__op" => "Add",
+                            "objects" => $commentsArray
+                        ],
+                        'updatedAt' => [
+                            "__type" => "Date",
+                            "iso" => $date,
+                        ]],
+                    'where' => $post_id
                 )
         );
         redirect('/events/event/' . $targetEvent, 'refresh');
@@ -733,35 +785,35 @@ class events extends CI_Controller_EX {
             $name = $event[0]['eventname'];
             $pdf->Output("$name.pdf", 'I');
             ob_end_clean();
-        } else if($type == 'xls'){
+        } else if ($type == 'xls') {
             $name = $event[0]['eventname'];
-            $filename =  'Data-'.Date('YmdGis')."-Event.$type";
+            $filename = 'Data-' . Date('YmdGis') . "-Event.$type";
 //            echo $filename;exit;
             header("Content-type: application/vnd-ms-excel");
             header("Content-Disposition: attachment; filename=" . $filename);
             echo $this->load->view('default/events/pdfDownloadMeta', $data, true);
-        }else{
+        } else {
             $name = $event[0]['eventname'];
             $eventActivity = array();
             $posts = json_decode(json_encode($temp_activity), true);
-             $eventActivity[] = 'Creator,'.$event[0]['username'];
-             $eventActivity[] = 'Data Created,'.date('Y-m-d',strtotime($event[0]['createdAt']));
-             $eventActivity[] = 'Time Created,'.date('g:i A',strtotime($event[0]['createdAt']));
-             if(isset($event[0]['commenters'])) {
-                $eventActivity[] = 'Number of Participants,'.count($event[0]['commenters']);
-             }
-             $eventActivity[] = 'Tagged Friends, '.count(implode(",",$event[0]['TagFriends']));
-             $eventActivity[] = 'Number of Activity Sheets,'.count($eventActivity);
-             $eventActivity[] = 'Title of Activity Sheet,'.$event[0]['eventname'];
+            $eventActivity[] = 'Creator,' . $event[0]['username'];
+            $eventActivity[] = 'Data Created,' . date('Y-m-d', strtotime($event[0]['createdAt']));
+            $eventActivity[] = 'Time Created,' . date('g:i A', strtotime($event[0]['createdAt']));
+            if (isset($event[0]['commenters'])) {
+                $eventActivity[] = 'Number of Participants,' . count($event[0]['commenters']);
+            }
+            $eventActivity[] = 'Tagged Friends, ' . count(implode(",", $event[0]['TagFriends']));
+            $eventActivity[] = 'Number of Activity Sheets,' . count($eventActivity);
+            $eventActivity[] = 'Title of Activity Sheet,' . $event[0]['eventname'];
             $eventActivity[] = 'Date,Time,Title,Location,Description';
-            foreach ($posts as $post){
-                $eventActivity[] = date('Y-m-d',strtotime($post['createdAt'])).','.date('g:i A',strtotime($post['createdAt'])).','.$post['title'].','.$post['countryLatLong'].','.$post['description'];
+            foreach ($posts as $post) {
+                $eventActivity[] = date('Y-m-d', strtotime($post['createdAt'])) . ',' . date('g:i A', strtotime($post['createdAt'])) . ',' . $post['title'] . ',' . $post['countryLatLong'] . ',' . $post['description'];
             }
             header('Content-Type: application/excel');
-            header('Content-Disposition: attachment; filename="'.$name.'.csv"');
-            
+            header('Content-Disposition: attachment; filename="' . $name . '.csv"');
+
             $fp = fopen('php://output', 'w');
-            foreach ( $eventActivity as $line ) {
+            foreach ($eventActivity as $line) {
                 $val = explode(",", $line);
                 fputcsv($fp, $val);
             }

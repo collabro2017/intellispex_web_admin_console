@@ -90,14 +90,14 @@
                                                                 endif;
                                                                 ?>
                                                             </b>
-        <?php echo $data->Comments; ?>
+                                                            <?php echo $data->Comments; ?>
                                                         </div>
                                                         <div style="float:right">
                                                             <a  href="javascript:updateComment('<?php echo $data->objectId; ?>')" style="background: transparent; border: none; font-size: 15px;color:#000;"> <i class="fa fa-pencil"></i> </a> 
                                                             <a  href="javascript:deletComment('<?php echo $data->objectId; ?>');" style="background: transparent; border: none; font-size: 15px;color:#000;"> <i class="fa fa-remove"></i> </a> 
                                                         </div>
                                                         <div style="clear:both"></div>
-                                                        
+
                                                         <?php
                                                     }
                                                 }
@@ -131,7 +131,7 @@
                                                             }
                                                             ?>
                                                             <p>
-    <?php echo date('Y-m-d g:i A', strtotime($post->createdAt)); ?>
+                                                                <?php echo date('Y-m-d g:i A', strtotime($post->createdAt)); ?>
                                                             </p>
                                                         </div>
                                                         <div style="background: #eee;margin: 0;padding: 10px;" class="span9">
@@ -146,10 +146,10 @@
                                                                 $user_details = json_decode(json_encode($user_details), true);
                                                                 ?>
                                                                 <p><b>By:  <?php
-                                                                if (isset($user_details[0]['username'])):
-                                                                    echo $user_details[0]['username'] . ": ";
-                                                                endif;
-                                                                ?></b> </p>
+                                                                        if (isset($user_details[0]['username'])):
+                                                                            echo $user_details[0]['username'] . ": ";
+                                                                        endif;
+                                                                        ?></b> </p>
                                                                 <p><?php echo $post->description; ?></p></div>
                                                             <div style="float:right;">
                                                                 <a  href="javascript:updatePost('<?php echo $post->objectId; ?>')" style="background: transparent; border: none; font-size: 15px;color:#000;"> <i class="fa fa-pencil"></i> </a> 
@@ -173,7 +173,7 @@
                                                         $name = explode('.', basename($video->url));
                                                         $extension = $name['1'];
                                                         ?>
-        <?php if ($extension == 'mp4' || $extension == 'ogg') { ?>
+                                                        <?php if ($extension == 'mp4' || $extension == 'ogg') { ?>
                                                             <video name="<?php echo $post->title; ?>" style="width: 100%;" controls autoplay>
                                                                 <source src="<?php echo $video->url; ?>" type="video/<?php echo $extension; ?>" />
                                                                 Sorry, your browser doesn't support the video element.
@@ -188,50 +188,63 @@
                                                         <?php
                                                     }
                                                     ?>
+                                                    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+                                                    <script type="text/javascript">
+                                                            window.jQuery || document.write("<script src='assets/js/jquery-1.9.1.min.js'>\x3C/script>");
+                                                    </script>
                                                     <div style="clear:both"></div>
-                                                    <?php if (isset($post->commentsArray)) { ?>
+                                                        
                                                         <div style="width:80%;float: right;background: #eee;  border: 1px solid #b2b2b2;margin: 0;padding-left: 20px;">
-                                                                <h4>Comments</h4>
-                                                                <?php
-
-                                                                    $postComments = $post->commentsArray;
-                                                                    for ($i = 0; $i < count($postComments); $i++) {
-                                                                        $comment = $this->parserestclient->query(array(
-                                                                            "objectId" => "Comments",
-                                                                            'query' => '{"objectId":"' . $postComments[$i]->objectId . '"}',
-                                                                                )
-                                                                        );
-                                                                        $comments = json_decode(json_encode($comment));
-                                                                        foreach ($comments as $data) {
-                                                                            $commenter = $data->Commenter;
-                                                                            $user_details = $this->parserestclient->query(array(
-                                                                                "objectId" => "_User",
-                                                                                'query' => '{"deletedAt":null,"objectId":"' . $commenter->objectId . '"}',
-                                                                                    )
-                                                                            );
-                                                                            $user_details = json_decode(json_encode($user_details), true);
-                                                                            ?>
-                                                                            <p><?php echo date('d-m-Y', strtotime($data->createdAt)); ?>: <?php
-                                                                                if (isset($user_details[0]['username'])): 
-                                                                                    echo '<b>'.$user_details[0]['username'].': </b>';
-                                                                                endif;
-                                                                                ?>
-                                                                            <?php echo $data->Comments; ?>
-                                                                            </p>
-                                                                            <?php
-                                                                        }
-                                                                    }
+                                                            <div style="clear: both;height:20px;"></div>
+                                                            <a id="add_post_comment<?php echo $post->objectId; ?>" class="btn btn-small btn-primary"  href="javascript:void(0)" class="btn btn-small btn-primary menu-button"> Add </a> 
+                                                            <script>
+                                                                
+                                                                $('#add_post_comment<?php echo $post->objectId; ?>').on('click', function () {
+                                                                    $('#comment_form').attr('action','<?php echo base_url(); ?>events/add_post_comment/<?php echo $post->objectId; ?>')
+                                                                    $('#add_comment_modal').fadeIn();
+                                                                });
+                                                            </script>
+                                                            <?php
+                                                            if (isset($post->commentsArray)) {
                                                                 ?>
+                                                            <?php
+                                                            $postComments = $post->commentsArray;
+                                                            for ($i = 0; $i < count($postComments); $i++) {
+                                                                $comment = $this->parserestclient->query(array(
+                                                                    "objectId" => "Comments",
+                                                                    'query' => '{"objectId":"' . $postComments[$i]->objectId . '"}',
+                                                                        )
+                                                                );
+                                                                $comments = json_decode(json_encode($comment));
+                                                                foreach ($comments as $data) {
+                                                                    $commenter = $data->Commenter;
+                                                                    $user_details = $this->parserestclient->query(array(
+                                                                        "objectId" => "_User",
+                                                                        'query' => '{"deletedAt":null,"objectId":"' . $commenter->objectId . '"}',
+                                                                            )
+                                                                    );
+                                                                    $user_details = json_decode(json_encode($user_details), true);
+                                                                    ?>
+                                                                    <p><?php echo date('d-m-Y', strtotime($data->createdAt)); ?>: <?php
+                                                    if (isset($user_details[0]['username'])):
+                                                        echo '<b>' . $user_details[0]['username'] . ': </b>';
+                                                    endif;
+                                                                    ?>
+                                                                        <?php echo $data->Comments; ?>
+                                                                    </p>
+                                                                    <?php
+                                                                }
+                                                            } }
+                                                            ?>
                                                         </div>
                                                         <div style="clear:both"></div>
-                                                    <?php } ?>
                                                 </li>
                                                 <?php
                                             }
                                             ?>
                                         </ul>
                                     </div>
-<?php if (isset($event->audio)) { ?>
+                                    <?php if (isset($event->audio)) { ?>
                                         <div style="clear:both;height: 10px;"></div>
 
 
@@ -248,7 +261,7 @@
                                         <?php
                                     }
                                     ?>
-<?php if (isset($event->video)) { ?>
+                                    <?php if (isset($event->video)) { ?>
                                         <div style="clear:both;height: 10px;"></div>
 
 
@@ -258,7 +271,7 @@
                                             $name = explode('.', basename($video->url));
                                             $extension = $name['1'];
                                             ?>
-    <?php if ($extension == 'mp4' || $extension == 'ogg') { ?>
+                                            <?php if ($extension == 'mp4' || $extension == 'ogg') { ?>
                                                 <video style="width: 100%;" controls autoplay>
                                                     <source src="<?php echo $video->url; ?>" type="video/<?php echo $extension; ?>" />
                                                     Sorry, your browser doesn't support the video element.
@@ -278,7 +291,7 @@
                                             </video>
 
                                         </div>
-<?php } ?>
+                                    <?php } ?>
 
 
                                     <div style="clear:both;height:10px"></div>
@@ -298,7 +311,7 @@
                                                 Full Resolution PDF
                                             </a>
                                         </li>
-<?php if (count($associated_user) > 0) { ?>
+                                        <?php if (count($associated_user) > 0) { ?>
                                             <li class="list-group-item">
                                                 Users
                                                 <ul class="children">
@@ -323,7 +336,7 @@
                                                 </ul>
                                             </li>
                                         <?php } ?>
-<?php if (count($associated_user) > 0) { ?>
+                                        <?php if (count($associated_user) > 0) { ?>
                                             <li class="list-group-item">
                                                 User Group
                                                 <ul class="children">
@@ -343,7 +356,7 @@
                                                     ?>
                                                 </ul>
                                             </li>
-<?php } ?>
+                                        <?php } ?>
                                     </ul>
                                 </div>
                                 <div class="span2">
@@ -421,11 +434,11 @@
 
 
                     // When the user clicks anywhere outside of the create_group, close it
-        //            window.onclick = function (event) {
-        //                if (event.target == create_group) {
-        //                    create_group.style.display = "none";
-        //                }
-        //            }
+                    //            window.onclick = function (event) {
+                    //                if (event.target == create_group) {
+                    //                    create_group.style.display = "none";
+                    //                }
+                    //            }
                     // Create Group End
                 </script>
                 <?php
@@ -456,7 +469,7 @@
                         </div>
                         <div style="clear: both" class="col-sm-10">
                             <textarea style="width: 97%; height: 120px;" name="description" cols="10" rows="10">
-<?php echo $event->description; ?>
+                                <?php echo $event->description; ?>
                             </textarea>
                         </div>
                     </div>
@@ -499,6 +512,7 @@
                     <div style="float:right">
                         <input type="hidden" name="Commenter" value="<?php echo $current_user; ?>" />
                         <input type="hidden" name="commentId" id="commentId" value="" />
+                        <input type="hidden" name="postId" id="postId" value="" />
                         <input type="hidden" name="targetEvent" value="<?php echo $event->objectId; ?>" />
                         <button type="button" class="btn btn-small btn-primary btnCommentClose" style="float:left;margin-right:20px;" >Close</button>
                         <button type="submit"  id="btnComment" class="btn btn-small btn-primary">Add Comment</button>
@@ -554,250 +568,247 @@
         <script src="http://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
         <script src="<?php echo base_url('public') ?>/js/jquery.colorbox.js"></script>
         <script type="text/javascript">
-            $('.btnEventClose').on('click', function () {
-                $('#event_modal').fadeOut();
-            });
-            $('#add_event').on('click', function () {
-                $('#event_modal').fadeIn();
-            });
-            $('#close').on('click', function () {
-                $('#event_modal').fadeOut();
-            });
-
-            $('.btnCommentClose').on('click', function () {
-                $('#add_comment_modal').fadeOut();
-            });
-            $('#add_comment').on('click', function () {
-                $('#add_comment_modal').fadeIn();
-            });
-            $('#close').on('click', function () {
-                $('#add_comment_modal').fadeOut();
-            });
-
-            $('.btnPostClose').on('click', function () {
-                $('#update_post_modal').fadeOut();
-            });
-            $('#add_comment').on('click', function () {
-                $('#update_post_modal').fadeIn();
-            });
-            $('#close').on('click', function () {
-                $('#update_post_modal').fadeOut();
-            });
-            function deletevent() {
-                if (window.confirm("Are you sure want to delete selected event?")) {
-
-                    var deletelist = [];
-                    deletelist.push('<?php echo $event->objectId; ?>');
-                    $.post("<?php echo base_url(); ?>events/eventdelete", {deletelist: deletelist}, function (data) {
-                        //console.log(data);
-                        window.location.href = "<?php echo base_url(); ?>events/index";
+                    $('.btnEventClose').on('click', function () {
+                        $('#event_modal').fadeOut();
                     });
-                }
-            }
-            function deletComment(comment_id) {
-                if (window.confirm("Are you sure want to delete selected comment?")) {
+                    $('#add_event').on('click', function () {
+                        $('#event_modal').fadeIn();
+                    });
+                    $('#close').on('click', function () {
+                        $('#event_modal').fadeOut();
+                    });
 
-                    $.post("<?php echo base_url(); ?>events/commentdelete", {commentId: comment_id}, function (data) {
-                        //console.log(data);
-                        window.location.href = "<?php echo base_url(); ?>events/event/<?php echo $event->objectId; ?>";
-                                    });
-                                }
-                            }
+                    $('.btnCommentClose').on('click', function () {
+                        $('#add_comment_modal').fadeOut();
+                    });
+                    $('#add_comment').on('click', function () {
+                        $('#add_comment_modal').fadeIn();
+                    });
+                    $('#close').on('click', function () {
+                        $('#add_comment_modal').fadeOut();
+                    });
 
-                            function deletPost(post_id) {
-                                if (window.confirm("Are you sure want to delete selected post?")) {
+                    $('.btnPostClose').on('click', function () {
+                        $('#update_post_modal').fadeOut();
+                    });
+                    $('#close').on('click', function () {
+                        $('#update_post_modal').fadeOut();
+                    });
+                    function deletevent() {
+                        if (window.confirm("Are you sure want to delete selected event?")) {
 
-                                    $.post("<?php echo base_url(); ?>events/postdelete", {postId: post_id}, function (data) {
-                                        //console.log(data);
-                                        window.location.href = "<?php echo base_url(); ?>events/event/<?php echo $event->objectId; ?>";
-                                                    });
-                                                }
-                                            }
-                                            function updateComment(comment_id) {
-                                                $.post("<?php echo base_url(); ?>events/comments", {commentId: comment_id}, function (data) {
-                                                    $('#comment_form').attr('action', '<?php echo base_url(); ?>events/update_event_comment/<?php echo $event->objectId; ?>');
-                                                                var obj = jQuery.parseJSON(data);
-                                                                $('#headingComment').html('Update Comment');
-                                                                $('#btnComment').html('Update Comment');
-                                                                $('#comments').val(obj.Comments);
-                                                                $('#commentId').val(comment_id);
-                                                                $('#add_comment_modal').fadeIn();
+                            var deletelist = [];
+                            deletelist.push('<?php echo $event->objectId; ?>');
+                            $.post("<?php echo base_url(); ?>events/eventdelete", {deletelist: deletelist}, function (data) {
+                                //console.log(data);
+                                window.location.href = "<?php echo base_url(); ?>events/index";
+                            });
+                        }
+                    }
+                    function deletComment(comment_id) {
+                        if (window.confirm("Are you sure want to delete selected comment?")) {
+
+                            $.post("<?php echo base_url(); ?>events/commentdelete", {commentId: comment_id}, function (data) {
+                                //console.log(data);
+                                window.location.href = "<?php echo base_url(); ?>events/event/<?php echo $event->objectId; ?>";
+                                            });
+                                        }
+                                    }
+
+                                    function deletPost(post_id) {
+                                        if (window.confirm("Are you sure want to delete selected post?")) {
+
+                                            $.post("<?php echo base_url(); ?>events/postdelete", {postId: post_id}, function (data) {
+                                                //console.log(data);
+                                                window.location.href = "<?php echo base_url(); ?>events/event/<?php echo $event->objectId; ?>";
                                                             });
                                                         }
-                                                        function updatePost(post_id) {
-                                                            $.post("<?php echo base_url(); ?>events/Post", {postId: post_id}, function (data) {
-                                                                var obj = jQuery.parseJSON(data);
-                                                                $('#description').val(obj.description);
-                                                                $('#title').val(obj.title);
-                                                                $('#postId').val(post_id);
-                                                                $('#update_post_modal').fadeIn();
-                                                            });
-                                                        }
-                                                        $(document).ready
-                                                                (
-                                                                        function ()
-                                                                        {
-                                                                            $(".groupPhoto").colorbox({rel: 'groupPhoto', transition: "fade"});
-                                                                            $('#event_area ul').multiSelect
-                                                                                    (
-                                                                                            {
-                                                                                                unselectOn: '#event_area',
-                                                                                                keepSelection: true,
-                                                                                            }
-                                                                                    );
-                                                                        }
-                                                                //.hover(function(){
-                                                                //                            alert('test');
-                                                                //                           $(this).find('.children').slideToggle(); 
-                                                                //                        });
-                                                                );
+                                                    }
+                                                    function updateComment(comment_id) {
+                                                        $.post("<?php echo base_url(); ?>events/comments", {commentId: comment_id}, function (data) {
+                                                            $('#comment_form').attr('action', '<?php echo base_url(); ?>events/update_event_comment/<?php echo $event->objectId; ?>');
+                                                                        var obj = jQuery.parseJSON(data);
+                                                                        $('#headingComment').html('Update Comment');
+                                                                        $('#btnComment').html('Update Comment');
+                                                                        $('#comments').val(obj.Comments);
+                                                                        $('#commentId').val(comment_id);
+                                                                        $('#add_comment_modal').fadeIn();
+                                                                    });
+                                                                }
+                                                                function updatePost(post_id) {
+                                                                    $.post("<?php echo base_url(); ?>events/Post", {postId: post_id}, function (data) {
+                                                                        var obj = jQuery.parseJSON(data);
+                                                                        $('#description').val(obj.description);
+                                                                        $('#title').val(obj.title);
+                                                                        $('#postId').val(post_id);
+                                                                        $('#update_post_modal').fadeIn();
+                                                                    });
+                                                                }
+                                                                $(document).ready
+                                                                        (
+                                                                                function ()
+                                                                                {
+                                                                                    $(".groupPhoto").colorbox({rel: 'groupPhoto', transition: "fade"});
+                                                                                    $('#event_area ul').multiSelect
+                                                                                            (
+                                                                                                    {
+                                                                                                        unselectOn: '#event_area',
+                                                                                                        keepSelection: true,
+                                                                                                    }
+                                                                                            );
+                                                                                }
+                                                                        //.hover(function(){
+                                                                        //                            alert('test');
+                                                                        //                           $(this).find('.children').slideToggle(); 
+                                                                        //                        });
+                                                                        );
 
-                                                        $('.list-group-item').hover(function () {
-                                                            $(this).find('.children').slideToggle();
-                                                        });
-                                                        function deletesheets()
-                                                        {
-                                                            $("#event_area ul li.selected").each
-                                                                    (
-                                                                            function (index)
-                                                                            {
-                                                                                console.log(index + ": " + $(this).data("id"));
-                                                                            }
-                                                                    );
-                                                            alert("Delete Sheets");
-                                                        }
-
-                                                        $.fn.multiSelect = function (o)
-                                                        {
-                                                            var defaults = {
-                                                                multiselect: true,
-                                                                selected: 'selected',
-                                                                filter: ' > *',
-                                                                unselectOn: false,
-                                                                keepSelection: true,
-                                                                list: $(this).selector,
-                                                                e: null,
-                                                                element: null,
-                                                                start: false,
-                                                                stop: false,
-                                                                unselecting: false
-                                                            }
-                                                            return this.each(function (k, v) {
-                                                                var options = $.extend({}, defaults, o || {});
-                                                                // selector - parent, assign listener to children only
-                                                                $(document).on('mousedown', options.list + options.filter, function (e)
-                                                                {
-                                                                    if (e.which == 1)
-                                                                    {
-                                                                        if (options.handle != undefined && !$(e.target).is(options.handle)) {
-
-                                                                            return true;
-                                                                        }
-                                                                        options.e = e;
-                                                                        options.element = $(this);
-                                                                        multiSelect(options);
-                                                                    }
-                                                                    return true;
+                                                                $('.list-group-item').hover(function () {
+                                                                    $(this).find('.children').slideToggle();
                                                                 });
-
-                                                                if (options.unselectOn)
+                                                                function deletesheets()
                                                                 {
-                                                                    $(document).on('mousedown', options.unselectOn, function (e)
-                                                                    {
-                                                                        if (!$(e.target).parents().is(options.list) && e.which != 3)
+                                                                    $("#event_area ul li.selected").each
+                                                                            (
+                                                                                    function (index)
+                                                                                    {
+                                                                                        console.log(index + ": " + $(this).data("id"));
+                                                                                    }
+                                                                            );
+                                                                    alert("Delete Sheets");
+                                                                }
+
+                                                                $.fn.multiSelect = function (o)
+                                                                {
+                                                                    var defaults = {
+                                                                        multiselect: true,
+                                                                        selected: 'selected',
+                                                                        filter: ' > *',
+                                                                        unselectOn: false,
+                                                                        keepSelection: true,
+                                                                        list: $(this).selector,
+                                                                        e: null,
+                                                                        element: null,
+                                                                        start: false,
+                                                                        stop: false,
+                                                                        unselecting: false
+                                                                    }
+                                                                    return this.each(function (k, v) {
+                                                                        var options = $.extend({}, defaults, o || {});
+                                                                        // selector - parent, assign listener to children only
+                                                                        $(document).on('mousedown', options.list + options.filter, function (e)
                                                                         {
-                                                                            $(options.list + ' .' + options.selected).removeClass(options.selected);
-                                                                            if (options.unselecting != false)
+                                                                            if (e.which == 1)
                                                                             {
-                                                                                options.unselecting();
+                                                                                if (options.handle != undefined && !$(e.target).is(options.handle)) {
+
+                                                                                    return true;
+                                                                                }
+                                                                                options.e = e;
+                                                                                options.element = $(this);
+                                                                                multiSelect(options);
                                                                             }
+                                                                            return true;
+                                                                        });
+
+                                                                        if (options.unselectOn)
+                                                                        {
+                                                                            $(document).on('mousedown', options.unselectOn, function (e)
+                                                                            {
+                                                                                if (!$(e.target).parents().is(options.list) && e.which != 3)
+                                                                                {
+                                                                                    $(options.list + ' .' + options.selected).removeClass(options.selected);
+                                                                                    if (options.unselecting != false)
+                                                                                    {
+                                                                                        options.unselecting();
+                                                                                    }
+                                                                                }
+                                                                            });
+
                                                                         }
+
                                                                     });
 
+
                                                                 }
 
-                                                            });
-
-
-                                                        }
-
-                                                        function multiSelect(o)
-                                                        {
-                                                            var target = o.e.target;
-                                                            var element = o.element;
-                                                            var list = o.list;
-
-                                                            if ($(element).hasClass('ui-sortable-helper'))
-                                                            {
-                                                                return false;
-                                                            }
-
-                                                            if (o.start != false)
-                                                            {
-                                                                var start = o.start(o.e, $(element));
-                                                                if (start == false)
+                                                                function multiSelect(o)
                                                                 {
-                                                                    return false;
+                                                                    var target = o.e.target;
+                                                                    var element = o.element;
+                                                                    var list = o.list;
+
+                                                                    if ($(element).hasClass('ui-sortable-helper'))
+                                                                    {
+                                                                        return false;
+                                                                    }
+
+                                                                    if (o.start != false)
+                                                                    {
+                                                                        var start = o.start(o.e, $(element));
+                                                                        if (start == false)
+                                                                        {
+                                                                            return false;
+                                                                        }
+                                                                    }
+
+                                                                    if (o.e.shiftKey && o.multiselect)
+                                                                    {
+                                                                        $(element).addClass(o.selected);
+                                                                        first = $(o.list).find('.' + o.selected).first().index();
+                                                                        last = $(o.list).find('.' + o.selected).last().index();
+
+                                                                        if (last < first)
+                                                                        {
+                                                                            firstHolder = first;
+                                                                            first = last;
+                                                                            last = firstHolder;
+                                                                        }
+
+                                                                        if (first == -1 || last == -1)
+                                                                        {
+                                                                            return false;
+                                                                        }
+
+                                                                        $(o.list).find('.' + o.selected).removeClass(o.selected);
+
+                                                                        var num = last - first;
+                                                                        var x = first;
+
+                                                                        for (i = 0; i <= num; i++)
+                                                                        {
+                                                                            $(list).find(o.filter).eq(x).addClass(o.selected);
+                                                                            x++;
+                                                                        }
+                                                                    } else if ((o.e.ctrlKey || o.e.metaKey) && o.multiselect)
+                                                                    {
+                                                                        if ($(element).hasClass(o.selected))
+                                                                        {
+                                                                            $(element).removeClass(o.selected);
+                                                                        } else
+                                                                        {
+                                                                            $(element).addClass(o.selected);
+                                                                        }
+                                                                    } else
+                                                                    {
+                                                                        if (o.keepSelection && !$(element).hasClass(o.selected))
+                                                                        {
+                                                                            $(list).find('.' + o.selected).removeClass(o.selected);
+                                                                            $(element).addClass(o.selected);
+                                                                        } else
+                                                                        {
+                                                                            $(list).find('.' + o.selected).removeClass(o.selected);
+                                                                            $(element).addClass(o.selected);
+                                                                        }
+
+                                                                    }
+
+                                                                    if (o.stop != false)
+                                                                    {
+                                                                        o.stop($(list).find('.' + o.selected), $(element));
+                                                                    }
+
                                                                 }
-                                                            }
-
-                                                            if (o.e.shiftKey && o.multiselect)
-                                                            {
-                                                                $(element).addClass(o.selected);
-                                                                first = $(o.list).find('.' + o.selected).first().index();
-                                                                last = $(o.list).find('.' + o.selected).last().index();
-
-                                                                if (last < first)
-                                                                {
-                                                                    firstHolder = first;
-                                                                    first = last;
-                                                                    last = firstHolder;
-                                                                }
-
-                                                                if (first == -1 || last == -1)
-                                                                {
-                                                                    return false;
-                                                                }
-
-                                                                $(o.list).find('.' + o.selected).removeClass(o.selected);
-
-                                                                var num = last - first;
-                                                                var x = first;
-
-                                                                for (i = 0; i <= num; i++)
-                                                                {
-                                                                    $(list).find(o.filter).eq(x).addClass(o.selected);
-                                                                    x++;
-                                                                }
-                                                            } else if ((o.e.ctrlKey || o.e.metaKey) && o.multiselect)
-                                                            {
-                                                                if ($(element).hasClass(o.selected))
-                                                                {
-                                                                    $(element).removeClass(o.selected);
-                                                                } else
-                                                                {
-                                                                    $(element).addClass(o.selected);
-                                                                }
-                                                            } else
-                                                            {
-                                                                if (o.keepSelection && !$(element).hasClass(o.selected))
-                                                                {
-                                                                    $(list).find('.' + o.selected).removeClass(o.selected);
-                                                                    $(element).addClass(o.selected);
-                                                                } else
-                                                                {
-                                                                    $(list).find('.' + o.selected).removeClass(o.selected);
-                                                                    $(element).addClass(o.selected);
-                                                                }
-
-                                                            }
-
-                                                            if (o.stop != false)
-                                                            {
-                                                                o.stop($(list).find('.' + o.selected), $(element));
-                                                            }
-
-                                                        }
         </script>
 
     </body>
