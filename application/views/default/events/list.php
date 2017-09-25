@@ -72,7 +72,7 @@
 										</td>
 										<td>
 											<button class="btn btn-small btn-primary btn-info" onclick="metadataevents('<?php echo $val['objectId']; ?>');">Download Metadata</button><br><br>
-											<a class="btn btn-small btn-primary btn-info" href="<?php echo base_url();?>events/downloadMeta/<?php echo $val['objectId']; ?>/pdf">
+											<a class="btn btn-small btn-primary btn-info" href="<?php echo base_url();?>events/download/<?php echo $val['objectId']; ?>/pdf">
                                                                                         Download PDF
                                                                                         </a>
 										</td>
