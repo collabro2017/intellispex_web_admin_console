@@ -54,7 +54,7 @@
                                             $imagePost = $event->postImage;
                                             ?>
                                             <a class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $event->eventname; ?>">
-                                                <img style="width:100%;" style="cursor: pointer" id="eventImage" src="<?php echo $imagePost->url; ?>" />    
+                                                <img style="width:70%;" style="cursor: pointer" id="eventImage" src="<?php echo $imagePost->url; ?>" />    
                                             </a>
                                             <?php
                                         }
@@ -165,7 +165,7 @@
                                                         ?>
 
                                                         <a  class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $post->title; ?>">
-                                                            <img style="width:100%;" style="cursor: pointer" id="eventImage" src="<?php echo $imagePost->url; ?>" />
+                                                            <img style="width:70%;" style="cursor: pointer" id="eventImage" src="<?php echo $imagePost->url; ?>" />
                                                         </a>
                                                         <?php
                                                     } elseif ($post->postType == 'video') {
