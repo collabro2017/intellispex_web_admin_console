@@ -162,9 +162,23 @@
                                                     if (isset($post->thumbImage) && isset($post->postFile) && $post->postType == 'photo') {
                                                         $image = $post->thumbImage;
                                                         $imagePost = $post->postFile;
+                                                        
                                                         ?>
-
-                                                        <a  class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $post->title; ?>">
+                                                    <style>
+                                                        <?php
+                                                        if(strlen($post->title) > 120 && strlen($post->title) < 180){
+                                                        ?>
+                                                        .cboxPhoto{ height: 98% !important; }
+                                                        <?php
+                                                        }elseif(strlen($post->title) > 180){
+                                                            ?>
+                                                        .cboxPhoto{ height: 96% !important; }
+                                                        <?php
+                                                        }
+                                                        ?>
+                                                    </style>
+                                                    
+                                                    <a  class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $post->title; ?>">
                                                             <img style="width:70%;" style="cursor: pointer" id="eventImage" src="<?php echo $imagePost->url; ?>" />
                                                         </a>
                                                         <?php
@@ -539,6 +553,7 @@
                         </div>
                         <div style="clear: both" class="col-sm-10">
                             <input type="text" name="title" id="title" />
+                            <input type="hidden" name="title2" id="title2" />
                         </div>
                         <div class="col-sm-10">
                             <label for="access_rights" style="text-align: left" class="col-sm-2 control-label">Description</label>
@@ -554,7 +569,7 @@
                 <div class="modal-footer">
                     <div style="float:right">
                         <input type="hidden" name="Commenter" value="<?php echo $current_user; ?>" />
-                        <input type="hidden" name="postId" id="postId" value="" />
+                        <input type="hidden" name="postId" id="postId" />
                         <input type="hidden" name="targetEvent" value="<?php echo $event->objectId; ?>" />
                         <button type="button" class="btn btn-small btn-primary btnPostClose" style="float:left;margin-right:20px;" >Close</button>
                         <button type="submit"  id="btnComment" class="btn btn-small btn-primary">Update Post</button>
@@ -624,9 +639,9 @@
                                                             });
                                                         }
                                                     }
-                                                    function updateComment(comment_id) {
-                                                        $.post("<?php echo base_url(); ?>events/comments", {commentId: comment_id}, function (data) {
-                                                            $('#comment_form').attr('action', '<?php echo base_url(); ?>events/update_event_comment/<?php echo $event->objectId; ?>');
+                                                                function updateComment(comment_id) {
+                                                                    $.post("<?php echo base_url(); ?>events/comments", {commentId: comment_id}, function (data) {
+                                                                        $('#comment_form').attr('action', '<?php echo base_url(); ?>events/update_event_comment/<?php echo $event->objectId; ?>');
                                                                         var obj = jQuery.parseJSON(data);
                                                                         $('#headingComment').html('Update Comment');
                                                                         $('#btnComment').html('Update Comment');
@@ -636,11 +651,13 @@
                                                                     });
                                                                 }
                                                                 function updatePost(post_id) {
+                                                                alert(post_id);
+                                                                    $('#postId').val(post_id);
                                                                     $.post("<?php echo base_url(); ?>events/Post", {postId: post_id}, function (data) {
                                                                         var obj = jQuery.parseJSON(data);
                                                                         $('#description').val(obj.description);
                                                                         $('#title').val(obj.title);
-                                                                        $('#postId').val(post_id);
+                                                                        $('#title2').val(obj.objectId);
                                                                         $('#update_post_modal').fadeIn();
                                                                     });
                                                                 }

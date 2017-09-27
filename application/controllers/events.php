@@ -345,7 +345,7 @@ class events extends CI_Controller_EX {
     public function update_event_post($event_id) {
         $description = $this->input->post('description');
         $title = $this->input->post('title');
-        $postId = $this->input->post('postId');
+        $postId = $this->input->post('title2');
         $date = date(DateTime::ISO8601, time());
         print_r($this->parserestclient->update
                         (
@@ -820,7 +820,10 @@ class events extends CI_Controller_EX {
             fclose($fp);
         }
     }
-
+    
+    public function eventDeleteAuto(){
+        
+    }
     public function eventmetadata() {
         $metadatalist = $this->input->post('metaviewlist');
         $id = $this->input->post('id');
