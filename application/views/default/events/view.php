@@ -651,7 +651,6 @@
                                                                     });
                                                                 }
                                                                 function updatePost(post_id) {
-                                                                alert(post_id);
                                                                     $('#postId').val(post_id);
                                                                     $.post("<?php echo base_url(); ?>events/Post", {postId: post_id}, function (data) {
                                                                         var obj = jQuery.parseJSON(data);
