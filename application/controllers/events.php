@@ -163,7 +163,7 @@ class events extends CI_Controller_EX {
                     array
                         (
                         "objectId" => "Event",
-                        'query' => '{"deletedAt":null,"openStatus":1, "TagFriends":{"$all":' . json_encode($userArr, true) . '}}',
+                        'query' => '{"deletedAt":null,"openStatus":1, "TagFriends":{"$in":' . json_encode($userArr, true) . '}}',
                         'order' => $asc
                     )
             );
@@ -248,7 +248,7 @@ class events extends CI_Controller_EX {
         }
     }
 
-    public function event($event_id) {
+    public function event($event_id,$restor = 0) {
         $data = new stdClass;
         $session_data = $this->session->userdata('logged_in');
         if ($session_data) {
@@ -256,15 +256,25 @@ class events extends CI_Controller_EX {
             $data->role = $session_data['role'];
             $data->id = $session_data['id'];
             $data->event_id = $event_id;
-
-            $event = json_decode(json_encode($this->parserestclient->query
-                                    (
-                                    array
+            if($restor == 0){
+                $event = json_decode(json_encode($this->parserestclient->query
                                         (
-                                        "objectId" => "Event",
-                                        "query" => '{"deletedAt":null,"openStatus":1,"objectId":"' . $event_id . '"}'
-                                    )
-                            ), true));
+                                        array
+                                            (
+                                            "objectId" => "Event",
+                                            "query" => '{"deletedAt":null,"openStatus":1,"objectId":"' . $event_id . '"}'
+                                        )
+                                ), true));
+            }else{
+                $event = json_decode(json_encode($this->parserestclient->query
+                                        (
+                                        array
+                                            (
+                                            "objectId" => "Event",
+                                            "query" => '{"objectId":"' . $event_id . '"}'
+                                        )
+                                ), true));
+            }
             $data->event_comment = json_decode(json_encode($this->parserestclient->query
                                     (
                                     array
@@ -322,7 +332,47 @@ class events extends CI_Controller_EX {
             );
         }
     }
+    
+    public function eventRestore() {
+        $deleteId = $this->input->post('deleteId');
+        $data = date('Y-m-d');
+        $this->parserestclient->update
+                    (
+                    array
+                        (
+                        "objectId" => "Event",
+                        'object' => ['deletedAt' => "", 'openStatus' => 1],
+                        'where' => $deleteId
+                    )
+            );
+    }
+    
+    public function deleteOldEvent() {
+        $events = json_decode(json_encode($this->parserestclient->query
+                                        (
+                                        array
+                                            (
+                                            "objectId" => "Event",
+                                            "query" => '{"deletedAt":{"$ne":null},"openStatus":0}'
+                                        )
+                                ), true));
+                foreach ($events as $event){
+                    $d1 = date('Y-m-d');
+                    $d2 = $event->deletedAt;
 
+                    $leftmonth = (int)abs((strtotime($d1) - strtotime($d2))/(60*60*24*30)); 
+                    if($leftmonth > 12){
+                        $this->parserestclient->delete
+                                (
+                                array
+                                    (
+                                    "className" => "Event",
+                                    'objectId' => $event->objectId
+                                )
+                        );
+                    }
+                }
+    }
     public function update_event_comment($event_id) {
         $Comments = $this->input->post('Comments');
         $commentId = $this->input->post('commentId');
@@ -347,7 +397,7 @@ class events extends CI_Controller_EX {
         $title = $this->input->post('title');
         $postId = $this->input->post('title2');
         $date = date(DateTime::ISO8601, time());
-        print_r($this->parserestclient->update
+        $this->parserestclient->update
                         (
                         array
                             (
@@ -358,7 +408,7 @@ class events extends CI_Controller_EX {
                                 ], 'title' => "$title", 'description' => "$description"],
                             'where' => $postId
                         )
-        ));
+        );
         redirect(base_url() . "events/event/" . $event_id);
     }
 
@@ -703,20 +753,50 @@ class events extends CI_Controller_EX {
         $data = new stdClass;
         $session_data = $this->session->userdata('logged_in');
         if ($session_data) {
+            $data->username = $session_data['username'];
+            $data->role = $session_data['role'];
+            $data->id = $session_data['id'];
+            $data->function_name = "VIEW OR EDIT GLOBAL EVENT LIST";
+            $user = $this->parserestclient->query(
+                    array(
+                        "objectId" => "_User",
+                        'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"XVr1sAmAQl"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $session_data['mongodb_id'] . '"}}',
+                    )
+            );
+            $associated_user = json_decode(json_encode($user), true);
+            $events = array();
+            $eventId = array();
+            $i = 0;
+            $userArr = array();
+            foreach ($associated_user as $user) {
+                $userArr[] = $user['objectId'];
+            }
             $temp = $this->parserestclient->query
                     (
                     array
                         (
                         "objectId" => "Event",
-                        //'query'=>'{"deletedAt":null}',
-                        'query' => '{"deletedAt":{"$ne":null}}'
+                        'query' => '{"openStatus":0,"deletedAt":{"$ne":null}, "TagFriends":{"$in":' . json_encode($userArr, true) . '}}'
                     )
             );
+            $event = json_decode(json_encode($temp), true);
+            foreach ($event as $ev) {
+                if (isset($ev)) {
+                    if ($i == 0) {
+                        $eventId[$i] = $ev['objectId'];
+                        $events[$i] = $ev;
+                    } elseif (!(in_array($ev['objectId'], $eventId))) {
+                        $eventId[$i] = $ev['objectId'];
+                        $events[$i] = $ev;
+                    }
+                }
+                $i++;
+            }
             $data->username = $session_data['username'];
             $data->role = $session_data['role'];
             $data->id = $session_data['id'];
             $data->function_name = "Deleted Events";
-            $data->info = json_decode(json_encode($temp), true);
+            $data->info = $events;//json_decode(json_encode($temp), true);
             $this->load->view('default/events/deletedlist', $data);
         } else {
             $this->load->view('default/include/manage/v_login');

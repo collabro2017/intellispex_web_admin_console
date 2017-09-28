@@ -55,7 +55,7 @@ $imagePost = $event->postImage->url;
                 endif;
                 ?>
             </h5>
-            <p><?php echo date('Y-m-d', strtotime($event->createdAt)); ?><br/>
+            <p><?php echo date('d-m-Y', strtotime($event->createdAt)); ?><br/>
                 <?php echo $data->Comments; ?>
             </p>
             <?php
@@ -78,7 +78,7 @@ $imagePost = $event->postImage->url;
             ?><?php echo $post->countryLatLong; ?><br/> <?php
         }
         ?>
-        <?php echo date('Y-m-d g:i A', strtotime($post->createdAt)); ?><br/>
+        <?php echo date('d-m-Y', strtotime($post->createdAt)); ?><br/>
         <?php echo $post->description;
         ?>
     </p>

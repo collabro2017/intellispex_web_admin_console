@@ -19,6 +19,7 @@
   	
 	  <div class="container-fluid" id="main-container">
 		<div id="main-content">
+                    
 			<div class="row-fluid" style="margin-top:20px;">
 				<div class="span1"></div>
 				<div class="span10">
@@ -30,6 +31,7 @@
 								<th>Date Created</th>
 								<th>Date Deleted</th>
                                 <th>Time Left</th>
+                                                            <th>Actions</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -44,16 +46,21 @@
                                         <td><?php echo $val['deletedAt'] ?></td>
                                         <td><?php
                                         if($val['deletedAt'] !=""){
+                                            $d1 = date('Y-m-d');
+                                            $d2 = $val['deletedAt'];
+
+                                            $leftmonth = (int)abs((strtotime($d1) - strtotime($d2))/(60*60*24*30)); 
                                             $today = date("Y")*12+date('m');                                            
                                             $deleteday=explode('-',$val['deletedAt']);
                                             $deleteddate = intval($deleteday[0])*12+intval($deleteday[1]);
-                                            $leftmonth = 12 - ($today-$deleteddate);
+//                                            $leftmonth = 12 - ($today-$deleteddate);
                                         }
                                         else{
                                             $leftmonth = "Unknown";
                                         }                                            
                                         echo $leftmonth." Months";
                                         ?></td>
+                                        <td><a href="javascript:restoreevent('<?php echo $val['objectId']; ?>');" >Restore Event</a></td>
                                     </tr>
 									<?php
 								}
@@ -78,6 +85,16 @@
 	
 	<script type="text/javascript">
 		$('#table_data').DataTable();
+                
+		function restoreevent(deleteId){
+			if (window.confirm("Are you sure want to restore selected event?")) { 
+				$.post( "<?php echo base_url(); ?>events/eventRestore",{ deleteId: deleteId}, function( data ) {
+					//console.log(data);
+                                    alert('Event is restored and you can manage restored event in Event Listing.');
+                                    window.location.href="<?php echo base_url(); ?>events/deletedevents/";
+				});
+			}
+		}
 	</script>
 	</body>
 </html>
