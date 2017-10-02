@@ -8,7 +8,7 @@ $imagePost = $event->postImage->url;
     h4 {
         color: black;
         font-family: "Trebuchet MS", Helvetica, sans-serif;
-        font-size: 16px;
+        font-size: 14px;
         padding: 0;
         margin: 0;
     }
@@ -21,8 +21,10 @@ $imagePost = $event->postImage->url;
         color: #000;
         font-family: helvetica;
         font-size: 8pt;
-        border: 3px solid #b2b2b2;
-        background-color: #eee;
+        border: none;
+    }
+    td{
+        margin-top: 20px;
     }
     .lowercase {
         text-transform: lowercase;
@@ -34,12 +36,70 @@ $imagePost = $event->postImage->url;
         text-transform: capitalize;
     }
 </style>
-<h4><?php echo $event->eventname; ?></h4>
-<p><?php $event->description; ?></p>
-<img src="<?php echo $imagePost; ?>" alt="<?php echo $event->eventname; ?>" border="0" />
-<div class="span12">
+<?php
+$event_user = $event->user->objectId;
+$event_user_details = json_decode(json_encode($this->parserestclient->query(array(
+                    "objectId" => "_User",
+                    'query' => '{"deletedAt":null,"objectId":"' . $event_user . '"}',
+                        )
+        )));
+$image = $event_user_details[0]->ProfileImage->url;
+?>
+<table width="200" cellpadding="1" cellspacing="1" border="0" style="text-align:center;">
+    <tr>
+        <td style="text-align:left;">
+            <img style="width:30px;border-radius: 20px;" src="<?php echo $image; ?>" />
+        </td>
+        <td style="text-align:left;">
+            <h4><?php
+            if (isset($event_user_details[0]->username)):
+                echo $event_user_details[0]->username;
+            endif;
+            ?></h4>
+        </td>
+    </tr>
+</table>
+
+<table cellpadding="1" cellspacing="1" border="0" style="text-align:center;">
+    <tr><td style="text-align:left;">
+            <h4><?php echo $event->eventname; ?></h4></td>
+    </tr>
+    <tr><td style="text-align:left;">
+            <p><?php $event->description; ?></p></td>
+    </tr>
+
+    <tr><td style="text-align:left;">
+            <img align="middle" src="<?php echo $imagePost; ?>" alt="<?php echo $event->eventname; ?>" border="0" /></td>
+    </tr>
+</table>
+<br/><br/>
+<table width="200" cellpadding="1" cellspacing="1" border="0" style="text-align:center;">
+    <tr><td style="text-align:left;">
+            <img align="middle"  src="<?php echo base_url() ?>public/like.png" style="width:20px;" />&nbsp;&nbsp;<span><?php
+                if (isset($event->likeUserArray)) {
+                    echo count($event->likeUserArray);
+                } else {
+                    echo 0;
+                }
+                ?></span>
+        </td>
+        <td style="text-align:left;">
+            <img align="middle" src="<?php echo base_url() ?>public/message.png" style="width:20px;" />&nbsp;&nbsp;<span><?php
+                if (isset($event_comment)) {
+                    echo count($event_comment);
+                } else {
+                    echo 0;
+                }
+                ?></span>  
+        </td>
+    </tr>
+</table>
+
+<br/><br/>
     <?php if (count($event_comment)) { ?>
-        <h4> Comments</h4>
+    <table cellpadding="1" cellspacing="1" border="0" style="text-align:center;">
+        <tr>
+            <td style="text-align:left;"><h4> Comments</h4></td></tr>
         <?php
         foreach ($event_comment as $data) {
             $commenter = $data->Commenter;
@@ -49,70 +109,89 @@ $imagePost = $event->postImage->url;
                     )
             );
             $user_details = json_decode(json_encode($user_details), true);
+            $imagePost = $user_details[0]['postImage']['url'];
             ?>
-            <h5> <?php
-                if (isset($user_details[0]['username'])): echo $user_details[0]['username'];
-                endif;
-                ?>
-            </h5>
-            <p><?php echo date('d-m-Y', strtotime($event->createdAt)); ?><br/>
-                <?php echo $data->Comments; ?>
-            </p>
-            <?php
-        }
-    }
-    ?>
-</div>
-<?php foreach ($event_post as $post) { ?>
-    <h4><?php echo $post->title; ?></h4>
-    <?php
-    if (isset($post->thumbImage) && isset($post->postFile) && $post->postType == 'photo') {
-        $image = $post->thumbImage;
-        $imagePost = $post->postFile->url;
-        ?>
-        <img src="<?php echo $imagePost; ?>" alt="<?php echo $event->eventname; ?>" border="0" />
-    <?php } ?>
-    <p>
+            <tr>
+                <td colspan="2" style="text-align:center;">
+                    <img width="500" align='middle' src="<?php echo $imagePost; ?>" alt="<?php echo $event->eventname; ?>" border="0" />
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:left;"><?php
+            if (isset($user_details[0]['username'])): echo $user_details[0]['username'];
+            endif;
+            ?>
+                </td>
+                <td style="text-align:right;">
+                    <?php echo date('d-m-Y g:i', strtotime($event->createdAt)); ?></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align:left;">
+        <?php echo $data->Comments; ?>
+                </td>
+            </tr>
+        </table>
         <?php
-        if (isset($post->countryLatLong)) {
-            ?><?php echo $post->countryLatLong; ?><br/> <?php
-        }
-        ?>
-        <?php echo date('d-m-Y', strtotime($post->createdAt)); ?><br/>
-        <?php echo $post->description;
-        ?>
-    </p>
+    }
+}
+?>
+<br/><br/>
+<?php foreach ($event_post as $post) { ?>
+    <table cellpadding="1" cellspacing="1" border="0" style="text-align:center;">
+
+        <tr>
+            <td style="text-align:left;"><h4><?php echo $post->title; ?></h4></td>
+            <td style="text-align:right;">
+        <?php echo date('d-m-Y g:i', strtotime($post->createdAt)); ?>
+            </td>
+        </tr>
+        <?php
+        if (isset($post->thumbImage) && isset($post->postFile) && $post->postType == 'photo') {
+            $image = $post->thumbImage;
+            $imagePost = $post->postFile->url;
+            ?><tr>
+                <td colspan="2" style="text-align:center;">
+                    <img align="middle" style="width:500px;" src="<?php echo $imagePost; ?>" alt="<?php echo $event->eventname; ?>" border="0" />
+                </td>
+            </tr>
+    <?php } ?>
+        <tr>
+            <td style="text-align:left;">
+    <?php echo $post->description; ?>
+            </td>
+        </tr>
+    </table>
     <?php if (isset($post->commentsArray)) { ?>
-            <h5>Comments</h5>
-            <?php
-            $postComments = $post->commentsArray;
-            for ($i = 0; $i < count($postComments); $i++) {
-                $comment = $this->parserestclient->query(array(
-                    "objectId" => "Comments",
-                    'query' => '{"objectId":"' . $postComments[$i]->objectId . '"}',
+        <h5>Comments</h5>
+        <?php
+        $postComments = $post->commentsArray;
+        for ($i = 0; $i < count($postComments); $i++) {
+            $comment = $this->parserestclient->query(array(
+                "objectId" => "Comments",
+                'query' => '{"objectId":"' . $postComments[$i]->objectId . '"}',
+                    )
+            );
+            $comments = json_decode(json_encode($comment));
+            foreach ($comments as $data) {
+                $commenter = $data->Commenter;
+                $user_details = $this->parserestclient->query(array(
+                    "objectId" => "_User",
+                    'query' => '{"deletedAt":null,"objectId":"' . $commenter->objectId . '"}',
                         )
                 );
-                $comments = json_decode(json_encode($comment));
-                foreach ($comments as $data) {
-                    $commenter = $data->Commenter;
-                    $user_details = $this->parserestclient->query(array(
-                        "objectId" => "_User",
-                        'query' => '{"deletedAt":null,"objectId":"' . $commenter->objectId . '"}',
-                            )
-                    );
-                    $user_details = json_decode(json_encode($user_details), true);
-                    ?>
-                    <p><?php echo date('d-m-Y', strtotime($data->createdAt)); ?>: <?php
+                $user_details = json_decode(json_encode($user_details), true);
+                ?>
+                <p><?php echo date('d-m-Y g:i', strtotime($data->createdAt)); ?>: <?php
                     if (isset($user_details[0]['username'])):
                         echo '<b>' . $user_details[0]['username'] . ': </b>';
                     endif;
                     ?>
-                        <?php echo $data->Comments; ?>
-                    </p>
-                    <?php
-                }
+                <?php echo $data->Comments; ?>
+                </p>
+                <?php
             }
-            ?>
+        }
+        ?>
         <div style="clear:both"></div>
     <?php } ?>
 <?php } ?>

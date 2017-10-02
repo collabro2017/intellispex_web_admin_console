@@ -527,7 +527,7 @@ class events extends CI_Controller_EX {
         }
     }
 
-    public function download($event_id) {
+    public function download($event_id,$download='full') {
         ob_clean();
         $data = new stdClass();
         $event = json_decode(json_encode($this->parserestclient->query
@@ -563,9 +563,12 @@ class events extends CI_Controller_EX {
         $pdf = new Pdf(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
         $pdf->preferences($pdf);
         $pdf->AddPage();
-        $html = $this->load->view('default/events/pdfDownload', $data, true);
-
-
+        if($download == 'full'){
+            $html = $this->load->view('default/events/fullResolution', $data, true);
+        }else{
+            $html = $this->load->view('default/events/pdfDownload', $data, true);
+        }
+        
 // output the HTML content
         $pdf->writeHTML($html, true, false, true, false, '');
 

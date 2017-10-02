@@ -82,7 +82,7 @@
                                                         $user_details = json_decode(json_encode($user_details), true);
                                                         ?>
                                                         <div style="float:left">
-                                                            <span style="color: #444"><?php echo date('d-m-Y', strtotime($event->createdAt)) . ": "; ?></span>
+                                                            <span style="color: #444"><?php echo date('d-m-Y g:i', strtotime($event->createdAt)) . ": "; ?></span>
                                                             <b>
                                                                 <?php
                                                                 if (isset($user_details[0]['username'])):
@@ -131,7 +131,7 @@
                                                             }
                                                             ?>
                                                             <p>
-                                                                <?php echo date('Y-m-d g:i A', strtotime($post->createdAt)); ?>
+                                                                <?php echo date('Y-m-d g:i', strtotime($post->createdAt)); ?>
                                                             </p>
                                                         </div>
                                                         <div style="background: #eee;margin: 0;padding: 10px;" class="span9">
@@ -239,7 +239,7 @@
                                                                     );
                                                                     $user_details = json_decode(json_encode($user_details), true);
                                                                     ?>
-                                                                    <p><?php echo date('d-m-Y', strtotime($data->createdAt)); ?>: <?php
+                                                                    <p><?php echo date('d-m-Y g:i', strtotime($data->createdAt)); ?>: <?php
                                                     if (isset($user_details[0]['username'])):
                                                         echo '<b>' . $user_details[0]['username'] . ': </b>';
                                                     endif;
