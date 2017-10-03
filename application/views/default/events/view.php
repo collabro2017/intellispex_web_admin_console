@@ -107,10 +107,13 @@
                                         <div class="span4" style="margin: 0">
                                             <ul style="list-style: none">
                                                 <li style="float: left">
-                                                    <a id="add_event" class="btn btn-small btn-primary"  href="javascript:void(0)" class="btn btn-small btn-primary menu-button"> Edit </a> 	
+                                                    <a id="add_event" class="btn btn-small btn-primary"  href="javascript:void(0)"> <i class="fa fa-pencil"></i>  </a> 	
                                                 </li>
                                                 <li style="float:left">
-                                                    <a class="btn btn-small btn-primary"  href="javascript:deletevent();" class="btn btn-small btn-primary menu-button"> Delete </a> 	
+                                                    <a class="btn btn-small btn-primary"  href="javascript:deletevent();"> <i class="fa fa-remove"></i> </a> 	
+                                                </li>
+                                                <li style="float:left">
+                                                    <a class="btn btn-small btn-primary"  href="javascript:report();"> <i class="fa fa-flag"></i> </a> 	
                                                 </li>
                                             </ul>
                                         </div>
@@ -153,7 +156,8 @@
                                                                 <p><?php echo $post->description; ?></p></div>
                                                             <div style="float:right;">
                                                                 <a  href="javascript:updatePost('<?php echo $post->objectId; ?>')" style="background: transparent; border: none; font-size: 15px;color:#000;"> <i class="fa fa-pencil"></i> </a> 
-                                                                <a  href="javascript:deletPost('<?php echo $post->objectId; ?>');" style="background: transparent; border: none; font-size: 15px;color:#000;"> <i class="fa fa-remove"></i> </a> 
+                                                                <a  href="javascript:deletPost('<?php echo $post->objectId; ?>');" style="background: transparent; border: none; font-size: 15px;color:#000;"> <i class="fa fa-remove"></i> </a>
+                                                                <a  href="javascript:reportPost('<?php echo $post->objectId; ?>');" style="background: transparent; border: none; font-size: 15px;color:#000;"> <i class="fa fa-flag"></i> </a> 
                                                             </div>
                                                         </div>
                                                         <div style="clear: both;"></div>
@@ -615,6 +619,28 @@
                             var deletelist = [];
                             deletelist.push('<?php echo $event->objectId; ?>');
                             $.post("<?php echo base_url(); ?>events/eventdelete", {deletelist: deletelist}, function (data) {
+                                //console.log(data);
+                                window.location.href = "<?php echo base_url(); ?>events/index";
+                            });
+                        }
+                    }
+                    function report() {
+                        if (window.confirm("Are you sure want to report selected event?")) {
+
+                            var deletelist = [];
+                            deletelist.push('<?php echo $event->objectId; ?>');
+                            $.post("<?php echo base_url(); ?>events/reportEvent", {deletelist: "<?php echo $event->objectId; ?>"}, function (data) {
+                                //console.log(data);
+                                window.location.href = "<?php echo base_url(); ?>events/index";
+                            });
+                        }
+                    }
+                    function reportPost(postId) {
+                        if (window.confirm("Are you sure want to report selected post?")) {
+
+                            var deletelist = [];
+                            deletelist.push('<?php echo $event->objectId; ?>');
+                            $.post("<?php echo base_url(); ?>events/reportPost", {deletelist: postId}, function (data) {
                                 //console.log(data);
                                 window.location.href = "<?php echo base_url(); ?>events/index";
                             });

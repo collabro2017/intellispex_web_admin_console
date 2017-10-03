@@ -333,6 +333,52 @@ class events extends CI_Controller_EX {
         }
     }
     
+    public function reportEvent() {
+        $session_data = $this->session->userdata('logged_in');
+        $eventId = $this->input->post('deletelist');
+        $user[] = $session_data['mongodb_id'];
+        $date = date(DateTime::ISO8601, time());
+        $response = $this->parserestclient->update
+                (
+                array
+                    (
+                    "objectId" => "Event",
+                    'object' => ['eventBadgeFlag' =>[
+                            "__op" => "Add",
+                            "objects" => $user
+                        ],
+                        'updatedAt' => [
+                            "__type" => "Date",
+                            "iso" => $date,
+                        ]],
+                    'where' => $eventId
+                )
+        );
+    }
+    
+    public function reportPost() {
+        $session_data = $this->session->userdata('logged_in');
+        $postId = $this->input->post('postId');
+        $user[] = $session_data['mongodb_id'];
+        $date = date(DateTime::ISO8601, time());
+        $response = $this->parserestclient->update
+                (
+                array
+                    (
+                    "objectId" => "EventPost",
+                    'object' => ['usersBadgeFlag' =>[
+                            "__op" => "Add",
+                            "objects" => $user
+                        ],
+                        'updatedAt' => [
+                            "__type" => "Date",
+                            "iso" => $date,
+                        ]],
+                    'where' => $postId
+                )
+        );
+    }
+    
     public function eventRestore() {
         $deleteId = $this->input->post('deleteId');
         $data = date('Y-m-d');
