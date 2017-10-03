@@ -123,7 +123,7 @@ $image = $event_user_details[0]->ProfileImage->url;
             ?>
                 </td>
                 <td style="text-align:right;">
-                    <?php echo date('d-m-Y g:i', strtotime($event->createdAt)); ?></td>
+                    <?php echo date('d-m-Y g:i A', strtotime($event->createdAt)); ?></td>
             </tr>
             <tr>
                 <td colspan="2" style="text-align:left;">
@@ -142,7 +142,7 @@ $image = $event_user_details[0]->ProfileImage->url;
         <tr>
             <td style="text-align:left;"><h4><?php echo $post->title; ?></h4></td>
             <td style="text-align:right;">
-        <?php echo date('d-m-Y g:i', strtotime($post->createdAt)); ?>
+        <?php echo date('d-m-Y g:i A', strtotime($post->createdAt)); ?>
             </td>
         </tr>
         <?php
@@ -181,7 +181,7 @@ $image = $event_user_details[0]->ProfileImage->url;
                 );
                 $user_details = json_decode(json_encode($user_details), true);
                 ?>
-                <p><?php echo date('d-m-Y g:i', strtotime($data->createdAt)); ?>: <?php
+                <p><?php echo date('d-m-Y g:i A', strtotime($data->createdAt)); ?>: <?php
                     if (isset($user_details[0]['username'])):
                         echo '<b>' . $user_details[0]['username'] . ': </b>';
                     endif;

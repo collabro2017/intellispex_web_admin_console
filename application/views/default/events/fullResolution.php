@@ -55,7 +55,7 @@ $imagePost = $event->postImage->url;
                 endif;
                 ?>
             </h5>
-            <p><?php echo date('d-m-Y g:i', strtotime($event->createdAt)); ?><br/>
+            <p><?php echo date('d-m-Y g:i A', strtotime($event->createdAt)); ?><br/>
                 <?php echo $data->Comments; ?>
             </p>
             <?php
@@ -78,7 +78,7 @@ $imagePost = $event->postImage->url;
             ?><?php echo $post->countryLatLong; ?><br/> <?php
         }
         ?>
-        <?php echo date('d-m-Y g:i', strtotime($post->createdAt)); ?><br/>
+        <?php echo date('d-m-Y g:i A', strtotime($post->createdAt)); ?><br/>
         <?php echo $post->description;
         ?>
     </p>
@@ -102,7 +102,7 @@ $imagePost = $event->postImage->url;
                     );
                     $user_details = json_decode(json_encode($user_details), true);
                     ?>
-                    <p><?php echo date('d-m-Y g:i', strtotime($data->createdAt)); ?>: <?php
+                    <p><?php echo date('d-m-Y g:i A', strtotime($data->createdAt)); ?>: <?php
                     if (isset($user_details[0]['username'])):
                         echo '<b>' . $user_details[0]['username'] . ': </b>';
                     endif;
