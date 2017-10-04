@@ -113,17 +113,29 @@ class manage extends CI_Controller_EX {
         $current_user = $users[0];
         $mongoRolerId = $current_user['user_type']['objectId'];
         $result = $this->M_user->login($username, $password, $mongoRolerId);
+        
         if ($result) {
             $sess_array = array();
             foreach ($result as $row) {
-                $sess_array = array(
-                    'id' => $row->id,
-                    'username' => $row->username,
-                    'role' => $role,
-                    'email' => $row->email,
-                    'mongodb_id' => $current_user['objectId'],
-                    'mongodb_role_id' => $row->mongodb_role_id
-                );
+                if(SERVER_LIVE == 0){ // Staging Database
+                    $sess_array = array(
+                        'id' => $row->id,
+                        'username' => $row->username,
+                        'role' => $role,
+                        'email' => $row->email,
+                        'mongodb_id' => $current_user['objectId'],
+                        'mongodb_role_id' => $row->mongodb_role_id
+                    );
+                }else{ // Live Database Sessoion
+                    $sess_array = array(
+                        'id' => $row->id,
+                        'username' => $row->username,
+                        'role' => $role,
+                        'email' => $row->email,
+                        'mongodb_id' => $current_user['objectId'],
+                        'mongodb_role_id' => $row->live_mangodb_role_id
+                    );
+                }
                 $this->session->set_userdata('logged_in', $sess_array);
             }
             return TRUE;
@@ -666,7 +678,7 @@ class manage extends CI_Controller_EX {
         $admin = $this->parserestclient->query(
                 array(
                     "objectId" => "_User",
-                    'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"aDiZnlW1AX"}}',
+                    'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"'.MONGODB_ROLE_ID.'"}}',
                 )
         );
         $users = $this->parserestclient->query(
@@ -690,7 +702,8 @@ class manage extends CI_Controller_EX {
         $admin = $this->parserestclient->query(
                 array(
                     "objectId" => "_User",
-                    'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"aDiZnlW1AX"}}',
+                    'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"'.MONGODB_ROLE_ID.''
+                    . '"}}',
                 )
         );
         $users = $this->parserestclient->query(

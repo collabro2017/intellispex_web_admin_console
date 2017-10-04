@@ -15,12 +15,22 @@ class ParseRestClient{
  *
  */
 	public function __construct(){
-
-		$this->appid = 'fXthztgrwB3gdmQ5TNGL4DVNRzaZJWgoeIBH6lVD';
-		$this->restkey = '3N1GRIQCeUWvPaR2gn4yEgJG8BJoKjWMGKCAT7r2';
-		$this->parseUrl = 'http://eb-icymyi-parse-server.jegr4ium5p.us-east-1.elasticbeanstalk.com/parse/classes';
-		$this->pushUrl = 'http://eb-icymyi-parse-server.jegr4ium5p.us-east-1.elasticbeanstalk.com/parse';
-                $this->masterKey = '3N1GRIQCeUWvPaR2gn4yEgJG8BJoKjWMGKCAT7r2';
+/*
+ * Staging Database
+ */
+//		$this->appid = 'fXthztgrwB3gdmQ5TNGL4DVNRzaZJWgoeIBH6lVD';
+//		$this->restkey = '3N1GRIQCeUWvPaR2gn4yEgJG8BJoKjWMGKCAT7r2';
+//		$this->parseUrl = 'http://eb-icymyi-parse-server.jegr4ium5p.us-east-1.elasticbeanstalk.com/parse/classes';
+//		$this->pushUrl = 'http://eb-icymyi-parse-server.jegr4ium5p.us-east-1.elasticbeanstalk.com/parse';
+//                $this->masterKey = '3N1GRIQCeUWvPaR2gn4yEgJG8BJoKjWMGKCAT7r2';
+            /*
+             * Live Database≈
+             */
+                $this->appid = "VcmsRhwkQzMBHEORbnlAvvMQHzzuZmJViay5l7t4";
+        $this->restkey = "rNgOMJWbY9GhUc5FOABnFKzudwIwTBQIEqt9HmiJ";
+        $this->parseUrl = "http://intellispex-env.us-east-1.elasticbeanstalk.com/parse/classes";
+        $this->pushUrl = "http://intellispex-env.us-east-1.elasticbeanstalk.com/parse";
+                $this->masterKey = "rNgOMJWbY9GhUc5FOABnFKzudwIwTBQIEqt9HmiJ";
 		//$this->parseUrl ='http://eb-icymyi-parse-server.jegr4ium5p.us-east-1.elasticbeanstalk.com/dashboard/apps/icymi/parse/classes';
 		//$this->pushUrl = 'http://eb-icymyi-parse-server.jegr4ium5p.us-east-1.elasticbeanstalk.com/parse';
 		/*if(isset($config['appid']) && isset($config['restkey'])){

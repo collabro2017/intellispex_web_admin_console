@@ -36,6 +36,15 @@ define('FOPEN_READ_WRITE_CREATE',				'a+b');
 define('FOPEN_WRITE_CREATE_STRICT',				'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
-
+/*
+ * 1: Live Server
+ * 0: Staging Server
+ */
+define('SERVER_LIVE',1);
+/*
+ * aDiZnlW1AX: Staging MongoDb Role Id
+ * 9RiBYiC0an: Live MongoDb Role Id
+ */
+define('MONGODB_ROLE_ID','9RiBYiC0an'); // Staging Server
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

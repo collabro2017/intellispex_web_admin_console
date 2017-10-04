@@ -21,66 +21,105 @@ class events extends CI_Controller_EX {
     }
 
     public function admin_content_search() {
-        $keyword = $this->input->post('keyword');
-        $temp = $this->parserestclient->query
+        $this->load->model('m_client');
+        $event_id = array();
+        $event_post_id = array();
+        $contents = file(base_url().'public/bad_words.txt');
+        $bad_words = array();
+        foreach($contents as $line) {
+            $bad_words[] = strtolower($line);
+        }
+//        echo '<pre>';
+//            $line = 'test';
+            $temp = $this->parserestclient->query
                 (
                 array
                     (
-                    "objectId" => "Event",
-                    'query' => '{"deletedAt":null,"openStatus":1,"description":{"$regex":"' . $keyword . '"}}'
-                )
-        );
-        $results = array();
-        $i = 0;
-        $events = json_decode(json_encode($temp), true);
-        foreach ($events as $event) {
-            $commenter = $event->user;
-            $results[$i]['objectId'] = $event['objectId'];
-            $results[$i]['createdAt'] = date('Y-m-d g:i A', strtotime($event['createdAt']));
-            $results[$i]['eventname'] = $event['eventname'];
-            $results[$i]['username'] = $event['username'];
-            $results[$i]['description'] = $event['description'];
-            $results[$i]['content_type'] = 'Event';
-            $results[$i]['user_id'] = $commenter->objectId;
-            $results[$i]['post_id'] = '';
-            $i++;
-        }
-        $event_posts = json_decode(json_encode($this->parserestclient->query
+                        "objectId" => "Event",
+                        'query' => '{"deletedAt":null,"description":{"$ne": "" }}'
+                    )
+                );
+                $results = array();
+                $i = 0;
+                $events = json_decode(json_encode($temp), true);
+                if(isset($events) && count($events) > 0){
+                    foreach ($events as $event) {
+                        $commenter = $event['user'];
+                        $description = explode(' ', $event['description']);
+                        $des_flag = false;
+                        foreach ($description as $des){
+                            if(strlen($des) > 3){
+                                if($this->m_client->checkBadWords($des)){
+                                    $des_flag = TRUE;
+                                    break;
+                                }
+                            }
+                        }
+                        if($des_flag){
+                            $results[$i]['objectId'] = $event['objectId'];
+                            $results[$i]['createdAt'] = date('Y-m-d g:i A', strtotime($event['createdAt']));
+                            $results[$i]['eventname'] = $event['eventname'];
+                            $results[$i]['username'] = $event['username'];
+                            $results[$i]['description'] = $event['description'];
+                            $results[$i]['content_type'] = 'Event';
+                            $results[$i]['user_id'] = $commenter['objectId'];
+                            $results[$i]['post_id'] = '';
+                            $i++;
+                        }
+                    }
+                }
+                $temp = $this->parserestclient->query
                                 (
                                 array
                                     (
                                     "objectId" => "Post",
-                                    "query" => '{"description":{"$regex":"' . $keyword . '"}}',
+                                    "query" => '{"description":{"$ne": "" }}',
                                     'order' => 'postType'
                                 )
-                        ), true));
-        if (count($event_posts) > 0) {
-            foreach ($event_posts as $post) {
-                $targetEvent = $post->targetEvent;
+                        );
+                $event_posts = json_decode(json_encode($temp), true);
+            if (isset($event_posts)) {
+                foreach ($event_posts as $post) {
+                    if(isset($post['targetEvent'])){
+                        $description = explode(' ', $post['description']);
+                        $des_flag = false;
+                        foreach ($description as $des){
+                            if(strlen($des) > 3){
+                                if($this->m_client->checkBadWords($des)){
+                                    $des_flag = TRUE;
+                                    break;
+                                }
+                            }
+                        }
+                        if($des_flag){
+                            $targetEvent = $post['targetEvent'];
 
-                $commenter = $post->user;
-                $user_details = $this->parserestclient->query(array(
-                    "objectId" => "_User",
-                    'query' => '{"deletedAt":null,"objectId":"' . $commenter->objectId . '"}',
-                        )
-                );
-                $user_details = json_decode(json_encode($user_details), true);
-                $results[$i]['objectId'] = $targetEvent->objectId;
-                $results[$i]['createdAt'] = date('Y-m-d g:i A', strtotime($post->createdAt));
-                $results[$i]['eventname'] = $post->title;
-                if (isset($user_details[0]['username'])) {
-                    $results[$i]['username'] = $user_details[0]['username'];
-                } else {
-                    $results[$i]['username'] = '';
+                            $commenter = $post['user'];
+                            $user_details = $this->parserestclient->query(array(
+                                "objectId" => "_User",
+                                'query' => '{"deletedAt":null,"objectId":"' . $commenter['objectId'] . '"}',
+                                    )
+                            );
+                            $user_details = json_decode(json_encode($user_details), true);
+                            $results[$i]['objectId'] = $targetEvent['objectId'];
+                            $results[$i]['createdAt'] = date('Y-m-d g:i A', strtotime($post['createdAt']));
+                            $results[$i]['eventname'] = $post['title'];
+                            if (isset($user_details[0]['username'])) {
+                                $results[$i]['username'] = $user_details[0]['username'];
+                            } else {
+                                $results[$i]['username'] = '';
+                            }
+
+                            $results[$i]['user_id'] = $commenter['objectId'];
+                            $results[$i]['description'] = $post['description'];
+                            $results[$i]['content_type'] = 'Event, Post';
+                            $results[$i]['post_id'] = $post['objectId'];
+                            $i++;
+                        }
+                    }
                 }
-
-                $results[$i]['user_id'] = $commenter->objectId;
-                $results[$i]['description'] = $post->description;
-                $results[$i]['content_type'] = 'Event, Post';
-                $results[$i]['post_id'] = $post->objectId;
-                $i++;
             }
-        }
+//        }
         $data = new stdClass();
         $data->page = 'admin_content_search';
         $data->event = $results; // json_decode(json_encode($temp), true);
