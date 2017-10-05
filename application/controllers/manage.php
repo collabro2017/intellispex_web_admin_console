@@ -963,7 +963,7 @@ class manage extends CI_Controller_EX {
                     array
                         (
                         "objectId" => "user_group",
-                        'query' => '{"created_by":{"__type":"Pointer","className":"_User","objectId":"' . $id . '"}}',
+                        'query' => '{"client_id":{"__type":"Pointer","className":"_User","objectId":"' . $id . '"}}',
                     )
             );
             $data->user_group = json_decode(json_encode($user_group), true);
