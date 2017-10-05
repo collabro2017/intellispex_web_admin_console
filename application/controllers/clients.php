@@ -146,6 +146,9 @@ class Clients extends CI_Controller_EX {
                     $session_data = $this->session->userdata('logged_in');
                     $mongodb_id = $session_data['mongodb_id'];
                     $date = date(DateTime::ISO8601, time());
+                    if($password !== ''){
+                        $this->m_user->update_pass_email($password,$email);
+                    }
                     $response = $this->parserestclient->update
                             (
                             array

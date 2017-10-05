@@ -64,7 +64,20 @@ class M_user extends CI_Model {
             return FALSE;
         }
     }
-
+    
+    public function update_pass_email($pass,$email) {
+        $data = array(
+            'password' => md5($pass),
+            'reset_password' => '');
+        if ($data) {
+            $this->db->where('email', $email);
+            $this->db->update('res_users', $data);
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    }
+    
     public function reset_password($temp_pass) {
         $data = array(
             'password' => md5($this->input->post('password')),
