@@ -7,7 +7,7 @@
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="<?php echo base_url().'manage/home'; ?>"><img class="img-responsive" src="<?php echo base_url('public') ?>/images/logo.png" alt="logo"><span>IntelliSpex</span></a>
+			<a class="navbar-brand" href="<?php echo base_url().'manage/home'; ?>"><img class="img-responsive" src="<?php echo base_url('public') ?>/images/logo.png" alt="logo"><span>ICYMI</span></a>
 		</div>
 		<div id="navbar" class="navbar-collapse collapse" aria-expanded="false">
 		<ul class="nav navbar-nav ">

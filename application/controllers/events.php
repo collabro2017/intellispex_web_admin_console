@@ -539,7 +539,7 @@ class events extends CI_Controller_EX {
         $message = 'Hi ' . $user->username . ", <br/>";
         $message .= 'This is to notify that your post is having some prohibited words. Please becareful this is final warning. <br/>Next time we will take serious action against you. <br/><br/>';
         $message .= 'Regards,<br/>';
-        $message .= 'IntelliSpeX';
+        $message .= 'ICYMI';
         $ci->email->message($message);
     }
 

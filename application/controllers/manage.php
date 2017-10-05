@@ -294,7 +294,7 @@ class manage extends CI_Controller_EX {
 
                     $ci->email->initialize($config);
 
-                    $ci->email->from('test.IntelliSpeX@gmail.com', 'IntelliSpeX');
+                    $ci->email->from('test.IntelliSpeX@gmail.com', 'ICYMI');
                     $list = array($email_to_reset);
                     $ci->email->to($list);
                     $this->email->reply_to('test.IntelliSpeX@gmail.com', 'Explendid Videos');
@@ -364,7 +364,7 @@ class manage extends CI_Controller_EX {
 
             $ci->email->initialize($config);
 
-            $ci->email->from('test.IntelliSpeX@gmail.com', 'IntelliSpeX');
+            $ci->email->from('test.IntelliSpeX@gmail.com', 'ICYMI');
             $list = array($this->input->post('username'));
             $ci->email->to($list);
             $this->email->reply_to('test.IntelliSpeX@gmail.com', 'Explendid Videos');

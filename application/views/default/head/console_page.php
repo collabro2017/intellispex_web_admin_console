@@ -1,6 +1,6 @@
 <head>
 	<meta charset="utf-8" />
-	<title>IntelliSpeX</title>
+	<title>ICYMI</title>
 	<meta name="description" content="Events" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<link href="<?php echo base_url('public') ?>/assets/css/bootstrap.min.css" rel="stylesheet" />

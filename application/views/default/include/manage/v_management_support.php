@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
 	<meta charset="utf-8" />
-	<title>IntelliSpeX</title>
+	<title>ICYMI</title>
 	<meta name="description" content="Support page" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
@@ -74,11 +74,11 @@
 							        <ol>
 										<li>Creating an Account &amp; Username
 											<ul>
-												<li>How do I create an IntelliSpeX account?</li>
-												IntelliSpeX is a mobile app that can be downloaded on iOS compatible phones and tablets.<br/>
+												<li>How do I create an ICYMI account?</li>
+												ICYMI is a mobile app that can be downloaded on iOS compatible phones and tablets.<br/>
 												To create an account:
 												<ol>
-													<li>Download the IntelliSpeX app for iOS from the App Store.</li>
+													<li>Download the ICYMI app for iOS from the App Store.</li>
 													<li>Once the app has been installed, tap <img src="<?php echo base_url('public') ?>/img/support-home.png" class="icon"/> to open it.</li>
 													<li>Tap Sign Up, then enter your email address, desired Username and Password. Fill out your profile info and select a photo.</li>
 													<li>You are also given the option to Sign Up by Connecting with Facebook or Google account.</li>
@@ -99,7 +99,7 @@
 							<div class="panel-heading" role="tab" id="headingTwo">
 								<h4 class="panel-title">
 									<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-										Creating an Event on IntelliSpeX
+										Creating an Event on ICYMI
 									</a>
 								</h4>
 							</div>
@@ -137,14 +137,14 @@
 							<div class="panel-heading" role="tab" id="headingThree">
 								<h4 class="panel-title">
 									<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-										Using features on IntelliSpeX
+										Using features on ICYMI
 									</a>
 								</h4>
 							</div>
 							<div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
 								<div class="panel-body">
 									<ol>
-										<li>Using features on IntelliSpeX
+										<li>Using features on ICYMI
 											<ul>
 												<li>How do I use the Toggle Feature?</li>
 												<ol>

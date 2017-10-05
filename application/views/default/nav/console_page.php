@@ -9,7 +9,7 @@
 				style="margin-top: 0px;"
 			>
 			<span style="color : #00aaff;">
-				IntelliSpeX
+				ICYMI
 			</span>
 		</h2>
 		<h2 class="span7" style="text-align:center;">

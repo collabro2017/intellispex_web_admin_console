@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>IntelliSpeX</title>
+    <title>ICYMI</title>
     <meta name="description" content="User login page" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -58,7 +58,7 @@
     <![endif]-->
 
   </head>
-  <h1 class="col-sm-4"><img class="irc_mut iUyhD38Z_yik-HwpH6ZlgJaI" onload="google.aft&amp;&amp;google.aft(this)" src="<?php echo base_url('public') ?>/images/logo.JPG" width="60" height="60" style="margin-top: 0px;"> <span style="color : #00aaff;">IntelliSpeX</span></h1>
+  <h1 class="col-sm-4"><img class="irc_mut iUyhD38Z_yik-HwpH6ZlgJaI" onload="google.aft&amp;&amp;google.aft(this)" src="<?php echo base_url('public') ?>/images/logo.JPG" width="60" height="60" style="margin-top: 0px;"> <span style="color : #00aaff;">ICYMI</span></h1>
 	<!-----------------//////////////////////////////------------------------>
 	<ul>
 		<li><a href="<?php echo base_url().'manage/home'; ?>">Home</a></li>

@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
 	<meta charset="utf-8" />
-	<title>IntelliSpeX</title>
+	<title>ICYMI</title>
 	<meta name="description" content="User login page" />
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -111,7 +111,7 @@
   <body class="login-layout admin-body">
 	<div class="widget-main">
 		<div class="top-menu">
-			<h2 class="span3"><img class="irc_mut iUyhD38Z_yik-HwpH6ZlgJaI" onload="google.aft&amp;&amp;google.aft(this)" src="<?php echo base_url('public') ?>/images/logo.JPG" width="60" height="60" style="margin-top: 0px;"> <span style="color : #00aaff;">IntelliSpeX</span></h2>
+			<h2 class="span3"><img class="irc_mut iUyhD38Z_yik-HwpH6ZlgJaI" onload="google.aft&amp;&amp;google.aft(this)" src="<?php echo base_url('public') ?>/images/logo.JPG" width="60" height="60" style="margin-top: 0px;"> <span style="color : #00aaff;">ICYMI</span></h2>
 			<h2 class="span7"><span><?php echo $function_name; ?></span></h2>
 			<h2 class="span2"></i> <span><?php echo $email; ?></span></h2>
 		</div>
