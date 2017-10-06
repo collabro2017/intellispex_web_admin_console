@@ -892,7 +892,7 @@ class manage extends CI_Controller_EX {
         $mongodb_id = $session_data['mongodb_id'];
         $this->load->model('m_user');
         $client_mongo_role = $this->m_user->getMongoRoleById(3);
-        if(base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/'){
+        if(base_url() == 'http://test.intellispex.com/'){
             $client_mongo_role = $client_mongo_role->mongodb_role_id;
         }else{
             $client_mongo_role = $client_mongo_role->live_mangodb_role_id;

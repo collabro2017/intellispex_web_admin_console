@@ -219,7 +219,7 @@ class M_user extends CI_Model {
         $mobile = $this->input->post('mobile');
         $email = $this->input->post('email');
         $client_mongo_role = $this->m_user->getMongoRoleById(3);
-        if(base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/'){
+        if(base_url() == 'http://test.intellispex.com/'){
             $client_mongo_role = $client_mongo_role->mongodb_role_id;
         }else{
             $client_mongo_role = $client_mongo_role->live_mangodb_role_id;
@@ -257,13 +257,14 @@ class M_user extends CI_Model {
                         ], 'user_type' => [
                             "__type" => "Pointer",
                             "className" => "_Role",
-                            "objectId" => "$regular_uses"
+                            "objectId" => "$regular_user"
                         ], 'created_by' => [
                             "__type" => "Pointer",
                             "className" => "_User",
                             "objectId" => "$mongodb_id"
                         ], 'associated_with' => [
-                            "__type" => "Pointer",
+                            "__type" => "Pointer",                            "className" => "_User",
+
                             "className" => "_User",
                             "objectId" => "$client_id"
                         ]],
