@@ -183,10 +183,15 @@ class events extends CI_Controller_EX {
             $data->role = $session_data['role'];
             $data->id = $session_data['id'];
             $data->function_name = "VIEW OR EDIT GLOBAL EVENT LIST";
+            if(base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/'){
+                $regular_user = 'XVr1sAmAQl';
+            }else{
+                $regular_user = 'Di56R0ITXB';
+            }
             $user = $this->parserestclient->query(
                     array(
                         "objectId" => "_User",
-                        'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"XVr1sAmAQl"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $session_data['mongodb_id'] . '"}}',
+                        'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"'.$regular_user.'"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $session_data['mongodb_id'] . '"}}',
                     )
             );
             $associated_user = json_decode(json_encode($user), true);
@@ -331,10 +336,15 @@ class events extends CI_Controller_EX {
                                         'order' => 'postType'
                                     )
                             ), true));
+            if(base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/'){
+                $regular_user = 'XVr1sAmAQl';
+            }else{
+                $regular_user = 'Di56R0ITXB';
+            }
             $user = $this->parserestclient->query(
                     array(
                         "objectId" => "_User",
-                        'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"XVr1sAmAQl"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $session_data['mongodb_id'] . '"}}',
+                        'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"'.$regular_user.'"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $session_data['mongodb_id'] . '"}}',
                     )
             );
             $data->associated_user = json_decode(json_encode($user), true);
@@ -845,10 +855,15 @@ class events extends CI_Controller_EX {
             $data->role = $session_data['role'];
             $data->id = $session_data['id'];
             $data->function_name = "VIEW OR EDIT GLOBAL EVENT LIST";
+            if(base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/'){
+                $regular_user = 'XVr1sAmAQl';
+            }else{
+                $regular_user = 'Di56R0ITXB';
+            }
             $user = $this->parserestclient->query(
                     array(
                         "objectId" => "_User",
-                        'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"XVr1sAmAQl"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $session_data['mongodb_id'] . '"}}',
+                        'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"'.$regular_user.'"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $session_data['mongodb_id'] . '"}}',
                     )
             );
             $associated_user = json_decode(json_encode($user), true);

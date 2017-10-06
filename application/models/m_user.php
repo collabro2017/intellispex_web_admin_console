@@ -36,7 +36,11 @@ class M_user extends CI_Model {
     }
 
     public function getMongoRoleById($id) {
-        $this->db->select('mongodb_role_id');
+        if(base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/'){
+            $this->db->select('mongodb_role_id');
+        }else{
+            $this->db->select('live_mangodb_role_id');
+        }
         $this->db->from('res_groups');
         $this->db->where('id', $id);
         $query = $this->db->get();
