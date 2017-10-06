@@ -156,7 +156,11 @@ class M_user extends CI_Model {
         $mobile = $this->input->post('mobile');
         $email = $this->input->post('email');
         $client_mongo_role = $this->m_user->getMongoRoleById(3);
-        $client_mongo_role = $client_mongo_role->mongodb_role_id;
+        if(base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/'){
+            $client_mongo_role = $client_mongo_role->mongodb_role_id;
+        }else{
+            $client_mongo_role = $client_mongo_role->live_mangodb_role_id;
+        }
         $session_data = $this->session->userdata('logged_in');
 
         $mongodb_id = $session_data['mongodb_id'];
@@ -219,7 +223,11 @@ class M_user extends CI_Model {
         $mobile = $this->input->post('mobile');
         $email = $this->input->post('email');
         $client_mongo_role = $this->m_user->getMongoRoleById(3);
-        $client_mongo_role = $client_mongo_role->mongodb_role_id;
+        if(base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/'){
+            $client_mongo_role = $client_mongo_role->mongodb_role_id;
+        }else{
+            $client_mongo_role = $client_mongo_role->live_mangodb_role_id;
+        }
         $mongodb_id = $session_data['mongodb_id'];
         $date = date(DateTime::ISO8601, time());
         $response = $this->parserestclient->update
