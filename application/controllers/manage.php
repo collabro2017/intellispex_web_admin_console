@@ -786,7 +786,7 @@ class manage extends CI_Controller_EX {
     }
 
     public function add_user($client_id) {
-
+        $session_data = $this->session->userdata('logged_in');
         $data = new stdClass;
         $this->load->model('m_user');
         $function_name = "ADD ASSOCIATED USER";
@@ -991,7 +991,7 @@ class manage extends CI_Controller_EX {
             $data->role = $session_data['role'];
             $data->id = $session_data['id'];
             $data->function_name = "Client View: User Management";
-            if(base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/'){
+            if(base_url() == 'http://test.intellispex.com/'){
                 $regular_user = 'XVr1sAmAQl';
             }else{
                 $regular_user = 'Di56R0ITXB';
@@ -1155,7 +1155,7 @@ class manage extends CI_Controller_EX {
     public function edit_client() {
         $this->load->model('m_user');
         $client_mongo_role = $this->m_user->getMongoRoleById(3);
-        if(base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/'){
+        if(base_url() == 'http://test.intellispex.com/'){
             $client_mongo_role = $client_mongo_role->mongodb_role_id;
         }else{
             $client_mongo_role = $client_mongo_role->live_mangodb_role_id;

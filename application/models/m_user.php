@@ -36,7 +36,7 @@ class M_user extends CI_Model {
     }
 
     public function getMongoRoleById($id) {
-        if(base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/'){
+        if(base_url() == 'http://test.intellispex.com/'){
             $this->db->select('mongodb_role_id');
         }else{
             $this->db->select('live_mangodb_role_id');
@@ -147,7 +147,7 @@ class M_user extends CI_Model {
         $mobile = $this->input->post('mobile');
         $email = $this->input->post('email');
         $client_mongo_role = $this->m_user->getMongoRoleById(3);
-        if(base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/'){
+        if(base_url() == 'http://test.intellispex.com/'){
             $client_mongo_role = $client_mongo_role->mongodb_role_id;
         }else{
             $client_mongo_role = $client_mongo_role->live_mangodb_role_id;
@@ -156,6 +156,11 @@ class M_user extends CI_Model {
 
         $mongodb_id = $session_data['mongodb_id'];
         $date = date(DateTime::ISO8601, time());
+        if(base_url() == 'http://test.intellispex.com/'){
+            $regular_user = 'XVr1sAmAQl';
+        }else{
+            $regular_user = 'Di56R0ITXB';
+        }
         $response = $this->parserestclient->create
                 (
                 array
@@ -182,7 +187,7 @@ class M_user extends CI_Model {
                         ], 'user_type' => [
                             "__type" => "Pointer",
                             "className" => "_Role",
-                            "objectId" => "XVr1sAmAQl"
+                            "objectId" => "$regular_user"
                         ], 'created_by' => [
                             "__type" => "Pointer",
                             "className" => "_User",
@@ -221,6 +226,11 @@ class M_user extends CI_Model {
         }
         $mongodb_id = $session_data['mongodb_id'];
         $date = date(DateTime::ISO8601, time());
+        if(base_url() == 'http://test.intellispex.com/'){
+            $regular_user = 'XVr1sAmAQl';
+        }else{
+            $regular_user = 'Di56R0ITXB';
+        }
         $response = $this->parserestclient->update
                 (
                 array
@@ -247,7 +257,7 @@ class M_user extends CI_Model {
                         ], 'user_type' => [
                             "__type" => "Pointer",
                             "className" => "_Role",
-                            "objectId" => "XVr1sAmAQl"
+                            "objectId" => "$regular_uses"
                         ], 'created_by' => [
                             "__type" => "Pointer",
                             "className" => "_User",
