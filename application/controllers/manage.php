@@ -158,7 +158,7 @@ class manage extends CI_Controller_EX {
         $user = $this->parserestclient->query(
                 array(
                     "objectId" => "_User",
-                    'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"'.$regular_user.'"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $session_data['mongodb_id'] . '"}}',
+                    'query' => '{"deletedAt":null,"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $session_data['mongodb_id'] . '"}}',
                 )
         );
         $associated_user = json_decode(json_encode($user), true);
@@ -171,7 +171,7 @@ class manage extends CI_Controller_EX {
                 array
                     (
                     "objectId" => "Event",
-                    'query' => '{"TagFriends":{"$all":' . json_encode($userArr, true) . '}}',
+                    'query' => '{"TagFriends":{"$in":' . json_encode($userArr, true) . '}}',
                 )
         );
         $events = json_decode(json_encode($temp), true);
