@@ -738,6 +738,24 @@ class events extends CI_Controller_EX {
                         ]]
                 )
         );
+        $comment = array();
+        $comment[] = $Comments;
+        $response = $this->parserestclient->update
+                (
+                array
+                    (
+                    "objectId" => "Event",
+                    'object' => ['commentsArray' => [
+                            "__op" => "Add",
+                            "objects" => $comment
+                        ],
+                        'updatedAt' => [
+                            "__type" => "Date",
+                            "iso" => $date,
+                        ]],
+                    'where' => $targetEvent
+                )
+        );
         redirect('/events/event/' . $targetEvent, 'refresh');
     }
 
@@ -766,6 +784,7 @@ class events extends CI_Controller_EX {
                         ]]
                 )
         );
+        
         $comments = $response->objectId;
         $commentsArray[] = ["type" => "Pointer",
             "className" => "Comments",
