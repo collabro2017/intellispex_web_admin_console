@@ -150,9 +150,9 @@ class manage extends CI_Controller_EX {
         $function_name = "User Statistics";
         $data->back = TRUE;
         $session_data = $this->session->userdata('logged_in');
-        if(base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/'){
+        if (base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/') {
             $regular_user = 'XVr1sAmAQl';
-        }else{
+        } else {
             $regular_user = 'Di56R0ITXB';
         }
         $user = $this->parserestclient->query(
@@ -536,9 +536,9 @@ class manage extends CI_Controller_EX {
             $data->role = $session_data['role'];
             $data->id = $session_data['id'];
             $data->function_name = "Review User";
-            if(base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/'){
+            if (base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/') {
                 $regular_user = 'XVr1sAmAQl';
-            }else{
+            } else {
                 $regular_user = 'Di56R0ITXB';
             }
             $user = $this->parserestclient->query
@@ -546,7 +546,7 @@ class manage extends CI_Controller_EX {
                     array
                         (
                         "objectId" => "_User",
-                        'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"'.$regular_user.'"}}',
+                        'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"' . $regular_user . '"}}',
                         'limit' => '1000000',
                         'order' => '-Status'
                     )
@@ -598,17 +598,28 @@ class manage extends CI_Controller_EX {
                     (
                     array
                         (
-                        "objectId" => "Event",
-                        'query' => '{"deletedAt":null,"openStatus":1}'
+                        "objectId" => "ReportedContent",
+                        'query' => '{"objectId":{"$ne":null } }'
                     )
             );
             $results = array();
             $i = 0;
-            $events = json_decode(json_encode($temp), true);
-            foreach ($events as $event) {
-                if (isset($event['eventBadgeFlag'])) {
-                    if (count($event['eventBadgeFlag']) > 0) {
-                        if (isset($event['user'])) {
+            $reported_content = json_decode(json_encode($temp), true);
+            foreach ($reported_content as $content) {
+                if (isset($content['targetEvent'])) {
+                    $event_id = $content['targetEvent']['objectId'];
+                    $temp = $this->parserestclient->query
+                            (
+                            array
+                                (
+                                "objectId" => "Event",
+                                'query' => '{"objectId":"' . $event_id . '", "description":{"$ne":"" } }'
+                            )
+                    );
+                    $event = json_decode(json_encode($temp), true);
+                    if(count($event) > 0){
+                        $event = $event[0];
+                        if (isset($event['objectId'])) {
                             $commenter = $event['user'];
                             $results[$i]['objectId'] = $event['objectId'];
                             $results[$i]['createdAt'] = date('Y-m-d g:i A', strtotime($event['createdAt']));
@@ -622,42 +633,39 @@ class manage extends CI_Controller_EX {
                         }
                     }
                 }
-            }
-            $event_posts = json_decode(json_encode($this->parserestclient->query
+                if (isset($content['targetPost'])) {
+                    $postId = $content['targetPost']['objectId'];
+                    $event_posts = json_decode(json_encode($this->parserestclient->query
+                                ( array
                                     (
-                                    array
-                                        (
-                                        "objectId" => "Post",
-                                        "query" => '{"description":{"$ne":"" }}',
-                                        'order' => 'postType'
-                                    )
-                            ), true));
-            if (count($event_posts) > 0) {
-                foreach ($event_posts as $post) {
-                    if (isset($post->usersBadgeFlag)) {
-                        if (count($post->usersBadgeFlag) > 0) {
-                            $targetEvent = $post->targetEvent;
-                            $commenter = $post->user;
-                            $user_details = $this->parserestclient->query(array(
-                                "objectId" => "_User",
-                                'query' => '{"deletedAt":null,"objectId":"' . $commenter->objectId . '"}',
-                                    )
-                            );
-                            $user_details = json_decode(json_encode($user_details), true);
-                            $results[$i]['objectId'] = $targetEvent->objectId;
-                            $results[$i]['createdAt'] = date('Y-m-d g:i A', strtotime($post->createdAt));
-                            $results[$i]['eventname'] = $post->title;
-                            if (isset($user_details[0]['username'])) {
-                                $results[$i]['username'] = $user_details[0]['username'];
-                            } else {
-                                $results[$i]['username'] = '';
-                            }
-                            $results[$i]['user_id'] = $commenter->objectId;
-                            $results[$i]['description'] = $post->description;
-                            $results[$i]['content_type'] = 'Event, Post';
-                            $results[$i]['post_id'] = $post->objectId;
-                            $i++;
+                                    "objectId" => "Post",
+                                    "query" => '{"objectId": "' . $postId . '","description":{"$ne":"" }}',
+                                    'order' => 'postType'
+                                )
+                        ), true));
+                    if (count($event_posts) > 0) {
+                        $post = $event_posts[0];
+                        $targetEvent = $post->targetEvent;
+                        $commenter = $post->user;
+                        $user_details = $this->parserestclient->query(array(
+                            "objectId" => "_User",
+                            'query' => '{"deletedAt":null,"objectId":"' . $commenter->objectId . '"}',
+                                )
+                        );
+                        $user_details = json_decode(json_encode($user_details), true);
+                        $results[$i]['objectId'] = $targetEvent->objectId;
+                        $results[$i]['createdAt'] = date('Y-m-d g:i A', strtotime($post->createdAt));
+                        $results[$i]['eventname'] = $post->title;
+                        if (isset($user_details[0]['username'])) {
+                            $results[$i]['username'] = $user_details[0]['username'];
+                        } else {
+                            $results[$i]['username'] = '';
                         }
+                        $results[$i]['user_id'] = $commenter->objectId;
+                        $results[$i]['description'] = $post->description;
+                        $results[$i]['content_type'] = 'Event, Post';
+                        $results[$i]['post_id'] = $post->objectId;
+                        $i++;
                     }
                 }
             }
@@ -673,15 +681,15 @@ class manage extends CI_Controller_EX {
         $data = new stdClass;
         $function_name = "APPLICATION ADMINISTRATOR - DASHBOARD";
         $data->back = TRUE;
-        if(base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/'){
+        if (base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/') {
             $regular_user = 'aDiZnlW1AX';
-        }else{
+        } else {
             $regular_user = '9RiBYiC0an';
         }
         $admin = $this->parserestclient->query(
                 array(
                     "objectId" => "_User",
-                    'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"'.$regular_user.'"}}',
+                    'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"' . $regular_user . '"}}',
                 )
         );
         $users = $this->parserestclient->query(
@@ -702,15 +710,15 @@ class manage extends CI_Controller_EX {
         $data = new stdClass;
         $function_name = "CLIENT MANAGEMENT DASHBOARD";
         $data->back = TRUE;
-        if(base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/'){
+        if (base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/') {
             $regular_user = 'aDiZnlW1AX';
-        }else{
+        } else {
             $regular_user = '9RiBYiC0an';
         }
         $admin = $this->parserestclient->query(
                 array(
                     "objectId" => "_User",
-                    'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"'.$regular_user.'"}}',
+                    'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"' . $regular_user . '"}}',
                 )
         );
         $users = $this->parserestclient->query(
@@ -747,9 +755,9 @@ class manage extends CI_Controller_EX {
             $data->role = $session_data['role'];
             $data->id = $session_data['id'];
             $data->function_name = "Review User";
-            if(base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/'){
+            if (base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/') {
                 $regular_user = 'XVr1sAmAQl';
-            }else{
+            } else {
                 $regular_user = 'Di56R0ITXB';
             }
             $user = $this->parserestclient->query
@@ -757,7 +765,7 @@ class manage extends CI_Controller_EX {
                     array
                         (
                         "objectId" => "_User",
-                        'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"'.$regular_user.'"}}',
+                        'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"' . $regular_user . '"}}',
                         'limit' => '1000000',
                         'order' => '-Status'
                     )
@@ -879,10 +887,10 @@ class manage extends CI_Controller_EX {
         $mongodb_id = $session_data['mongodb_id'];
         $this->load->model('m_user');
         $client_mongo_role = $this->m_user->getMongoRoleById(3);
-        
-        if(base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/'){
+
+        if (base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/') {
             $client_mongo_role = $client_mongo_role->mongodb_role_id;
-        }else{
+        } else {
             $client_mongo_role = $client_mongo_role->live_mangodb_role_id;
         }
         $temp = $this->parserestclient->query
@@ -979,9 +987,9 @@ class manage extends CI_Controller_EX {
             $data->role = $session_data['role'];
             $data->id = $session_data['id'];
             $data->function_name = "Client View: User Management";
-            if(base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/'){
+            if (base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/') {
                 $regular_user = 'XVr1sAmAQl';
-            }else{
+            } else {
                 $regular_user = 'Di56R0ITXB';
             }
             $user = $this->parserestclient->query
@@ -989,7 +997,7 @@ class manage extends CI_Controller_EX {
                     array
                         (
                         "objectId" => "_User",
-                        'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"'.$regular_user.'"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $id . '"}}',
+                        'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"' . $regular_user . '"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $id . '"}}',
                     )
             );
             $data->associated_user = json_decode(json_encode($user), true);
@@ -1089,9 +1097,9 @@ class manage extends CI_Controller_EX {
                 $mobile = $this->input->post('mobile');
                 $email = $this->input->post('email');
                 $client_mongo_role = $this->m_user->getMongoRoleById(3);
-                if(base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/'){
+                if (base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/') {
                     $client_mongo_role = $client_mongo_role->mongodb_role_id;
-                }else{
+                } else {
                     $client_mongo_role = $client_mongo_role->live_mangodb_role_id;
                 }
                 $session_data = $this->session->userdata('logged_in');
@@ -1143,9 +1151,9 @@ class manage extends CI_Controller_EX {
     public function edit_client() {
         $this->load->model('m_user');
         $client_mongo_role = $this->m_user->getMongoRoleById(3);
-        if(base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/'){
+        if (base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/') {
             $client_mongo_role = $client_mongo_role->mongodb_role_id;
-        }else{
+        } else {
             $client_mongo_role = $client_mongo_role->live_mangodb_role_id;
         }
         $temp = $this->parserestclient->query
@@ -1179,15 +1187,15 @@ class manage extends CI_Controller_EX {
             $data->role = $session_data['role'];
             $data->id = $session_data['id'];
             $data->function_name = "VIEW OR EDIT GLOBAL EVENT LIST";
-            if(base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/'){
+            if (base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/') {
                 $regular_user = 'XVr1sAmAQl';
-            }else{
+            } else {
                 $regular_user = 'Di56R0ITXB';
             }
             $user = $this->parserestclient->query(
                     array(
                         "objectId" => "_User",
-                        'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"'.$regular_user.'"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $session_data['mongodb_id'] . '"}}',
+                        'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"' . $regular_user . '"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $session_data['mongodb_id'] . '"}}',
                     )
             );
             $associated_user = json_decode(json_encode($user), true);
