@@ -36,13 +36,13 @@
 							</div>
 							<div class="radio">
 								<label>
-									<input type="radio" checked="checked" value="1" name="role">
+									<input type="radio" checked="checked" value="2" name="role">
 									Corporation Administrator
 								</label>
 							</div>
 							<div class="radio">
 								<label>
-									<input type="radio" value="2" name="role">
+									<input type="radio" value="1" name="role">
 									Application Administrator
 								</label>
 							</div>

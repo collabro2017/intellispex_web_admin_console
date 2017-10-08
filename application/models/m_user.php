@@ -10,8 +10,8 @@ class M_user extends CI_Model {
         $this->load->library('ParseRestClient');
     }
 
-    function login($username, $password, $mongodb_id) {
-        $this->db->select('res_users.id, username, email,mongodb_role_id');
+    function login($username, $password, $mongodb_id,$user_type) {
+        $this->db->select('res_users.id,user_type, username, email,mongodb_role_id');
         $this->db->from('res_users');
         $this->db->join('res_groups', 'res_groups.id = res_users.user_type', 'left');
         $sanitize_username = $this->db->escape($username);
@@ -19,6 +19,7 @@ class M_user extends CI_Model {
         $this->db->where($where);
         $this->db->where('password', md5($password));
         $this->db->where('mongodb_role_id', $mongodb_id);
+        $this->db->where('res_users.user_type', $user_type);
         $this->db->where('res_users.active', 1);
         $this->db->limit(1);
 

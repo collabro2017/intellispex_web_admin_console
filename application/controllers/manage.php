@@ -112,19 +112,23 @@ class manage extends CI_Controller_EX {
         }
         $current_user = $users[0];
         $mongoRolerId = $current_user['user_type']['objectId'];
-        $result = $this->M_user->login($username, $password, $mongoRolerId);
+        $result = $this->M_user->login($username, $password, $mongoRolerId,$role);
         if ($result) {
             $sess_array = array();
             foreach ($result as $row) {
-                $sess_array = array(
-                    'id' => $row->id,
-                    'username' => $row->username,
-                    'role' => $role,
-                    'email' => $row->email,
-                    'mongodb_id' => $current_user['objectId'],
-                    'mongodb_role_id' => $row->mongodb_role_id
-                );
-                $this->session->set_userdata('logged_in', $sess_array);
+                if($row->user_type == $role){
+                    $sess_array = array(
+                        'id' => $row->id,
+                        'username' => $row->username,
+                        'role' => $row->user_type,
+                        'email' => $row->email,
+                        'mongodb_id' => $current_user['objectId'],
+                        'mongodb_role_id' => $row->mongodb_role_id
+                    );
+                    $this->session->set_userdata('logged_in', $sess_array);
+                }else{
+                    return false;
+                }
             }
             return TRUE;
         } else {
@@ -496,15 +500,15 @@ class manage extends CI_Controller_EX {
 
     public function console_menu() {
         $session_data = $this->session->userdata('logged_in');
-        //var_dump($session_data);exit();
+//        print_r($session_data);exit();
         $role = $session_data['role'];
         $data = new stdClass;
-        if ($role == 1) {
+        if ($role == 2) {
             $function_name = "CLIENT ADMINISTRATOR CONSOLE MENU";
             $data->links = array('c_dashboard' => 'Client Management Dashboard', 'client_set_up' => 'User Set Up / Client Management / Upload / Editing',
                 'set_up_management' => 'Activity Set Up and Management', 'user_data_management' => 'User Data Management and Export',
                 'logout' => 'Logout');
-        } else if ($role == 2) {
+        } else if ($role == 1) {
             $function_name = "APPLICATION ADMINISTRATOR CONSOLE MENU";
             $data->links = array('dashboard' => 'Management Dashboard', 'client_set_up' => 'Client Set Up/ Upload / Editing',
                 'activity_setup_management' => 'Activity Setup and Management', 'user_data_management' => 'User Data Management and Export',
