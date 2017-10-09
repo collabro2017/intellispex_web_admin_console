@@ -28,14 +28,22 @@
                     </div>
                     <div style="clear: both;height: 20px"></div>
                 </div>
+                <div class="row">
+                    <div class="span9">
+                        <div class="clear" style="text-align:center;">
+                            <a href="<?php echo base_url(); ?>manage/console_menu" class="btn btn-small btn-primary menu-button">Console Menu</a>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
         <?php $this->load->view('default/footer/console_page.php'); ?>
         <script type="text/javascript">
-            $( "#runSearch" ).click(function(){
-                $('.search-results').css('display','block');
-                    $.post( "<?php echo base_url(); ?>events/admin_content_search",{ keyword:''}, function( data ) {
-                         $('.search-results').html(data);
+            $("#runSearch").click(function () {
+                $('.search-results').css('display', 'block');
+                $.post("<?php echo base_url(); ?>events/admin_content_search", {keyword: ''}, function (data) {
+                    $('.search-results').html(data);
                 });
             });
         </script>
