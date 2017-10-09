@@ -740,6 +740,12 @@ class events extends CI_Controller_EX {
         );
         $comment = array();
         $comment[] = $Comments;
+        $commenterArray = array();
+        $commenterArray[] = [
+                            "__type" => "Pointer",
+                            "className" => "_User",
+                            "objectId" => "$Commenter"
+                        ];
         $response = $this->parserestclient->update
                 (
                 array
@@ -748,6 +754,9 @@ class events extends CI_Controller_EX {
                     'object' => ['commentsArray' => [
                             "__op" => "Add",
                             "objects" => $comment
+                        ],'commenters' => [
+                            "__op" => "Add",
+                            "objects" => $commenterArray
                         ],
                         'updatedAt' => [
                             "__type" => "Date",
