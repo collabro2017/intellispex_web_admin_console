@@ -579,7 +579,7 @@ class manage extends CI_Controller_EX {
         $role = $session_data['role'];
         $data = new stdClass;
         $function_name = "Manage Flagged/Reported Content";
-        $data->links = array('admin_content_search' => 'Administrator Content Search', 'FlaggedEvents' => 'User Flagged Content Queue',
+        $data->links = array('admin_content_search' => 'Administrator Content Search', 'FlaggedEvents' => 'User Flagged Content Queue', 'console_menu' => 'Console Menu',
             'logout' => 'Logout');
         $this->check_login($data, $function_name);
     }
