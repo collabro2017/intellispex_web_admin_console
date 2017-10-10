@@ -163,47 +163,49 @@
                                                         <div style="clear: both;"></div>
                                                     </div>
                                                     <?php
-                                                    if (isset($post->thumbImage) && isset($post->postFile) && $post->postType == 'photo') {
-                                                        $image = $post->thumbImage;
-                                                        $imagePost = $post->postFile;
-                                                        
-                                                        ?>
-                                                    <style>
-                                                        <?php
-                                                        if(strlen($post->title) > 120 && strlen($post->title) < 180){
-                                                        ?>
-                                                        .cboxPhoto{ height: 98% !important; }
-                                                        <?php
-                                                        }elseif(strlen($post->title) > 180){
+                                                    if(isset($post->postType)){
+                                                        if (isset($post->thumbImage) && isset($post->postFile) && $post->postType == 'photo') {
+                                                            $image = $post->thumbImage;
+                                                            $imagePost = $post->postFile;
+
                                                             ?>
-                                                        .cboxPhoto{ height: 96% !important; }
-                                                        <?php
-                                                        }
-                                                        ?>
-                                                    </style>
-                                                    
-                                                    <a  class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $post->title; ?>">
-                                                            <img style="width:70%;" style="cursor: pointer" id="eventImage" src="<?php echo $imagePost->url; ?>" />
-                                                        </a>
-                                                        <?php
-                                                    } elseif ($post->postType == 'video') {
-                                                        $video = $post->postFile;
-                                                        $name = explode('.', basename($video->url));
-                                                        $extension = $name['1'];
-                                                        ?>
-                                                        <?php if ($extension == 'mp4' || $extension == 'ogg') { ?>
-                                                            <video name="<?php echo $post->title; ?>" style="width: 100%;" controls autoplay>
-                                                                <source src="<?php echo $video->url; ?>" type="video/<?php echo $extension; ?>" />
-                                                                Sorry, your browser doesn't support the video element.
-                                                            </video>
+                                                        <style>
                                                             <?php
-                                                        } else {
+                                                            if(strlen($post->title) > 120 && strlen($post->title) < 180){
                                                             ?>
-                                                            <video style="width: 100%;" controls="controls" width="800" height="600" name="<?php echo $post->title; ?>" src="<?php echo $video->url; ?>"></video>
+                                                            .cboxPhoto{ height: 98% !important; }
+                                                            <?php
+                                                            }elseif(strlen($post->title) > 180){
+                                                                ?>
+                                                            .cboxPhoto{ height: 96% !important; }
+                                                            <?php
+                                                            }
+                                                            ?>
+                                                        </style>
+
+                                                        <a  class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $post->title; ?>">
+                                                                <img style="width:70%;" style="cursor: pointer" id="eventImage" src="<?php echo $imagePost->url; ?>" />
+                                                            </a>
+                                                            <?php
+                                                        } elseif ($post->postType == 'video') {
+                                                            $video = $post->postFile;
+                                                            $name = explode('.', basename($video->url));
+                                                            $extension = $name['1'];
+                                                            ?>
+                                                            <?php if ($extension == 'mp4' || $extension == 'ogg') { ?>
+                                                                <video name="<?php echo $post->title; ?>" style="width: 100%;" controls autoplay>
+                                                                    <source src="<?php echo $video->url; ?>" type="video/<?php echo $extension; ?>" />
+                                                                    Sorry, your browser doesn't support the video element.
+                                                                </video>
+                                                                <?php
+                                                            } else {
+                                                                ?>
+                                                                <video style="width: 100%;" controls="controls" width="800" height="600" name="<?php echo $post->title; ?>" src="<?php echo $video->url; ?>"></video>
+                                                                <?php
+                                                            }
+                                                            ?>
                                                             <?php
                                                         }
-                                                        ?>
-                                                        <?php
                                                     }
                                                     ?>
                                                     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
