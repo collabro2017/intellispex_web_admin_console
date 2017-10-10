@@ -1223,6 +1223,7 @@ class manage extends CI_Controller_EX {
                         (
                         "objectId" => "Event",
                         'query' => '{"deletedAt":null, "TagFriends":{"$all":' . json_encode($userArr, true) . '}}',
+                        'limit' => '100000',
                         'order' => $asc
                     )
             );
@@ -1246,6 +1247,7 @@ class manage extends CI_Controller_EX {
                             (
                             "objectId" => "Event",
                             'query' => '{"deletedAt":null}',
+                            'limit' => '100000',
                             'order' => $asc
                         )
                 );
@@ -1274,6 +1276,7 @@ class manage extends CI_Controller_EX {
                             "objectId" => "Event",
                             //'query'=>'{"deletedAt":null, "createdAt":{"$gt":"'.$date.'"}}',
                             'query' => '{"deletedAt":null, "user":{"__type":"Pointer", "createdAt":{"$gte":{"__type":"Date","iso":"' . $date . '"}}}',
+                            'limit' => '100000',
                             'order' => $asc,
                         //'limit'=>intval($day),
                         )
