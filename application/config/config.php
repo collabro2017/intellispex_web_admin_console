@@ -15,7 +15,7 @@
 |
 */
 $config['base_url']	= 'http://intellispex.com/';
-
+date_default_timezone_set('America/Chicago');
 /*
 |--------------------------------------------------------------------------
 | Index File
