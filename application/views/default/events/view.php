@@ -338,21 +338,16 @@
                                                 Users
                                                 <ul class="children">
                                                     <?php foreach ($associated_user as $user) {
+                                                        
+                                                            if (isset($user['username'])): 
                                                         ?>
                                                         <li>
                                                             <a id="create_group<?php echo $user['objectId']; ?>" href="#">
-                                                                <?php
-                                                                if (isset($user['Firstname'])): echo $user['Firstname'];
-                                                                endif;
-                                                                echo " ";
-                                                                if (isset($user['LastName'])): echo $user['LastName'];
-                                                                endif;
-                                                                ?>
+                                                                <?php echo $user['username']; ?>
                                                             </a>
                                                         </li>
-
-
                                                         <?php
+                                                        endif;
                                                     }
                                                     ?>
                                                 </ul>

@@ -297,17 +297,26 @@ class events extends CI_Controller_EX {
                                         'order' => 'postType'
                                     )
                             ), true));
-            if (base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/') {
+            if (base_url() == 'http://test.intellispex.com/') {
                 $regular_user = 'XVr1sAmAQl';
             } else {
                 $regular_user = 'Di56R0ITXB';
             }
-            $user = $this->parserestclient->query(
-                    array(
-                        "objectId" => "_User",
-                        'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"' . $regular_user . '"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $session_data['mongodb_id'] . '"}}',
-                    )
-            );
+            if($session_data['role'] == 1){
+                $user = $this->parserestclient->query(
+                        array(
+                            "objectId" => "_User",
+                            'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"'.$regular_user.'"}}',
+                        )
+                );
+            }else{
+                $user = $this->parserestclient->query(
+                        array(
+                            "objectId" => "_User",
+                            'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"'.$regular_user.'"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $session_data['mongodb_id'] . '"}}',
+                        )
+                );
+            }
             $data->associated_user = json_decode(json_encode($user), true);
             $user_group = $this->parserestclient->query(
                     array(
