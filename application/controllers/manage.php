@@ -643,6 +643,7 @@ class manage extends CI_Controller_EX {
                             $results[$i]['description'] = $event['description'];
                             $results[$i]['content_type'] = 'Event';
                             $results[$i]['user_id'] = $commenter['objectId'];
+                            $results[$i]['reported_id'] = $content['objectId'];
                             $results[$i]['post_id'] = '';
                             $i++;
                         }
@@ -680,6 +681,7 @@ class manage extends CI_Controller_EX {
                         $results[$i]['description'] = $post->description;
                         $results[$i]['content_type'] = 'Event, Post';
                         $results[$i]['post_id'] = $post->objectId;
+                        $results[$i]['reported_id'] = $content['objectId'];
                         $i++;
                     }
                 }

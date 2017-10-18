@@ -1,3 +1,8 @@
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+	window.jQuery || document.write("<script src='assets/js/jquery-1.9.1.min.js'>\x3C/script>");
+</script>
+
 <table class="table table-striped events-table" id="table_data">
     <thead>
         <tr>
@@ -47,29 +52,35 @@
                                 }
                             }else if($( this ).val() == 'delete_post'){
                                 if (window.confirm("Are you sure want to delete selected post?")) {
-                                    $.post("<?php echo base_url(); ?>events/postdelete", {postId: <?php echo $val['post_id']; ?>}, function (data) {
+                                    $.post("<?php echo base_url(); ?>events/postdelete", {postId: "<?php echo $val['post_id']; ?>"}, function (data) {
                                         //console.log(data);
                                         window.location.href = "<?php echo base_url(); ?>manage/<?php echo $page; ?>";
                                     });
                                 }
                             }else if($( this ).val() == 'delete_user'){
                                 if (window.confirm("Are you sure want to delete user?")) {
-                                    $.post("<?php echo base_url(); ?>events/userdelete", {user_id: <?php echo $val['user_id']; ?>}, function (data) {
+                                    $.post("<?php echo base_url(); ?>events/userdelete", {user_id: "<?php echo $val['user_id']; ?>"}, function (data) {
                                         //console.log(data);
                                         window.location.href = "<?php echo base_url(); ?>manage/<?php echo $page; ?>";
                                     });
                                 }
                             }else if($( this ).val() == 'suspend_user'){
                                 if (window.confirm("Are you sure want to suspend user?")) {
-                                    $.post("<?php echo base_url(); ?>events/suspendUser", {user_id: <?php echo $val['user_id']; ?>}, function (data) {
+                                    $.post("<?php echo base_url(); ?>events/suspendUser", {user_id: "<?php echo $val['user_id']; ?>"}, function (data) {
                                         //console.log(data);
                                         window.location.href = "<?php echo base_url(); ?>manage/<?php echo $page; ?>";
                                     });
                                 }
                             }else if($( this ).val() == 'send_user_warning'){
-                                $.post("<?php echo base_url(); ?>events/send_user_warning", {user_id: <?php echo $val['user_id']; ?>}, function (data) {
+                                $.post("<?php echo base_url(); ?>events/send_user_warning", {user_id: "<?php echo $val['user_id']; ?>"}, function (data) {
                                     window.location.href = "<?php echo base_url(); ?>manage/<?php echo $page; ?>";
                                 });
+                            }else if($( this ).val() == 'dismiss'){
+                                if (window.confirm("Are you sure want to dismiss flag request?")) {
+                                    $.post("<?php echo base_url(); ?>events/dismiss", {reportId: "<?php echo $val['reported_id']; ?>"}, function (data) {
+                                        window.location.href = "<?php echo base_url(); ?>manage/<?php echo $page; ?>";
+                                    });
+                                }
                             }
                         });
                     </script>

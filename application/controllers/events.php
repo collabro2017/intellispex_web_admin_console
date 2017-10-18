@@ -234,6 +234,7 @@ class events extends CI_Controller_EX {
                         $results[$i]['username'] = $event['username'];
                         $results[$i]['description'] = $event['description'];
                         $results[$i]['content_type'] = 'Event';
+                        $results[$i]['reported_id'] = $content['objectId'];
                         $results[$i]['user_id'] = $commenter['objectId'];
                         $results[$i]['post_id'] = '';
                         $i++;
@@ -284,6 +285,7 @@ class events extends CI_Controller_EX {
                         $results[$i]['user_id'] = $commenter['objectId'];
                         $results[$i]['description'] = $post['description'];
                         $results[$i]['content_type'] = 'Event, Post';
+                        $results[$i]['reported_id'] = $content['objectId'];
                         $results[$i]['post_id'] = $post['objectId'];
                         $i++;
                     }
@@ -764,7 +766,18 @@ class events extends CI_Controller_EX {
                 )
         );
     }
-
+    
+    public function dismiss() {
+        $reportId= $this->input->post('reportId');
+        $this->parserestclient->delete
+                (
+                array
+                    (
+                    "className" => "ReportedContent",
+                    'objectId' => $reportId
+                )
+        );
+    }
     public function userdelete() {
         $user_id = $this->input->post('user_id');
         $this->parserestclient->delete
