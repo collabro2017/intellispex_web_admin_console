@@ -15,6 +15,7 @@
 |
 */
 $config['base_url']	= 'http://test.intellispex.com/';
+date_default_timezone_set('America/Chicago');
 
 /*
 |--------------------------------------------------------------------------
