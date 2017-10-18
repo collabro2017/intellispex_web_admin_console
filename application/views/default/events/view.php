@@ -206,6 +206,31 @@
                                                             ?>
                                                             <?php
                                                         }
+                                                    }else{
+                                                        if (isset($post->thumbImage) && isset($post->postFile)) {
+                                                            $image = $post->thumbImage;
+                                                            $imagePost = $post->postFile;
+
+                                                            ?>
+                                                        <style>
+                                                            <?php
+                                                            if(strlen($post->title) > 120 && strlen($post->title) < 180){
+                                                            ?>
+                                                            .cboxPhoto{ height: 98% !important; }
+                                                            <?php
+                                                            }elseif(strlen($post->title) > 180){
+                                                                ?>
+                                                            .cboxPhoto{ height: 96% !important; }
+                                                            <?php
+                                                            }
+                                                            ?>
+                                                        </style>
+
+                                                        <a  class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $post->title; ?>">
+                                                                <img style="width:70%;" style="cursor: pointer" id="eventImage" src="<?php echo $imagePost->url; ?>" />
+                                                            </a>
+                                                            <?php
+                                                        }
                                                     }
                                                     ?>
                                                     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>

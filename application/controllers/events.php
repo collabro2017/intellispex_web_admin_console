@@ -183,10 +183,10 @@ class events extends CI_Controller_EX {
             $data->role = $session_data['role'];
             $data->id = $session_data['id'];
             $data->function_name = "VIEW OR EDIT GLOBAL EVENT LIST";
-            if(base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/'){
-                $regular_user = 'XVr1sAmAQl';
-            }else{
+            if(base_url() == 'http://intellispex.com/' || base_url() == 'http://localhost/icymi/'){
                 $regular_user = 'Di56R0ITXB';
+            }else{
+                $regular_user = 'XVr1sAmAQl';
             }
             $user = $this->parserestclient->query(
                     array(
