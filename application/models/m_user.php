@@ -11,14 +11,19 @@ class M_user extends CI_Model {
     }
 
     function login($username, $password, $mongodb_id,$user_type) {
-        $this->db->select('res_users.id,user_type, username, email,mongodb_role_id');
+        $this->db->select('res_users.id, username, email,mongodb_role_id,live_mangodb_role_id');
         $this->db->from('res_users');
         $this->db->join('res_groups', 'res_groups.id = res_users.user_type', 'left');
         $sanitize_username = $this->db->escape($username);
         $where = "( username=" . $sanitize_username . " OR  email=" . $sanitize_username . ")";
         $this->db->where($where);
         $this->db->where('password', md5($password));
-        $this->db->where('mongodb_role_id', $mongodb_id);
+        if(base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/'){
+            $this->db->where('mongodb_role_id', $mongodb_id);
+        }else{
+            $this->db->where('live_mangodb_role_id', $mongodb_id);
+        }
+
         $this->db->where('res_users.user_type', $user_type);
         $this->db->where('res_users.active', 1);
         $this->db->limit(1);
@@ -31,7 +36,22 @@ class M_user extends CI_Model {
             return false;
         }
     }
+    
+    public function getUserByType($user_type) {
+        $this->db->select('username');
+        $this->db->from('res_users');
+        $this->db->where('res_users.user_type', $user_type);
+        $this->db->where('res_users.active', 1);
+        $this->db->limit(1);
 
+        $query = $this->db->get();
+
+        if ($query->num_rows() == 1) {
+            return $query->row();
+        } else {
+            return false;
+        }
+    }
     public function getMongoRoleById($id) {
         if(base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/'){
             $this->db->select('mongodb_role_id');

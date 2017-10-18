@@ -20,7 +20,7 @@
             <div id="main-content">
                 <div class="row">
                     <div class="span9">
-                        <input id="search" required="" type="text" value="" placeholder="Search Content" />
+                        <!--<input id="search" required="" type="text" value="" placeholder="Search Content" />-->
                         <button style="margin-top: 6px;" id="runSearch" class="btn btn-small btn-primary btn-info">Run Search</button>
                     </div>
                     <div class="search-results" style="display:none;">
@@ -40,19 +40,10 @@
         <?php $this->load->view('default/footer/console_page.php'); ?>
         <script type="text/javascript">
             $( "#runSearch" ).click(function(){
-                if($('#search').val()){
-                    $('.search-results').css('display','block');
-                    $.post( "<?php echo base_url(); ?>events/admin_content_search",{ keyword: $('#search').val()}, function( data ) {
-                         $('.search-results').html(data);
-                    });
-                }else{
-                    $('#search').focus();
-                    $('#search').css('color','#e9322d');
-                    $('#search').css('border-color','#e9322d');
-                    $('#search').css('-webkit-box-shadow','0 0 6px #f8b9b7');
-                    $('#search').css('-moz-box-shadow','0 0 6px #f8b9b7');
-                    $('#search').css('box-shadow','0 0 6px #f8b9b7');
-                }
+                $('.search-results').css('display','block');
+                $.post( "<?php echo base_url(); ?>events/admin_content_search",{ keyword:''}, function( data ) {
+                     $('.search-results').html(data);
+                });
             });
             $('#search').on('input',function(e){
                 if($(this).val()){

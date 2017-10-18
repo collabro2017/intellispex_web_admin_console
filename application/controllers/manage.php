@@ -117,14 +117,25 @@ class manage extends CI_Controller_EX {
             $sess_array = array();
             foreach ($result as $row) {
                 if($row->user_type == $role){
-                    $sess_array = array(
-                        'id' => $row->id,
-                        'username' => $row->username,
-                        'role' => $row->user_type,
-                        'email' => $row->email,
-                        'mongodb_id' => $current_user['objectId'],
-                        'mongodb_role_id' => $row->mongodb_role_id
-                    );
+                    if(base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/'){ // Staging Database
+                        $sess_array = array(
+                            'id' => $row->id,
+                            'username' => $row->username,
+                            'role' => $role,
+                            'email' => $row->email,
+                            'mongodb_id' => $current_user['objectId'],
+                            'mongodb_role_id' => $row->mongodb_role_id
+                        );
+                    }else{ // Live Database Sessoion
+                        $sess_array = array(
+                            'id' => $row->id,
+                            'username' => $row->username,
+                            'role' => $role,
+                            'email' => $row->email,
+                            'mongodb_id' => $current_user['objectId'],
+                            'mongodb_role_id' => $row->live_mangodb_role_id
+                        );
+                    }
                     $this->session->set_userdata('logged_in', $sess_array);
                 }else{
                     return false;
