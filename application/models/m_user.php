@@ -11,7 +11,7 @@ class M_user extends CI_Model {
     }
 
     function login($username, $password, $mongodb_id,$user_type) {
-        $this->db->select('res_users.id, username, email,mongodb_role_id,live_mangodb_role_id');
+        $this->db->select('res_users.id, username, email,mongodb_role_id,live_mangodb_role_id,user_type');
         $this->db->from('res_users');
         $this->db->join('res_groups', 'res_groups.id = res_users.user_type', 'left');
         $sanitize_username = $this->db->escape($username);
