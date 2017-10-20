@@ -3,6 +3,8 @@
     <head>		
         <link href="<?php echo base_url('public') ?>/css/datatable.css" rel="stylesheet" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/css/bootstrap-timepicker.min.css" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <style>
             .row-fluid [class*="span"]:first-child {
                 text-align: left !important;
@@ -13,7 +15,20 @@
                 margin-right: 30px !important;
                 margin-left: 0px !important;
             }
-
+            .bootstrap-timepicker-hour{
+                padding: 0px !important;
+                padding-left: 2px !important;
+            }
+            .bootstrap-timepicker-minute{
+                padding: 0px !important;
+                padding-left: 2px !important;
+                
+            }
+            .bootstrap-timepicker-meridian{
+                padding: 0px !important;
+                padding-left: 2px !important;
+                
+            }
             .list-group {
                 padding-left: 0;
                 margin-bottom: 20px;
@@ -166,6 +181,28 @@
                                                 <th><input required type="text" class="span6" name='eventname' <?php if (isset($event[0]['eventname'])): ?> value="<?php echo $event[0]['eventname']; ?>" <?php endif; ?>/></th>
                                             </tr>
                                             <tr>
+                                                <th>Company</th>
+                                                <th><input type="text" class="span6" name='company' <?php if (isset($event[0]['company'])): ?> value="<?php echo $event[0]['company']; ?>" <?php endif; ?>/></th>
+                                            </tr>
+                                            <tr>
+                                                <th>Time Start</th>
+                                                <th>
+                                                     <div class="input-group bootstrap-timepicker timepicker">
+                                                        <input class="form-control input-small" id="startTime" type="time" autocomplete="on" class="span6" name='startTime' <?php if (isset($event[0]['startTime'])): ?> value="<?php echo $event[0]['startTime']; ?>" <?php endif; ?>/>
+                                                        <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>Time Start</th>
+                                                <th>
+                                                     <div class="input-group bootstrap-timepicker timepicker">
+                                                        <input class="form-control input-small" id="endTime" required type="time" autocomplete="on" class="span6" name='endTime' <?php if (isset($event[0]['endTime'])): ?> value="<?php echo $event[0]['endTime']; ?>" <?php endif; ?>/>
+                                                        <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                                                    </div>
+                                                </th>
+                                            </tr>
+                                            <tr>
                                                 <td>*Description</td>
                                                 <td><textarea class="span6" name='description'> <?php if (isset($event[0]['description'])): ?> <?php echo $event[0]['description']; ?> <?php endif; ?> </textarea> </td>
                                             </tr>
@@ -271,8 +308,14 @@
         </div>
     </div>
 <?php $this->load->view('default/footer/console_page.php'); ?>
-
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js" />
+    
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    
     <script type="text/javascript">
+        $('#startTime').timepicker();
+        $('#endTime').timepicker();
         function readURL(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();

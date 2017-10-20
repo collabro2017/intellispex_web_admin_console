@@ -75,6 +75,9 @@ class events extends CI_Controller_EX {
 
                     $eventname = $this->input->post('eventname');
                     $description = $this->input->post('description');
+                    $company = $this->input->post('company');
+                    $startTime = $this->input->post('startTime');
+                    $endTime = $this->input->post('endTime');
                     $country = $this->input->post('country');
                     $user_id = $session_data['mongodb_id'];
                     $temp = $this->parserestclient->query
@@ -99,7 +102,7 @@ class events extends CI_Controller_EX {
                             array
                                 (
                                 "objectId" => "Event",
-                                'object' => ['eventname' => "$eventname", 'description' => "$description", 'country' => "$country", 'username' => "$user_name",
+                                'object' => ['eventname' => "$eventname",'company' => "$company",'startTime' => "$startTime",'endTime' => "$endTime", 'description' => "$description", 'country' => "$country", 'username' => "$user_name",
                                     'postType' => "image",
                                     'createdAt' => [
                                         "__type" => "Date",
@@ -113,6 +116,10 @@ class events extends CI_Controller_EX {
                                         "name" => "$image_name",
                                         "url" => "$image_url"
                                     ], 'user' => [
+                                        "__type" => "Pointer",
+                                        "className" => "_User",
+                                        "objectId" => "$user_id"
+                                    ], 'completedBy' => [
                                         "__type" => "Pointer",
                                         "className" => "_User",
                                         "objectId" => "$user_id"
@@ -541,7 +548,7 @@ class events extends CI_Controller_EX {
             $data->function_name = $event[0]->eventname;
             $data->event = $event[0];
             $data->current_user = $session_data['mongodb_id'];
-            $this->load->view('default/events/view', $data);
+            $this->load->view('default/events/event', $data);
         } else {
             $this->load->view('default/include/manage/v_login');
         }
