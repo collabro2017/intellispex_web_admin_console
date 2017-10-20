@@ -324,7 +324,8 @@ class events extends CI_Controller_EX {
                                     array
                                         (
                                         "objectId" => "EventComment",
-                                        "query" => '{"deletedAt":null,"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}'
+                                        "query" => '{"deletedAt":null,"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}',
+                                        'order' => '-createdAt'
                                     )
                             ), true));
             $data->event_post = json_decode(json_encode($this->parserestclient->query
@@ -608,7 +609,8 @@ class events extends CI_Controller_EX {
                                 array
                                     (
                                     "objectId" => "EventComment",
-                                    "query" => '{"deletedAt":null,"objectId": "' . $comment_id . '"}'
+                                    "query" => '{"deletedAt":null,"objectId": "' . $comment_id . '"}',
+                                    'order' => '-createdAt'
                                 )
                         ), true));
         if (isset($event[0])) {
@@ -649,7 +651,8 @@ class events extends CI_Controller_EX {
                                 array
                                     (
                                     "objectId" => "EventComment",
-                                    "query" => '{"deletedAt":null,"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}'
+                                    "query" => '{"deletedAt":null,"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}',
+                                    'order' => '-createdAt'
                                 )
                         ), true));
 
@@ -925,7 +928,8 @@ class events extends CI_Controller_EX {
                     "objectId" => "EventComment",
                     //'query'=>'{"deletedAt":null}',	
                     //'query'=>'{"targetEvent":"'.$id.'"}'
-                    "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $id . '"}}'
+                    "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $id . '"}}',
+                    'order' => '-createdAt'
                 )
         );
         $temp_activity = $this->parserestclient->query
@@ -1029,7 +1033,8 @@ class events extends CI_Controller_EX {
                         "objectId" => "EventComment",
                         //'query'=>'{"deletedAt":null}',	
                         //'query'=>'{"targetEvent":"'.$id.'"}'
-                        "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $id . '"}}'
+                        "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $id . '"}}',
+                        'order' => '-createdAt'
                     )
             );
             $temp_activity = $this->parserestclient->query
