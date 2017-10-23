@@ -219,7 +219,7 @@
 				});
 				$.post( "<?php echo base_url(); ?>events/eventdelete",{ deletelist: deletelist}, function( data ) {
 					//console.log(data);
-					window.location.href="<?php echo base_url(); ?>events/index";
+					window.location.href="<?php echo base_url()."".$page; ?>";
 				});
 			}
 		}
@@ -239,10 +239,10 @@
 
 		}
 		$( "#orderbyday" ).change(function() {
-			window.location.href="<?php echo base_url(); ?>events/index?day="+$('#orderbyday').val()+"&asc="+$('#orderbyasc').val();
+			window.location.href="<?php echo base_url()."".$page; ?>?day="+$('#orderbyday').val()+"&asc="+$('#orderbyasc').val();
 		});
 		$( "#orderbyasc" ).change(function() {
-			window.location.href="<?php echo base_url(); ?>events/index?day="+$('#orderbyday').val()+"&asc="+$('#orderbyasc').val();
+			window.location.href="<?php echo base_url()."".$page; ?>?day="+$('#orderbyday').val()+"&asc="+$('#orderbyasc').val();
 		});
 
 	</script>

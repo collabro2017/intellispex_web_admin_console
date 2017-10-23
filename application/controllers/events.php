@@ -477,7 +477,7 @@ class events extends CI_Controller_EX {
                 }
                 $data->day = $day;
             }
-
+            $data->page = 'events/index';
             $data->info = $events; //json_decode(json_encode($temp), true);
             $this->load->view('default/events/list', $data);
         } else {
