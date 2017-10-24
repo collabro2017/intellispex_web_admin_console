@@ -141,15 +141,15 @@
                                         <?php endif; ?>
                                         <table class="table table-striped create-client-table" style="margin: 0px;max-width: 85%;"> 
                                             <tr>
-                                                <th>Client Name</th>
+                                                <th>*Client Name</th>
                                                 <th><input required type="text" class="span6" name='name' <?php if (isset($client_data[0]['username'])): ?> value="<?php echo $client_data[0]['username']; ?>" <?php endif; ?>/></th>
                                             </tr>
                                             <tr>
-                                                <td>Administrator Email</td>
+                                                <td>*Email</td>
                                                 <td><input required type="text" class="span6" name='email'<?php if (isset($client_data[0]['email'])): ?> value="<?php echo $client_data[0]['email']; ?>" <?php endif; ?>/></td>
                                             </tr>
                                             <tr>
-                                                <td>Password</td>
+                                                <td>*Password</td>
                                                 <td><input required type="password" class="span6" name='password'<?php if (isset($client_data[0]['password'])): ?> value="<?php echo $client_data[0]['password']; ?>" <?php endif; ?>/></td>
                                             </tr>
 <!--										<tr>
@@ -158,23 +158,23 @@
                                             </tr>-->
                                             <tr>
                                                 <td>City</td>
-                                                <td><input required type="text" class="span6" name='city'<?php if (isset($client_data[0]['city'])): ?> value="<?php echo $client_data[0]['city']; ?>" <?php endif; ?>/></td>
+                                                <td><input type="text" class="span6" name='city'<?php if (isset($client_data[0]['city'])): ?> value="<?php echo $client_data[0]['city']; ?>" <?php endif; ?>/></td>
                                             </tr>
                                             <tr>
                                                 <td>Province / State</td>
-                                                <td><input required type="text" class="span6" name='province'<?php if (isset($client_data[0]['state'])): ?> value="<?php echo $client_data[0]['state']; ?>" <?php endif; ?>/></td>
+                                                <td><input type="text" class="span6" name='province'<?php if (isset($client_data[0]['state'])): ?> value="<?php echo $client_data[0]['state']; ?>" <?php endif; ?>/></td>
                                             </tr>
                                             <tr>
                                                 <td>Postal Code</td>
-                                                <td><input required type="text" class="span6" name='postal'<?php if (isset($client_data[0]['zipcode'])): ?> value="<?php echo $client_data[0]['zipcode']; ?>" <?php endif; ?>/></td>
+                                                <td><input type="text" class="span6" name='postal'<?php if (isset($client_data[0]['zipcode'])): ?> value="<?php echo $client_data[0]['zipcode']; ?>" <?php endif; ?>/></td>
                                             </tr>
                                             <tr>
                                                 <td>Phone</td>
-                                                <td><input required type="text" class="span6" name='phone_number'<?php if (isset($client_data[0]['telephone'])): ?> value="<?php echo $client_data[0]['telephone']; ?>" <?php endif; ?>/></td>
+                                                <td><input type="text" class="span6" name='phone_number'<?php if (isset($client_data[0]['telephone'])): ?> value="<?php echo $client_data[0]['telephone']; ?>" <?php endif; ?>/></td>
                                             </tr>
                                             <tr>
                                                 <td>Mobile Phone</td>
-                                                <td><input required type="text" class="span6" name='mobile'<?php if (isset($client_data[0]['phone'])): ?> value="<?php echo $client_data[0]['phone']; ?>" <?php endif; ?>/></td>
+                                                <td><input type="text" class="span6" name='mobile'<?php if (isset($client_data[0]['phone'])): ?> value="<?php echo $client_data[0]['phone']; ?>" <?php endif; ?>/></td>
                                             </tr>
 <!--										<tr>
                                               <td>Date Created</td>
