@@ -26,6 +26,7 @@
                 <tr><td>Number of Participants</td><td><?php if(isset($event[0]['commenters'])) { echo count($event[0]['commenters']); }else{ echo 0; } ?></td></tr>
                 <tr><td>Tagged Users</td><td><?php echo count(implode(",",$event[0]['TagFriends'])) ?></td></tr>
                 <tr><td>Location</td><td><?php  ?></td></tr>
+                
             </table>
             <br><br>
             <table>
@@ -40,12 +41,23 @@
             ?>
             <table>
                 <?php for($i = 0; $i < $halfActivity; $i++){ ?>
-                <tr><td colspan="2">Activity Sheet <?php echo $i+1; ?></td></tr>
-                    <tr><td>Date</td><td><?php echo date('Y-m-d',strtotime($eventActivity[$i]['createdAt'])); ?></td></tr>
-                    <tr><td>Time</td><td><?php echo date('g:i A',strtotime($eventActivity[$i]['createdAt'])); ?></td></tr>
-                    <tr><td>Title</td><td><?php echo $eventActivity[$i]['title']; ?></td></tr>
-                    <tr><td>Location</td><td><?php echo $eventActivity[$i]['countryLatLong']; ?></td></tr>
-                    <tr><td>Description</td><td><?php echo $eventActivity[$i]['description']; ?></td></tr>
+                <tr><td colspan="2">Activity Sheet <?php echo $i+1; ?></td></tr>                    
+                    <?php if(isset($eventActivity[$i]['createdAt'])){ ?>
+                        <tr><td>Date</td><td><?php echo date('Y-m-d',strtotime($eventActivity[$i]['createdAt'])); ?></td></tr>
+                    <?php } ?>
+                    <?php if(isset($eventActivity[$i]['createdAt'])){ ?>
+                        <tr><td>Time</td><td><?php echo date('g:i A',strtotime($eventActivity[$i]['createdAt'])); ?></td></tr>
+                    <?php } ?>
+                    <?php if(isset($eventActivity[$i]['title'])){ ?>
+                        <tr><td>Title</td><td><?php echo $eventActivity[$i]['title']; ?></td></tr>
+                    <?php } ?>
+                    <?php if(isset($eventActivity[$i]['countryLatLong'])){ ?>
+                        <tr><td>Location</td><td><?php echo $eventActivity[$i]['countryLatLong']; ?></td></tr>
+                    <?php } ?>
+                    <?php if(isset($eventActivity[$i]['description'])){ ?>
+                        <tr><td>Description</td><td><?php echo $eventActivity[$i]['description']; ?></td></tr>
+                    <?php } ?>
+
                     
                 <?php } ?>
             </table>
@@ -58,12 +70,21 @@
             <table>
                 <?php for($i = $halfActivity; $i < count($eventActivity); $i++){ ?>
                     <tr><td colspan="2">Activity Sheet <?php echo $i+1; ?></td></tr>
-                    <tr><td>Date</td><td><?php echo date('Y-m-d',time($eventActivity[$i]['createdAt'])); ?></td></tr>
-                    <tr><td>Time</td><td><?php echo date('g:i A',time($eventActivity[$i]['createdAt'])); ?></td></tr>
-                    <tr><td>Title</td><td><?php echo $eventActivity[$i]['title']; ?></td></tr>
-                    <tr><td>Location</td><td><?php echo $eventActivity[$i]['countryLatLong']; ?></td></tr>
-                    <tr><td>Description</td><td><?php echo $eventActivity[$i]['description']; ?></td></tr>
-                     
+                    <?php if(isset($eventActivity[$i]['createdAt'])){ ?>
+                        <tr><td>Date</td><td><?php echo date('Y-m-d',strtotime($eventActivity[$i]['createdAt'])); ?></td></tr>
+                    <?php } ?>
+                    <?php if(isset($eventActivity[$i]['createdAt'])){ ?>
+                        <tr><td>Time</td><td><?php echo date('g:i A',strtotime($eventActivity[$i]['createdAt'])); ?></td></tr>
+                    <?php } ?>
+                    <?php if(isset($eventActivity[$i]['title'])){ ?>
+                        <tr><td>Title</td><td><?php echo $eventActivity[$i]['title']; ?></td></tr>
+                    <?php } ?>
+                    <?php if(isset($eventActivity[$i]['countryLatLong'])){ ?>
+                        <tr><td>Location</td><td><?php echo $eventActivity[$i]['countryLatLong']; ?></td></tr>
+                    <?php } ?>
+                    <?php if(isset($eventActivity[$i]['description'])){ ?>
+                        <tr><td>Description</td><td><?php echo $eventActivity[$i]['description']; ?></td></tr>
+                    <?php } ?>   
                 <?php } ?>
             </table>
             <?php } ?>
