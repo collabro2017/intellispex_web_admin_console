@@ -194,7 +194,7 @@
                                                 </th>
                                             </tr>
                                             <tr>
-                                                <th>Time Start</th>
+                                                <th>Time End</th>
                                                 <th>
                                                      <div class="input-group bootstrap-timepicker timepicker">
                                                         <input class="form-control input-small" id="endTime" required type="time" autocomplete="on" class="span6" name='endTime' <?php if (isset($event[0]['endTime'])): ?> value="<?php echo $event[0]['endTime']; ?>" <?php endif; ?>/>
