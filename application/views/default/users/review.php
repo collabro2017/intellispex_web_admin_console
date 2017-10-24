@@ -103,10 +103,12 @@
         <div id="main-content">
             <div class="row" style="margin-top:20px;">
                 <div class="span11">
+                    <a class="btn btn-small btn-primary"  href="javascript:deleteuser();" class="btn btn-small btn-primary menu-button">Delete User</a>
                     <table class="table table-striped events-table" id="table_data">
                         <thead>
                             <tr>
                                 <th>Sr. Number</th>
+                                <th></th>
                                 <th>Name</th>
                                 <th>Client or App Administrator</th>
                                 <th>Email</th>
@@ -121,6 +123,7 @@
                             foreach ($associated_user as $value): ?>
                                 <tr>
                                     <td><?php echo $i; ?></td>
+                                    <td><input type="checkbox" class="deleteitem" name="<?php echo $value['objectId'] ?>"></td>
                                     <td><?php
                                         if (isset($value['username'])): echo $value['username'];
                                         endif;
@@ -198,7 +201,21 @@
     $('#table_data').DataTable( {
         "order": [[ 1, "asc" ]]
     } );
-    
+    function deleteuser() {
+        if (window.confirm("Are you sure want to delete selected user(s)?")) {
+
+            var deletelist = [];
+            $(".deleteitem").each(function () {
+                if (this.checked == true)
+                    deletelist.push(this.name);
+            });
+            $.post("<?php echo base_url(); ?>manage/userdelete", {deletelist: deletelist}, function (data) {
+                //console.log(data);
+                window.location.href = "<?php echo base_url(); ?>manage/app_administrator_user";
+            });
+        }
+    }
+
 </script>
 </body>
 </html>

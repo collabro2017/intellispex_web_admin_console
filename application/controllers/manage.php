@@ -554,7 +554,7 @@ class manage extends CI_Controller_EX {
             $data->role = $session_data['role'];
             $data->id = $session_data['id'];
             $data->function_name = "Review User";
-            if (base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/') {
+            if (base_url() == 'http://test.intellispex.com/') {
                 $regular_user = 'XVr1sAmAQl';
             } else {
                 $regular_user = 'Di56R0ITXB';
