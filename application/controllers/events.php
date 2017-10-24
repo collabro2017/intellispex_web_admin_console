@@ -998,6 +998,7 @@ class events extends CI_Controller_EX {
     public function add_post_comment($post_id) {
         $date = date(DateTime::ISO8601, time());
         $Comments = $this->input->post('Comments');
+        $post_id = $this->input->post('postIds');
         $Commenter = $this->input->post('Commenter');
         $targetEvent = $this->input->post('targetEvent');
         $response = $this->parserestclient->create

@@ -44,7 +44,7 @@
                         <div class="widget-main">
                             <div class="row-fluid">
                                 <div class="span8">
-                                    
+
                                     <!-- Event Cover -->
                                     <div class="span12" style="border:1px solid #b2b2b2; border-radius: 2px;">
                                         <?php
@@ -109,20 +109,20 @@
                                                     </li>
                                                 </ul>
                                                 <?php if (isset($event_comment) && count($event_comment) > 1) { ?>
-                                                <ul style="right:10px; position: absolute; bottom: 15px; background: #FFF;opacity: 0.7;width: 40px;height: 38px;border-radius: 3px;">
-                                                    <li id='showMore' style="float: left;margin-top: 0px;cursor: pointer">
-                                                        ...
-                                                    </li>
-                                                </ul>
+                                                    <ul style="right:10px; position: absolute; bottom: 15px; background: #FFF;opacity: 0.7;width: 40px;height: 38px;border-radius: 3px;">
+                                                        <li id='showMore' style="float: left;margin-top: 0px;cursor: pointer">
+                                                            ...
+                                                        </li>
+                                                    </ul>
                                                 <?php } ?>
                                                 <div style="clear: both"></div>
                                             </div>
-                                                
+
                                             <!-- Event Description -->
                                             <div class="span12" style="border-bottom:1px solid #eee;margin: 0;padding: 20px 20px 5px;">
                                                 <p class="description"><?php echo $event->description; ?></p>
                                             </div>
-                                            
+
                                             <!-- Event Comment Section -->
                                             <div class="span12" style="margin: 0;padding: 20px">
                                                 <div style="clear:both"></div>
@@ -155,27 +155,27 @@
                                                                 )
                                                         );
                                                         $user_details = json_decode(json_encode($user_details), true);
-                                                        
                                                         ?>
-                                                <div class="span12" style="margin: 0;">
+                                                        <div class="span12" style="margin: 0;padding-top: 20px;">
                                                             <div class="span6">
-                                                                <?php if(isset($user_details[0]['ProfileImage'])){ 
+                                                                <?php
+                                                                if (isset($user_details[0]['ProfileImage'])) {
                                                                     $imagePost = $user_details[0]['ProfileImage']['url'];
-                                                                ?>
-                                                                <img src="<?php echo $imagePost; ?>" style="border-radius: 20px; width:35px" />&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                    ?>
+                                                                    <img src="<?php echo $imagePost; ?>" style="border-radius: 20px; width:35px" />&nbsp;&nbsp;&nbsp;&nbsp;
                                                                 <?php } ?>
                                                                 <b>
-                                                                <?php
-                                                                if (isset($user_details[0]['username'])):
-                                                                    echo $user_details[0]['username'];
-                                                                endif;
-                                                                ?>
+                                                                    <?php
+                                                                    if (isset($user_details[0]['username'])):
+                                                                        echo $user_details[0]['username'];
+                                                                    endif;
+                                                                    ?>
                                                                 </b>
                                                             </div>
                                                             <div class="span6" style="text-align: right;padding-right: 10px;">                                                            
                                                                 <span style="text-align: right;color: #444"><?php echo date('d-m-Y g:i A', strtotime($data->createdAt)); ?></span>
                                                             </div>
-                                                            <div class="span12" style="margin: 0;padding-top: 10px">
+                                                            <div class="span12" style="margin: 0;min-height: 20px;">
                                                                 <div style="float: left"><?php echo $data->Comments; ?></div>
                                                                 <div style="float:right;padding-right: 10px;">
                                                                     <a  href="javascript:updateComment('<?php echo $data->objectId; ?>')" style="background: transparent; border: none; font-size: 15px;color:#000;"> <i class="fa fa-pencil"></i> </a> 
@@ -312,14 +312,7 @@
 
                                                             <div style="width:97.4%;float: right;background: #eee;  border: 1px solid #b2b2b2;margin: 0;padding-left: 20px;">
                                                                 <div style="clear: both;height:20px;"></div>
-                                                                <a id="add_post_comment<?php echo $post->objectId; ?>" class="btn btn-small btn-primary"  href="javascript:void(0)" class="btn btn-small btn-primary menu-button"> Add </a> 
-                                                                <script>
-
-                                                                    $('#add_post_comment<?php echo $post->objectId; ?>').on('click', function () {
-                                                                        $('#comment_form').attr('action', '<?php echo base_url(); ?>events/add_post_comment/<?php echo $post->objectId; ?>')
-                                                                                $('#add_comment_modal').fadeIn();
-                                                                            });
-                                                                </script>
+                                                                <a class="btn btn-small btn-primary"  href="javascript:add_post_comment('<?php echo $post->objectId; ?>')" class="btn btn-small btn-primary menu-button"> Add </a> 
                                                                 <?php
                                                                 if (isset($post->commentsArray)) {
                                                                     ?>
@@ -605,8 +598,39 @@
 
             <!-- Add Comment Modal -->
 
-            <div id="add_comment_modal" class="modal">
+            <div id="add_post_comment_modal" class="modal">
+                <form id='comment_form' class="form-horizontal" action='<?php echo base_url(); ?>events/add_post_comment/<?php echo $event->objectId; ?>' method='post' style="margin-bottom:0">
+                    <div class="modal-header">
+                        <span id="close" class="close">&times;</span>
+                        <h2 id="headingComment">Add New Comment</h2>
+                    </div>
+                    <!-- Modal content -->
+                    <div class="modal-content">
+                        <div class="form-group">
+                            <div class="col-sm-10">
+                                <label for="access_rights" style="text-align: left" class="col-sm-2 control-label">Description</label>
+                            </div>
+                            <div style="clear: both" class="col-sm-10">
+                                <textarea id="comments" style="width: 100%; height: 200px;" name="Comments" cols="10" rows="10">
 
+                                </textarea>
+                            </div>
+                            <div style="clear:both; height: 10px;"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div style="float:right">
+                            <input type="hidden" name="Commenter" value="<?php echo $current_user; ?>" />
+                            <input type="hidden" name="commentId" id="commentId" value="" />
+                            <input type="hidden" name="postId" id="postId"/>
+                            <input type="hidden" name="postIds" id="postIds" />
+                            <input type="hidden" name="targetEvent" value="<?php echo $event->objectId; ?>" />
+                            <button type="button" class="btn btn-small btn-primary btnCommentClose" style="float:left;margin-right:20px;" >Close</button>
+                            <button type="submit"  id="btnComment" class="btn btn-small btn-primary">Add Comment</button>
+                        </div>
+                        <div style="clear:both"></div>
+                    </div>
+                </form>
             </div>
             <!-- Add Comment Modal End -->
 
@@ -653,278 +677,283 @@
             </div>
             <!-- Update Post Title & Description Modal End -->
 
-            <script src="http://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
-            <script src="<?php echo base_url('public') ?>/js/jquery.colorbox.js"></script>
+    <script src="http://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
+    <script src="<?php echo base_url('public') ?>/js/jquery.colorbox.js"></script>
 
-            <script type="text/javascript">
-                        $('.btnEventClose').on('click', function () {
-                            $('#event_modal').fadeOut();
-                        });
-                        $('#showMore').on('click',function(){
-                            $('#showMoreComments').slideToggle('slow');
-                        })
-                        $('#add_event').on('click', function () {
-                            $('#event_modal').fadeIn();
-                        });
-                        $('#close').on('click', function () {
-                            $('#event_modal').fadeOut();
-                        });
+    <script type="text/javascript">
+        $('.btnEventClose').on('click', function () {
+            $('#event_modal').fadeOut();
+        });
+        $('#showMore').on('click', function () {
+            $('#showMoreComments').slideToggle('slow');
+        })
+        $('#add_event').on('click', function () {
+            $('#event_modal').fadeIn();
+        });
+        $('#close').on('click', function () {
+            $('#event_modal').fadeOut();
+        });
 
-                        $('.btnCommentClose').on('click', function () {
-                            $('#add_comment_modal').fadeOut();
-                        });
-                        $('#add_comment').on('click', function () {
-                            $('#add_comment_modal').fadeIn();
-                        });
-                        $('#close').on('click', function () {
-                            $('#add_comment_modal').fadeOut();
-                        });
+        $('.btnCommentClose').on('click', function () {
+            $('#add_post_comment_modal').fadeOut();
+        });
+        $('#add_comment').on('click', function () {
+            $('#add_comment_modal').fadeIn();
+        });
+        $('#close').on('click', function () {
+            $('#add_comment_modal').fadeOut();
+        });
 
-                        $('.btnPostClose').on('click', function () {
-                            $('#update_post_modal').fadeOut();
-                        });
-                        $('#close').on('click', function () {
-                            $('#update_post_modal').fadeOut();
-                        });
-                        function deletevent() {
-                            if (window.confirm("Are you sure want to delete selected event?")) {
+        $('.btnPostClose').on('click', function () {
+            $('#update_post_modal').fadeOut();
+        });
+        $('#close').on('click', function () {
+            $('#update_post_modal').fadeOut();
+        });
+        function deletevent() {
+            if (window.confirm("Are you sure want to delete selected event?")) {
 
-                                var deletelist = [];
-                                deletelist.push('<?php echo $event->objectId; ?>');
-                                $.post("<?php echo base_url(); ?>events/eventdelete", {deletelist: deletelist}, function (data) {
-                                    //console.log(data);
-                                    window.location.href = "<?php echo base_url(); ?>events/index";
-                                });
+                var deletelist = [];
+                deletelist.push('<?php echo $event->objectId; ?>');
+                $.post("<?php echo base_url(); ?>events/eventdelete", {deletelist: deletelist}, function (data) {
+                    //console.log(data);
+                    window.location.href = "<?php echo base_url(); ?>events/index";
+                });
+            }
+        }
+        function report() {
+            if (window.confirm("Are you sure want to report selected event?")) {
+
+                var deletelist = [];
+                deletelist.push('<?php echo $event->objectId; ?>');
+                $.post("<?php echo base_url(); ?>events/reportEvent", {deletelist: "<?php echo $event->objectId; ?>"}, function (data) {
+                    //console.log(data);
+                    window.location.href = "<?php echo base_url(); ?>events/index";
+                });
+            }
+        }
+        function reportPost(postId) {
+            if (window.confirm("Are you sure want to report selected post?")) {
+
+                var deletelist = [];
+                deletelist.push('<?php echo $event->objectId; ?>');
+                $.post("<?php echo base_url(); ?>events/reportPost", {deletelist: postId}, function (data) {
+                    //console.log(data);
+                    window.location.href = "<?php echo base_url(); ?>events/index";
+                });
+            }
+        }
+        function deletComment(comment_id) {
+            if (window.confirm("Are you sure want to delete selected comment?")) {
+
+                $.post("<?php echo base_url(); ?>events/commentdelete", {commentId: comment_id}, function (data) {
+                    //console.log(data);
+                    window.location.href = "<?php echo base_url(); ?>events/event/<?php echo $event->objectId; ?>";
+                });
+            }
+        }
+
+        function deletPost(post_id) {
+            if (window.confirm("Are you sure want to delete selected post?")) {
+
+                $.post("<?php echo base_url(); ?>events/postdelete", {postId: post_id}, function (data) {
+                    //console.log(data);
+                    window.location.href = "<?php echo base_url(); ?>events/event/<?php echo $event->objectId; ?>";
+                });
+            }
+        }
+        function updateComment(comment_id) {
+            $.post("<?php echo base_url(); ?>events/comments", {commentId: comment_id}, function (data) {
+            $('#comment_form').attr('action', '<?php echo base_url(); ?>events/update_event_comment/<?php echo $event->objectId; ?>');
+                var obj = jQuery.parseJSON(data);
+                $('#headingComment').html('Update Comment');
+                $('#btnComment').html('Update Comment');
+                $('#comments').val(obj.Comments);
+                $('#commentId').val(comment_id);
+                $('#add_comment_modal').fadeIn();
+            });
+        }
+        function updateComment(comment_id) {
+            $.post("<?php echo base_url(); ?>events/comments", {commentId: comment_id}, function (data) {
+            $('#comment_form').attr('action', '<?php echo base_url(); ?>events/update_event_comment/<?php echo $event->objectId; ?>');
+                var obj = jQuery.parseJSON(data);
+                $('#headingComment').html('Update Comment');
+                $('#btnComment').html('Update Comment');
+                $('#comments').val(obj.Comments);
+                $('#commentId').val(comment_id);
+                $('#add_comment_modal').fadeIn();
+            });
+        }
+        function add_post_comment(post_id) {
+            $('#postIds').val(post_id);
+            $('#comment_form').attr('action', '<?php echo base_url(); ?>events/add_post_comment/'+post_id);
+            $('#add_post_comment_modal').fadeIn();
+        }
+        $(document).ready
+        (
+            function ()
+            {
+                $(".groupPhoto").colorbox({rel: 'groupPhoto', transition: "fade"});
+                $('#event_area ul').multiSelect
+                (
+                    {
+                        unselectOn: '#event_area',
+                        keepSelection: true,
+                    }
+                );
+            }
+                //.hover(function(){
+                //                            alert('test');
+                //                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              $(this).find('.children').slideToggle(); 
+                //                        });
+        );
+
+        $('.list-group-item').hover(function () {
+            $(this).find('.children').slideToggle();
+        });
+        function deletesheets()
+        {
+            $("#event_area ul li.selected").each
+                    (
+                            function (index)
+                            {
+                                console.log(index + ": " + $(this).data("id"));
+                            }
+                    );
+            alert("Delete Sheets");
+        }
+
+        $.fn.multiSelect = function (o)
+        {
+            var defaults = {
+                multiselect: true,
+                selected: 'selected',
+                filter: ' > *',
+                unselectOn: false,
+                keepSelection: true,
+                list: $(this).selector,
+                e: null,
+                element: null,
+                start: false,
+                stop: false,
+                unselecting: false
+            }
+            return this.each(function (k, v) {
+                var options = $.extend({}, defaults, o || {});
+                // selector - parent, assign listener to children only
+                $(document).on('mousedown', options.list + options.filter, function (e)
+                {
+                    if (e.which == 1)
+                    {
+                        if (options.handle != undefined && !$(e.target).is(options.handle)) {
+
+                            return true;
+                        }
+                        options.e = e;
+                        options.element = $(this);
+                        multiSelect(options);
+                    }
+                    return true;
+                });
+
+                if (options.unselectOn)
+                {
+                    $(document).on('mousedown', options.unselectOn, function (e)
+                    {
+                        if (!$(e.target).parents().is(options.list) && e.which != 3)
+                        {
+                            $(options.list + ' .' + options.selected).removeClass(options.selected);
+                            if (options.unselecting != false)
+                            {
+                                options.unselecting();
                             }
                         }
-                        function report() {
-                            if (window.confirm("Are you sure want to report selected event?")) {
+                    });
 
-                                var deletelist = [];
-                                deletelist.push('<?php echo $event->objectId; ?>');
-                                $.post("<?php echo base_url(); ?>events/reportEvent", {deletelist: "<?php echo $event->objectId; ?>"}, function (data) {
-                                    //console.log(data);
-                                    window.location.href = "<?php echo base_url(); ?>events/index";
-                                });
-                            }
-                        }
-                        function reportPost(postId) {
-                            if (window.confirm("Are you sure want to report selected post?")) {
+                }
 
-                                var deletelist = [];
-                                deletelist.push('<?php echo $event->objectId; ?>');
-                                $.post("<?php echo base_url(); ?>events/reportPost", {deletelist: postId}, function (data) {
-                                    //console.log(data);
-                                    window.location.href = "<?php echo base_url(); ?>events/index";
-                                });
-                            }
-                        }
-                        function deletComment(comment_id) {
-                            if (window.confirm("Are you sure want to delete selected comment?")) {
-
-                                $.post("<?php echo base_url(); ?>events/commentdelete", {commentId: comment_id}, function (data) {
-                                    //console.log(data);
-                                    window.location.href = "<?php echo base_url(); ?>events/event/<?php echo $event->objectId; ?>";
-                                                });
-                                            }
-                                        }
-
-                                        function deletPost(post_id) {
-                                            if (window.confirm("Are you sure want to delete selected post?")) {
-
-                                                $.post("<?php echo base_url(); ?>events/postdelete", {postId: post_id}, function (data) {
-                                                    //console.log(data);
-                                                    window.location.href = "<?php echo base_url(); ?>events/event/<?php echo $event->objectId; ?>";
-                                                                });
-                                                            }
-                                                        }
-                                                        function updateComment(comment_id) {
-                                                            $.post("<?php echo base_url(); ?>events/comments", {commentId: comment_id}, function (data) {
-                                                                $('#comment_form').attr('action', '<?php echo base_url(); ?>events/update_event_comment/<?php echo $event->objectId; ?>');
-                                                                            var obj = jQuery.parseJSON(data);
-                                                                            $('#headingComment').html('Update Comment');
-                                                                            $('#btnComment').html('Update Comment');
-                                                                            $('#comments').val(obj.Comments);
-                                                                            $('#commentId').val(comment_id);
-                                                                            $('#add_comment_modal').fadeIn();
-                                                                        });
-                                                                    }
-                                                                    function updatePost(post_id) {
-                                                                        $('#postId').val(post_id);
-                                                                        $.post("<?php echo base_url(); ?>events/Post", {postId: post_id}, function (data) {
-                                                                            var obj = jQuery.parseJSON(data);
-                                                                            $('#description').val(obj.description);
-                                                                            $('#title').val(obj.title);
-                                                                            $('#title2').val(obj.objectId);
-                                                                            $('#update_post_modal').fadeIn();
-                                                                        });
-                                                                    }
-                                                                    $(document).ready
-                                                                            (
-                                                                                    function ()
-                                                                                    {
-                                                                                        $(".groupPhoto").colorbox({rel: 'groupPhoto', transition: "fade"});
-                                                                                        $('#event_area ul').multiSelect
-                                                                                                (
-                                                                                                        {
-                                                                                                            unselectOn: '#event_area',
-                                                                                                            keepSelection: true,
-                                                                                                        }
-                                                                                                );
-                                                                                    }
-                                                                            //.hover(function(){
-                                                                            //                            alert('test');
-                                                                            //                           $(this).find('.children').slideToggle(); 
-                                                                            //                        });
-                                                                            );
-
-                                                                    $('.list-group-item').hover(function () {
-                                                                        $(this).find('.children').slideToggle();
-                                                                    });
-                                                                    function deletesheets()
-                                                                    {
-                                                                        $("#event_area ul li.selected").each
-                                                                                (
-                                                                                        function (index)
-                                                                                        {
-                                                                                            console.log(index + ": " + $(this).data("id"));
-                                                                                        }
-                                                                                );
-                                                                        alert("Delete Sheets");
-                                                                    }
-
-                                                                    $.fn.multiSelect = function (o)
-                                                                    {
-                                                                        var defaults = {
-                                                                            multiselect: true,
-                                                                            selected: 'selected',
-                                                                            filter: ' > *',
-                                                                            unselectOn: false,
-                                                                            keepSelection: true,
-                                                                            list: $(this).selector,
-                                                                            e: null,
-                                                                            element: null,
-                                                                            start: false,
-                                                                            stop: false,
-                                                                            unselecting: false
-                                                                        }
-                                                                        return this.each(function (k, v) {
-                                                                            var options = $.extend({}, defaults, o || {});
-                                                                            // selector - parent, assign listener to children only
-                                                                            $(document).on('mousedown', options.list + options.filter, function (e)
-                                                                            {
-                                                                                if (e.which == 1)
-                                                                                {
-                                                                                    if (options.handle != undefined && !$(e.target).is(options.handle)) {
-
-                                                                                        return true;
-                                                                                    }
-                                                                                    options.e = e;
-                                                                                    options.element = $(this);
-                                                                                    multiSelect(options);
-                                                                                }
-                                                                                return true;
-                                                                            });
-
-                                                                            if (options.unselectOn)
-                                                                            {
-                                                                                $(document).on('mousedown', options.unselectOn, function (e)
-                                                                                {
-                                                                                    if (!$(e.target).parents().is(options.list) && e.which != 3)
-                                                                                    {
-                                                                                        $(options.list + ' .' + options.selected).removeClass(options.selected);
-                                                                                        if (options.unselecting != false)
-                                                                                        {
-                                                                                            options.unselecting();
-                                                                                        }
-                                                                                    }
-                                                                                });
-
-                                                                            }
-
-                                                                        });
+            });
 
 
-                                                                    }
+        }
 
-                                                                    function multiSelect(o)
-                                                                    {
-                                                                        var target = o.e.target;
-                                                                        var element = o.element;
-                                                                        var list = o.list;
+        function multiSelect(o)
+        {
+            var target = o.e.target;
+            var element = o.element;
+            var list = o.list;
 
-                                                                        if ($(element).hasClass('ui-sortable-helper'))
-                                                                        {
-                                                                            return false;
-                                                                        }
+            if ($(element).hasClass('ui-sortable-helper'))
+            {
+                return false;
+            }
 
-                                                                        if (o.start != false)
-                                                                        {
-                                                                            var start = o.start(o.e, $(element));
-                                                                            if (start == false)
-                                                                            {
-                                                                                return false;
-                                                                            }
-                                                                        }
+            if (o.start != false)
+            {
+                var start = o.start(o.e, $(element));
+                if (start == false)
+                {
+                    return false;
+                }
+            }
 
-                                                                        if (o.e.shiftKey && o.multiselect)
-                                                                        {
-                                                                            $(element).addClass(o.selected);
-                                                                            first = $(o.list).find('.' + o.selected).first().index();
-                                                                            last = $(o.list).find('.' + o.selected).last().index();
+            if (o.e.shiftKey && o.multiselect)
+            {
+                $(element).addClass(o.selected);
+                first = $(o.list).find('.' + o.selected).first().index();
+                last = $(o.list).find('.' + o.selected).last().index();
 
-                                                                            if (last < first)
-                                                                            {
-                                                                                firstHolder = first;
-                                                                                first = last;
-                                                                                last = firstHolder;
-                                                                            }
+                if (last < first)
+                {
+                    firstHolder = first;
+                    first = last;
+                    last = firstHolder;
+                }
 
-                                                                            if (first == -1 || last == -1)
-                                                                            {
-                                                                                return false;
-                                                                            }
+                if (first == -1 || last == -1)
+                {
+                    return false;
+                }
 
-                                                                            $(o.list).find('.' + o.selected).removeClass(o.selected);
+                $(o.list).find('.' + o.selected).removeClass(o.selected);
 
-                                                                            var num = last - first;
-                                                                            var x = first;
+                var num = last - first;
+                var x = first;
 
-                                                                            for (i = 0; i <= num; i++)
-                                                                            {
-                                                                                $(list).find(o.filter).eq(x).addClass(o.selected);
-                                                                                x++;
-                                                                            }
-                                                                        } else if ((o.e.ctrlKey || o.e.metaKey) && o.multiselect)
-                                                                        {
-                                                                            if ($(element).hasClass(o.selected))
-                                                                            {
-                                                                                $(element).removeClass(o.selected);
-                                                                            } else
-                                                                            {
-                                                                                $(element).addClass(o.selected);
-                                                                            }
-                                                                        } else
-                                                                        {
-                                                                            if (o.keepSelection && !$(element).hasClass(o.selected))
-                                                                            {
-                                                                                $(list).find('.' + o.selected).removeClass(o.selected);
-                                                                                $(element).addClass(o.selected);
-                                                                            } else
-                                                                            {
-                                                                                $(list).find('.' + o.selected).removeClass(o.selected);
-                                                                                $(element).addClass(o.selected);
-                                                                            }
+                for (i = 0; i <= num; i++)
+                {
+                    $(list).find(o.filter).eq(x).addClass(o.selected);
+                    x++;
+                }
+            } else if ((o.e.ctrlKey || o.e.metaKey) && o.multiselect)
+            {
+                if ($(element).hasClass(o.selected))
+                {
+                    $(element).removeClass(o.selected);
+                } else
+                {
+                    $(element).addClass(o.selected);
+                }
+            } else
+            {
+                if (o.keepSelection && !$(element).hasClass(o.selected))
+                {
+                    $(list).find('.' + o.selected).removeClass(o.selected);
+                    $(element).addClass(o.selected);
+                } else
+                {
+                    $(list).find('.' + o.selected).removeClass(o.selected);
+                    $(element).addClass(o.selected);
+                }
 
-                                                                        }
+            }
 
-                                                                        if (o.stop != false)
-                                                                        {
-                                                                            o.stop($(list).find('.' + o.selected), $(element));
-                                                                        }
+            if (o.stop != false)
+            {
+                o.stop($(list).find('.' + o.selected), $(element));
+            }
 
-                                                                    }
-            </script>
-
+        }
+    </script>
     </body>
 </html>

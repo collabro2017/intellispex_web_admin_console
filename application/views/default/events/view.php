@@ -221,8 +221,8 @@
 
                                                                 $('#add_post_comment<?php echo $post->objectId; ?>').on('click', function () {
                                                                     $('#comment_form').attr('action', '<?php echo base_url(); ?>events/add_post_comment/<?php echo $post->objectId; ?>')
-                                                                            $('#add_comment_modal').fadeIn();
-                                                                        });
+                                                                            $('#add_post_comment_modal').fadeIn();
+                                                                        })$;
                                                             </script>
                                                             <?php
                                                             if (isset($post->commentsArray)) {
@@ -505,7 +505,7 @@
 
         <!-- Add Comment Modal -->
 
-        <div id="add_comment_modal" class="modal">
+        <div id="add_post_comment_modal" class="modal">
             <form id='comment_form' class="form-horizontal" action='<?php echo base_url(); ?>events/add_event_comment/<?php echo $event->objectId; ?>' method='post' style="margin-bottom:0">
                 <div class="modal-header">
                     <span id="close" class="close">&times;</span>
@@ -529,7 +529,8 @@
                     <div style="float:right">
                         <input type="hidden" name="Commenter" value="<?php echo $current_user; ?>" />
                         <input type="hidden" name="commentId" id="commentId" value="" />
-                        <input type="hidden" name="postId" id="postId" value="" />
+                        <input type="hidden" name="postIds" id="postIds" />
+                        <input type="hidden" name="postId" id="postId" />
                         <input type="hidden" name="targetEvent" value="<?php echo $event->objectId; ?>" />
                         <button type="button" class="btn btn-small btn-primary btnCommentClose" style="float:left;margin-right:20px;" >Close</button>
                         <button type="submit"  id="btnComment" class="btn btn-small btn-primary">Add Comment</button>
