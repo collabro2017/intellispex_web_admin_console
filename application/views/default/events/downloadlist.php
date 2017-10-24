@@ -20,11 +20,21 @@
 		<div id="main-content">
         <div class="span5"><br><br><br><br>
             <table>
-                <tr><td>Creator</td><td><?php echo $event[0]['username'] ?></td></tr>
-                <tr><td>Data Created</td><td><?php echo date('Y-m-d',strtotime($event[0]['createdAt'])); ?></td></tr>
-                <tr><td>Time Created</td><td><?php echo date('g:i A',strtotime($event[0]['createdAt'])); ?></td></tr>
-                <tr><td>Number of Participants</td><td><?php if(isset($event[0]['commenters'])) { echo count($event[0]['commenters']); }else{ echo 0; } ?></td></tr>
-                <tr><td>Tagged Users</td><td><?php echo count(implode(",",$event[0]['TagFriends'])) ?></td></tr>
+                <?php if(isset($event[0]['username'])){ ?>
+                    <tr><td>Creator</td><td><?php echo $event[0]['username'] ?></td></tr>
+                <?php } ?>
+                <?php if(isset($event[0]['createdAt'])){ ?>
+                    <tr><td>Data Created</td><td><?php echo date('Y-m-d',strtotime($event[0]['createdAt'])); ?></td></tr>
+                <?php } ?>
+                <?php if(isset($event[0]['createdAt'])){ ?>
+                    <tr><td>Time Created</td><td><?php echo date('g:i A',strtotime($event[0]['createdAt'])); ?></td></tr>
+                <?php } ?>
+                <?php if(isset($event[0]['commenters'])){ ?>
+                    <tr><td>Number of Participants</td><td><?php if(isset($event[0]['commenters'])) { echo count($event[0]['commenters']); }else{ echo 0; } ?></td></tr>
+                <?php } ?>
+                <?php if(isset($event[0]['TagFriends'])){ ?>
+                    <tr><td>Tagged Users</td><td><?php echo count(implode(",",$event[0]['TagFriends'])) ?></td></tr>
+                <?php } ?>
                 <tr><td>Location</td><td><?php  ?></td></tr>
                 
             </table>

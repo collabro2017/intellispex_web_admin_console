@@ -202,15 +202,32 @@ class events extends CI_Controller_EX {
             foreach ($associated_user as $user) {
                 $userArr[] = $user['objectId'];
             }
-            $temp = $this->parserestclient->query
-                    (
-                    array
+            $userArr[] = $session_data['mongodb_id'];
+            if (!$day || is_null($day) || $day == "") {
+                $temp = $this->parserestclient->query
                         (
-                        "objectId" => "Event",
-                        'query' => '{"deletedAt":null,"openStatus":1, "TagFriends":{"$in":' . json_encode($userArr, true) . '}}',
-                        'order' => $asc
-                    )
-            );
+                        array
+                            (
+                            "objectId" => "Event",
+                            'query' => '{"deletedAt":null, "TagFriends":{"$in":' . json_encode($userArr, true) . '}}',
+                            'order' => $asc,
+                            'limit' => '10000000',
+                        )
+                );
+            } else {
+                $date = date('Y-m-d', strtotime('-' . $day . ' days'));
+                $date = date(DateTime::ISO8601, strtotime($date));
+                $temp = $this->parserestclient->query
+                        (
+                        array
+                            (
+                            "objectId" => "Event",
+                            'query' => '{"deletedAt":null,"createdAt":{"$gte":{"__type":"Date","iso":"' . $date . '"}}, "TagFriends":{"$in":' . json_encode($userArr, true) . '}}',
+                            'order' => $asc,
+                            'limit' => '10000000',
+                        )
+                );
+            }
             $event = json_decode(json_encode($temp), true);
             foreach ($event as $ev) {
                 if (isset($ev)) {
@@ -232,7 +249,7 @@ class events extends CI_Controller_EX {
                             array
                                 (
                                 "objectId" => "Event",
-                                'query' => '{"deletedAt":null,"openStatus":1, "user":{"__type":"Pointer","className":"_User","objectId":"' . $user['objectId'] . '"}}',
+                                'query' => '{"deletedAt":null }',
                                 'order' => $asc
                             )
                     );
@@ -253,8 +270,8 @@ class events extends CI_Controller_EX {
                 $data->day = "";
             } else {
 
-                $dayCount = -1 * $day;
-                $date = date(DateTime::ISO8601, strtotime($dayCount . ' days'));
+                $date = date('Y-m-d', strtotime('-' . $day . ' days'));
+                $date = date(DateTime::ISO8601, strtotime($date));
                 //$date = "2017-06-01T00:00:00.000Z";
                 foreach ($associated_user as $user) {
                     $temp = $this->parserestclient->query
@@ -263,7 +280,7 @@ class events extends CI_Controller_EX {
                                 (
                                 "objectId" => "Event",
                                 //'query'=>'{"deletedAt":null, "createdAt":{"$gt":"'.$date.'"}}',
-                                'query' => '{"deletedAt":null,"openStatus":1, "user":{"__type":"Pointer","className":"_User","objectId":"' . $user['objectId'] . '"}, "createdAt":{"$gte":{"__type":"Date","iso":"' . $date . '"}}}',
+                                'query' => '{"deletedAt":null,"createdAt":{"$gte":{"__type":"Date","iso":"' . $date . '"}}}',
                                 'order' => $asc,
                             //'limit'=>intval($day),
                             )
@@ -284,7 +301,7 @@ class events extends CI_Controller_EX {
                 }
                 $data->day = $day;
             }
-
+            $data->page = 'events/index';
             $data->info = $events; //json_decode(json_encode($temp), true);
             $this->load->view('default/events/list', $data);
         } else {
