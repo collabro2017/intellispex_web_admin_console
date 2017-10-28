@@ -19,7 +19,184 @@ class events extends CI_Controller_EX {
         $this->load->library('grocery_CRUD');
         $this->load->library('ParseRestClient');
     }
+        
+    public function create() {
+        $session_data = $this->session->userdata('logged_in');
+        $data = new stdClass();
+        if ($session_data) {
+            $data->username = $session_data['username'];
+            $data->role = $session_data['role'];
+            $data->id = $session_data['id'];
+            $data->message = '';
+            $data->function_name = "Create New Event";
+            if (base_url() == 'http://intellispex.com/') {
+                $regular_user = 'Di56R0ITXB';
+            } else {
+                $regular_user = 'XVr1sAmAQl';
+            }
+            if($session_data['role'] == 1){
+                $user = $this->parserestclient->query(
+                        array(
+                            "objectId" => "_User",
+                            'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"'.$regular_user.'"}}',
+                        )
+                );
+            }else{
+                $user = $this->parserestclient->query(
+                        array(
+                            "objectId" => "_User",
+                            'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"'.$regular_user.'"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $session_data['mongodb_id'] . '"}}',
+                        )
+                );
+            }
+            $data->associated_user = json_decode(json_encode($user), true);
+            $user_group = $this->parserestclient->query(
+                    array(
+                        "objectId" => "user_group",
+                        'query' => '{"created_by":{"__type":"Pointer","className":"_User","objectId":"' . $session_data['mongodb_id'] . '"}}',
+                    )
+            );
+            $data->user_group = json_decode(json_encode($user_group), true);
+            
+            if ($this->input->post('submit')) {
+                if(isset($_FILES['postImage'])){
+                    $name = $_FILES['postImage']['name'];
+                    $type = $_FILES['postImage']['type'];
+                    $file_base64 = file_get_contents($_FILES['postImage']['tmp_name']);
+                    $temp = $this->parserestclient->file(
+                                array (
+                                    "object" => $file_base64,
+                                    "content-type" => $type,
+                                    "file-name" => $name
+                                )
+                            );
+                    
+                    $image = json_decode(json_encode($temp));
+                    
+                    $eventname = $this->input->post('eventname');
+                    $description = $this->input->post('description');
+                    $country = $this->input->post('country');
+                    $user_id = $session_data['mongodb_id'];
+                    $company = $this->input->post('company');
+                    $startTime = $this->input->post('startTime');
+                    $endTime = $this->input->post('endTime');
+                    $temp = $this->parserestclient->query
+                                    (
+                                    array
+                                        (
+                                        "objectId" => "_User",
+                                        'query' => '{"objectId":"'.$user_id.'"}'
+                                    )
+                                );
+                    $user = json_decode(json_encode($temp));
+                    if(count($user) > 0){
+                        $user_name = $user[0]->username;
+                    }else{
+                        $user_name = '';
+                    }
+                    $image_name = $image->name;
+                    $image_url = $image->url;
+                    $date = date(DateTime::ISO8601, time());
+                    $response = $this->parserestclient->create
+                            (
+                            array
+                                (
+                                "objectId" => "Event",
+                                'object' => ['eventname' => "$eventname", 'description' => "$description", 'country' => "$country", 'username' => "$user_name",
+                                    'postType' => "image",
+                                    'company' => "$company",
+                                    'startTime' => "$startTime",
+                                    'endTime' => "$endTime",
+                                    'createdAt' => [
+                                        "__type" => "Date",
+                                        "iso" => $date,
+                                    ], 'thumbImage' => [
+                                        "__type" => "File",
+                                        "name" => "$image_name",
+                                        "url" => "$image_url"
+                                    ], 'postImage' => [
+                                        "__type" => "File",
+                                        "name" => "$image_name",
+                                        "url" => "$image_url"
+                                    ], 'user' => [
+                                        "__type" => "Pointer",
+                                        "className" => "_User",
+                                        "objectId" => "$user_id"
+                                    ]]
+                            )
+                    );
+                    if(isset($response->objectId)){
+                        echo '<pre>';
+                        print_r($response);
+                        // Tag Users to events
+                        $event_id = $response->objectId;
+                        $TagFriends = array();
+                        $TagFriendAuthorities = array();
+                        $users = $this->input->post('user_id');
+                        $access_rights = $this->input->post('access_rights');
+                        $date = date(DateTime::ISO8601, time());
+                        if(count($users) > 0){
+                            foreach ($users as $user){
+                                $TagFriends[] = $user;
+                                $TagFriendAuthorities[] = $access_rights;
+                            }
 
+                            $response = $this->parserestclient->update
+                                    (
+                                    array
+                                        (
+                                        "objectId" => "Event",
+                                        'object' => ['TagFriends' => [
+                                                "__op" => "Add",
+                                                "objects" => $TagFriends
+                                            ],
+                                            'TagFriendAuthorities' => [
+                                                "__op" => "Add",
+                                                "objects" => $TagFriendAuthorities
+                                            ],
+                                            'updatedAt' => [
+                                                "__type" => "Date",
+                                                "iso" => $date,
+                                            ]],
+                                        'where' => $event_id
+                                    )
+                            );
+                            // Tag Groups from Users 
+                            $user_groups = $this->input->post('user_group');
+                            foreach ($user_groups as $user_group){
+                                $this->_tag_user_group($user_group,$event_id);
+                            }        
+                            redirect(base_url() . "events/event/" . $event_id);
+                        }else{
+                            $data->message = 'Some issues with Event';
+                        }
+                    }
+                }
+            }
+            $this->load->view('default/events/create', $data);
+        }else {
+            $this->load->view('default/include/manage/v_login');
+        }
+    }
+    public function upload_event_image(){
+        $image_d = file_get_contents(base_url()."/public/like.png");
+        $encoded_image=base64_encode($image_d);
+        $imgdata = base64_decode($encoded_image);
+        $f = finfo_open();
+
+        $mime_type = finfo_buffer($f, $imgdata, FILEINFO_MIME_TYPE);
+        echo $mime_type;
+       $temp = $this->parserestclient->file
+                (
+                array
+                    (
+                    "object" => $imgdata,
+                    "content-type" => $mime_type,
+                    "file-name" => "like.png"
+                )
+        );
+       print_r($temp);
+    }
     public function admin_content_search() {
         $this->load->model('m_client');
         $event_id = array();
@@ -386,7 +563,7 @@ class events extends CI_Controller_EX {
             $data->function_name = $event[0]->eventname;
             $data->event = $event[0];
             $data->current_user = $session_data['mongodb_id'];
-            $this->load->view('default/events/view', $data);
+            $this->load->view('default/events/event', $data);
         } else {
             $this->load->view('default/include/manage/v_login');
         }
@@ -692,7 +869,6 @@ class events extends CI_Controller_EX {
         }else{
             $html = $this->load->view('default/events/pdfDownload', $data, true);
         }
-        
 // output the HTML content
         $pdf->writeHTML($html, true, false, true, false, '');
 
@@ -732,6 +908,7 @@ class events extends CI_Controller_EX {
         $date = date(DateTime::ISO8601, time());
         $Comments = $this->input->post('Comments');
         $Commenter = $this->input->post('Commenter');
+        $post_id = $this->input->post('postIds');
         $targetEvent = $this->input->post('targetEvent');
         $response = $this->parserestclient->create
                 (
@@ -747,7 +924,6 @@ class events extends CI_Controller_EX {
                             "className" => "_User",
                             "objectId" => "$Commenter"
                         ], 'postMedia' => [
-                            "__type" => "Pointer",
                             "className" => "Post",
                             "objectId" => "$post_id"
                         ]]

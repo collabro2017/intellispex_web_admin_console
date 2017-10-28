@@ -54,14 +54,26 @@ class ParseRestClient{
 		curl_setopt($c, CURLOPT_TIMEOUT, 15);
 		curl_setopt($c, CURLOPT_USERAGENT, 'parseRestClient/1.0');
 		curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($c, CURLOPT_HTTPHEADER, array(
-			'Content-Type: application/json',
-			'X-Parse-Application-Id: '.$this->appid,
-			'X-Parse-REST-API-Key: '.$this->restkey,
-			'X-Parse-Master-Key: '.$this->masterKey,
-                        'X-Parse-Revocable-Session: 1',
-			'Cache-Control: no-cache'
-		));
+                if(isset($args['type']) && $args['type'] == "FILE"){
+                    curl_setopt($c, CURLOPT_HTTPHEADER, array(
+                            'Content-Type: '.$args['content-type'],
+                            'X-Parse-Application-Id: '.$this->appid,
+                            'X-Parse-REST-API-Key: '.$this->restkey,
+                            'X-Parse-Master-Key: '.$this->masterKey,
+                            'X-Parse-Revocable-Session: 1',
+                            'Cache-Control: no-cache'
+                    ));
+                }else{
+                    curl_setopt($c, CURLOPT_HTTPHEADER, array(
+                            'Content-Type: application/json',
+                            'X-Parse-Application-Id: '.$this->appid,
+                            'X-Parse-REST-API-Key: '.$this->restkey,
+                            'X-Parse-Master-Key: '.$this->masterKey,
+                            'X-Parse-Revocable-Session: 1',
+                            'Cache-Control: no-cache'
+                    ));
+                }
+
 		curl_setopt($c, CURLOPT_CUSTOMREQUEST, $args['method']);
 
 
@@ -78,6 +90,17 @@ class ParseRestClient{
 		{
 			$postData = json_encode($args['payload']);			
 			curl_setopt($c, CURLOPT_POSTFIELDS, $postData );
+		}		
+                if($args['method'] == "POST")
+		{
+                    if(isset($args['type']) && $args['type'] == "FILE"){
+			curl_setopt($c, CURLOPT_SAFE_UPLOAD, TRUE);//require php 5.6^
+                        curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($c, CURLOPT_POSTFIELDS, $args['payload'] );
+                    }else{
+			$postData = json_encode($args['payload']);			
+			curl_setopt($c, CURLOPT_POSTFIELDS, $postData );
+                    }
 		}
 		else if($args['method'] == 'PUT')
 		{			
@@ -271,7 +294,28 @@ class ParseRestClient{
 
 		return $this->checkResponse($return,'200');
 	}
-
+                /*
+ * Used to get a parse.com object
+ *
+ * @param array $args - argument hash:
+ *
+ * className: string of className
+ * objectId: (optional) the objectId of the object you want to update. If none, will return multiple objects from className
+ *
+ * @return string $return
+ *
+ */
+	public function file($args){
+            $params = array(
+                    'url' => $this->pushUrl .'/files/'.$args['file-name'],
+                    'method' => 'POST',
+                    'type' => 'FILE',
+                    'content-type' => $args['content-type'],
+                    'payload' => $args['object']
+            );
+            $return = $this->request($params);
+            return $this->checkResponse($return,'201');
+	}
 
 /*
  * Checks for correct/expected response code.
