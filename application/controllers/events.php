@@ -924,6 +924,7 @@ class events extends CI_Controller_EX {
                             "className" => "_User",
                             "objectId" => "$Commenter"
                         ], 'postMedia' => [
+                            "__type" => "Pointer",
                             "className" => "Post",
                             "objectId" => "$post_id"
                         ]]
