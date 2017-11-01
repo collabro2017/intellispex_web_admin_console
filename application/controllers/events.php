@@ -574,16 +574,17 @@ class events extends CI_Controller_EX {
         $data = date('Y-m-d');
         foreach ($deletelist as $val) {
             //$data = array('deletedAt' => '2017-07-03T00:00:00','objectId'=>$val);
-            $this->parserestclient->update
+            $response = $this->parserestclient->update
                     (
                     array
                         (
                         "objectId" => "Event",
-                        'object' => ['deletedAt' => "$data", 'openStatus' => 0],
+                        'object' => ['deletedAt' => "$data"],
                         'where' => $val
                     )
             );
         }
+        exit;
     }
     
     public function reportEvent() {
