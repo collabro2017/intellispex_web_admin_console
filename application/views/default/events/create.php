@@ -214,7 +214,7 @@
                                             <tr>
                                                 <td>Add User Group</td>
                                                 <td>
-                                                    <select required="" name="user_group[]" id="user_group" class="form-control" size="8" multiple="multiple">
+                                                    <select name="user_group[]" id="user_group" class="form-control" size="8" multiple="multiple">
                                                         <?php foreach ($user_group as $value){ 
                                                             if (isset($value['group_name'])): 
                                                             ?>
@@ -233,7 +233,7 @@
                                             <tr>
                                                 <td>Add User</td>
                                                 <td>
-                                                    <select required="" name="user_id[]" id="user" class="form-control" size="8" multiple="multiple">
+                                                    <select name="user_id[]" id="user" class="form-control" size="8" multiple="multiple">
                                                         <?php foreach ($associated_user as $value){ 
                                                             if (isset($value['username'])): 
                                                                 ?>
@@ -247,7 +247,7 @@
                                                          endif;
                                                         } ?>
                                                     </select><br/>
-                                                    <select required="" id="access_rights" name="access_rights">
+                                                    <select id="access_rights" name="access_rights">
                                                         <option value="Full">Full Rights</option>
                                                         <option value="View &amp; Comments">View &amp; Comments</option>
                                                         <option value="Comment">Comment</option>

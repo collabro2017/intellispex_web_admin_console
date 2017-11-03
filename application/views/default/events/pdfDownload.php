@@ -108,12 +108,59 @@ $image = $event_user_details[0]->ProfileImage->url;
             <?php echo $event->eventname; ?>
         </td>
     </tr>
-     <tr>
+    <tr>
         <td style="text-align:left;">
             <?php echo $event->description; ?>
         </td>
     </tr>
 </table>
+<?php
+if (count($event_comment)) {
+    $i = 0;
+    ?>
+
+    <h4>Event Comments</h4>
+    <?php
+    foreach ($event_comment as $data) {
+        $commenter = $data->Commenter;
+        $user_details = $this->parserestclient->query(array(
+            "objectId" => "_User",
+            'query' => '{"deletedAt":null,"objectId":"' . $commenter->objectId . '"}',
+                )
+        );
+        $user_details = json_decode(json_encode($user_details), true);
+        $image = $event_user_details[0]->ProfileImage->url;
+        ?>
+        <table cellpadding="1" cellspacing="1" border="0" style="text-align:center;">
+            <tr>
+                <td style="text-align:left;width: 50px">
+                    <img style="height:50px;"  src="<?php echo $image; ?>" />
+                </td>
+                <td style="text-align:left;">
+                    <h4>
+                        <?php
+                        if (isset($event_user_details[0]->username)):
+                            echo $event_user_details[0]->username;
+                        endif;
+                        ?>
+                    </h4>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <span style="text-align: right;color: #444"><?php echo date('d-m-Y g:i A', strtotime($data->createdAt)); ?></span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <?php echo $data->Comments; ?>
+                </td>
+            </tr>
+        </table>
+        <?php
+    }
+}
+?>
 <hr style="background-color: #bbb;color: #BBB" />
 <br/><br/>
 <?php foreach ($event_post as $post) { ?>
@@ -123,28 +170,30 @@ $image = $event_user_details[0]->ProfileImage->url;
                         "objectId" => "_User",
                         'query' => '{"deletedAt":null,"objectId":"' . $event_user . '"}',
                             )
-            )));
-    $image = $event_user_details[0]->ProfileImage->url;
-    ?>
-    <table cellpadding="1" cellspacing="1" border="0" style="text-align:center;">
-        <tr>
-            <td style="text-align:left;width: 50px">
-                <img style="height:50px;"  src="<?php echo $image; ?>" />
-            </td>
-            <td style="text-align:left;width:300px;">
-                <h4>
-                    <?php
-                    if (isset($event_user_details[0]->username)):
-                        echo $event_user_details[0]->username;
-                    endif;
-                    ?>
-                </h4>
-            </td>
-            <td style="text-align:right;">
-        <?php echo date('d-m-Y g:i A', strtotime($post->createdAt)); ?>
-            </td>
-        </tr>
-    </table>
+    )));
+    if (isset($event_user_details[0])) {
+        $image = $event_user_details[0]->ProfileImage->url;
+        ?>
+        <table cellpadding="1" cellspacing="1" border="0" style="text-align:center;">
+            <tr>
+                <td style="text-align:left;width: 50px">
+                    <img style="height:50px;"  src="<?php echo $image; ?>" />
+                </td>
+                <td style="text-align:left;width:300px;">
+                    <h4>
+                        <?php
+                        if (isset($event_user_details[0]->username)):
+                            echo $event_user_details[0]->username;
+                        endif;
+                        ?>
+                    </h4>
+                </td>
+                <td style="text-align:right;">
+                    <?php echo date('d-m-Y g:i A', strtotime($post->createdAt)); ?>
+                </td>
+            </tr>
+        </table>
+    <?php } ?>
     <table cellpadding="1" cellspacing="1" border="0" style="text-align:center;">
         <?php
         if (isset($post->thumbImage) && isset($post->postFile)) {
@@ -158,22 +207,24 @@ $image = $event_user_details[0]->ProfileImage->url;
             $a = getimagesize($imagePost);
             $image_type = $a[2];
 
-            if(in_array($image_type , array(IMAGETYPE_GIF , IMAGETYPE_JPEG ,IMAGETYPE_PNG , IMAGETYPE_BMP)))
-            {
-            ?><tr>
-                <td style="text-align:center;">
-                    <img style="width:400px;" src="<?php echo $imagePost; ?>" />
-                </td>
-            </tr>
-        <?php } 
-        } 
+            if (in_array($image_type, array(IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_BMP))) {
+                ?><tr>
+                    <td style="text-align:left;">
+                        <img style="width:400px;" src="<?php echo $imagePost; ?>" />
+                    </td>
+                </tr>
+                <?php
+            }
+        }
         ?>
     </table>
-    <?php if (isset($post->commentsArray)) {
+    <?php
+    if (isset($post->commentsArray)) {
         $postComments = count($post->commentsArray);
-    }else{
+    } else {
         $postComment = 0;
-    } ?>
+    }
+    ?>
     <table width="200" cellpadding="1" cellspacing="1" border="0" style="text-align:center;">
         <tr>
             <td style="text-align:left;width: 20px;">
@@ -205,15 +256,59 @@ $image = $event_user_details[0]->ProfileImage->url;
         </tr>
     </table>
     <table cellpadding="1" cellspacing="1" border="0" style="text-align:center;">
-            <tr>
-                <td style="text-align:left;"><?php echo $post->title; ?></td>
-            </tr>
+        <tr>
+            <td style="text-align:left;"><?php echo $post->title; ?></td>
+        </tr>
+        <tr>
+            <td style="text-align:left;">
+                <?php echo $post->description; ?>
+            </td>
+        </tr>
+    </table>
+
+    <?php
+    if (isset($post->commentsArray)) {
+        ?>
+        <table cellpadding="1" cellspacing="1" border="0" style="text-align:center;">
             <tr>
                 <td style="text-align:left;">
-        <?php echo $post->description; ?>
+                    <h4>Event Comments</h4>
                 </td>
             </tr>
-    </table>
-    <hr style="background-color: #bbb;color: #BBB; margin-bottom: 20px;" />
-    <br/><br/>
-<?php } ?>
+            <?php
+            $postComments = $post->commentsArray;
+            for ($i = 0; $i < count($postComments); $i++) {
+                $comment = $this->parserestclient->query(array(
+                    "objectId" => "Comments",
+                    'query' => '{"objectId":"' . $postComments[$i]->objectId . '"}',
+                        )
+                );
+                $comments = json_decode(json_encode($comment));
+                foreach ($comments as $data) {
+                    $commenter = $data->Commenter;
+                    $user_details = $this->parserestclient->query(array(
+                        "objectId" => "_User",
+                        'query' => '{"deletedAt":null,"objectId":"' . $commenter->objectId . '"}',
+                            )
+                    );
+                    $user_details = json_decode(json_encode($user_details), true);
+                    ?>
+                    <tr>
+                        <td style="text-align:left;">
+                            <p><?php echo date('d-m-Y g:i A', strtotime($data->createdAt)); ?>: <?php
+                                if (isset($user_details[0]['username'])):
+                                    echo '<b>' . $user_details[0]['username'] . ': </b>';
+                                endif;
+                                ?>
+                                <?php echo $data->Comments; ?>
+                            </p>
+                        </td>
+                    </tr>
+                    <?php
+                }
+            }
+        }
+        ?>
+        <hr style="background-color: #bbb;color: #BBB; margin-bottom: 20px;" />
+        <br/><br/>
+    <?php } ?>

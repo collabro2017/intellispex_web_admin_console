@@ -29,7 +29,7 @@ class events extends CI_Controller_EX {
             $data->id = $session_data['id'];
             $data->message = '';
             $data->function_name = "Create New Event";
-            if (base_url() == 'http://intellispex.com/') {
+            if (base_url() == 'http://intellispex.com/' || base_url('http://localhost/icymi/')) {
                 $regular_user = 'Di56R0ITXB';
             } else {
                 $regular_user = 'XVr1sAmAQl';
@@ -426,8 +426,9 @@ class events extends CI_Controller_EX {
                             array
                                 (
                                 "objectId" => "Event",
-                                'query' => '{"deletedAt":null }',
-                                'order' => $asc
+                                'query' => '{"deletedAt":null ,"user":{"__type":"Pointer","className":"_User","objectId":"' . $user['objectId'] . '"}}',
+                                'order' => $asc,
+                                'limit' => 1000000
                             )
                     );
                     $event = json_decode(json_encode($temp), true);
@@ -457,7 +458,7 @@ class events extends CI_Controller_EX {
                                 (
                                 "objectId" => "Event",
                                 //'query'=>'{"deletedAt":null, "createdAt":{"$gt":"'.$date.'"}}',
-                                'query' => '{"deletedAt":null,"createdAt":{"$gte":{"__type":"Date","iso":"' . $date . '"}}}',
+                                'query' => '{"deletedAt":null,"createdAt":{"$gte":{"__type":"Date","iso":"' . $date . '"}},"user":{"__type":"Pointer","className":"_User","objectId":"' . $user['objectId'] . '"}}',
                                 'order' => $asc,
                             //'limit'=>intval($day),
                             )
@@ -500,7 +501,7 @@ class events extends CI_Controller_EX {
                                         array
                                             (
                                             "objectId" => "Event",
-                                            "query" => '{"deletedAt":null,"openStatus":1,"objectId":"' . $event_id . '"}'
+                                            "query" => '{"deletedAt":null,"objectId":"' . $event_id . '"}'
                                         )
                                 ), true));
             }else{
@@ -1062,7 +1063,7 @@ class events extends CI_Controller_EX {
             $data->role = $session_data['role'];
             $data->id = $session_data['id'];
             $data->function_name = "VIEW OR EDIT GLOBAL EVENT LIST";
-            if(base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/'){
+            if(base_url() == 'http://test.intellispex.com/'){
                 $regular_user = 'XVr1sAmAQl';
             }else{
                 $regular_user = 'Di56R0ITXB';
@@ -1081,12 +1082,13 @@ class events extends CI_Controller_EX {
             foreach ($associated_user as $user) {
                 $userArr[] = $user['objectId'];
             }
+            $userArr[] = $session_data['mongodb_id'];
             $temp = $this->parserestclient->query
                     (
                     array
                         (
                         "objectId" => "Event",
-                        'query' => '{"openStatus":0,"deletedAt":{"$ne":null}, "TagFriends":{"$in":' . json_encode($userArr, true) . '}}'
+                        'query' => '{"deletedAt":{"$ne":null}, "TagFriends":{"$in":' . json_encode($userArr, true) . '}}'
                     )
             );
             $event = json_decode(json_encode($temp), true);
@@ -1101,6 +1103,29 @@ class events extends CI_Controller_EX {
                     }
                 }
                 $i++;
+            }
+            foreach ($associated_user as $user) {
+                $temp = $this->parserestclient->query
+                        (
+                        array
+                            (
+                            "objectId" => "Event",
+                            'query' => '{"deletedAt":{"$ne":null},"user":{"__type":"Pointer","className":"_User","objectId":"' . $user['objectId'] . '"} }'
+                        )
+                );
+                $event = json_decode(json_encode($temp), true);
+                foreach ($event as $ev) {
+                    if (isset($ev)) {
+                        if ($i == 0) {
+                            $eventId[$i] = $ev['objectId'];
+                            $events[$i] = $ev;
+                        } elseif (!(in_array($ev['objectId'], $eventId))) {
+                            $eventId[$i] = $ev['objectId'];
+                            $events[$i] = $ev;
+                        }
+                    }
+                    $i++;
+                }
             }
             $data->username = $session_data['username'];
             $data->role = $session_data['role'];
