@@ -306,7 +306,9 @@ if (count($event_comment)) {
                     </tr>
                     <?php
                 }
-            }
+            } ?>
+        </table>
+                    <?php
         }
         ?>
         <hr style="background-color: #bbb;color: #BBB; margin-bottom: 20px;" />
