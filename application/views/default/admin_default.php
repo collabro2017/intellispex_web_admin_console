@@ -325,12 +325,12 @@
 					  				<a class="btn btn-small btn-primary menu-button" style="min-width:250px;margin-top: 15px;" href="#">Download Complete</a>
 					  			</div>
 					  		</div>	
-                                                        <div class="row">
+<!--                                                        <div class="row">
                                                             <div class="span3"></div>
                                                             <div class="span6" style="text-align: center;" >
                                                                 <a class="btn btn-small btn-primary menu-button" href="<?php echo base_url(); ?>events/create">Set-Up Events</a>
                                                             </div>					  			
-                                                        </div>
+                                                        </div>-->
 					  		<div class="row">
 					  			<div class="span3"></div>
 					  			<div class="span6" style="text-align: center;" >
