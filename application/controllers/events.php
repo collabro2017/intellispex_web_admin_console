@@ -72,12 +72,21 @@ class events extends CI_Controller_EX {
                     );
 
                     $image = json_decode(json_encode($temp));
-
+                    
                     $eventname = $this->input->post('eventname');
                     $description = $this->input->post('description');
                     $company = $this->input->post('company');
-                    $startTime = $this->input->post('startTime');
-                    $endTime = $this->input->post('endTime');
+                    
+                    $hourStart = $this->input->post('hourStart');
+                    $secondStart = $this->input->post('secondStart');
+                    $ampmStart = $this->input->post('ampmStart');
+                    $startTime = $hourStart.":".$secondStart." ".$ampmStart;
+                    
+                    $hourEnd = $this->input->post('hourEnd');
+                    $secondEnd = $this->input->post('secondEnd');
+                    $ampmEnd = $this->input->post('ampmEnd');
+                    $endTime = $hourEnd.":".$secondEnd." ".$ampmEnd;
+                    
                     $country = $this->input->post('country');
                     $user_id = $session_data['mongodb_id'];
                     $temp = $this->parserestclient->query
@@ -241,7 +250,7 @@ class events extends CI_Controller_EX {
                         $results[$i]['username'] = $event['username'];
                         $results[$i]['description'] = $event['description'];
                         $results[$i]['content_type'] = 'Event';
-                        $results[$i]['reported_id'] = $content['objectId'];
+//                        $results[$i]['reported_id'] = $content['objectId'];
                         $results[$i]['user_id'] = $commenter['objectId'];
                         $results[$i]['post_id'] = '';
                         $i++;
@@ -292,7 +301,7 @@ class events extends CI_Controller_EX {
                         $results[$i]['user_id'] = $commenter['objectId'];
                         $results[$i]['description'] = $post['description'];
                         $results[$i]['content_type'] = 'Event, Post';
-                        $results[$i]['reported_id'] = $content['objectId'];
+//                        $results[$i]['reported_id'] = $content['objectId'];
                         $results[$i]['post_id'] = $post['objectId'];
                         $i++;
                     }

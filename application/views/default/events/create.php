@@ -188,8 +188,26 @@
                                                 <th>Time Start</th>
                                                 <th>
                                                      <div class="input-group bootstrap-timepicker timepicker">
-                                                        <input class="form-control input-small" id="startTime" type="time" autocomplete="on" class="span6" name='startTime' <?php if (isset($event[0]['startTime'])): ?> value="<?php echo $event[0]['startTime']; ?>" <?php endif; ?>/>
-                                                        <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                                                         <select style="width:50px; float:left" name="hourStart">
+                                                             <?php for($i = 1; $i < 13; $i++){
+                                                                 ?>
+                                                             <option <?php if($i == 3) echo 'selected'; ?> value="<?php echo $i?>"><?php echo $i; ?></option>
+                                                             <?php
+                                                             }
+                                                             ?>
+                                                         </select>
+                                                         <select style="width:50px; float:left" name="secondStart">
+                                                             <?php for($i = 1; $i < 60; $i++){
+                                                                 ?>
+                                                             <option <?php if($i == 29) echo 'selected'; ?> value="<?php echo $i?>"><?php echo $i; ?></option>
+                                                             <?php
+                                                             }
+                                                             ?>
+                                                         </select>
+                                                         <select style="width:60px; float:left" name="ampmStart">
+                                                             <option value="AM">AM</option>
+                                                             <option selected value="PM">PM</option>
+                                                         </select>
                                                     </div>
                                                 </th>
                                             </tr>
@@ -197,8 +215,26 @@
                                                 <th>Time End</th>
                                                 <th>
                                                      <div class="input-group bootstrap-timepicker timepicker">
-                                                        <input class="form-control input-small" id="endTime" required type="time" autocomplete="on" class="span6" name='endTime' <?php if (isset($event[0]['endTime'])): ?> value="<?php echo $event[0]['endTime']; ?>" <?php endif; ?>/>
-                                                        <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                                                         <select style="width:50px; float:left" name="hourEnd">
+                                                             <?php for($i = 1; $i < 13; $i++){
+                                                                 ?>
+                                                             <option <?php if($i == 5) echo 'selected'; ?> value="<?php echo $i?>"><?php echo $i; ?></option>
+                                                             <?php
+                                                             }
+                                                             ?>
+                                                         </select>
+                                                         <select style="width:50px; float:left" name="secondEnd">
+                                                             <?php for($i = 1; $i < 60; $i++){
+                                                                 ?>
+                                                             <option <?php if($i == 29) echo 'selected'; ?> value="<?php echo $i?>"><?php echo $i; ?></option>
+                                                             <?php
+                                                             }
+                                                             ?>
+                                                         </select>
+                                                         <select style="width:60px; float:left" name="ampmEnd">
+                                                             <option value="AM">AM</option>
+                                                             <option selected value="PM">PM</option>
+                                                         </select>
                                                     </div>
                                                 </th>
                                             </tr>
