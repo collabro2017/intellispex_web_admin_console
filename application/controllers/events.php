@@ -60,9 +60,16 @@ class events extends CI_Controller_EX {
 
             if ($this->input->post('submit')) {
                 if (isset($_FILES['postImage'])) {
+                    $eventname = $this->input->post('eventname');
+                    
                     $name = $_FILES['postImage']['name'];
                     $type = $_FILES['postImage']['type'];
                     $file_base64 = file_get_contents($_FILES['postImage']['tmp_name']);
+                    
+                    $extension = pathinfo($_FILES['postImage']['tmp_name']);
+                    $extension = $extension['extension'];
+                    $name = strtolower(str_replace(' ', '-', $eventname)).".".$extension;
+                    
                     $temp = $this->parserestclient->file(
                             array(
                                 "object" => $file_base64,
@@ -70,10 +77,8 @@ class events extends CI_Controller_EX {
                                 "file-name" => $name
                             )
                     );
-
                     $image = json_decode(json_encode($temp));
                     
-                    $eventname = $this->input->post('eventname');
                     $description = $this->input->post('description');
                     $company = $this->input->post('company');
                     
@@ -136,8 +141,6 @@ class events extends CI_Controller_EX {
                             )
                     );
                     if (isset($response->objectId)) {
-                        echo '<pre>';
-                        print_r($response);
                         // Tag Users to events
                         $event_id = $response->objectId;
                         $TagFriends = array();
@@ -190,7 +193,7 @@ class events extends CI_Controller_EX {
     }
 
     public function upload_event_image() {
-        $image_d = file_get_contents(base_url() . "/public/like.png");
+        $image_d = file_get_contents(base_url() . "/public/loading.gif");
         $encoded_image = base64_encode($image_d);
         $imgdata = base64_decode($encoded_image);
         $f = finfo_open();
@@ -203,7 +206,7 @@ class events extends CI_Controller_EX {
                     (
                     "object" => $imgdata,
                     "content-type" => $mime_type,
-                    "file-name" => "like.png"
+                    "file-name" => "loading.gif"
                 )
         );
         print_r($temp);
