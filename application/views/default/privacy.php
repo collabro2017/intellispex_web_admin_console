@@ -17,6 +17,7 @@
 			$this->load->view('default/nav/public_page.php', $data );
 			?>
 			</nav>
+                        <div class="row" style="margin-top: 20px;">
 <h4>End user license agreement for Visionary Technology Management Mobile Applications (ICYMI and IntelliSpeX)</h4>
 <h5>Last update – December</h5>
 <p>This End User License Agreement (“Agreement”) sets forth the terms and conditions governing the use of any Visionary Technology Management, LLC mobile application downloaded or otherwise acquired by you (the “App”) that is designed to operate on any device you own or control which runs any non-Apple Inc. mobile operating system (“Device”).</p>
@@ -71,7 +72,8 @@ You acknowledge that this Agreement is entered into by and between you and the V
 
 <h5>Legal compliance</h5>
 <p>You represent and warrant that (i) you are not located in a country that is subject to a U.S. Government embargo, or that has been designated by the U.S. Government as a “terrorist supporting” country; (ii) you are not listed on any U.S. Government list of prohibited or restricted parties; and (iii) you will comply with all relevant U.N. and EU sanctions and embargoes.</p>
-<?php $this->load->view('default/footer/public_page.php');?>
+        </div>
+    <?php $this->load->view('default/footer/public_page.php');?>
 	</body>
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 	<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
