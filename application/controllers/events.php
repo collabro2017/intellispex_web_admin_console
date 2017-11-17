@@ -118,6 +118,7 @@ class events extends CI_Controller_EX {
                                 "objectId" => "Event",
                                 'object' => ['eventname' => "$eventname",'company' => "$company",'startTime' => "$startTime",'endTime' => "$endTime", 'description' => "$description", 'country' => "$country", 'username' => "$user_name",
                                     'postType' => "image",
+                                    'openStatus' => 1,
                                     'createdAt' => [
                                         "__type" => "Date",
                                         "iso" => $date,
