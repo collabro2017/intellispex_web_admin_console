@@ -540,7 +540,7 @@ class events extends CI_Controller_EX {
                                         (
                                         "objectId" => "Post",
                                         "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}',
-                                        'order' => 'updatedAt'
+                                        'order' => 'postOrder'
                                     )
                             ), true));
             if (base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/') {
