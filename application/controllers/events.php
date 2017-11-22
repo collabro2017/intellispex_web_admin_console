@@ -268,7 +268,7 @@ class events extends CI_Controller_EX {
                     (
                     "objectId" => "Post",
                     "query" => '{"description":{"$ne": "" }}',
-                    'order' => 'postType'
+                    'order' => 'createdAt'
                 )
         );
         $event_posts = json_decode(json_encode($temp), true);
@@ -540,7 +540,7 @@ class events extends CI_Controller_EX {
                                         (
                                         "objectId" => "Post",
                                         "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}',
-                                        'order' => 'postType'
+                                        'order' => 'updatedAt'
                                     )
                             ), true));
             if (base_url() == 'http://test.intellispex.com/' || base_url() == 'http://localhost/icymi/') {
