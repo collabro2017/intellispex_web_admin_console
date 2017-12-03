@@ -66,7 +66,7 @@ $imagePost = $event->postImage->url;
 <?php foreach ($event_post as $post) { ?>
     <h4><?php echo $post->title; ?></h4>
     <?php
-    if (isset($post->thumbImage) && isset($post->postFile) && $post->postType == 'photo') {
+    if (isset($post->thumbImage) && isset($post->postFile) && (isset($post->postType) && $post->postType == 'photo')) {
         $image = $post->thumbImage;
         $imagePost = $post->postFile->url;
         ?>

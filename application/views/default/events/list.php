@@ -137,6 +137,12 @@
 					<label><input type="checkbox" class="downloadlist" value="7">Location</label>
 				</div>
 				<div class="checkbox">
+					<label><input type="checkbox" class="downloadlist" value="16">Description</label>
+				</div>
+				<div class="checkbox">
+					<label><input type="checkbox" class="downloadlist" value="17">Comments</label>
+				</div>
+				<div class="checkbox">
 					<label><input type="checkbox" class="downloadlist" value="8">Number of Activity Sheets</label>
 				</div>
 				<div class="checkbox">
@@ -205,9 +211,15 @@
 			$( ".downloadlist" ).each(function(){
 				this.checked = true;						
 			});
+                        $( ".activitylist" ).each(function(){
+				this.checked = true;						
+			});
 		}
 		function deselectall(){
 			$( ".downloadlist" ).each(function(){
+				this.checked = false;						
+			});
+                        $( ".activitylist" ).each(function(){
 				this.checked = false;						
 			});
 		}

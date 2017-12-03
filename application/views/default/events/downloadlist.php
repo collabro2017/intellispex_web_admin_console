@@ -26,12 +26,12 @@
                 <tr><td>Number of Participants</td><td><?php if(isset($event[0]['commenters'])) { echo count($event[0]['commenters']); }else{ echo 0; } ?></td></tr>
                 <tr><td>Tagged Users</td><td><?php echo count(implode(",",$event[0]['TagFriends'])) ?></td></tr>
                 <tr><td>Location</td><td><?php  ?></td></tr>
+                <!--<tr><td>Description</td><td><?php echo $event[0]['description'] ?></td></tr>-->
             </table>
             <br><br>
             <table>
                 <tr><td>Number of Activity Sheets</td><td><?php echo count($eventActivity); ?></td></tr>
                 <tr><td>Title of Activity Sheet</td><td><?php echo $event[0]['eventname'] ?></td></tr>
-                <tr><td>Description</td><td>none<?php //echo $event[0]['description'] ?></td></tr>
             </table>
             <?php
             if(count($eventActivity) > 0){
@@ -56,6 +56,46 @@
                     <?php if(isset($eventActivity[$i]['description'])){ ?>
                         <tr><td>Description</td><td><?php echo $eventActivity[$i]['description']; ?></td></tr>
                     <?php } ?>
+                    <?php
+                        if (isset($eventActivity[$i]['commentsArray'])) {
+                            ?>
+                        <tr>
+                            <td colspan="2">
+                                <h4>Comments</h4>
+                                <?php
+                                $postComments = $eventActivity[$i]['commentsArray'];
+                                for ($k = 0; $k < count($postComments); $k++) {
+                                    $comment = $this->parserestclient->query(array(
+                                        "objectId" => "Comments",
+                                        'query' => '{"objectId":"' . $postComments[$k]['objectId'] . '"}',
+                                            )
+                                    );
+                                    $comments = json_decode(json_encode($comment));
+                                    foreach ($comments as $data) {
+                                        $commenter = $data->Commenter;
+                                        $user_details = $this->parserestclient->query(array(
+                                            "objectId" => "_User",
+                                            'query' => '{"deletedAt":null,"objectId":"' . $commenter->objectId . '"}',
+                                                )
+                                        );
+                                        $user_details = json_decode(json_encode($user_details), true);
+                                        ?>
+                                        <p><?php echo date('d-m-Y g:i A', strtotime($data->createdAt)); ?>: <?php
+                                            if (isset($user_details[0]['username'])):
+                                                echo '<b>' . $user_details[0]['username'] . ': </b>';
+                                            endif;
+                                            ?>
+                                            <?php echo $data->Comments; ?>
+                                        </p>
+                                        <?php
+                                    }
+                                }
+                                ?>
+                            </td>
+                        </tr>
+                        <?php
+                        }
+                        ?>
                     
                 <?php } ?>
             </table>
@@ -83,7 +123,46 @@
                     <?php if(isset($eventActivity[$i]['description'])){ ?>
                         <tr><td>Description</td><td><?php echo $eventActivity[$i]['description']; ?></td></tr>
                     <?php } ?>
-                     
+                     <?php
+                        if (isset($eventActivity[$i]['commentsArray'])) {
+                            ?>
+                        <tr>
+                            <td colspan="2">
+                                <h4>Comments</h4>
+                                <?php
+                                $postComments = $eventActivity[$i]['commentsArray'];
+                                for ($k = 0; $k < count($postComments); $k++) {
+                                    $comment = $this->parserestclient->query(array(
+                                        "objectId" => "Comments",
+                                        'query' => '{"objectId":"' . $postComments[$k]->objectId . '"}',
+                                            )
+                                    );
+                                    $comments = json_decode(json_encode($comment));
+                                    foreach ($comments as $data) {
+                                        $commenter = $data->Commenter;
+                                        $user_details = $this->parserestclient->query(array(
+                                            "objectId" => "_User",
+                                            'query' => '{"deletedAt":null,"objectId":"' . $commenter->objectId . '"}',
+                                                )
+                                        );
+                                        $user_details = json_decode(json_encode($user_details), true);
+                                        ?>
+                                        <p><?php echo date('d-m-Y g:i A', strtotime($data->createdAt)); ?>: <?php
+                                            if (isset($user_details[0]['username'])):
+                                                echo '<b>' . $user_details[0]['username'] . ': </b>';
+                                            endif;
+                                            ?>
+                                            <?php echo $data->Comments; ?>
+                                        </p>
+                                        <?php
+                                    }
+                                }
+                                ?>
+                            </td>
+                        </tr>
+                        <?php
+                        }
+                        ?>
                 <?php } ?>
             </table>
             <?php } ?>
