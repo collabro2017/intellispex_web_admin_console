@@ -105,6 +105,7 @@ class events extends CI_Controller_EX {
                                 'object' => ['eventname' => "$eventname", 'description' => "$description", 'country' => "$country", 'username' => "$user_name",
                                     'postType' => "image",
                                     'company' => "$company",
+                                    'event_type' => 'Web-Console',
                                     'startTime' => "$startTime",
                                     'endTime' => "$endTime",
                                     'createdAt' => [
