@@ -376,7 +376,7 @@ else if ($function_name == "Content Manager") {
                                                                 <div class="row">
                                                                     <div class="span6">To:</div>
                                                                     <div class="span6">
-                                                                        <input type="email" class="form-control" id="email" value="support@visitechmgmt.zendesk.com" name="email">
+                                                                        <input type="email" class="form-control" id="email" value="support@vistechmgmt.zendesk.com" name="email">
                                                                     </div>											
                                                                 </div>
                                                                 <div class="row">
