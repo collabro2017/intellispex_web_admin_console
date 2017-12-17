@@ -67,18 +67,20 @@ class events extends CI_Controller_EX {
                     $file_base64 = file_get_contents($_FILES['postImage']['tmp_name']);
                     
                     $extension = pathinfo($_FILES['postImage']['tmp_name']);
-                    $extension = $extension['extension'];
-                    $name = strtolower(str_replace(' ', '-', $eventname)).".".$extension;
+                    if(isset($extension['extension'])){
+                        $extension = $extension['extension'];
+                        $name = strtolower(str_replace(' ', '-', $eventname)).".".$extension;
                     
-                    $temp = $this->parserestclient->file(
-                            array(
-                                "object" => $file_base64,
-                                "content-type" => $type,
-                                "file-name" => $name
-                            )
-                    );
-                    $image = json_decode(json_encode($temp));
                     
+                        $temp = $this->parserestclient->file(
+                                array(
+                                    "object" => $file_base64,
+                                    "content-type" => $type,
+                                    "file-name" => $name
+                                )
+                        );
+                        $image = json_decode(json_encode($temp));
+                    }
                     $description = $this->input->post('description');
                     $company = $this->input->post('company');
                     
@@ -108,10 +110,11 @@ class events extends CI_Controller_EX {
                     } else {
                         $user_name = '';
                     }
-                    $image_name = $image->name;
-                    $image_url = $image->url;
                     $date = date(DateTime::ISO8601, time());
-                    $response = $this->parserestclient->create
+                    if(isset($image->name)){
+                        $image_name = $image->name;
+                        $image_url = $image->url;
+                        $response = $this->parserestclient->create
                             (
                             array
                                 (
@@ -141,7 +144,32 @@ class events extends CI_Controller_EX {
                                         "objectId" => "$user_id"
                                     ]]
                             )
-                    );
+                        );
+                    }else{
+                       $response = $this->parserestclient->create
+                            (
+                            array
+                                (
+                                "objectId" => "Event",
+                                'object' => ['eventname' => "$eventname",'company' => "$company",'startTime' => "$startTime",'endTime' => "$endTime", 'description' => "$description", 'country' => "$country", 'username' => "$user_name",
+                                    'postType' => "image",
+                                    'openStatus' => 1,
+                                    'event_type' => 'Web-Console',
+                                    'createdAt' => [
+                                        "__type" => "Date",
+                                        "iso" => $date,
+                                    ], 'user' => [
+                                        "__type" => "Pointer",
+                                        "className" => "_User",
+                                        "objectId" => "$user_id"
+                                    ], 'completedBy' => [
+                                        "__type" => "Pointer",
+                                        "className" => "_User",
+                                        "objectId" => "$user_id"
+                                    ]]
+                            )
+                        ); 
+                    }
                     if (isset($response->objectId)) {
                         // Tag Users to events
                         $event_id = $response->objectId;
