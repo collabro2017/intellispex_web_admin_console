@@ -36,7 +36,9 @@
                     <tr><td>Tagged Users</td><td><?php echo count(implode(",",$event[0]['TagFriends'])) ?></td></tr>
                 <?php } ?>
                 <tr><td>Location</td><td><?php  ?></td></tr>
-                
+                <?php if(isset($event[0]['description'])){ ?>
+                    <tr><td>Description</td><td><?php echo $event[0]['description'] ?></td></tr>
+                <?php } ?>
             </table>
             <br><br>
             <table>
@@ -67,6 +69,46 @@
                     <?php if(isset($eventActivity[$i]['description'])){ ?>
                         <tr><td>Description</td><td><?php echo $eventActivity[$i]['description']; ?></td></tr>
                     <?php } ?>
+                    <?php
+                        if (isset($eventActivity[$i]['commentsArray'])) {
+                            ?>
+                        <tr>
+                            <td colspan="2">
+                                <h4>Comments</h4>
+                                <?php
+                                $postComments = $eventActivity[$i]['commentsArray'];
+                                for ($k = 0; $k < count($postComments); $k++) {
+                                    $comment = $this->parserestclient->query(array(
+                                        "objectId" => "Comments",
+                                        'query' => '{"objectId":"' . $postComments[$k]['objectId'] . '"}',
+                                            )
+                                    );
+                                    $comments = json_decode(json_encode($comment));
+                                    foreach ($comments as $data) {
+                                        $commenter = $data->Commenter;
+                                        $user_details = $this->parserestclient->query(array(
+                                            "objectId" => "_User",
+                                            'query' => '{"deletedAt":null,"objectId":"' . $commenter->objectId . '"}',
+                                                )
+                                        );
+                                        $user_details = json_decode(json_encode($user_details), true);
+                                        ?>
+                                        <p><?php echo date('d-m-Y g:i A', strtotime($data->createdAt)); ?>: <?php
+                                            if (isset($user_details[0]['username'])):
+                                                echo '<b>' . $user_details[0]['username'] . ': </b>';
+                                            endif;
+                                            ?>
+                                            <?php echo $data->Comments; ?>
+                                        </p>
+                                        <?php
+                                    }
+                                }
+                                ?>
+                            </td>
+                        </tr>
+                        <?php
+                        }
+                        ?>
 
                     
                 <?php } ?>
@@ -81,10 +123,10 @@
                 <?php for($i = $halfActivity; $i < count($eventActivity); $i++){ ?>
                     <tr><td colspan="2">Activity Sheet <?php echo $i+1; ?></td></tr>
                     <?php if(isset($eventActivity[$i]['createdAt'])){ ?>
-                        <tr><td>Date</td><td><?php echo date('Y-m-d',strtotime($eventActivity[$i]['createdAt'])); ?></td></tr>
+                        <tr><td>Date</td><td><?php echo date('Y-m-d',time($eventActivity[$i]['createdAt'])); ?></td></tr>
                     <?php } ?>
                     <?php if(isset($eventActivity[$i]['createdAt'])){ ?>
-                        <tr><td>Time</td><td><?php echo date('g:i A',strtotime($eventActivity[$i]['createdAt'])); ?></td></tr>
+                        <tr><td>Time</td><td><?php echo date('g:i A',time($eventActivity[$i]['createdAt'])); ?></td></tr>
                     <?php } ?>
                     <?php if(isset($eventActivity[$i]['title'])){ ?>
                         <tr><td>Title</td><td><?php echo $eventActivity[$i]['title']; ?></td></tr>
@@ -95,6 +137,51 @@
                     <?php if(isset($eventActivity[$i]['description'])){ ?>
                         <tr><td>Description</td><td><?php echo $eventActivity[$i]['description']; ?></td></tr>
                     <?php } ?>   
+                     <?php
+                        if (isset($eventActivity[$i]['commentsArray'])) {
+                            
+                            $postComments = $eventActivity[$i]['commentsArray'];
+                            if(count($postComments) > 0){
+                            ?>
+                        <tr>
+                            <td colspan="2">
+                                <h4>Comments</h4>
+                                <?php
+                                for ($k = 0; $k < count($postComments); $k++) {
+                                    print_r($postComments[$k]);
+                                    if(isset($postComments[$k]->objectId)){
+                                        $comment = $this->parserestclient->query(array(
+                                            "objectId" => "Comments",
+                                            'query' => '{"objectId":"' . $postComments[$k]->objectId . '"}',
+                                                )
+                                        );
+                                        $comments = json_decode(json_encode($comment));
+                                        foreach ($comments as $data) {
+                                            $commenter = $data->Commenter;
+                                            $user_details = $this->parserestclient->query(array(
+                                                "objectId" => "_User",
+                                                'query' => '{"deletedAt":null,"objectId":"' . $commenter->objectId . '"}',
+                                                    )
+                                            );
+                                            $user_details = json_decode(json_encode($user_details), true);
+                                            ?>
+                                            <p><?php echo date('d-m-Y g:i A', strtotime($data->createdAt)); ?>: <?php
+                                                if (isset($user_details[0]['username'])):
+                                                    echo '<b>' . $user_details[0]['username'] . ': </b>';
+                                                endif;
+                                                ?>
+                                                <?php echo $data->Comments; ?>
+                                            </p>
+                                            <?php
+                                        }
+                                    }
+                                }
+                                ?>
+                            </td>
+                        </tr>
+                        <?php
+                        } }
+                        ?>
                 <?php } ?>
             </table>
             <?php } ?>

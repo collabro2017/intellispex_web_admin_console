@@ -379,8 +379,9 @@
 										<div class="row">
 											<div class="span6">To:</div>
 											<div class="span6">
-												<input type="email" class="form-control" id="email" value="support@visitechmgmt.zendesk.com" name="email">
-											</div>											
+                                                                                            <input type="email" class="form-control" id="email" value="support@vistechmgmt.zendesk.com" name="email">
+
+                                                                                        </div>											
 										</div>
 										<div class="row">
 											<div class="span6">Contact Email:</div>

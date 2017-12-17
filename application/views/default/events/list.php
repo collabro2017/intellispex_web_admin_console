@@ -63,7 +63,6 @@
 							<?php														
 								foreach($info as $val){
                                                                         if(isset($val['eventname'])){
-
 									?>
 									<tr>																
 										<td><input type="checkbox" class="deleteitem" name="<?php echo $val['objectId'] ?>"></td>
