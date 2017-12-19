@@ -3,9 +3,8 @@
     <head>		
         <link href="<?php echo base_url('public') ?>/css/datatable.css" rel="stylesheet" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/css/bootstrap-timepicker.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/css/bootstrap-timepicker.min.css" />
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
         <style>
             .row-fluid [class*="span"]:first-child {
                 text-align: left !important;
@@ -16,7 +15,7 @@
                 margin-right: 30px !important;
                 margin-left: 0px !important;
             }
-                        .bootstrap-timepicker-hour{
+            .bootstrap-timepicker-hour{
                 padding: 0px !important;
                 padding-left: 2px !important;
             }
@@ -182,15 +181,33 @@
                                                 <th><input required type="text" class="span6" name='eventname' <?php if (isset($event[0]['eventname'])): ?> value="<?php echo $event[0]['eventname']; ?>" <?php endif; ?>/></th>
                                             </tr>
                                             <tr>
-                                                                                                <th>Company</th>
+                                                <th>Company</th>
                                                 <th><input type="text" class="span6" name='company' <?php if (isset($event[0]['company'])): ?> value="<?php echo $event[0]['company']; ?>" <?php endif; ?>/></th>
                                             </tr>
                                             <tr>
                                                 <th>Time Start</th>
                                                 <th>
                                                      <div class="input-group bootstrap-timepicker timepicker">
-                                                        <input class="form-control input-small" id="startTime" type="time" autocomplete="on" class="span6" name='startTime' <?php if (isset($event[0]['startTime'])): ?> value="<?php echo $event[0]['startTime']; ?>" <?php endif; ?>/>
-                                                        <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                                                         <select style="width:50px; float:left" name="hourStart">
+                                                             <?php for($i = 1; $i < 13; $i++){
+                                                                 ?>
+                                                             <option <?php if($i == 3) echo 'selected'; ?> value="<?php echo $i?>"><?php echo $i; ?></option>
+                                                             <?php
+                                                             }
+                                                             ?>
+                                                         </select>
+                                                         <select style="width:50px; float:left" name="secondStart">
+                                                             <?php for($i = 1; $i < 60; $i++){
+                                                                 ?>
+                                                             <option <?php if($i == 29) echo 'selected'; ?> value="<?php echo $i?>"><?php echo $i; ?></option>
+                                                             <?php
+                                                             }
+                                                             ?>
+                                                         </select>
+                                                         <select style="width:60px; float:left" name="ampmStart">
+                                                             <option value="AM">AM</option>
+                                                             <option selected value="PM">PM</option>
+                                                         </select>
                                                     </div>
                                                 </th>
                                             </tr>
@@ -198,8 +215,26 @@
                                                 <th>Time End</th>
                                                 <th>
                                                      <div class="input-group bootstrap-timepicker timepicker">
-                                                        <input class="form-control input-small" id="endTime" required type="time" autocomplete="on" class="span6" name='endTime' <?php if (isset($event[0]['endTime'])): ?> value="<?php echo $event[0]['endTime']; ?>" <?php endif; ?>/>
-                                                        <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                                                         <select style="width:50px; float:left" name="hourEnd">
+                                                             <?php for($i = 1; $i < 13; $i++){
+                                                                 ?>
+                                                             <option <?php if($i == 5) echo 'selected'; ?> value="<?php echo $i?>"><?php echo $i; ?></option>
+                                                             <?php
+                                                             }
+                                                             ?>
+                                                         </select>
+                                                         <select style="width:50px; float:left" name="secondEnd">
+                                                             <?php for($i = 1; $i < 60; $i++){
+                                                                 ?>
+                                                             <option <?php if($i == 29) echo 'selected'; ?> value="<?php echo $i?>"><?php echo $i; ?></option>
+                                                             <?php
+                                                             }
+                                                             ?>
+                                                         </select>
+                                                         <select style="width:60px; float:left" name="ampmEnd">
+                                                             <option value="AM">AM</option>
+                                                             <option selected value="PM">PM</option>
+                                                         </select>
                                                     </div>
                                                 </th>
                                             </tr>
@@ -247,7 +282,7 @@
                                                          endif;
                                                         } ?>
                                                     </select><br/>
-                                                    <select id="access_rights" name="access_rights">
+                                                    <select required="" id="access_rights" name="access_rights">
                                                         <option value="Full">Full Rights</option>
                                                         <option value="View &amp; Comments">View &amp; Comments</option>
                                                         <option value="Comment">Comment</option>
@@ -307,7 +342,6 @@
         </div>
     </div>
 <?php $this->load->view('default/footer/console_page.php'); ?>
-
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js" />
     
     <!-- Latest compiled and minified JavaScript -->
