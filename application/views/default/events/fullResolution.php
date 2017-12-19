@@ -66,12 +66,13 @@ $imagePost = $event->postImage->url;
 <?php foreach ($event_post as $post) { ?>
     <h4><?php echo $post->title; ?></h4>
     <?php
-    if (isset($post->thumbImage) && isset($post->postFile) && (isset($post->postType) && $post->postType == 'photo')) {
+    if(isset($post->postType)){
+    if (isset($post->thumbImage) && isset($post->postFile) && ($post->postType == 'photo')) {
         $image = $post->thumbImage;
         $imagePost = $post->postFile->url;
         ?>
         <img src="<?php echo $imagePost; ?>" alt="<?php echo $event->eventname; ?>" border="0" />
-    <?php } ?>
+    <?php } } ?>
     <p>
         <?php
         if (isset($post->countryLatLong)) {
