@@ -66,7 +66,13 @@
 									?>
 									<tr>																
 										<td><input type="checkbox" class="deleteitem" name="<?php echo $val['objectId'] ?>"></td>
-                                                                                <td><a href="<?php echo base_url(); ?>events/event/<?php echo $val['objectId']; ?>"><img width="70px" src="<?php echo $val['postImage']['url']; ?>" /></a></td>
+                                                                                <td>
+                                                                                    <a href="<?php echo base_url(); ?>events/event/<?php echo $val['objectId']; ?>">
+                                                                                        <?php if(isset($val['postImage'])){ ?>
+                                                                                            <img width="70px" src="<?php echo $val['postImage']['url']; ?>" />
+                                                                                        <?php } ?>
+                                                                                    </a>
+                                                                                </td>
 										<td><?php echo $val['eventname'] ?><br>
 											<b>Date Created:</b> <?php echo $val['createdAt'] ?><br>
 											<b>User:</b> <?php echo $val['username'] ?><br>
