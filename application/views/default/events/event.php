@@ -710,6 +710,16 @@
         $('#close').on('click', function () {
             $('#update_post_modal').fadeOut();
         });
+        function updatePost(post_id) {
+            $('#postId').val(post_id);
+            $.post("<?php echo base_url(); ?>events/Post", {postId: post_id}, function (data) {
+                var obj = jQuery.parseJSON(data);
+                $('#description').val(obj.description);
+                $('#title').val(obj.title);
+                $('#title2').val(obj.objectId);
+                $('#update_post_modal').fadeIn();
+            });
+        }
         function deletevent() {
             if (window.confirm("Are you sure want to delete selected event?")) {
 

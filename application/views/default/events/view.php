@@ -163,27 +163,26 @@
                                                         <div style="clear: both;"></div>
                                                     </div>
                                                     <?php
-                                                    if(isset($post->postType)){
+                                                    if (isset($post->postType)) {
                                                         if (isset($post->thumbImage) && isset($post->postFile) && $post->postType == 'photo') {
                                                             $image = $post->thumbImage;
                                                             $imagePost = $post->postFile;
+                                                            ?>
+                                                            <style>
+            <?php
+            if (strlen($post->title) > 120 && strlen($post->title) < 180) {
+                ?>
+                                                                    .cboxPhoto{ height: 98% !important; }
+                <?php
+            } elseif (strlen($post->title) > 180) {
+                ?>
+                                                                    .cboxPhoto{ height: 96% !important; }
+                <?php
+            }
+            ?>
+                                                            </style>
 
-                                                            ?>
-                                                        <style>
-                                                            <?php
-                                                            if(strlen($post->title) > 120 && strlen($post->title) < 180){
-                                                            ?>
-                                                            .cboxPhoto{ height: 98% !important; }
-                                                            <?php
-                                                            }elseif(strlen($post->title) > 180){
-                                                                ?>
-                                                            .cboxPhoto{ height: 96% !important; }
-                                                            <?php
-                                                            }
-                                                            ?>
-                                                        </style>
-
-                                                        <a  class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $post->title; ?>">
+                                                            <a  class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $post->title; ?>">
                                                                 <img style="width:70%;" style="cursor: pointer" id="eventImage" src="<?php echo $imagePost->url; ?>" />
                                                             </a>
                                                             <?php
@@ -206,27 +205,26 @@
                                                             ?>
                                                             <?php
                                                         }
-                                                    }else{
+                                                    } else {
                                                         if (isset($post->thumbImage) && isset($post->postFile)) {
                                                             $image = $post->thumbImage;
                                                             $imagePost = $post->postFile;
+                                                            ?>
+                                                            <style>
+            <?php
+            if (strlen($post->title) > 120 && strlen($post->title) < 180) {
+                ?>
+                                                                    .cboxPhoto{ height: 98% !important; }
+                <?php
+            } elseif (strlen($post->title) > 180) {
+                ?>
+                                                                    .cboxPhoto{ height: 96% !important; }
+                <?php
+            }
+            ?>
+                                                            </style>
 
-                                                            ?>
-                                                        <style>
-                                                            <?php
-                                                            if(strlen($post->title) > 120 && strlen($post->title) < 180){
-                                                            ?>
-                                                            .cboxPhoto{ height: 98% !important; }
-                                                            <?php
-                                                            }elseif(strlen($post->title) > 180){
-                                                                ?>
-                                                            .cboxPhoto{ height: 96% !important; }
-                                                            <?php
-                                                            }
-                                                            ?>
-                                                        </style>
-
-                                                        <a  class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $post->title; ?>">
+                                                            <a  class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $post->title; ?>">
                                                                 <img style="width:70%;" style="cursor: pointer" id="eventImage" src="<?php echo $imagePost->url; ?>" />
                                                             </a>
                                                             <?php
@@ -235,23 +233,23 @@
                                                     ?>
                                                     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
                                                     <script type="text/javascript">
-                                                            window.jQuery || document.write("<script src='assets/js/jquery-1.9.1.min.js'>\x3C/script>");
+                                                        window.jQuery || document.write("<script src='assets/js/jquery-1.9.1.min.js'>\x3C/script>");
                                                     </script>
                                                     <div style="clear:both"></div>
-                                                        
-                                                        <div style="width:80%;float: right;background: #eee;  border: 1px solid #b2b2b2;margin: 0;padding-left: 20px;">
-                                                            <div style="clear: both;height:20px;"></div>
-                                                            <a id="add_post_comment<?php echo $post->objectId; ?>" class="btn btn-small btn-primary"  href="javascript:void(0)" class="btn btn-small btn-primary menu-button"> Add </a> 
-                                                            <script>
-                                                                
-                                                                $('#add_post_comment<?php echo $post->objectId; ?>').on('click', function () {
-                                                                    $('#comment_form').attr('action','<?php echo base_url(); ?>events/add_post_comment/<?php echo $post->objectId; ?>')
-                                                                    $('#add_comment_modal').fadeIn();
-                                                                });
-                                                            </script>
-                                                            <?php
-                                                            if (isset($post->commentsArray)) {
-                                                                ?>
+
+                                                    <div style="width:80%;float: right;background: #eee;  border: 1px solid #b2b2b2;margin: 0;padding-left: 20px;">
+                                                        <div style="clear: both;height:20px;"></div>
+                                                        <a id="add_post_comment<?php echo $post->objectId; ?>" class="btn btn-small btn-primary"  href="javascript:void(0)" class="btn btn-small btn-primary menu-button"> Add </a> 
+                                                        <script>
+
+                                                            $('#add_post_comment<?php echo $post->objectId; ?>').on('click', function () {
+                                                                $('#comment_form').attr('action', '<?php echo base_url(); ?>events/add_post_comment/<?php echo $post->objectId; ?>')
+                                                                        $('#add_comment_modal').fadeIn();
+                                                                    });
+                                                        </script>
+                                                        <?php
+                                                        if (isset($post->commentsArray)) {
+                                                            ?>
                                                             <?php
                                                             $postComments = $post->commentsArray;
                                                             for ($i = 0; $i < count($postComments); $i++) {
@@ -271,18 +269,19 @@
                                                                     $user_details = json_decode(json_encode($user_details), true);
                                                                     ?>
                                                                     <p><?php echo date('d-m-Y g:i A', strtotime($data->createdAt)); ?>: <?php
-                                                    if (isset($user_details[0]['username'])):
-                                                        echo '<b>' . $user_details[0]['username'] . ': </b>';
-                                                    endif;
-                                                                    ?>
+                                                                        if (isset($user_details[0]['username'])):
+                                                                            echo '<b>' . $user_details[0]['username'] . ': </b>';
+                                                                        endif;
+                                                                        ?>
                                                                         <?php echo $data->Comments; ?>
                                                                     </p>
                                                                     <?php
                                                                 }
-                                                            } }
-                                                            ?>
-                                                        </div>
-                                                        <div style="clear:both"></div>
+                                                            }
+                                                        }
+                                                        ?>
+                                                    </div>
+                                                    <div style="clear:both"></div>
                                                 </li>
                                                 <?php
                                             }
@@ -360,13 +359,14 @@
                                             <li class="list-group-item">
                                                 Users
                                                 <ul class="children">
-                                                    <?php foreach ($associated_user as $user) {
-                                                        if (isset($user['username'])){
+                                                    <?php
+                                                    foreach ($associated_user as $user) {
+                                                        if (isset($user['username'])) {
                                                             ?>
                                                             <li>
                                                                 <a id="create_group<?php echo $user['objectId']; ?>" href="#">
                                                                     <?php
-                                                                    if (isset($user['username'])): 
+                                                                    if (isset($user['username'])):
                                                                         echo $user['username'];
                                                                     endif;
                                                                     ?>
@@ -612,6 +612,18 @@
         <script src="http://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
         <script src="<?php echo base_url('public') ?>/js/jquery.colorbox.js"></script>
         <script type="text/javascript">
+            
+                    
+                    function updatePost(post_id) {
+                        $('#postId').val(post_id);
+                        $.post("<?php echo base_url(); ?>events/Post", {postId: post_id}, function (data) {
+                            var obj = jQuery.parseJSON(data);
+                            $('#description').val(obj.description);
+                            $('#title').val(obj.title);
+                            $('#title2').val(obj.objectId);
+                            $('#update_post_modal').fadeIn();
+                        });
+                    }
                     $('.btnEventClose').on('click', function () {
                         $('#event_modal').fadeOut();
                     });
@@ -638,6 +650,35 @@
                     $('#close').on('click', function () {
                         $('#update_post_modal').fadeOut();
                     });
+                    function deletComment(comment_id) {
+                        if (window.confirm("Are you sure want to delete selected comment?")) {
+                            $.post("<?php echo base_url(); ?>events/commentdelete", {commentId: comment_id}, function (data) {
+                                //console.log(data);
+                                window.location.href = "<?php echo base_url(); ?>events/event/<?php echo $event->objectId; ?>";
+                            });
+                        }
+                    }
+
+                    function deletPost(post_id) {
+                        if (window.confirm("Are you sure want to delete selected post?")) {
+
+                            $.post("<?php echo base_url(); ?>events/postdelete", {postId: post_id}, function (data) {
+                                //console.log(data);
+                                window.location.href = "<?php echo base_url(); ?>events/event/<?php echo $event->objectId; ?>";
+                            });
+                        }
+                    }
+                    function updateComment(comment_id) {
+                        $.post("<?php echo base_url(); ?>events/comments", {commentId: comment_id}, function (data) {
+                            $('#comment_form').attr('action', '<?php echo base_url(); ?>events/update_event_comment/<?php echo $event->objectId; ?>');
+                            var obj = jQuery.parseJSON(data);
+                            $('#headingComment').html('Update Comment');
+                            $('#btnComment').html('Update Comment');
+                            $('#comments').val(obj.Comments);
+                            $('#commentId').val(comment_id);
+                            $('#add_comment_modal').fadeIn();
+                        });
+                    }
                     function deletevent() {
                         if (window.confirm("Are you sure want to delete selected event?")) {
 
@@ -671,79 +712,34 @@
                             });
                         }
                     }
-                    function deletComment(comment_id) {
-                        if (window.confirm("Are you sure want to delete selected comment?")) {
+                    $(document).ready(
+                        function ()
+                        {
+                            $(".groupPhoto").colorbox({rel: 'groupPhoto', transition: "fade"});
+                            $('#event_area ul').multiSelect
+                                    (
+                                            {
+                                                unselectOn: '#event_area',
+                                                keepSelection: true,
+                                            }
+                            );
+                        }
+                );
 
-                            $.post("<?php echo base_url(); ?>events/commentdelete", {commentId: comment_id}, function (data) {
-                                //console.log(data);
-                                window.location.href = "<?php echo base_url(); ?>events/event/<?php echo $event->objectId; ?>";
-                                            });
-                                        }
+                $('.list-group-item').hover(function () {
+                    $(this).find('.children').slideToggle();
+                });
+                function deletesheets()
+                {
+                    $("#event_area ul li.selected").each
+                            (
+                                    function (index)
+                                    {
+                                        console.log(index + ": " + $(this).data("id"));
                                     }
-
-                                    function deletPost(post_id) {
-                                        if (window.confirm("Are you sure want to delete selected post?")) {
-
-                                            $.post("<?php echo base_url(); ?>events/postdelete", {postId: post_id}, function (data) {
-                                                //console.log(data);
-                                                window.location.href = "<?php echo base_url(); ?>events/event/<?php echo $event->objectId; ?>";
-                                                            });
-                                                        }
-                                                    }
-                                                                function updateComment(comment_id) {
-                                                                    $.post("<?php echo base_url(); ?>events/comments", {commentId: comment_id}, function (data) {
-                                                                        $('#comment_form').attr('action', '<?php echo base_url(); ?>events/update_event_comment/<?php echo $event->objectId; ?>');
-                                                                        var obj = jQuery.parseJSON(data);
-                                                                        $('#headingComment').html('Update Comment');
-                                                                        $('#btnComment').html('Update Comment');
-                                                                        $('#comments').val(obj.Comments);
-                                                                        $('#commentId').val(comment_id);
-                                                                        $('#add_comment_modal').fadeIn();
-                                                                    });
-                                                                }
-                                                                function updatePost(post_id) {
-                                                                    $('#postId').val(post_id);
-                                                                    $.post("<?php echo base_url(); ?>events/Post", {postId: post_id}, function (data) {
-                                                                        var obj = jQuery.parseJSON(data);
-                                                                        $('#description').val(obj.description);
-                                                                        $('#title').val(obj.title);
-                                                                        $('#title2').val(obj.objectId);
-                                                                        $('#update_post_modal').fadeIn();
-                                                                    });
-                                                                }
-                                                                $(document).ready
-                                                                        (
-                                                                                function ()
-                                                                                {
-                                                                                    $(".groupPhoto").colorbox({rel: 'groupPhoto', transition: "fade"});
-                                                                                    $('#event_area ul').multiSelect
-                                                                                            (
-                                                                                                    {
-                                                                                                        unselectOn: '#event_area',
-                                                                                                        keepSelection: true,
-                                                                                                    }
-                                                                                            );
-                                                                                }
-                                                                        //.hover(function(){
-                                                                        //                            alert('test');
-                                                                        //                           $(this).find('.children').slideToggle(); 
-                                                                        //                        });
-                                                                        );
-
-                                                                $('.list-group-item').hover(function () {
-                                                                    $(this).find('.children').slideToggle();
-                                                                });
-                                                                function deletesheets()
-                                                                {
-                                                                    $("#event_area ul li.selected").each
-                                                                            (
-                                                                                    function (index)
-                                                                                    {
-                                                                                        console.log(index + ": " + $(this).data("id"));
-                                                                                    }
-                                                                            );
-                                                                    alert("Delete Sheets");
-                                                                }
+                            );
+                    alert("Delete Sheets");
+                }
 
                                                                 $.fn.multiSelect = function (o)
                                                                 {
