@@ -122,52 +122,58 @@
 			
 			<div class="span6" style="text-align:left;padding-top:20px;">
 				<div class="checkbox">
-					<label><input type="checkbox" class="downloadlist"  value="1">Creator</label>
+					<label><input class="downloadlist" value="1" type="checkbox">Creator</label>
 				</div>
 				<div class="checkbox">
-					<label><input type="checkbox" class="downloadlist" value="2">Date Created</label>
+					<label><input class="downloadlist" value="2" type="checkbox">Date Created</label>
 				</div>
 				<div class="checkbox">
-					<label><input type="checkbox" class="downloadlist" value="3">Time Created</label>
+					<label><input class="downloadlist" value="3" type="checkbox">Time Created</label>
 				</div>
 				<div class="checkbox">
-					<label><input type="checkbox" class="downloadlist" value="4">Number of Participants</label>
+					<label><input class="downloadlist" value="4" type="checkbox">Number of Participants</label>
 				</div>
 				<div class="checkbox">
-					<label><input type="checkbox" class="downloadlist" value="5">Tagged Users</label>
+					<label><input class="downloadlist" value="5" type="checkbox">Tagged Users</label>
 				</div>
 				<div class="checkbox">
-					<label><input type="checkbox" class="downloadlist" value="6">Size</label>
+					<label><input class="downloadlist" value="6" type="checkbox">Size</label>
 				</div>
 				<div class="checkbox">
-					<label><input type="checkbox" class="downloadlist" value="7">Location</label>
+					<label><input class="downloadlist" value="7" type="checkbox">Location</label>
 				</div>
 				<div class="checkbox">
-					<label><input type="checkbox" class="downloadlist" value="8">Number of Activity Sheets</label>
+					<label><input class="downloadlist" value="16" type="checkbox">Description</label>
 				</div>
 				<div class="checkbox">
-					<label><input type="checkbox" class="downloadlist" value="9">Title of Activity Sheets</label>
+					<label><input class="downloadlist" value="17" type="checkbox">Comments</label>
+				</div>
+				<div class="checkbox">
+					<label><input class="downloadlist" value="8" type="checkbox">Number of Activity Sheets</label>
+				</div>
+				<div class="checkbox">
+					<label><input class="downloadlist" value="9" type="checkbox">Title of Activity Sheets</label>
 				</div>
 			</div>
 			<div class="span6" style="padding-top:20px;">
 				<label>Activity Sheets</label>
 				<div class="checkbox">
-					<label><input type="checkbox" class="activitylist" value="10">Activity Sheet Time</label>
+					<label><input class="activitylist" value="10" type="checkbox">Activity Sheet Time</label>
 				</div>
 				<div class="checkbox">
-					<label><input type="checkbox" class="activitylist" value="11">Activity Sheet Date</label>
+					<label><input class="activitylist" value="11" type="checkbox">Activity Sheet Date</label>
 				</div>
 				<div class="checkbox">
-					<label><input type="checkbox" class="activitylist" value="12">Activity Sheet Title</label>
+					<label><input class="activitylist" value="12" type="checkbox">Activity Sheet Title</label>
 				</div>
 				<div class="checkbox">
-					<label><input type="checkbox" class="activitylist" value="13">Activity Sheet List</label>
+					<label><input class="activitylist" value="13" type="checkbox">Activity Sheet List</label>
 				</div>
 				<div class="checkbox">
-					<label><input type="checkbox" class="activitylist" value="14">Activity Sheet Description</label>
+					<label><input class="activitylist" value="14" type="checkbox">Activity Sheet Description</label>
 				</div>
 				<div class="checkbox">
-					<label><input type="checkbox" class="activitylist" value="15">Activity Sheet Comment</label>
+					<label><input class="activitylist" value="15" type="checkbox">Activity Sheet Comment</label>
 				</div>
 			</div>			
 		</div>

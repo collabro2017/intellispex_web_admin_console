@@ -148,11 +148,10 @@
                                 <h4>Comments</h4>
                                 <?php
                                 for ($k = 0; $k < count($postComments); $k++) {
-                                    print_r($postComments[$k]);
-                                    if(isset($postComments[$k]->objectId)){
+                                    if(isset($postComments[$k]['objectId'])){
                                         $comment = $this->parserestclient->query(array(
                                             "objectId" => "Comments",
-                                            'query' => '{"objectId":"' . $postComments[$k]->objectId . '"}',
+                                            'query' => '{"objectId":"' . $postComments[$k]['objectId'] . '"}',
                                                 )
                                         );
                                         $comments = json_decode(json_encode($comment));
