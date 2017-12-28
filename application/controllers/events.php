@@ -29,11 +29,12 @@ class events extends CI_Controller_EX {
             $data->id = $session_data['id'];
             $data->message = '';
             $data->function_name = "Create New Event";
-            if (base_url() == 'http://intellispex.com/') {
-                $regular_user = 'Di56R0ITXB';
-            } else {
+            if (base_url() == 'http://test.intellispex.com/') {
                 $regular_user = 'XVr1sAmAQl';
+            } else {
+                $regular_user = 'Di56R0ITXB';
             }
+            
             if ($session_data['role'] == 1) {
                 $user = $this->parserestclient->query(
                         array(
@@ -42,6 +43,7 @@ class events extends CI_Controller_EX {
                         )
                 );
             } else {
+                
                 $user = $this->parserestclient->query(
                         array(
                             "objectId" => "_User",
@@ -57,7 +59,7 @@ class events extends CI_Controller_EX {
                     )
             );
             $data->user_group = json_decode(json_encode($user_group), true);
-
+            
             if ($this->input->post('submit')) {
                 if (isset($_FILES['postImage'])) {
                     $eventname = $this->input->post('eventname');
@@ -67,8 +69,9 @@ class events extends CI_Controller_EX {
                     $file_base64 = file_get_contents($_FILES['postImage']['tmp_name']);
                     
                     $extension = pathinfo($_FILES['postImage']['tmp_name']);
-                    if(isset($extension['extension'])){
-                        $extension = $extension['extension'];
+                    $ext = (explode(".", $name)); # extra () to prevent notice
+                    $extension = end($ext);
+                    if(isset($extension)){
                         $name = strtolower(str_replace(' ', '-', $eventname)).".".$extension;
                     
                     
@@ -1058,7 +1061,7 @@ class events extends CI_Controller_EX {
         redirect('/events/event/' . $event_id, 'refresh');
     }
 
-    public function tag_user_group($group_id, $event_id) {
+    private function _tag_user_group($group_id, $event_id) {
         $TagFriends = array();
         $TagFriendAuthorities = array();
         $date = date(DateTime::ISO8601, time());
@@ -1097,8 +1100,15 @@ class events extends CI_Controller_EX {
                             'where' => $event_id
                         )
                 );
+
+                print_r($response);
+                print_r($_SESSION);
             }
         }
+    }
+
+    public function tag_user_group($group_id, $event_id) {
+        $this->_tag_user_group($group_id, $event_id);
         redirect('/events/event/' . $event_id, 'refresh');
     }
 
