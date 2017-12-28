@@ -211,9 +211,15 @@
 			$( ".downloadlist" ).each(function(){
 				this.checked = true;						
 			});
+                        $( ".activitylist" ).each(function(){
+				this.checked = true;						
+			});
 		}
 		function deselectall(){
 			$( ".downloadlist" ).each(function(){
+				this.checked = false;						
+			});
+                        $( ".activitylist" ).each(function(){
 				this.checked = false;						
 			});
 		}
