@@ -26,7 +26,7 @@
                 <tr><td>Number of Participants</td><td><?php if(isset($event[0]['commenters'])) { echo count($event[0]['commenters']); }else{ echo 0; } ?></td></tr>
                 <tr><td>Tagged Users</td><td><?php echo count(implode(",",$event[0]['TagFriends'])) ?></td></tr>
                 <tr><td>Location</td><td><?php  ?></td></tr>
-                <!--<tr><td>Description</td><td><?php echo $event[0]['description'] ?></td></tr>-->
+                <tr><td>Description</td><td><p><?php echo $event[0]['description'] ?></p></td></tr>
             </table>
             <br><br>
             <table>
@@ -54,7 +54,7 @@
                         <tr><td>Location</td><td><?php echo $eventActivity[$i]['countryLatLong']; ?></td></tr>
                     <?php } ?>
                     <?php if(isset($eventActivity[$i]['description'])){ ?>
-                        <tr><td>Description</td><td><?php echo $eventActivity[$i]['description']; ?></td></tr>
+                        <tr><td>Description</td><td><p><?php echo $eventActivity[$i]['description']; ?></p></td></tr>
                     <?php } ?>
                     <?php
                         if (isset($eventActivity[$i]['commentsArray'])) {
@@ -121,7 +121,7 @@
                         <tr><td>Location</td><td><?php echo $eventActivity[$i]['countryLatLong']; ?></td></tr>
                     <?php } ?>
                     <?php if(isset($eventActivity[$i]['description'])){ ?>
-                        <tr><td>Description</td><td><?php echo $eventActivity[$i]['description']; ?></td></tr>
+                        <tr><td>Description</td><td><p><?php echo $eventActivity[$i]['description']; ?></p></td></tr>
                     <?php } ?>
                      <?php
                         if (isset($eventActivity[$i]['commentsArray'])) {

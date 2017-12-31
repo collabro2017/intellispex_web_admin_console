@@ -196,7 +196,9 @@ body > section {
 .top-number p{
 	margin: 0
 }
-
+p {
+	word-break: break-all;
+}
 .social{
 	text-align: right;
 }
