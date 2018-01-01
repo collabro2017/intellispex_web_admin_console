@@ -986,7 +986,7 @@ class events extends CI_Controller_EX {
                                     (
                                     "objectId" => "Post",
                                     "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}',
-                                    'order' => 'postType'
+                                    'order' => 'postOrder'
                                 )
                         ), true));
 
