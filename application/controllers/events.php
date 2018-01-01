@@ -66,9 +66,9 @@ class events extends CI_Controller_EX {
                     $type = $_FILES['postImage']['type'];
                     $file_base64 = file_get_contents($_FILES['postImage']['tmp_name']);
                     
-                    $extension = pathinfo($_FILES['postImage']['tmp_name']);
-                    if(isset($extension['extension'])){
-                        $extension = $extension['extension'];
+                    $ext = (explode(".", $name)); # extra () to prevent notice
+                    $extension = end($ext);
+                    if(isset($extension)){
                         $name = strtolower(str_replace(' ', '-', $eventname)).".".$extension;
                     
                     
@@ -460,6 +460,30 @@ class events extends CI_Controller_EX {
                 }
                 $i++;
             }
+            
+            $temp = $this->parserestclient->query
+                    (
+                    array
+                        (
+                        "objectId" => "Event",
+                        'query' => '{"deletedAt":null, "completedBy":{"__type":"Pointer","className":"_User","objectId":"' . $session_data['mongodb_id'] . '"}}',
+                        'order' => $asc
+                    )
+            );
+            $event = json_decode(json_encode($temp), true);
+            foreach ($event as $ev) {
+                if (isset($ev)) {
+                    if ($i == 0) {
+                        $eventId[$i] = $ev['objectId'];
+                        $events[$i] = $ev;
+                    } elseif (!(in_array($ev['objectId'], $eventId))) {
+                        $eventId[$i] = $ev['objectId'];
+                        $events[$i] = $ev;
+                    }
+                }
+                $i++;
+            }
+            
             if (!$day || is_null($day) || $day == "") {
                 foreach ($associated_user as $user) {
                     $temp = $this->parserestclient->query
@@ -483,7 +507,7 @@ class events extends CI_Controller_EX {
                             }
                         }
                         $i++;
-                    }
+                    }//
                 }
                 $data->day = "";
             } else {
@@ -519,6 +543,7 @@ class events extends CI_Controller_EX {
                 }
                 $data->day = $day;
             }
+            
             $data->page = 'events/index';
             $data->info = $events; //json_decode(json_encode($temp), true);
             $this->load->view('default/events/list', $data);
