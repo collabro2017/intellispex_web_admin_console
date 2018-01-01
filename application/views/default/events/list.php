@@ -70,7 +70,11 @@
                                                                                     <a href="<?php echo base_url(); ?>events/event/<?php echo $val['objectId']; ?>">
                                                                                         <?php if(isset($val['postImage'])){ ?>
                                                                                             <img width="70px" src="<?php echo $val['postImage']['url']; ?>" />
-                                                                                        <?php } ?>
+                                                                                        <?php }else{
+                                                                                            ?>
+                                                                                            <?php echo $val['eventname'] ?>
+                                                                                        <?php
+                                                                                        } ?>
                                                                                     </a>
                                                                                 </td>
 										<td><?php echo $val['eventname'] ?><br>

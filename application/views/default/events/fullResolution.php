@@ -1,5 +1,7 @@
 <?php
-$imagePost = $event->postImage->url;
+if(isset($event->postImage)){   
+    $imagePost = $event->postImage->url;
+}
 ?>
 <style>
     *{
@@ -36,7 +38,9 @@ $imagePost = $event->postImage->url;
 </style>
 <h4><?php echo $event->eventname; ?></h4>
 <p><?php $event->description; ?></p>
+<?php if(isset($imagePost)){ ?>
 <img src="<?php echo $imagePost; ?>" alt="<?php echo $event->eventname; ?>" border="0" />
+<?php } ?>
 <div class="span12">
     <?php if (count($event_comment)) { ?>
         <h4> Comments</h4>
