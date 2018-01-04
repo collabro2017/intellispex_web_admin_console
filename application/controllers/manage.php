@@ -253,7 +253,7 @@ class manage extends CI_Controller_EX {
         $session_data = $this->session->userdata('logged_in');
         $ci = get_instance();
         $ci->load->library('email');
-        $config['protocol'] = "smtp";
+        $config['protocol'] = "mail";
         $config['smtp_host'] = "ssl://smtp.gmail.com";
         $config['smtp_port'] = "465";
         $config['smtp_user'] = "test.IntelliSpeX@gmail.com";
