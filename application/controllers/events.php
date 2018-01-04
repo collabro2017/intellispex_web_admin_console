@@ -829,8 +829,8 @@ class events extends CI_Controller_EX {
         $config['protocol'] = "smtp";
         $config['smtp_host'] = "ssl://smtp.gmail.com";
         $config['smtp_port'] = "465";
-        $config['smtp_user'] = "test.IntelliSpeX@gmail.com";
-        $config['smtp_pass'] = "Test123456789";
+        $config['smtp_user'] = "jimmy.song1989@gmail.com";
+        $config['smtp_pass'] = "Test@123";
 
         $config['charset'] = "utf-8";
         $config['mailtype'] = "html";
@@ -839,7 +839,7 @@ class events extends CI_Controller_EX {
         $ci->email->initialize($config);
         $ci->email->from($session_data['username']);
         $ci->email->to($user->email);
-        $this->email->reply_to($session_data['username']);
+        $ci->email->reply_to($session_data['username']);
         $ci->email->subject('Warning Message for prohibited text of your post.');
         $message = 'Hi ' . $user->username . ", <br/>";
         $message .= 'This is to notify that your post is having some prohibited words. Please becareful this is final warning. <br/>Next time we will take serious action against you. <br/><br/>';

@@ -253,11 +253,11 @@ class manage extends CI_Controller_EX {
         $session_data = $this->session->userdata('logged_in');
         $ci = get_instance();
         $ci->load->library('email');
-        $config['protocol'] = "mail";
+        $config['protocol'] = "smtp";
         $config['smtp_host'] = "ssl://smtp.gmail.com";
         $config['smtp_port'] = "465";
-        $config['smtp_user'] = "test.IntelliSpeX@gmail.com";
-        $config['smtp_pass'] = "Test123456789";
+        $config['smtp_user'] = "jimmy.song1989@gmail.com";
+        $config['smtp_pass'] = "Test@123";
 
         $config['charset'] = "utf-8";
         $config['mailtype'] = "html";
@@ -266,7 +266,7 @@ class manage extends CI_Controller_EX {
         $ci->email->initialize($config);
         $ci->email->from($this->input->post('emailto'), $session_data['username']);
         $ci->email->to('support@visitechmgmt.zendesk.com');
-        $this->email->reply_to($this->input->post('emailto'), $session_data['username']);
+        $ci->email->reply_to($this->input->post('emailto'), $session_data['username']);
         $ci->email->subject($this->input->post('priority'));
         $ci->email->message($this->input->post('des'));
 
@@ -309,8 +309,8 @@ class manage extends CI_Controller_EX {
                     $config['protocol'] = "smtp";
                     $config['smtp_host'] = "ssl://smtp.gmail.com";
                     $config['smtp_port'] = "465";
-                    $config['smtp_user'] = "test.IntelliSpeX@gmail.com";
-                    $config['smtp_pass'] = "Test123456789";
+                    $config['smtp_user'] = "jimmy.song1989@gmail.com";
+                    $config['smtp_pass'] = "Test@123";
                     $config['charset'] = "utf-8";
                     $config['mailtype'] = "html";
                     $config['newline'] = "\r\n";
@@ -379,8 +379,8 @@ class manage extends CI_Controller_EX {
             $config['protocol'] = "smtp";
             $config['smtp_host'] = "ssl://smtp.gmail.com";
             $config['smtp_port'] = "465";
-            $config['smtp_user'] = "test.IntelliSpeX@gmail.com";
-            $config['smtp_pass'] = "Test123456789";
+            $config['smtp_user'] = "jimmy.song1989@gmail.com";
+            $config['smtp_pass'] = "Test@123";
             $config['charset'] = "utf-8";
             $config['mailtype'] = "html";
             $config['newline'] = "\r\n";
