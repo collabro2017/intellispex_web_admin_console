@@ -127,6 +127,21 @@
 					<label><input class="downloadlist" value="1" type="checkbox">Creator</label>
 				</div>
 				<div class="checkbox">
+					<label><input class="downloadlist" value="15" type="checkbox">Title</label>
+				</div>
+				<div class="checkbox">
+					<label><input class="downloadlist" value="16" type="checkbox">Company Name</label>
+				</div>
+				<div class="checkbox">
+					<label><input class="downloadlist" value="17" type="checkbox">Start Time</label>
+				</div>
+				<div class="checkbox">
+					<label><input class="downloadlist" value="18" type="checkbox">End Time</label>
+				</div>
+				<div class="checkbox">
+					<label><input class="downloadlist" value="19" type="checkbox">Address</label>
+				</div>
+				<div class="checkbox">
 					<label><input class="downloadlist" value="2" type="checkbox">Date Created</label>
 				</div>
 				<div class="checkbox">

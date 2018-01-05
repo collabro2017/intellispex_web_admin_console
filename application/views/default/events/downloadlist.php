@@ -23,6 +23,21 @@
                 <?php if(isset($event[0]['username'])){ ?>
                     <tr><td>Creator</td><td><?php echo $event[0]['username'] ?></td></tr>
                 <?php } ?>
+                <?php if(isset($event[0]['eventname'])){ ?>
+                    <tr><td>Event Title</td><td><?php echo $event[0]['eventname'] ?></td></tr>
+                <?php } ?>
+                <?php if(isset($event[0]['company'])){ ?>
+                    <tr><td>Company Name</td><td><?php echo $event[0]['company'] ?></td></tr>
+                <?php } ?>
+                <?php if(isset($event[0]['startTime'])){ ?>
+                    <tr><td>Start Time</td><td><?php echo $event[0]['startTime'] ?></td></tr>
+                <?php } ?>
+                <?php if(isset($event[0]['endTime'])){ ?>
+                    <tr><td>End Time</td><td><?php echo $event[0]['endTime'] ?></td></tr>
+                <?php } ?>
+                <?php if(isset($event[0]['country'])){ ?>
+                    <tr><td>Address</td><td><?php echo $event[0]['country'] ?></td></tr>
+                <?php } ?>
                 <?php if(isset($event[0]['createdAt'])){ ?>
                     <tr><td>Data Created</td><td><?php echo date('Y-m-d',strtotime($event[0]['createdAt'])); ?></td></tr>
                 <?php } ?>
