@@ -1326,7 +1326,8 @@ class events extends CI_Controller_EX {
                         "objectId" => "Post",
                         //'query'=>'{"deletedAt":null}',	
                         //'query'=>'{"targetEvent":"'.$id.'"}'
-                        "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $id . '"}}'
+                        "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $id . '"}}',
+                        'order' => 'postType'
                     )
             );
             $temp_event = $this->parserestclient->query

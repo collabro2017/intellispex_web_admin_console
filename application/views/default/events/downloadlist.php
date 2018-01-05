@@ -135,13 +135,14 @@
         <div class="span5"><br><br><br><br>
             <?php if(count($eventActivity) > 0){ ?>
             <table>
-                <?php for($i = $halfActivity; $i < count($eventActivity); $i++){ ?>
+                <?php for($i = $halfActivity; $i < count($eventActivity); $i++){ 
+                    ?>
                     <tr><td colspan="2">Activity Sheet <?php echo $i+1; ?></td></tr>
                     <?php if(isset($eventActivity[$i]['createdAt'])){ ?>
-                        <tr><td>Date</td><td><?php echo date('Y-m-d',time($eventActivity[$i]['createdAt'])); ?></td></tr>
+                        <tr><td>Date</td><td><?php echo date('Y-m-d',strtotime($eventActivity[$i]['createdAt'])); ?></td></tr>
                     <?php } ?>
                     <?php if(isset($eventActivity[$i]['createdAt'])){ ?>
-                        <tr><td>Time</td><td><?php echo date('g:i A',time($eventActivity[$i]['createdAt'])); ?></td></tr>
+                        <tr><td>Time</td><td><?php echo date('g:i A',strtotime($eventActivity[$i]['createdAt'])); ?></td></tr>
                     <?php } ?>
                     <?php if(isset($eventActivity[$i]['title'])){ ?>
                         <tr><td>Title</td><td><?php echo $eventActivity[$i]['title']; ?></td></tr>
