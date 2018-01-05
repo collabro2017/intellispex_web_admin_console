@@ -172,12 +172,17 @@ if (count($event_comment)) {
                             )
     )));
     if (isset($event_user_details[0])) {
-        $image = $event_user_details[0]->ProfileImage->url;
+        if(isset($event_user_details[0]->ProfileImage)){
+            $image = $event_user_details[0]->ProfileImage->url;
+        }
         ?>
         <table cellpadding="1" cellspacing="1" border="0" style="text-align:center;">
             <tr>
                 <td style="text-align:left;width: 50px">
-                    <img style="height:50px;"  src="<?php echo $image; ?>" />
+                    
+                    <?php if(isset($image)){ ?>
+                        <img style="height:50px;"  src="<?php echo $image; ?>" />
+                    <?php } ?>
                 </td>
                 <td style="text-align:left;width:300px;">
                     <h4>
