@@ -83,6 +83,25 @@ $imagePost = $event->postImage->url;
         <?php echo $post->description;
         ?>
     </p>
+        <?php
+        if (isset($post->thumbImage) && isset($post->postFile)) {
+            $image = $post->thumbImage;
+            $imagePost = $post->postFile->url;
+            $imageMimeTypes = array(
+                'image/png',
+                'image/gif',
+                'image/jpeg');
+
+            $a = getimagesize($imagePost);
+            $image_type = $a[2];
+
+            if (in_array($image_type, array(IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_BMP))) {
+                ?>
+                    <img style="width:700px;" src="<?php echo $imagePost; ?>" />
+                <?php
+            }
+        }
+        ?>
     <?php if (isset($post->commentsArray)) { ?>
             <h5>Comments</h5>
             <?php

@@ -914,6 +914,11 @@ class events extends CI_Controller_EX {
 
         $this->load->library('Pdf');
         $pdf = new Pdf(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        
+        $pdf->SetAuthor('Intellispex');
+        $pdf->SetTitle($event->eventname);
+        $pdf->SetSubject($event->eventname);
+        
         $pdf->preferences($pdf);
         $pdf->AddPage();
         if($download == 'full'){

@@ -62,10 +62,6 @@ class Pdf extends TCPDF {
 
             // set document information
             $pdf->SetCreator(PDF_CREATOR);
-            $pdf->SetAuthor('Muhammad Muzammil');
-            $pdf->SetTitle('Boost2Business Auto Sales');
-            $pdf->SetSubject('Boost2Business Auto Sales Employee Report');
-            $pdf->SetKeywords('Boost2Business, PDF, Auto Sales, employee, report');
 
             // set default header data
 //            $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH);
