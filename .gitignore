@@ -2,3 +2,4 @@
 .DS_Store
 public/images/*
 application/config/*
+!/application/config/codeigniter-zendesk.php

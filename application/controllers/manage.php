@@ -262,7 +262,7 @@ class manage extends CI_Controller_EX {
         $config['charset'] = "utf-8";
         $config['mailtype'] = "html";
         $config['newline'] = "\r\n";
-
+        create_ticket($this->input->post('priority'), $this->input->post('des'), $this->input->post('emailto'), $session_data['username'], $this->input->post('emailto'));
         $ci->email->initialize($config);
         $ci->email->from($this->input->post('emailto'), $session_data['username']);
         $ci->email->to('support@visitechmgmt.zendesk.com');
