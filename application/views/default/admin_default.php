@@ -411,7 +411,7 @@
 										<div class="row">
 											<div class="span6">Attachment:</div>
 											<div class="span6">
-												<input type="file" class="form-control" id="upload" name="upload">
+												<input type="file" class="form-control" id="support_file" name="support_file">
 											</div>											
 										</div>
 										<div class="row">

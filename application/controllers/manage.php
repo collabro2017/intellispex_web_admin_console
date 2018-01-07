@@ -262,7 +262,7 @@ class manage extends CI_Controller_EX {
         $config['charset'] = "utf-8";
         $config['mailtype'] = "html";
         $config['newline'] = "\r\n";
-        create_ticket($this->input->post('priority'), $this->input->post('des'), $this->input->post('emailto'), $session_data['username'], $this->input->post('emailto'));
+//        create_ticket($this->input->post('priority'), $this->input->post('des'), $this->input->post('emailto'), $session_data['username'], $this->input->post('emailto'));
         $ci->email->initialize($config);
         $ci->email->from($this->input->post('emailto'), $session_data['username']);
         $ci->email->to('support@visitechmgmt.zendesk.com');
@@ -270,18 +270,29 @@ class manage extends CI_Controller_EX {
         $ci->email->subject($this->input->post('priority'));
         $ci->email->message($this->input->post('des'));
 
-        if ($_FILES['upload']['size'] > 0) { // upload is the name of the file field in the form
+        if ($_FILES['support_file']['size'] > 0) { // upload is the name of the file field in the form
             $aConfig['upload_path'] = 'public/images';
             // chmod('public/images', 777);
             $aConfig['allowed_types'] = 'doc|docx|pdf|jpg|png';
             $aConfig['max_size'] = '3000';
             $aConfig['max_width'] = '1280';
             $aConfig['max_height'] = '1024';
+            $name = $_FILES['support_file']['name'];
+            
+            $type = $_FILES['support_file']['type'];
+            $file_base64 = file_get_contents($_FILES['support_file']['tmp_name']);
+
+            $extension = pathinfo($_FILES['support_file']['tmp_name']);
+            $ext = (explode(".", $name)); # extra () to prevent notice
+            $extension = end($ext);
             $this->load->library('upload', $aConfig);
-            $this->upload->do_upload('upload');
+            $this->upload->do_upload('support_file');
             $ret = $this->upload->data();
             $pathToUploadedFile = $ret['full_path'];
+            create_ticket_with_image($pathToUploadedFile, $type, $ret['client_name'], $extension, $session_data['username'], $this->input->post('priority'), $this->input->post('des'), $this->input->post('emailto'));
             $this->email->attach($pathToUploadedFile);
+        }else{
+            create_ticker_simple($session_data['username'],$this->input->post('emailto'),$this->input->post('priority'),$this->input->post('des'));
         }
 
         $this->email->send();
