@@ -301,7 +301,7 @@ class events extends CI_Controller_EX {
                                     (
                                     "objectId" => "Post",
                                     "query" => '{"description":{"$ne": "" }}',
-                                    'order' => 'postType'
+                                    'order' => 'postOrder'
                                 )
                         );
                 $event_posts = json_decode(json_encode($temp), true);
@@ -579,7 +579,7 @@ class events extends CI_Controller_EX {
                                         (
                                         "objectId" => "Post",
                                         "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}',
-                                        'order' => 'postType'
+                                        'order' => 'postOrder'
                                     )
                             ), true));
             if(base_url() == 'http://test.intellispex.com/'){
@@ -908,7 +908,7 @@ class events extends CI_Controller_EX {
                                     (
                                     "objectId" => "Post",
                                     "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}',
-                                    'order' => 'postType'
+                                    'order' => 'postOrder'
                                 )
                         ), true));
 
@@ -1327,7 +1327,7 @@ class events extends CI_Controller_EX {
                         //'query'=>'{"deletedAt":null}',	
                         //'query'=>'{"targetEvent":"'.$id.'"}'
                         "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $id . '"}}',
-                        'order' => 'postType'
+                        'order' => 'postOrder'
                     )
             );
             $temp_event = $this->parserestclient->query

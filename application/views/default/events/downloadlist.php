@@ -54,6 +54,37 @@
                 <?php if(isset($event[0]['description'])){ ?>
                     <tr><td>Description</td><td><?php echo $event[0]['description'] ?></td></tr>
                 <?php } ?>
+                <?php
+                        if (isset($eventComment)) {
+                            ?>
+                        <tr>
+                            <td colspan="2">
+                                <h4>Comments</h4>
+                                <?php
+                                    foreach ($eventComment as $data) {
+                                        $commenter = $data['Commenter'];
+                                        $user_details = $this->parserestclient->query(array(
+                                            "objectId" => "_User",
+                                            'query' => '{"deletedAt":null,"objectId":"' . $commenter['objectId'] . '"}',
+                                                )
+                                        );
+                                        $user_details = json_decode(json_encode($user_details), true);
+                                        ?>
+                                        <p><?php echo date('d-m-Y g:i A', strtotime($data['createdAt'])); ?>: <?php
+                                            if (isset($user_details[0]['username'])):
+                                                echo '<b>' . $user_details[0]['username'] . ': </b>';
+                                            endif;
+                                            ?>
+                                            <?php echo $data['Comments']; ?>
+                                        </p>
+                                        <?php
+                                    }
+                                ?>
+                            </td>
+                        </tr>
+                        <?php
+                        }
+                        ?>
             </table>
             <br><br>
             <table>
@@ -68,7 +99,25 @@
             ?>
             <table>
                 <?php for($i = 0; $i < $halfActivity; $i++){ ?>
-                <tr><td colspan="2">Activity Sheet <?php echo $i+1; ?></td></tr>                    
+                <tr><td colspan="2">Activity Sheet <?php echo $i+1; ?></td></tr>     
+                <tr><td>Formate</td><td><?php echo $eventActivity[$i]['postType']; ?></td></tr>
+                <?php if(isset($eventActivity[$i]['postFile']['url'])){ ?>
+                        <tr><td>File Size</td><td>
+                                <?php
+                                 $ch = curl_init($eventActivity[$i]['postFile']['url']);
+
+                                curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+                                curl_setopt($ch, CURLOPT_HEADER, TRUE);
+                                curl_setopt($ch, CURLOPT_NOBODY, TRUE);
+
+                                $data = curl_exec($ch);
+                                $size = curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
+
+                                curl_close($ch);
+                                echo $size."kb";
+                                ?>
+                    </td></tr>
+                <?php } ?>
                     <?php if(isset($eventActivity[$i]['createdAt'])){ ?>
                         <tr><td>Date</td><td><?php echo date('Y-m-d',strtotime($eventActivity[$i]['createdAt'])); ?></td></tr>
                     <?php } ?>
@@ -137,8 +186,26 @@
             <table>
                 <?php for($i = $halfActivity; $i < count($eventActivity); $i++){ 
                     ?>
-                    <tr><td colspan="2">Activity Sheet <?php echo $i+1; ?></td></tr>
-                    <?php if(isset($eventActivity[$i]['createdAt'])){ ?>
+                    <tr><td colspan="2">Activity Sheet <?php echo $i+1; ?></td></tr>   
+                <tr><td>Formate</td><td><?php echo $eventActivity[$i]['postType']; ?></td></tr>
+                <?php if(isset($eventActivity[$i]['postFile']['url'])){ ?>
+                        <tr><td>File Size</td><td>
+                                <?php
+                                 $ch = curl_init($eventActivity[$i]['postFile']['url']);
+
+                                curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+                                curl_setopt($ch, CURLOPT_HEADER, TRUE);
+                                curl_setopt($ch, CURLOPT_NOBODY, TRUE);
+
+                                $data = curl_exec($ch);
+                                $size = curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
+
+                                curl_close($ch);
+                                echo $size."kb";
+                                ?>
+                    </td></tr>
+                <?php } ?>
+                <?php if(isset($eventActivity[$i]['createdAt'])){ ?>
                         <tr><td>Date</td><td><?php echo date('Y-m-d',strtotime($eventActivity[$i]['createdAt'])); ?></td></tr>
                     <?php } ?>
                     <?php if(isset($eventActivity[$i]['createdAt'])){ ?>

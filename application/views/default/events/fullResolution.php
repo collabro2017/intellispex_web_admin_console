@@ -36,7 +36,7 @@ $imagePost = $event->postImage->url;
 </style>
 <h4><?php echo $event->eventname; ?></h4>
 <p><?php $event->description; ?></p>
-<img src="<?php echo $imagePost; ?>" alt="<?php echo $event->eventname; ?>" border="0" />
+<img width="800" src="<?php echo $imagePost; ?>" alt="<?php echo $event->eventname; ?>" border="0" />
 <div class="span12">
     <?php if (count($event_comment)) { ?>
         <h4> Comments</h4>
@@ -71,7 +71,7 @@ $imagePost = $event->postImage->url;
         $image = $post->thumbImage;
         $imagePost = $post->postFile->url;
         ?>
-        <img src="<?php echo $imagePost; ?>" alt="<?php echo $event->eventname; ?>" border="0" />
+        <img width="800" src="<?php echo $imagePost; ?>" alt="<?php echo $event->eventname; ?>" border="0" />
     <?php } ?>
     <p>
         <?php
