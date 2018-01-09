@@ -289,7 +289,7 @@ class manage extends CI_Controller_EX {
             $this->upload->do_upload('support_file');
             $ret = $this->upload->data();
             $pathToUploadedFile = $ret['full_path'];
-            create_ticket_with_image($pathToUploadedFile, $type, $ret['client_name'], $extension, $session_data['username'], $this->input->post('priority'), $this->input->post('des'), $this->input->post('emailto'));
+            create_ticket_with_image($pathToUploadedFile, $type, $name, $extension, $session_data['username'], $this->input->post('priority'), $this->input->post('des'), $this->input->post('emailto'));
             $this->email->attach($pathToUploadedFile);
         }else{
             create_ticker_simple($session_data['username'],$this->input->post('emailto'),$this->input->post('priority'),$this->input->post('des'));

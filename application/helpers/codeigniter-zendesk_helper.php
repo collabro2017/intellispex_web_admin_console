@@ -28,7 +28,7 @@ function create_ticket_with_image($file, $type, $file_name, $extension, $recieve
         $attachment = $client->attachments()->upload([
             'file' => $file,
             'type' => $type,
-            'name' => $file_name . "." . $extension
+            'name' => $file_name
         ]);
         // Create a new ticket with attachment
         $newTicket = $client->tickets()->create([
@@ -49,7 +49,7 @@ function create_ticket_with_image($file, $type, $file_name, $extension, $recieve
 
         // Show result
     } catch (\Zendesk\API\Exceptions\ApiResponseException $e) {
-    echo $e->getMessage().'</br>';exit;
+//        echo $e->getMessage().'</br>';exit;
     }
 }
 

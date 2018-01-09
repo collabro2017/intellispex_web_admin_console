@@ -71,7 +71,6 @@ $imagePost = $event->postImage->url;
         $image = $post->thumbImage;
         $imagePost = $post->postFile->url;
         ?>
-        <img width="800" src="<?php echo $imagePost; ?>" alt="<?php echo $event->eventname; ?>" border="0" />
     <?php } ?>
     <p>
         <?php
