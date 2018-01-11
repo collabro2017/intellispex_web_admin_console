@@ -90,14 +90,21 @@ $imagePost = $event->postImage->url;
                 'image/png',
                 'image/gif',
                 'image/jpeg');
+            
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL,$imagePost);
+            curl_setopt($ch, CURLOPT_NOBODY, 1);
+            curl_setopt($ch, CURLOPT_FAILONERROR, 1);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            if(curl_exec($ch)!==FALSE){  
+                $a = getimagesize($imagePost);
+                $image_type = $a[2];
 
-            $a = getimagesize($imagePost);
-            $image_type = $a[2];
-
-            if (in_array($image_type, array(IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_BMP))) {
-                ?>
-                    <img style="width:700px;" src="<?php echo $imagePost; ?>" />
-                <?php
+                if (in_array($image_type, array(IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_BMP))) {
+                    ?>
+                        <img style="width:700px;" src="<?php echo $imagePost; ?>" />
+                    <?php
+                }
             }
         }
         ?>

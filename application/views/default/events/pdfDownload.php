@@ -208,17 +208,22 @@ if (count($event_comment)) {
                 'image/png',
                 'image/gif',
                 'image/jpeg');
-
-            $a = getimagesize($imagePost);
-            $image_type = $a[2];
-
-            if (in_array($image_type, array(IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_BMP))) {
-                ?><tr>
-                    <td style="text-align:left;">
-                        <img style="width:400px;" src="<?php echo $imagePost; ?>" />
-                    </td>
-                </tr>
-                <?php
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL,$imagePost);
+            curl_setopt($ch, CURLOPT_NOBODY, 1);
+            curl_setopt($ch, CURLOPT_FAILONERROR, 1);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            if(curl_exec($ch)!==FALSE){  
+                $a = getimagesize($imagePost);
+                $image_type = $a[2];     
+                if (in_array($image_type, array(IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_BMP))) {   
+                    ?><tr>
+                        <td style="text-align:left;">
+                            <img style="width:400px;" src="<?php echo $imagePost; ?>" />
+                        </td>
+                    </tr>
+                    <?php
+                }
             }
         }
         ?>

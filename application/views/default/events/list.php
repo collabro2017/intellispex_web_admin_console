@@ -184,7 +184,7 @@
 					<label><input class="activitylist" value="12" type="checkbox">Activity Sheet Title</label>
 				</div>
 				<div class="checkbox">
-					<label><input class="activitylist" value="16" type="checkbox">Activity Sheet Formate</label>
+					<label><input class="activitylist" value="16" type="checkbox">Activity Sheet Format</label>
 				</div>
 				<div class="checkbox">
 					<label><input class="activitylist" value="13" type="checkbox">Activity Sheet List</label>

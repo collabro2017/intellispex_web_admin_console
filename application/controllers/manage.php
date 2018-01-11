@@ -269,31 +269,42 @@ class manage extends CI_Controller_EX {
         $ci->email->reply_to($this->input->post('emailto'), $session_data['username']);
         $ci->email->subject($this->input->post('priority'));
         $ci->email->message($this->input->post('des'));
-
+        $body = $this->input->post('des');
         if ($_FILES['support_file']['size'] > 0) { // upload is the name of the file field in the form
-            $aConfig['upload_path'] = 'public/images';
-            // chmod('public/images', 777);
-            $aConfig['allowed_types'] = 'doc|docx|pdf|jpg|png';
-            $aConfig['max_size'] = '3000';
-            $aConfig['max_width'] = '1280';
-            $aConfig['max_height'] = '1024';
             $name = $_FILES['support_file']['name'];
-            
             $type = $_FILES['support_file']['type'];
             $file_base64 = file_get_contents($_FILES['support_file']['tmp_name']);
 
             $extension = pathinfo($_FILES['support_file']['tmp_name']);
             $ext = (explode(".", $name)); # extra () to prevent notice
             $extension = end($ext);
-            $this->load->library('upload', $aConfig);
-            $this->upload->do_upload('support_file');
-            $ret = $this->upload->data();
-            $pathToUploadedFile = $ret['full_path'];
-            create_ticket_with_image($pathToUploadedFile, $type, $name, $extension, $session_data['username'], $this->input->post('priority'), $this->input->post('des'), $this->input->post('emailto'));
-            $this->email->attach($pathToUploadedFile);
+            if(isset($extension)){
+                $name = strtolower(str_replace(' ', '-', $this->input->post('priority'))).".".$extension;
+
+
+                $temp = $this->parserestclient->file(
+                        array(
+                            "object" => $file_base64,
+                            "content-type" => $type,
+                            "file-name" => $name
+                        )
+                );
+                $image = json_decode(json_encode($temp));
+                
+                if(isset($image->name)){
+                    $image_name = $image->name;
+                    $image_url = $image->url;
+                    create_ticket_with_image($_FILES['support_file']['tmp_name'], $type, $name, $extension, $session_data['username'], $this->input->post('priority'), $body, $this->input->post('emailto'));
+                }else{
+                    create_ticker_simple($session_data['username'],$this->input->post('emailto'),$this->input->post('priority'),$body);
+                }
+            }else{
+                create_ticker_simple($session_data['username'],$this->input->post('emailto'),$this->input->post('priority'),$body);
+            }
         }else{
-            create_ticker_simple($session_data['username'],$this->input->post('emailto'),$this->input->post('priority'),$this->input->post('des'));
+            create_ticker_simple($session_data['username'],$this->input->post('emailto'),$this->input->post('priority'),$body);
         }
+        
 
         $this->email->send();
 //var_dump($this->email->print_debugger());

@@ -16,7 +16,47 @@
         }
     </style>
 	<div class="container-fluid" id="main-container">
-        
+        <?php 
+            $total_size = 0;
+            for($i = 0; $i < count($eventActivity); $i++){ 
+                if(isset($eventActivity[$i]['postFile']['url'])){ 
+                    $ch = curl_init($eventActivity[$i]['postFile']['url']);
+
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+                    curl_setopt($ch, CURLOPT_HEADER, TRUE);
+                    curl_setopt($ch, CURLOPT_NOBODY, TRUE);
+
+                    $data = curl_exec($ch);
+                    $size = curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
+                    $total_size = $total_size+$size;
+                } 
+            }
+            $bytes = $total_size;
+            if ($bytes >= 1073741824)
+            {
+                $bytes = number_format($bytes / 1073741824, 2) . ' GB';
+            }
+            elseif ($bytes >= 1048576)
+            {
+                $bytes = number_format($bytes / 1048576, 2) . ' MB';
+            }
+            elseif ($bytes >= 1024)
+            {
+                $bytes = number_format($bytes / 1024, 2) . ' KB';
+            }
+            elseif ($bytes > 1)
+            {
+                $bytes = $bytes . ' bytes';
+            }
+            elseif ($bytes == 1)
+            {
+                $bytes = $bytes . ' byte';
+            }
+            else
+            {
+                $bytes = '0 bytes';
+            }
+        ?>
 		<div id="main-content">
         <div class="span5"><br><br><br><br>
             <table>
@@ -49,6 +89,9 @@
                 <?php } ?>
                 <?php if(isset($event[0]['TagFriends'])){ ?>
                     <tr><td>Tagged Users</td><td><?php echo count(implode(",",$event[0]['TagFriends'])) ?></td></tr>
+                <?php } ?>
+                <?php if(isset($bytes)){ ?>
+                    <tr><td>File Size</td><td><?php echo $bytes; ?></td></tr>
                 <?php } ?>
                 <tr><td>Location</td><td><?php  ?></td></tr>
                 <?php if(isset($event[0]['description'])){ ?>
@@ -98,11 +141,11 @@
             $halfActivity = $halfActivity-1;
             ?>
             <table>
-                <?php for($i = 0; $i < $halfActivity; $i++){ ?>
+                <?php for($i = 0; $i < $halfActivity; $i++){ 
+                    ?>
                 <tr><td colspan="2">Activity Sheet <?php echo $i+1; ?></td></tr>     
-                <tr><td>Formate</td><td><?php echo $eventActivity[$i]['postType']; ?></td></tr>
                 <?php if(isset($eventActivity[$i]['postFile']['url'])){ ?>
-                        <tr><td>File Size</td><td>
+                        <tr><td>Format</td><td>
                                 <?php
                                  $ch = curl_init($eventActivity[$i]['postFile']['url']);
 
@@ -112,9 +155,10 @@
 
                                 $data = curl_exec($ch);
                                 $size = curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
+                                $type = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
 
                                 curl_close($ch);
-                                echo $size."kb";
+                                echo $type;
                                 ?>
                     </td></tr>
                 <?php } ?>
@@ -187,9 +231,9 @@
                 <?php for($i = $halfActivity; $i < count($eventActivity); $i++){ 
                     ?>
                     <tr><td colspan="2">Activity Sheet <?php echo $i+1; ?></td></tr>   
-                <tr><td>Formate</td><td><?php echo $eventActivity[$i]['postType']; ?></td></tr>
-                <?php if(isset($eventActivity[$i]['postFile']['url'])){ ?>
-                        <tr><td>File Size</td><td>
+                <!--<tr><td>Format</td><td><?php // echo $eventActivity[$i]['postType']; ?></td></tr>-->
+                    <?php if(isset($eventActivity[$i]['postFile']['url'])){ ?>
+                <tr><td>Format</td><td>
                                 <?php
                                  $ch = curl_init($eventActivity[$i]['postFile']['url']);
 
@@ -199,12 +243,13 @@
 
                                 $data = curl_exec($ch);
                                 $size = curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
+                                $type = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
 
                                 curl_close($ch);
-                                echo $size."kb";
+                                echo $type;
                                 ?>
                     </td></tr>
-                <?php } ?>
+                    <?php } ?>
                 <?php if(isset($eventActivity[$i]['createdAt'])){ ?>
                         <tr><td>Date</td><td><?php echo date('Y-m-d',strtotime($eventActivity[$i]['createdAt'])); ?></td></tr>
                     <?php } ?>
