@@ -145,22 +145,7 @@
                     ?>
                 <tr><td colspan="2">Activity Sheet <?php echo $i+1; ?></td></tr>     
                 <?php if(isset($eventActivity[$i]['postFile']['url'])){ ?>
-                        <tr><td>Format</td><td>
-                                <?php
-                                 $ch = curl_init($eventActivity[$i]['postFile']['url']);
-
-                                curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-                                curl_setopt($ch, CURLOPT_HEADER, TRUE);
-                                curl_setopt($ch, CURLOPT_NOBODY, TRUE);
-
-                                $data = curl_exec($ch);
-                                $size = curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
-                                $type = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
-
-                                curl_close($ch);
-                                echo $type;
-                                ?>
-                    </td></tr>
+                    <tr><td>Format</td><td><?php echo ucfirst($eventActivity[$i]['postType']); ?></td></tr>
                 <?php } ?>
                     <?php if(isset($eventActivity[$i]['createdAt'])){ ?>
                         <tr><td>Date</td><td><?php echo date('Y-m-d',strtotime($eventActivity[$i]['createdAt'])); ?></td></tr>
@@ -231,24 +216,8 @@
                 <?php for($i = $halfActivity; $i < count($eventActivity); $i++){ 
                     ?>
                     <tr><td colspan="2">Activity Sheet <?php echo $i+1; ?></td></tr>   
-                <!--<tr><td>Format</td><td><?php // echo $eventActivity[$i]['postType']; ?></td></tr>-->
                     <?php if(isset($eventActivity[$i]['postFile']['url'])){ ?>
-                <tr><td>Format</td><td>
-                                <?php
-                                 $ch = curl_init($eventActivity[$i]['postFile']['url']);
-
-                                curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-                                curl_setopt($ch, CURLOPT_HEADER, TRUE);
-                                curl_setopt($ch, CURLOPT_NOBODY, TRUE);
-
-                                $data = curl_exec($ch);
-                                $size = curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD);
-                                $type = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
-
-                                curl_close($ch);
-                                echo $type;
-                                ?>
-                    </td></tr>
+                    <tr><td>Format</td><td><?php echo ucfirst($eventActivity[$i]['postType']); ?></td></tr>
                     <?php } ?>
                 <?php if(isset($eventActivity[$i]['createdAt'])){ ?>
                         <tr><td>Date</td><td><?php echo date('Y-m-d',strtotime($eventActivity[$i]['createdAt'])); ?></td></tr>
