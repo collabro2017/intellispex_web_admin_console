@@ -144,9 +144,36 @@
                 <?php for($i = 0; $i < $halfActivity; $i++){ 
                     ?>
                 <tr><td colspan="2">Activity Sheet <?php echo $i+1; ?></td></tr>     
-                <?php if(isset($eventActivity[$i]['postFile']['url'])){ ?>
-                    <tr><td>Format</td><td><?php echo ucfirst($eventActivity[$i]['postType']); ?></td></tr>
-                <?php } ?>
+                <?php if(isset($eventActivity[$i]['postType'])){ ?>
+                <tr><td>Format</td><td>
+                        <?php echo ucfirst($eventActivity[$i]['postType']);
+
+                        ?>
+                        
+                    </td></tr>
+                <?php }elseif(isset($eventActivity[$i]['postFile']['url'])){
+                    ?>
+                    <tr><td>Format</td><td>
+                        <?php 
+                        $extension = explode('.', $eventActivity[$i]['postFile']['url']);
+                        $extension = end($extension);
+                        $extension = strtolower($extension);
+                        if($extension == 'mov' || $extension == 'mp4' || $extension == 'avi'){
+                            echo 'Video';
+                        }elseif($extension == 'wav' || $extension == 'mp3' || $extension == 'ogg'){
+                            echo 'Audio';
+                        }elseif($extension == 'jpg' || $extension == 'jpeg' || $extension == 'png' || $extension == 'gif'){
+                            echo 'Photo';
+                        }elseif( $extension == 'txt'){
+                            echo 'Text';
+                        }else{
+                            echo $extension;
+                        }
+                        ?>
+                        
+                    </td></tr>
+                    <?php
+                    } ?>
                     <?php if(isset($eventActivity[$i]['createdAt'])){ ?>
                         <tr><td>Date</td><td><?php echo date('Y-m-d',strtotime($eventActivity[$i]['createdAt'])); ?></td></tr>
                     <?php } ?>
@@ -215,10 +242,37 @@
             <table>
                 <?php for($i = $halfActivity; $i < count($eventActivity); $i++){ 
                     ?>
-                    <tr><td colspan="2">Activity Sheet <?php echo $i+1; ?></td></tr>   
-                    <?php if(isset($eventActivity[$i]['postFile']['url'])){ ?>
-                    <tr><td>Format</td><td><?php echo ucfirst($eventActivity[$i]['postType']); ?></td></tr>
-                    <?php } ?>
+                <tr><td colspan="2">Activity Sheet <?php echo $i+1; ?></td></tr>   
+                <?php if(isset($eventActivity[$i]['postType'])){ ?>
+                <tr><td>Format</td><td>
+                        <?php echo ucfirst($eventActivity[$i]['postType']);
+
+                        ?>
+                        
+                    </td></tr>
+                <?php }elseif(isset($eventActivity[$i]['postFile']['url'])){
+                    ?>
+                    <tr><td>Format</td><td>
+                        <?php 
+                        $extension = explode('.', $eventActivity[$i]['postFile']['url']);
+                        $extension = end($extension);
+                        $extension = strtolower($extension);
+                        if($extension == 'mov' || $extension == 'mp4' || $extension == 'avi'){
+                            echo 'Video';
+                        }elseif($extension == 'wav' || $extension == 'mp3' || $extension == 'ogg'){
+                            echo 'Audio';
+                        }elseif($extension == 'jpg' || $extension == 'jpeg' || $extension == 'png' || $extension == 'gif'){
+                            echo 'Photo';
+                        }elseif( $extension == 'txt'){
+                            echo 'Text';
+                        }else{
+                            echo $extension;
+                        }
+                        ?>
+                        
+                    </td></tr>
+                    <?php
+                    } ?>
                 <?php if(isset($eventActivity[$i]['createdAt'])){ ?>
                         <tr><td>Date</td><td><?php echo date('Y-m-d',strtotime($eventActivity[$i]['createdAt'])); ?></td></tr>
                     <?php } ?>
