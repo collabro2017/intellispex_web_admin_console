@@ -921,14 +921,15 @@ class events extends CI_Controller_EX {
         
         $pdf->preferences($pdf);
         $pdf->AddPage();
+        error_reporting(0);
         if($download == 'full'){
             $html = $this->load->view('default/events/fullResolution', $data, true);
         }else{
             $html = $this->load->view('default/events/pdfDownload', $data, true);
         }
 // output the HTML content
-        $pdf->writeHTML($html, true, false, true, false, '');
-
+       $pdf->writeHTML($html, true, false, true, false, '');
+        
         $pdf->Output("$event->eventname.pdf", 'I');
         ob_end_clean();
     }

@@ -180,8 +180,11 @@ if (count($event_comment)) {
             <tr>
                 <td style="text-align:left;width: 50px">
                     
-                    <?php if(isset($image)){ ?>
-                        <img style="height:50px;"  src="<?php echo $image; ?>" />
+                    <?php if(isset($event_user_details[0]->ProfileImage->url)){ 
+                        print_r($event_user_details[0]->ProfileImage->url);
+                        
+                        ?>
+                        <!--<img style="height:50px;"  src="<?php print_r($image); ?>" />-->
                     <?php } ?>
                 </td>
                 <td style="text-align:left;width:300px;">
@@ -209,17 +212,17 @@ if (count($event_comment)) {
                 'image/gif',
                 'image/jpeg');
             $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL,$imagePost);
+            curl_setopt($ch, CURLOPT_URL,$post->postFile->url);
             curl_setopt($ch, CURLOPT_NOBODY, 1);
             curl_setopt($ch, CURLOPT_FAILONERROR, 1);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             if(curl_exec($ch)!==FALSE){  
-                $a = getimagesize($imagePost);
+                $a = getimagesize($post->postFile->url);
                 $image_type = $a[2];     
                 if (in_array($image_type, array(IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_BMP))) {   
                     ?><tr>
                         <td style="text-align:left;">
-                            <img style="width:400px;" src="<?php echo $imagePost; ?>" />
+                            <img style="width:400px;" src="<?php echo $post->postFile->url; ?>" />
                         </td>
                     </tr>
                     <?php
@@ -321,6 +324,4 @@ if (count($event_comment)) {
                     <?php
         }
         ?>
-        <hr style="background-color: #bbb;color: #BBB; margin-bottom: 20px;" />
-        <br/><br/>
     <?php } ?>
