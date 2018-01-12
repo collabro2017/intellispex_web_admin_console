@@ -277,6 +277,22 @@
                                                                     }
                                                                     ?>
                                                                     <?php
+                                                                }elseif ($post->postType == 'audio') {
+                                                                    $audio = $post->postFile;
+                                                                    $name = explode('.', basename($audio->url));
+                                                                    $extension = $name['1'];
+                                                                    ?>
+                                                                    <?php if ($extension == 'mp4' || $extension == 'ogg') { ?>
+                                                                    <audio name="<?php echo $post->title; ?>" style="width: 100%;" controls autoplay>
+                                                                        <source src="<?php echo $audio->url; ?>" type="video/<?php echo $extension; ?>">
+                                                                        Your browser does not support the audio element.
+                                                                    </audio>
+                                                                        <?php
+                                                                    } else {
+                                                                        ?>
+                                                                        <audio style="width: 100%;" controls="controls" name="<?php echo $post->title; ?>" src="<?php echo $audio->url; ?>"></audio>
+                                                                        <?php
+                                                                    }
                                                                 }
                                                             } else {
                                                                 if (isset($post->thumbImage) && isset($post->postFile)) {
