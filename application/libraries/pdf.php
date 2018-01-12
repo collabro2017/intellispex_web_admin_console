@@ -56,6 +56,26 @@ class Pdf extends TCPDF {
 //		}
 //		$this->Cell(array_sum($w), 0, '', 'T');
 //	}
+        
+        public function Footer() {
+            // Position at 15 mm from bottom
+            $this->SetY(-15);
+            // Set font
+//            $this->SetFont('helvetica', 'I', 8);
+            // Page number
+            
+            
+            if(isset($_SESSION['RightText'])){
+                $this->Cell(0, 10, $_SESSION['RightText'], 0, false, 'L', 0, '', 0, false, 'T', 'M');
+            }
+            
+            $this->Cell(0, 10, "Page ". $this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+            
+            
+            if(isset($_SESSION['CenterText'])){
+                $this->Cell(0, 10, $_SESSION['CenterText'], 0, false, 'R', 0, '', 0, false, 'C', 'M');
+            }
+        }
         public function preferences($pdf){
             // set font
             $pdf->SetFont('helvetica', '', 14);

@@ -31,9 +31,6 @@
                 #DataTables_Table_0_wrapper{
                         margin:auto;
                 }
-                #main-container{
-                        margin-top:10%;
-                }
         </style>
 	<!--[if lt IE 9]>
 	  <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
@@ -109,13 +106,27 @@
   </head>
 
   <body class="login-layout admin-body">
-	<div class="widget-main">
 		<div class="top-menu">
-			<h2 class="span3"><img class="irc_mut iUyhD38Z_yik-HwpH6ZlgJaI" onload="google.aft&amp;&amp;google.aft(this)" src="<?php echo base_url('public') ?>/images/logo.JPG" width="60" height="60" style="margin-top: 0px;"> <span style="color : #00aaff;">IntelliSpeX</span></h2>
-			<h2 class="span7"><span><?php echo $function_name; ?></span></h2>
-			<h2 class="span2"></i> <span><?php echo $email; ?></span></h2>
+                    <div class="span2">
+                        <h2><img class="irc_mut iUyhD38Z_yik-HwpH6ZlgJaI" onload="google.aft&amp;&amp;google.aft(this)" src="<?php echo base_url('public') ?>/images/logo.JPG" width="60" height="60" style="margin-top: 0px;"> 
+                        <span style="color : #00aaff;">IntelliSpeX</span></h2>
+                    </div>
+                    <div class="span5"><h2 style="text-align: left;"><span><?php echo $function_name; ?></span></h2></div>
+                    <div class="span5" style="float:right;">
+                        <h2 id="welcome-heading"> <span>Welcome, <?php echo $email; ?></span></h2>
+                        <ul class="main-menu">
+                            <li>
+                                <a href="<?php echo base_url(); ?>manage/console_menu">Home</a>
+                            </li>
+                            <li>
+                                <a href="<?php echo base_url(); ?>manage/clientmanagementconsolesupport">Support</a>
+                            </li>
+                            <li>
+                                <a href="<?php echo base_url(); ?>manage/logout">Logout</a>
+                            </li>
+                        </ul>
+                    </div>
 		</div>
-	</div>
   <div class="container-fluid" id="main-container">
 	<div id="main-content">
 		<?php if ( isset($links) && ( array_key_exists( "logout", $links ) || array_key_exists( "Logout", $links ) ) ): ?>
@@ -181,18 +192,7 @@
 						  			<img alt="Client Management's Images" src="<?php echo base_url('public') ?>/images/earth.jpg" />
 					  			</div>
 					  		</div>
-					  		<div class="row">
-					  			<div class="span3"></div>
-					  			<div class="span6" style="text-align: center;">
-					  				<a class="btn btn-small btn-primary menu-button" style="min-width:350px;margin-top: 15px;" href="<?php echo base_url(); ?>manage/clientmanagementconsolesupport">Support</a>
-					  			</div>					  			
-					  		</div>
-					  		<div class="row">
-					  			<div class="span3"></div>
-					  			<div class="span6" style="text-align: center;">
-					  				<a class="btn btn-small btn-primary menu-button" style="min-width:350px;" href="<?php echo base_url(); ?>manage/logout">Logout</a>
-					  			</div>					  			
-					  		</div>
+                                              <div style="clear:both;height: 40px;"></div>
 					  		
 					  	<?php
 					  		}
@@ -318,13 +318,19 @@
 					  	?>
 					  		<div class="row">
 					  			<div class="span2"></div>
-					  			<div class="span4" style="text-align: left;">
+<!--					  			<div class="span4" style="text-align: left;">
 					  				<a class="btn btn-small btn-primary menu-button" style="min-width:250px;margin-top: 15px;" href="<?php echo base_url(); ?>manage/clientmanagementconsolesupport">Support</a>
 					  			</div>
 					  			<div class="span4" style="text-align: right;">
 					  				<a class="btn btn-small btn-primary menu-button" style="min-width:250px;margin-top: 15px;" href="#">Download Complete</a>
-					  			</div>
+					  			</div>-->
 					  		</div>	
+                                                        <div class="row">
+                                                            <div class="span3"></div>
+                                                            <div class="span6" style="text-align: center;" >
+                                                                <a class="btn btn-small btn-primary menu-button" href="<?php echo base_url(); ?>events/download_metadata">Download Metadata</a>
+                                                            </div>					  			
+                                                        </div>	
                                                         <div class="row">
                                                             <div class="span3"></div>
                                                             <div class="span6" style="text-align: center;" >
@@ -361,12 +367,12 @@
 					  				<a class="btn btn-small btn-primary menu-button" href="#">User Customizable Delimited Data Lists</a>
 					  			</div>					  			
 					  		</div>	
-					  		<div class="row">
+<!--					  		<div class="row">
 					  			<div class="span2"></div>
 					  			<div class="span8" style="text-align: center;" >
 					  				<a class="btn btn-small btn-primary menu-button" href="<?php echo base_url(); ?>manage/clientmanagementconsole">Client Management Console</a>
 					  			</div>					  			
-					  		</div>					  		
+					  		</div>					  		-->
 					  	<?php
 					  		}
 								else if($function_name == "SUPPORT REQUEST"){									

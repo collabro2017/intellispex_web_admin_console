@@ -57,9 +57,6 @@
             #DataTables_Table_0_wrapper{
                 margin:auto;
             }
-            #main-container{
-                margin-top:10%;
-            }
             /* The Modal (background) */
             .modal {
                 display: none; /* Hidden by default */

@@ -7,7 +7,10 @@
 
 
 body {
-	background: #fff;
+	/*background: #fff;*/
+        background: url('../images/Picture2.jpg') !important;
+        background-size: 100% 100%;
+        background-position: center center;
 	font-family: "Trebuchet MS", Helvetica, sans-serif
 
 }
@@ -59,7 +62,23 @@ hr {
 	border-top: 1px solid #e5e5e5;
 	border-bottom: 1px solid #fff;
 }
-
+.main-menu {
+	margin: 0px;
+	float: right;
+	margin-right: 40px;
+}
+.main-menu li {
+	float: left;
+	margin-left: 35px;
+	list-style: none;
+}
+h2#welcome-heading{
+    line-height: 25px; margin: 0px;float: right;margin-right: 42px;
+}
+.main-menu li a{
+    color:#FFF;
+    font-size: 17px;
+}
 
 .btn-primary {
 	padding: 8px 20px;
@@ -70,7 +89,14 @@ hr {
 	margin-bottom: 10px;
 }
 
-
+#main-container {
+	margin-top: 0%;
+	padding-top: 2%;
+}
+.widget-main {
+	padding: 1px !important;
+	border: none !important;
+}
 .btn-primary:hover,
 .btn-primary:focus{
 	background: #c52d2f;
@@ -2679,12 +2705,12 @@ tr:nth-child(even) {
 }
 
 /*top-menu*/
-.top-menu{
-	background: #ddd;
-	color:#000;
+.top-menu {
+	background: #434343;
+	color: #FFF;
 	width: 100%;
-	border: 1px solid #000;
-	float: left;
+	border: 1px solid #434343;
+	height: 90px;
 }
 
 .top-menu h2 > span
@@ -2700,12 +2726,11 @@ tr:nth-child(even) {
 
 .menu-button
 {
-	background-color: aqua !important;
-	border: 1px solid #000;
+	background-color: #6EA4CA !important;
 	border-radius: 8px !important;
 	min-width: 500px;
 	padding:15px 0px;
-	color:#000 !important;
+	color:#FFF !important;
 	font-size: 18px;
 	font-weight: bold;
 }

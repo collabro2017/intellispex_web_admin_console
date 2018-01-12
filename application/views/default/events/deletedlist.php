@@ -7,9 +7,6 @@
 			#DataTables_Table_0_wrapper{
 				margin:auto;
 			}
-			#main-container{
-				margin-top:10%;
-			}
 		</style>
 
 	</head>

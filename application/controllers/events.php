@@ -922,16 +922,31 @@ class events extends CI_Controller_EX {
         $pdf->preferences($pdf);
         $pdf->AddPage();
         error_reporting(0);
+        
         if($download == 'full'){
             $html = $this->load->view('default/events/fullResolution', $data, true);
         }else{
             $html = $this->load->view('default/events/pdfDownload', $data, true);
         }
 // output the HTML content
+        
+            $pdf->setFooterFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+//            $pdf->SetY($event[0]['eventname']);
+//            $pdf->Cell(0, 10, $event[0]['eventname'], 0, 0, 'C');
+
+            $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+            $pdf->setPrintFooter(true);
+            $_SESSION['RightText'] = $event->eventname;
+            $_SESSION['CenterText'] = date('Y-m-d',strtotime($event->createdAt));
+            
        $pdf->writeHTML($html, true, false, true, false, '');
         
         $pdf->Output("$event->eventname.pdf", 'I');
         ob_end_clean();
+    }
+    
+    public function download_metadata(){
+        $this->index();
     }
 
     public function add_event_comment() {
@@ -1260,7 +1275,18 @@ class events extends CI_Controller_EX {
             $html = $this->load->view('default/events/pdfDownloadMeta', $data, true);
 
 // output the HTML content
+
+            $pdf->setFooterFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+//            $pdf->SetY($event[0]['eventname']);
+//            $pdf->Cell(0, 10, $event[0]['eventname'], 0, 0, 'C');
+
+            $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+            $pdf->setPrintFooter(true);
+            $_SESSION['RightText'] = $event[0]['eventname'];
+            $_SESSION['CenterText'] = date('Y-m-d',strtotime($event[0]['createdAt']));
+            
             $pdf->writeHTML($html, true, false, true, false, '');
+
             $name = $event[0]['eventname'];
             $pdf->Output("$name.pdf", 'I');
             ob_end_clean();

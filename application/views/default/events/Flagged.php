@@ -6,9 +6,6 @@
             #DataTables_Table_0_wrapper{
                 margin:auto;
             }
-            #main-container{
-                margin-top:10%;
-            }
         </style>
     </head>
     <?php $this->load->view('default/head/console_page.php'); ?>
