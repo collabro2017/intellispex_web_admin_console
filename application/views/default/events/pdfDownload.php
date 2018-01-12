@@ -181,10 +181,9 @@ if (count($event_comment)) {
                 <td style="text-align:left;width: 50px">
                     
                     <?php if(isset($event_user_details[0]->ProfileImage->url)){ 
-                        print_r($event_user_details[0]->ProfileImage->url);
                         
                         ?>
-                        <!--<img style="height:50px;"  src="<?php print_r($image); ?>" />-->
+                        <img style="height:50px;"  src="<?php echo $event_user_details[0]->ProfileImage->url; ?>" />
                     <?php } ?>
                 </td>
                 <td style="text-align:left;width:300px;">
