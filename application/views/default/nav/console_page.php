@@ -1,3 +1,7 @@
+<?php 
+$session_data = $this->session->userdata('logged_in');
+        
+?>
 <div class="top-menu">
                     <div class="span2">
                         <h2><img class="irc_mut iUyhD38Z_yik-HwpH6ZlgJaI" onload="google.aft&amp;&amp;google.aft(this)" src="<?php echo base_url('public') ?>/images/logo.JPG" width="60" height="60" style="margin-top: 0px;"> 
@@ -5,7 +9,7 @@
                     </div>
                     <div class="span5"><h2 style="text-align: left;"><span><?php echo $function_name; ?></span></h2></div>
                     <div class="span5" style="float:right;">
-                        <h2 id="welcome-heading"> <span>Welcome, <?php echo $username; ?></span></h2>
+                        <h2 id="welcome-heading"> <span>Welcome, <?php echo $session_data['username']; ?></span></h2>
                         <ul class="main-menu">
                             <li>
                                 <a href="<?php echo base_url(); ?>manage/console_menu">Home</a>

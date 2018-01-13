@@ -113,7 +113,7 @@
                     </div>
                     <div class="span5"><h2 style="text-align: left;"><span><?php echo $function_name; ?></span></h2></div>
                     <div class="span5" style="float:right;">
-                        <h2 id="welcome-heading"> <span>Welcome, <?php echo $email; ?></span></h2>
+                        <h2 id="welcome-heading"> <span>Welcome, <?php echo $username; ?></span></h2>
                         <ul class="main-menu">
                             <li>
                                 <a href="<?php echo base_url(); ?>manage/console_menu">Home</a>
