@@ -75,6 +75,90 @@ hr {
 h2#welcome-heading{
     line-height: 25px; margin: 0px;float: right;margin-right: 42px;
 }
+ul.label-meta{
+    list-style: none;
+    margin: 0;
+    margin-left: 20px;
+}
+ul.label-meta li{
+    float:left;
+    margin-left: 10px;
+}
+.styled select {
+	background: #76717191;
+	width: 160px;
+	font-size: 16px;
+	height: 34px;
+	border: none;
+	color: #FFF;
+	padding-left: 10px !important;
+}
+.styled {
+	margin: 0px;
+	width: 130px;
+	height: 34px;
+	border-radius: 6px;
+	overflow: hidden;
+	background: url(../images/dropdown.png) 90% / 15% no-repeat #eee;
+	right: -170px;
+	position: relative;
+}
+ul.label-meta .number {
+	background: #a6a6a6;
+	padding: 10px 15px;
+	color: #FFF;
+	border-radius: 20px;
+	font-size: 18px;
+	margin-top: 0px;
+	margin-bottom: 0;
+        margin-right: 15px;
+}
+button {
+	background: #6EA4CA !important;
+	padding: 15px 20px !important;
+	color: #FFF !important;
+	border: none;
+	border-radius: 15px;
+}
+.metadata-fields {
+	background: #D6DCE5;
+	padding: 20px;
+	border-radius: 10px;
+	margin-left: 30px;
+	width: 75%;
+}
+.meta-table{
+    background: #E7E6E6;
+    padding: 20px;
+}
+.file-selection{
+    text-align:left;padding-top:0px;margin: 0;list-style: none
+}
+.radio input[type="radio"], .checkbox input[type="checkbox"] {
+	float: left;
+	margin-left: -20px;
+	margin-top: 1px;
+	background: #eee;
+	border: none !important;
+}
+.file-selection li {
+	float: left;
+	margin-right: 25px;
+}
+.mera-table-inner{
+    height: 500px;
+    overflow-x:hidden;
+    overflow-y: scroll;
+}
+.meta-table-sorter{
+    background: #7F7F7F;padding:10px;border-radius: 10px;
+}
+.select-style select:focus {
+    outline: none;
+}
+.label-text{
+    margin-top: 10px;
+}
 .main-menu li a{
     color:#FFF;
     font-size: 17px;

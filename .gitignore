@@ -1,4 +1,5 @@
 ._*
 .DS_Store
 application/config/*
+public/images/*
 !/application/config/codeigniter-zendesk.php
