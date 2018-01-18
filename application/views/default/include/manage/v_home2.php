@@ -73,7 +73,7 @@
 			</div>
 		</div>
 
-		<div class="container">
+            <div class="container" style="display:none">
 			<div class="features-list">
 				<div class="text-center mgt-4em">
 					<h2 class="title-v3 mgb-15em">OFFER / Contact- Current Value -$10 million</h2>
