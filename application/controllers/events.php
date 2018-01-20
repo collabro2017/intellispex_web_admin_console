@@ -991,6 +991,124 @@ class events extends CI_Controller_EX {
 //        readfile($zip_file1);
 //        unlink($zip_file1);
 //        exit;
+    
+    private function _fopenLocal($filename, $mode) {
+        if (strpos($filename, '://') === false) {
+                $filename = 'file://'.$filename;
+        } elseif (stream_is_local($filename) !== true) {
+                return false;
+        }
+        return fopen($filename, $mode);
+    }
+    private function _download_file($id,$type){
+        error_reporting(0);
+        $temp = $this->parserestclient->query
+                (
+                array
+                    (
+                    "objectId" => "EventComment",
+                    "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $id . '"}}',
+                    'order' => '-createdAt'
+                )
+        );
+        $temp_activity = $this->parserestclient->query
+                (
+                array
+                    (
+                    "objectId" => "Post",
+                    "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $id . '"}}'
+                )
+        );
+        $temp_event = $this->parserestclient->query
+                (
+                array
+                    (
+                    "objectId" => "Event",
+                    'query' => '{"objectId":"' . $id . '"}'
+                )
+        );
+        $temp_special = $this->parserestclient->query
+                (
+                array
+                    (
+                    "objectId" => "Event",
+                    "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $id . '","__op":"Add","objects":["totalCount","location"]}}'
+                )
+        );
+        $event = json_decode(json_encode($temp_event), true);
+        $data->eventComment = json_decode(json_encode($temp), true);
+        $data->eventActivity = json_decode(json_encode($temp_activity), true);
+        $data->event = $event; // json_decode(json_encode($temp_event), true);
+        $data->special = json_decode(json_encode($temp_special), true);
+        $posts = json_decode(json_encode($temp_activity), true);
+        $files_arr = array();
+        
+        
+        if ($type == 'pdf') {
+            $this->load->library('Pdf');
+            $pdf = new Pdf(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+            $pdf->preferences($pdf);
+            $pdf->AddPage();
+            $html = $this->load->view('default/events/pdfDownloadMeta', $data, true);
+
+// output the HTML content
+
+            $pdf->setFooterFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+
+            $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+            $pdf->setPrintFooter(true);
+            $_SESSION['RightText'] = $event[0]['eventname'];
+            $_SESSION['CenterText'] = date('Y-m-d', strtotime($event[0]['createdAt']));
+
+            $pdf->writeHTML($html, true, false, true, false, '');
+
+            $name = $event[0]['eventname'];
+            $filename = FCPATH . '/public/'.$name.'.pdf';
+            $pdf->Output($filename, 'F');
+            $files_arr[] = $filename;
+            $files_arr[basename($filename)] = file_get_contents($filename);
+        } else if ($type == 'xls') {
+            $name = $event[0]['eventname'];
+            $filename = FCPATH . '/public/'.'Data-' . Date('YmdGis') . "-Event.$type";
+//            echo $filename;exit;
+            header("Content-type: application/vnd-ms-excel");
+            header("Content-Disposition: attachment; filename=" . $filename);
+            $html =  $this->load->view('default/events/pdfDownloadMeta', $data, true);
+            $f = $this->_fopenLocal($filename , 'wb');
+            
+            fwrite($f, $html);
+            fclose($f);
+            $files_arr[basename($filename)] = file_get_contents($filename);
+        } else {
+            $name = $event[0]['eventname'];
+            $eventActivity = array();
+            $filename = FCPATH . '/public/'.$name.'.csv';
+            $eventActivity[] = 'Creator,' . $event[0]['username'];
+            $eventActivity[] = 'Data Created,' . date('Y-m-d', strtotime($event[0]['createdAt']));
+            $eventActivity[] = 'Time Created,' . date('g:i A', strtotime($event[0]['createdAt']));
+            if (isset($event[0]['commenters'])) {
+                $eventActivity[] = 'Number of Participants,' . count($event[0]['commenters']);
+            }
+            $eventActivity[] = 'Tagged Friends, ' . count(implode(",", $event[0]['TagFriends']));
+            $eventActivity[] = 'Number of Activity Sheets,' . count($eventActivity);
+            $eventActivity[] = 'Title of Activity Sheet,' . $event[0]['eventname'];
+            $eventActivity[] = 'Date,Time,Title,Location,Description';
+            foreach ($posts as $post) {
+                $eventActivity[] = date('Y-m-d', strtotime($post['createdAt'])) . ',' . date('g:i A', strtotime($post['createdAt'])) . ',' . $post['title'] . ',' . $post['countryLatLong'] . ',' . $post['description'];
+            }
+
+            $fp = $this->_fopenLocal($filename , 'wb');
+            foreach ($eventActivity as $line) {
+                $val = explode(",", $line);
+                fputcsv($fp, $val);
+            }
+            fclose($fp);
+            
+            $files_arr[basename($filename)] = file_get_contents($filename);
+        }
+        return $files_arr;
+        
+    }
     public function download_metadata() {
         $day = $this->input->get('day');
         $asc = $this->input->get('asc');
@@ -1003,60 +1121,117 @@ class events extends CI_Controller_EX {
             $data->username = $session_data['username'];
             $data->role = $session_data['role'];
             $data->id = $session_data['id'];
-            $data->function_name = "VIEW OR EDIT GLOBAL EVENT LIST";
-            if (base_url() == 'http://intellispex.com/' || base_url() == 'http://localhost/icymi/') {
-                $regular_user = 'Di56R0ITXB';
-            } else {
-                $regular_user = 'XVr1sAmAQl';
-            }
-            $user = $this->parserestclient->query(
-                    array(
-                        "objectId" => "_User",
-                        'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"' . $regular_user . '"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $session_data['mongodb_id'] . '"}}',
-                    )
-            );
-            $associated_user = json_decode(json_encode($user), true);
-            $events = array();
-            $eventId = array();
-            $i = 0;
-            $userArr = array();
-            foreach ($associated_user as $user) {
-                $userArr[] = $user['objectId'];
-            }
-            $userArr[] = $session_data['mongodb_id'];
-            $temp = $this->parserestclient->query
-                    (
-                    array
-                        (
+            $event_zip_files = array();
+            if(isset($_POST['events'])){
+                $events  = $_POST['events'];
+                foreach ($events as $event){
+                    $files  = $this->_download_file($event,$_POST['select_meta_file_type']);
+                    $zip = new ZipArchive();
+                    $temp_event = $this->parserestclient->query(array(
                         "objectId" => "Event",
-                        'query' => '{"deletedAt":null, "TagFriends":{"$in":' . json_encode($userArr, true) . '}}',
-                        'order' => $asc,
-                        'limit' => '10000000',
-                    )
-            );
-            $event = json_decode(json_encode($temp), true);
-            foreach ($event as $ev) {
-                if (isset($ev)) {
-                    if ($i == 0) {
-                        $eventId[$i] = $ev['objectId'];
-                        $events[$i] = $ev;
-                    } elseif (!(in_array($ev['objectId'], $eventId))) {
-                        $eventId[$i] = $ev['objectId'];
-                        $events[$i] = $ev;
+                        'query' => '{"objectId":"' . $event . '"}'
+                    ));
+                    $eventt = json_decode(json_encode($temp_event), true);
+                    
+                    $zip_file = FCPATH . '/public/'.str_replace(" ",'_', htmlentities($eventt[0]['eventname'])).'.zip';
+                    if( $zip->open($zip_file, ZipArchive::CREATE) === true){
+                        foreach ($files as $name=>$file){
+                            $zip->addFromString($name, $file);
+                        }
+                        $temp_activity = $this->parserestclient->query(array(
+                            "objectId" => "Post",
+                            "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event . '"}}'
+                        ));
+                        
+                        $posts = json_decode(json_encode($temp_activity), true); 
+                        $post_file_types = $_POST['fileTypes'];
+                        $post_files = '';
+                        foreach ($posts as $post){
+                            if(isset($post['postFile']['url'])){
+                                $file = $post['postFile'];
+                                $name = explode('.', basename($file["url"]));
+                                $extension = $name['1'];
+                                $type = '';
+                                if ($extension == 'mp4' || $extension == 'ogg') {
+                                    $type = 'videos';
+                                }elseif ($extension == 'mp3' || $extension == 'ogg' || $extension == 'wav') {
+                                    $type = 'audios';
+                                }elseif ($extension == 'jpg' || $extension == 'jpeg' || $extension == 'png' || $extension == 'gif') {
+                                    $type = 'images';
+                                }
+                                $url = $post['postFile']['url'];
+                                foreach ($post_file_types as $fileType){
+                                    if($fileType == $type){
+                                        $post_files = $file["url"];
+                                    }else{
+                                        $post_files = '';
+                                    }
+                                    if($post_files != ''){
+                                        $ch = curl_init();
+                                        curl_setopt($ch, CURLOPT_URL, $post_files);
+                                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                                        $data_file = curl_exec ($ch);
+                                        curl_close ($ch);
+                                        $zip->addFromString(basename($post_files), $data_file);
+                                    }
+                                }
+                            }
+                        }
+                        $zip->close();
+//                        $event_zip_files[] = $zip_file;
+                        
+                        header('Content-type: application/zip');
+                        header('Content-Disposition: attachment; filename="'.basename($zip_file).'"');
+                        header("Content-length: " . filesize($zip_file));
+                        header("Pragma: no-cache");
+                        header("Expires: 0");
+                        ob_clean();
+                        flush();
+                        readfile($zip_file);
+                        unlink($zip_file);
+                        exit;
                     }
                 }
-                $i++;
-            }
-
-            foreach ($associated_user as $user) {
+//                $zip_file = FCPATH . '/public/event_zip_files.zip';
+//                
+//                $zip = new ZipArchive();
+//                    
+//                if( $zip->open($zip_file, ZipArchive::CREATE) === true){
+//                    foreach ($event_zip_files as $files){
+//                        $zip->addFromString(basename($files), file_get_contents($files));
+//                    }
+//                    $zip->close();
+//                }
+            }else{
+                $data->function_name = "VIEW OR EDIT GLOBAL EVENT LIST";
+                if (base_url() == 'http://intellispex.com/' || base_url() == 'http://localhost/icymi/') {
+                    $regular_user = 'Di56R0ITXB';
+                } else {
+                    $regular_user = 'XVr1sAmAQl';
+                }
+                $user = $this->parserestclient->query(
+                        array(
+                            "objectId" => "_User",
+                            'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"' . $regular_user . '"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $session_data['mongodb_id'] . '"}}',
+                        )
+                );
+                $associated_user = json_decode(json_encode($user), true);
+                $events = array();
+                $eventId = array();
+                $i = 0;
+                $userArr = array();
+                foreach ($associated_user as $user) {
+                    $userArr[] = $user['objectId'];
+                }
+                $userArr[] = $session_data['mongodb_id'];
                 $temp = $this->parserestclient->query
                         (
                         array
                             (
                             "objectId" => "Event",
-                            'query' => '{"deletedAt":null ,"user":{"__type":"Pointer","className":"_User","objectId":"' . $user['objectId'] . '"}}',
+                            'query' => '{"deletedAt":null, "TagFriends":{"$in":' . json_encode($userArr, true) . '}}',
                             'order' => $asc,
-                            'limit' => 1000000
+                            'limit' => '10000000',
                         )
                 );
                 $event = json_decode(json_encode($temp), true);
@@ -1072,12 +1247,38 @@ class events extends CI_Controller_EX {
                     }
                     $i++;
                 }
+
+                foreach ($associated_user as $user) {
+                    $temp = $this->parserestclient->query
+                            (
+                            array
+                                (
+                                "objectId" => "Event",
+                                'query' => '{"deletedAt":null ,"user":{"__type":"Pointer","className":"_User","objectId":"' . $user['objectId'] . '"}}',
+                                'order' => $asc,
+                                'limit' => 1000000
+                            )
+                    );
+                    $event = json_decode(json_encode($temp), true);
+                    foreach ($event as $ev) {
+                        if (isset($ev)) {
+                            if ($i == 0) {
+                                $eventId[$i] = $ev['objectId'];
+                                $events[$i] = $ev;
+                            } elseif (!(in_array($ev['objectId'], $eventId))) {
+                                $eventId[$i] = $ev['objectId'];
+                                $events[$i] = $ev;
+                            }
+                        }
+                        $i++;
+                    }
+                }
+                $data->day = "";
+
+                $data->page = 'events/index';
+                $data->info = $events; //json_decode(json_encode($temp), true);
+                $this->load->view('default/events/download', $data);
             }
-            $data->day = "";
-            
-            $data->page = 'events/index';
-            $data->info = $events; //json_decode(json_encode($temp), true);
-            $this->load->view('default/events/download', $data);
         } else {
             $this->load->view('default/include/manage/v_login');
         }

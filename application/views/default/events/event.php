@@ -282,9 +282,9 @@
                                                                     $name = explode('.', basename($audio->url));
                                                                     $extension = $name['1'];
                                                                     ?>
-                                                                    <?php if ($extension == 'mp4' || $extension == 'ogg') { ?>
+                                                                    <?php if ($extension == 'mp3' || $extension == 'ogg' || $extension == 'wav') { ?>
                                                                     <audio name="<?php echo $post->title; ?>" style="width: 100%;" controls autoplay>
-                                                                        <source src="<?php echo $audio->url; ?>" type="video/<?php echo $extension; ?>">
+                                                                        <source src="<?php echo $audio->url; ?>" type="audio/<?php echo $extension; ?>">
                                                                         Your browser does not support the audio element.
                                                                     </audio>
                                                                         <?php

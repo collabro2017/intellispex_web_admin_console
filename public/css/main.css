@@ -113,7 +113,7 @@ ul.label-meta .number {
 	margin-bottom: 0;
         margin-right: 15px;
 }
-button {
+.btn-small, button {
 	background: #6EA4CA !important;
 	padding: 15px 20px !important;
 	color: #FFF !important;
