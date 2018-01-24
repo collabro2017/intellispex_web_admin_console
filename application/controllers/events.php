@@ -1000,7 +1000,7 @@ class events extends CI_Controller_EX {
         }
         return fopen($filename, $mode);
     }
-    private function _download_file($id,$type){
+    private function _download_file($id,$type,$path){
         error_reporting(0);
         $temp = $this->parserestclient->query
                 (
@@ -1063,13 +1063,13 @@ class events extends CI_Controller_EX {
             $pdf->writeHTML($html, true, false, true, false, '');
 
             $name = $event[0]['eventname'];
-            $filename = FCPATH . '/public/'.$name.'.pdf';
+            $filename = $path."/".$name.'.pdf';
             $pdf->Output($filename, 'F');
             $files_arr[] = $filename;
             $files_arr[basename($filename)] = file_get_contents($filename);
         } else if ($type == 'xls') {
             $name = $event[0]['eventname'];
-            $filename = FCPATH . '/public/'.'Data-' . Date('YmdGis') . "-Event.$type";
+            $filename = $path."/". 'Data-' . Date('YmdGis') . "-Event.$type";
 //            echo $filename;exit;
             header("Content-type: application/vnd-ms-excel");
             header("Content-Disposition: attachment; filename=" . $filename);
@@ -1082,7 +1082,7 @@ class events extends CI_Controller_EX {
         } else {
             $name = $event[0]['eventname'];
             $eventActivity = array();
-            $filename = FCPATH . '/public/'.$name.'.csv';
+            $filename = $path."/".$name.'.csv';
             $eventActivity[] = 'Creator,' . $event[0]['username'];
             $eventActivity[] = 'Data Created,' . date('Y-m-d', strtotime($event[0]['createdAt']));
             $eventActivity[] = 'Time Created,' . date('g:i A', strtotime($event[0]['createdAt']));
@@ -1122,22 +1122,29 @@ class events extends CI_Controller_EX {
             $data->role = $session_data['role'];
             $data->id = $session_data['id'];
             $event_zip_files = array();
+            $base_path = FCPATH . '/public/'.'events_'.time();
+            if(!is_dir($base_path)){
+                mkdir($base_path);
+            }
             if(isset($_POST['events'])){
                 $events  = $_POST['events'];
                 foreach ($events as $event){
-                    $files  = $this->_download_file($event,$_POST['select_meta_file_type']);
-                    $zip = new ZipArchive();
                     $temp_event = $this->parserestclient->query(array(
                         "objectId" => "Event",
                         'query' => '{"objectId":"' . $event . '"}'
                     ));
                     $eventt = json_decode(json_encode($temp_event), true);
                     
-                    $zip_file = FCPATH . '/public/'.str_replace(" ",'_', htmlentities($eventt[0]['eventname'])).'.zip';
-                    if( $zip->open($zip_file, ZipArchive::CREATE) === true){
-                        foreach ($files as $name=>$file){
-                            $zip->addFromString($name, $file);
-                        }
+                    $event_base_path = $base_path."/".str_replace(" ",'_', htmlentities($eventt[0]['eventname']));
+                    if(!is_dir($event_base_path)){
+                        mkdir($event_base_path);
+                    }
+                    $files  = $this->_download_file($event,$_POST['select_meta_file_type'],$event_base_path);
+//                    $zip_file = $event_base_path.'/'.data('Y/m/d').'.zip';
+//                    if( $zip->open($zip_file, ZipArchive::CREATE) === true){
+//                        foreach ($files as $name=>$file){
+//                            $zip->addFromString($name, $file);
+//                        }
                         $temp_activity = $this->parserestclient->query(array(
                             "objectId" => "Post",
                             "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event . '"}}'
@@ -1172,36 +1179,68 @@ class events extends CI_Controller_EX {
                                         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                                         $data_file = curl_exec ($ch);
                                         curl_close ($ch);
-                                        $zip->addFromString(basename($post_files), $data_file);
+//                                        $zip->addFromString(basename($post_files), $data_file);
+                                        file_put_contents($event_base_path."/".basename($file['name']), $data_file);
                                     }
                                 }
                             }
                         }
-                        $zip->close();
-//                        $event_zip_files[] = $zip_file;
-                        
-                        header('Content-type: application/zip');
-                        header('Content-Disposition: attachment; filename="'.basename($zip_file).'"');
-                        header("Content-length: " . filesize($zip_file));
-                        header("Pragma: no-cache");
-                        header("Expires: 0");
-                        ob_clean();
-                        flush();
-                        readfile($zip_file);
-                        unlink($zip_file);
-                        exit;
+//                        $zip->close();
+////                        $event_zip_files[] = $zip_file;
+//                        
+//                        header('Content-type: application/zip');
+//                        header('Content-Disposition: attachment; filename="'.basename($zip_file).'"');
+//                        header("Content-length: " . filesize($zip_file));
+//                        header("Pragma: no-cache");
+//                        header("Expires: 0");
+//                        ob_clean();
+//                        flush();
+//                        readfile($zip_file);
+//                        unlink($zip_file);
+//                        exit;
+//                    }
+                }
+                // Get real path for our folder
+                $rootPath = realpath($base_path);
+                $zip_file = $base_path.'/'.time().'.zip';
+                // Initialize archive object
+                $zip = new ZipArchive();
+                $zip->open($base_path.'/'.time().'.zip', ZipArchive::CREATE | ZipArchive::OVERWRITE);
+
+                // Create recursive directory iterator
+                /** @var SplFileInfo[] $files */
+                $files = new RecursiveIteratorIterator(
+                    new RecursiveDirectoryIterator($rootPath),
+                    RecursiveIteratorIterator::LEAVES_ONLY
+                );
+
+                foreach ($files as $name => $file)
+                {
+                    // Skip directories (they would be added automatically)
+                    if (!$file->isDir())
+                    {
+                        // Get real and relative path for current file
+                        $filePath = $file->getRealPath();
+                        $relativePath = substr($filePath, strlen($rootPath) + 1);
+
+                        // Add current file to archive
+                        $zip->addFile($filePath, $relativePath);
                     }
                 }
-//                $zip_file = FCPATH . '/public/event_zip_files.zip';
-//                
-//                $zip = new ZipArchive();
-//                    
-//                if( $zip->open($zip_file, ZipArchive::CREATE) === true){
-//                    foreach ($event_zip_files as $files){
-//                        $zip->addFromString(basename($files), file_get_contents($files));
-//                    }
-//                    $zip->close();
-//                }
+
+                // Zip archive will be created only after closing object
+                $zip->close();
+                header('Content-type: application/zip');
+                header('Content-Disposition: attachment; filename="'.basename($zip_file).'"');
+                header("Content-length: " . filesize($zip_file));
+                header("Pragma: no-cache");
+                header("Expires: 0");
+                ob_clean();
+                flush();
+                readfile($zip_file);
+                unlink($zip_file);
+                exit;
+
             }else{
                 $data->function_name = "VIEW OR EDIT GLOBAL EVENT LIST";
                 if (base_url() == 'http://intellispex.com/' || base_url() == 'http://localhost/icymi/') {
