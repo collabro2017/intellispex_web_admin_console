@@ -59,7 +59,7 @@
                                         <thead>
                                             <tr>
                                                 <th>
-                                                    <input style="margin-left: -3px;margin-top: 0px;" type="checkbox" name="checkAll" id="checkAll" onclick="selectall()" />
+                                                    <!--<input style="margin-left: -3px;margin-top: 0px;" type="checkbox" name="checkAll" id="checkAll" onclick="selectall()" />-->
                                                 </th>
                                                 <th>Title</th>
                                                 <th>User</th>
@@ -73,7 +73,7 @@
                                                     ?>
                                                     <tr>																
                                                         <td>
-                                                            <input style="margin-left:5px;" name="events[]" type="checkbox" class="downloadlist" value="<?php echo $val['objectId'] ?>" /></td>
+                                                            <input style="margin-left:5px;" name="events" type="radio" value="<?php echo $val['objectId'] ?>" /></td>
                                                         <td>
                                                             <a href="<?php echo base_url(); ?>events/event/<?php echo $val['objectId']; ?>">
                                                                 <?php echo $val['eventname']; ?>
@@ -93,11 +93,6 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="span12" style="text-align:left;"><br>
-                                    <input type = 'hidden' id="metadataID" value="" />
-                                    <a class="btn-small" href="#" onclick="selectall();">Select All</a>
-                                    <a class="btn-small" href="#" onclick="deselectall();">Deselect All</a><br><br>
-                                </div>		
                             </div>
                         </div>
                         <div style="clear:both;height: 30px;"></div>
@@ -114,83 +109,90 @@
                             <div class="metadata-fields">
                                 <div class="span3" style="text-align:left;padding-top:20px;">
                                     <div class="checkbox">
-                                        <label><input name="creator" value="1" type="checkbox">Creator</label>
+                                        <label><input class="downloadlist" name="creator" value="1" type="checkbox">Creator</label>
                                     </div>
                                     <div class="checkbox">
-                                        <label><input name="event_title" value="1" type="checkbox">Event Title</label>
+                                        <label><input class="downloadlist" name="event_title" value="1" type="checkbox">Event Title</label>
                                     </div>
                                     <div class="checkbox">
-                                        <label><input name="number_of_participants" value="1" type="checkbox">Number of Participants</label>
+                                        <label><input class="downloadlist" name="number_of_participants" value="1" type="checkbox">Number of Participants</label>
                                     </div>
                                     <div class="checkbox">
-                                        <label><input name="time_start" value="1" type="checkbox">Time Start</label>
+                                        <label><input class="downloadlist" name="time_start" value="1" type="checkbox">Time Start</label>
                                     </div> 
                                     <div class="checkbox">
-                                        <label><input name="time_end" value="1" type="checkbox">Time End</label>
+                                        <label><input class="downloadlist" name="time_end" value="1" type="checkbox">Time End</label>
                                     </div>
                                     <div class="checkbox">
-                                        <label><input name="users" value="1" type="checkbox">Users</label>
+                                        <label><input class="downloadlist" name="users" value="1" type="checkbox">Users</label>
                                     </div>
                                     <div class="checkbox">
-                                        <label><input name="groups" value="1" type="checkbox">Groups</label>
+                                        <label><input class="downloadlist" name="groups" value="1" type="checkbox">Groups</label>
                                     </div>
                                     <div class="checkbox">
-                                        <label><input name="address" value="1" type="checkbox">Address</label>
+                                        <label><input class="downloadlist" name="address" value="1" type="checkbox">Address</label>
                                     </div>
                                 </div>
                                 <div class="span3" style="text-align:left;padding-top:20px;">
                                     <div class="checkbox">
-                                        <label><input name="date_created" value="1" type="checkbox">Date Created</label>
+                                        <label><input class="downloadlist" name="date_created" value="1" type="checkbox">Date Created</label>
                                     </div>
                                     <div class="checkbox">
-                                        <label><input name="time_created" value="1" type="checkbox">Time Created</label>
+                                        <label><input class="downloadlist" name="time_created" value="1" type="checkbox">Time Created</label>
                                     </div>
                                     <div class="checkbox">
-                                        <label><input name="size" value="1" type="checkbox">Size</label>
+                                        <label><input class="downloadlist" name="size" value="1" type="checkbox">Size</label>
                                     </div>
                                     <div class="checkbox">
-                                        <label><input name="location" value="1" type="checkbox">Location</label>
+                                        <label><input class="downloadlist" name="location" value="1" type="checkbox">Location</label>
                                     </div>
                                     <div class="checkbox">
-                                        <label><input name="number_of_actiity_sheets" value="1" type="checkbox">Number of Activity Sheets</label>
+                                        <label><input class="downloadlist" name="number_of_actiity_sheets" value="1" type="checkbox">Number of Activity Sheets</label>
                                     </div>
                                     <div class="checkbox">
-                                        <label><input name="company_name" value="1" type="checkbox">Company Name</label>
+                                        <label><input class="downloadlist" name="company_name" value="1" type="checkbox">Company Name</label>
                                     </div>
                                     <div class="checkbox">
-                                        <label><input name="description" value="1" type="checkbox">Description</label>
+                                        <label><input class="downloadlist" name="description" value="1" type="checkbox">Description</label>
                                     </div>
                                     <div class="checkbox">
-                                        <label><input name="comments" value="1" type="checkbox">Comments</label>
+                                        <label><input class="downloadlist" name="comments" value="1" type="checkbox">Comments</label>
                                     </div>
                                 </div>
                                 <div class="span3" style="padding-top:20px;">
                                     <div class="checkbox">
-                                        <label><input name="activity_sheet_time" value="1" type="checkbox">Activity Sheet Time</label>
+                                        <label><input class="downloadlist" name="activity_sheet_time" value="1" type="checkbox">Activity Sheet Time</label>
                                     </div>
                                     <div class="checkbox">
-                                        <label><input name="activity_sheet_date" value="1" type="checkbox">Activity Sheet Date</label>
+                                        <label><input class="downloadlist" name="activity_sheet_date" value="1" type="checkbox">Activity Sheet Date</label>
                                     </div>
                                     <div class="checkbox">
-                                        <label><input name="activity_sheet_title" value="1" type="checkbox">Activity Sheet Title</label>
+                                        <label><input class="downloadlist" name="activity_sheet_title" value="1" type="checkbox">Activity Sheet Title</label>
                                     </div>
                                     <div class="checkbox">
-                                        <label><input name="activity_sheet_formate" value="1" type="checkbox">Activity Sheet Format</label>
+                                        <label><input class="downloadlist" name="activity_sheet_formate" value="1" type="checkbox">Activity Sheet Format</label>
                                     </div>
                                     <div class="checkbox">
-                                        <label><input name="activity_sheet_list" value="1" type="checkbox">Activity Sheet List</label>
+                                        <label><input class="downloadlist" name="activity_sheet_list" value="1" type="checkbox">Activity Sheet List</label>
                                     </div>
                                     <div class="checkbox">
-                                        <label><input name="activity_sheet_description" value="1" type="checkbox">Activity Sheet Description</label>
+                                        <label><input class="downloadlist" name="activity_sheet_description" value="1" type="checkbox">Activity Sheet Description</label>
                                     </div>
                                     <div class="checkbox">
-                                        <label><input name="activity_sheet_comment" value="1" type="checkbox">Activity Sheet Comment</label>
+                                        <label><input class="downloadlist" name="activity_sheet_comment" value="1" type="checkbox">Activity Sheet Comment</label>
                                     </div>
                                 </div>	
                                 <div style="clear:both"></div>
                             </div>
                         </div>
                         <div style="clear:both;height: 30px;"></div>
+                        <div class="row">
+                            <div class="span12" id="select" style="text-align:left;"><br>
+                                <input type = 'hidden' id="metadataID" value="" />
+                                <a class="btn-small" href="#select" onclick="selectall();">Select All</a>
+                                <a class="btn-small" href="#select" onclick="deselectall();">Deselect All</a><br><br>
+                            </div>		
+                        </div>
                         <div class="row">
                             <div class="menu-button span3">
                                 <ul class="label-meta">

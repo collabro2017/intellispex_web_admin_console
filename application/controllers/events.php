@@ -1106,6 +1106,59 @@ class events extends CI_Controller_EX {
             
             $files_arr[basename($filename)] = file_get_contents($filename);
         }
+        $data->event = $event;
+        $data->event_comment = json_decode(json_encode($this->parserestclient->query
+                                (
+                                array
+                                    (
+                                    "objectId" => "EventComment",
+                                    "query" => '{"deletedAt":null,"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $id . '"}}',
+                                    'order' => '-createdAt'
+                                )
+                        ), true));
+
+        $data->event_post = json_decode(json_encode($this->parserestclient->query
+                                (
+                                array
+                                    (
+                                    "objectId" => "Post",
+                                    "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $id . '"}}',
+                                    'order' => 'postOrder'
+                                )
+                        ), true));
+
+        $this->load->library('Pdf');
+        
+        $pdf = new Pdf(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+            
+
+        $pdf->SetAuthor('Intellispex');
+        $pdf->SetTitle($event->eventname);
+        $pdf->SetSubject($event->eventname);
+
+        $pdf->preferences($pdf);
+        $pdf->AddPage();
+        error_reporting(0);
+
+        $html = $this->load->view('default/events/fullResolution', $data, true);
+// output the HTML content
+
+        $pdf->setFooterFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+//            $pdf->SetY($event[0]['eventname']);
+//            $pdf->Cell(0, 10, $event[0]['eventname'], 0, 0, 'C');
+
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        $pdf->setPrintFooter(true);
+        $_SESSION['RightText'] = $event->eventname;
+        $_SESSION['CenterText'] = date('Y-m-d', strtotime($event->createdAt));
+        $pdf->writeHTML($html, true, false, true, false, '');
+
+        $name = $event[0]['eventname'];
+        $filename = $path."/full_resolution_".$name.'.pdf';
+        $pdf->Output($filename, 'F');
+        $files_arr[] = $filename;
+        $files_arr[basename($filename)] = file_get_contents($filename);
+        
         return $files_arr;
         
     }
@@ -1127,8 +1180,8 @@ class events extends CI_Controller_EX {
                 mkdir($base_path);
             }
             if(isset($_POST['events'])){
-                $events  = $_POST['events'];
-                foreach ($events as $event){
+                $event  = $_POST['events'];
+//                foreach ($events as $event){
                     $temp_event = $this->parserestclient->query(array(
                         "objectId" => "Event",
                         'query' => '{"objectId":"' . $event . '"}'
@@ -1140,11 +1193,6 @@ class events extends CI_Controller_EX {
                         mkdir($event_base_path);
                     }
                     $files  = $this->_download_file($event,$_POST['select_meta_file_type'],$event_base_path);
-//                    $zip_file = $event_base_path.'/'.data('Y/m/d').'.zip';
-//                    if( $zip->open($zip_file, ZipArchive::CREATE) === true){
-//                        foreach ($files as $name=>$file){
-//                            $zip->addFromString($name, $file);
-//                        }
                         $temp_activity = $this->parserestclient->query(array(
                             "objectId" => "Post",
                             "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event . '"}}'
@@ -1159,7 +1207,7 @@ class events extends CI_Controller_EX {
                                 $name = explode('.', basename($file["url"]));
                                 $extension = $name['1'];
                                 $type = '';
-                                if ($extension == 'mp4' || $extension == 'ogg') {
+                                if ($extension == 'mp4' || $extension == 'ogg' || $extension == 'mov') {
                                     $type = 'videos';
                                 }elseif ($extension == 'mp3' || $extension == 'ogg' || $extension == 'wav') {
                                     $type = 'audios';
@@ -1174,32 +1222,11 @@ class events extends CI_Controller_EX {
                                         $post_files = '';
                                     }
                                     if($post_files != ''){
-                                        $ch = curl_init();
-                                        curl_setopt($ch, CURLOPT_URL, $post_files);
-                                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                                        $data_file = curl_exec ($ch);
-                                        curl_close ($ch);
-//                                        $zip->addFromString(basename($post_files), $data_file);
-                                        file_put_contents($event_base_path."/".basename($file['name']), $data_file);
+                                        file_put_contents($event_base_path."/".basename($file['name']), file_get_contents($post_files));
                                     }
                                 }
                             }
                         }
-//                        $zip->close();
-////                        $event_zip_files[] = $zip_file;
-//                        
-//                        header('Content-type: application/zip');
-//                        header('Content-Disposition: attachment; filename="'.basename($zip_file).'"');
-//                        header("Content-length: " . filesize($zip_file));
-//                        header("Pragma: no-cache");
-//                        header("Expires: 0");
-//                        ob_clean();
-//                        flush();
-//                        readfile($zip_file);
-//                        unlink($zip_file);
-//                        exit;
-//                    }
-                }
                 // Get real path for our folder
                 $rootPath = realpath($base_path);
                 $zip_file = $base_path.'/'.time().'.zip';
@@ -1239,8 +1266,8 @@ class events extends CI_Controller_EX {
                 flush();
                 readfile($zip_file);
                 unlink($zip_file);
+                rmdir($base_path);
                 exit;
-
             }else{
                 $data->function_name = "VIEW OR EDIT GLOBAL EVENT LIST";
                 if (base_url() == 'http://intellispex.com/' || base_url() == 'http://localhost/icymi/') {
