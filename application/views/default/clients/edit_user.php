@@ -43,7 +43,7 @@
                     } endif; ?>  value="male">Male</option>
                                 <option <?php if (isset($user[0]['Gender'])): if ($user[0]['Gender'] == 'female') {
                         echo 'selected';
-                    } endif; ?> value="female">Fe-Male</option>
+                    } endif; ?> value="female">Female</option>
                             </select>
                         </th>
                     </tr>

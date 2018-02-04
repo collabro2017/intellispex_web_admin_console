@@ -337,10 +337,12 @@
             <?php } ?>
         </div>
         <div class="span2"><br><br><br><br>
-            <button onclick="window.print();" class="btn btn-small btn-primary menu-button">Export</button><br><br>
-            <button id="show_option" class="btn btn-small btn-primary menu-button">Save</button><br><br>
-            <button onclick="" class="btn btn-small btn-primary menu-button">Analyse</button><br><br>
-            <button onclick="" class="btn btn-small btn-primary menu-button">Select Metadata</button><br><br>
+            <button onclick="window.print();" class="btn btn-small btn-primary menu-button">Print</button><br><br>
+            <button id="show_option" class="btn btn-small btn-primary menu-button">Export</button><br><br>
+            <!--<button onclick="" class="btn btn-small btn-primary menu-button">Analyse</button><br><br>-->
+            <a href="<?php echo base_url(); ?>events/index?day=1&asc=0" class="btn btn-small btn-primary menu-button">
+                Select Metadata
+            </a><br><br>
             <a href="<?php echo base_url(); ?>events/index" class="btn btn-small btn-primary menu-button">
                 Back to Event Viewer
             </a><br><br>

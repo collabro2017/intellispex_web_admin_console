@@ -491,13 +491,13 @@
                                         </a>
                                     </div>
                                 </div>
-                                <div class="row-fluid">
+<!--                                <div class="row-fluid">
                                     <div class="span12">
                                         <a class=" btn btn-small btn-primary menu-button menu-logout-button menu-button-small" href="<?php echo base_url(); ?>/manage/sqlserver">
                                             SQL Server
                                         </a>
                                     </div>
-                                </div>
+                                </div>-->
                             </div>
                         </div>
                     </div>

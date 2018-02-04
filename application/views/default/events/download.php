@@ -38,7 +38,7 @@
                             <div class="menu-button span3">
                                 <ul class="label-meta">
                                     <li> <label class="number">2</label></li>
-                                    <li> <div class="label-text">Download Selected Event Metadata </div> </li>
+                                    <li> <div class="label-text">Event Selection </div> </li>
                                 </ul>
                             </div>
                         </div>
@@ -100,7 +100,7 @@
                             <div class="menu-button span3">
                                 <ul class="label-meta">
                                     <li> <label class="number">3</label></li>
-                                    <li> <div class="label-text">Select Metadata for Selected Events </div> </li>
+                                    <li> <div class="label-text">Metadata Selection </div> </li>
                                 </ul>
                             </div>
                         </div>
@@ -220,8 +220,18 @@
                         </div>
                         <div style="clear:both;height: 30px;"></div>
                         <div class="row">
-                            <div style="clear:both;height: 30px;"></div>
-                            <input type="submit" class="menu-button" style="border:none;" value="Download" />
+                            <div class="span3">
+                                <div style="clear:both;height: 30px;"></div>
+                                <input style="min-width: 100%;" type="submit" class="menu-button" style="border:none;" value="Download" />
+                            </div>
+                            <div class="span1">
+                                <div style="clear:both;height: 30px;"></div>
+                                &nbsp;    
+                            </div>
+                            <div class="span3" style="margin-left: -65px;margin-top: 19px;">
+                                <div style="clear:both;height: 30px;"></div>
+                                <a style="padding-left: 20px;padding-right: 20px;" href="<?php echo base_url();?>manage/console_menu" class="menu-button" style="border:none;"> Back to Content Manager </a>
+                            </div>
                         </div>
                         <div style="clear:both;height: 30px;"></div>
 

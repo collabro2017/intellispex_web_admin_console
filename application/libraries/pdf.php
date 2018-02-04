@@ -69,7 +69,7 @@ class Pdf extends TCPDF {
                 $this->Cell(0, 10, $_SESSION['RightText'], 0, false, 'L', 0, '', 0, false, 'T', 'M');
             }
             
-            $this->Cell(0, 10, "Page ". $this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+            $this->Cell(0, 10, "Page ". $this->getAliasNumPage(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
             
             
             if(isset($_SESSION['CenterText'])){

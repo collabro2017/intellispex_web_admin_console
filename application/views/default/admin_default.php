@@ -108,8 +108,11 @@
   <body class="login-layout admin-body">
 		<div class="top-menu">
                     <div class="span2">
-                        <h2><img class="irc_mut iUyhD38Z_yik-HwpH6ZlgJaI" onload="google.aft&amp;&amp;google.aft(this)" src="<?php echo base_url('public') ?>/images/logo.JPG" width="60" height="60" style="margin-top: 0px;"> 
-                        <span style="color : #00aaff;">IntelliSpeX</span></h2>
+                        <h2>
+                            <a href="<?php echo base_url(); ?>manage/console_menu">
+                                <img class="irc_mut iUyhD38Z_yik-HwpH6ZlgJaI" onload="google.aft&amp;&amp;google.aft(this)" src="<?php echo base_url('public') ?>/images/logo.JPG" width="60" height="60" style="margin-top: 0px;"> 
+                            
+                        <span style="color : #00aaff;">IntelliSpeX</span></a></h2>
                     </div>
                     <div class="span5"><h2 style="text-align: left;"><span><?php echo $function_name; ?></span></h2></div>
                     <div class="span5" style="float:right;">
@@ -168,31 +171,32 @@
 					  <div class="panel-admin" style="text-align: initial;">
 					  	<?php
 					  		if($function_name == "CLIENT MANAGEMENT CONSOLE"){ ?>
-					  		<div class="row">
-					  			<div class="span3"></div>
-					  			<div class="span6" style="text-align: center;">
-					  				<a class="btn btn-small btn-primary menu-button" href="<?php echo base_url(); ?>manage/contentmanager">Content Manager</a>
-					  			</div>					  			
-					  		</div>
-					  		<div class="row">
-					  			<div class="span3"></div>
-					  			<div class="span6" style="text-align: center;">
-					  				<a class="btn btn-small btn-primary menu-button" href="<?php echo base_url(); ?>manage/userstatistics">User Statistics</a>
-					  			</div>					  			
-					  		</div>
-					  		<div class="row">
-					  			<div class="span3"></div>
-					  			<div class="span6" style="text-align: center;">
-					  				<a class="btn btn-small btn-primary menu-button" href="#">Console Manager</a>
-					  			</div>					  			
-					  		</div>
-					  		<div class="row">
-					  			<div class="span3"></div>
-						  		<div class="span6">
-						  			<img alt="Client Management's Images" src="<?php echo base_url('public') ?>/images/earth.jpg" />
-					  			</div>
-					  		</div>
-                                              <div style="clear:both;height: 40px;"></div>
+                                                            <div class="row">
+                                                                    <div class="span3"></div>
+                                                                    <div class="span6">
+                                                                            <!--<img alt="Client Management's Images" src="<?php echo base_url('public') ?>/images/earth.jpg" />-->
+                                                                    </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                    <div class="span3"></div>
+                                                                    <div class="span6" style="text-align: center;">
+                                                                            <a class="btn btn-small btn-primary menu-button" href="<?php echo base_url(); ?>manage/contentmanager">Content Manager</a>
+                                                                    </div>					  			
+                                                            </div>
+                                                            <div class="row">
+                                                                    <div class="span3"></div>
+                                                                    <div class="span6" style="text-align: center;">
+                                                                            <a class="btn btn-small btn-primary menu-button" href="<?php echo base_url(); ?>manage/userstatistics">User Statistics</a>
+                                                                    </div>					  			
+                                                            </div>
+                                                            <div class="row">
+                                                                    <div class="span3"></div>
+                                                                    <div class="span6" style="text-align: center;">
+                                                                            <a class="btn btn-small btn-primary menu-button" href="#">Console Manager</a>
+                                                                    </div>					  			
+                                                            </div>
+
+                                                            <div style="clear:both;height: 40px;"></div>
 					  		
 					  	<?php
 					  		}
@@ -381,26 +385,26 @@
 								<div class="span3"></div>
 								<div class="span6">
 									<!--form action="<?php echo base_url(); ?>manage/supportmsg" id="frm_support" method="post" enctype="multipart/form-data"-->
-									<?php   echo form_open_multipart(base_url().'manage/supportmsg', array('id'=>'frm_support', 'method'=>'post')); ?>
+									<?php   echo form_open_multipart(base_url().'manage/supportmsg', array('id'=>'frm_support','autocomplete' => 'off', 'method'=>'post')); ?>
 										<div class="row">
-											<div class="span6">To:</div>
+											<div class="span6"><h3>To:</h3></div>
 											<div class="span6">
-                                                                                            <input type="email" class="form-control" id="email" value="support@vistechmgmt.zendesk.com" name="email">
+                                                                                            <input autocomplete="off" type="email" class="form-control" id="email" value="support@vistechmgmt.zendesk.com" name="email">
 
                                                                                         </div>											
 										</div>
 										<div class="row">
-											<div class="span6">Contact Email:</div>
+                                                                                    <div class="span6"><h3>Contact Email:</h3></div>
 											<div class="span6">
-												<input type="email" class="form-control" id="emailto" name="emailto">
+												<input autocomplete="off" type="email" class="form-control" id="emailto" name="emailto">
 											</div>											
 										</div>
 										<div class="row">
-											<div class="span6">Priority:</div>
+											<div class="span6"><h3>Priority:</h3></div>
 											<div class="span6">
 												<select name="priority">
-													<option value="Forget Password">Forget Password</option>
-													<option value="Forget Username">Forget Username</option>
+													<option value="Forgot Password">Forgot Password</option>
+													<option value="Forgot Username">Forgot Username</option>
 													<option value="Change Password">Change Password</option>
 													<option value="Page does not load">Page does not load</option>
 													<option value="Error Page">Error Page</option>
@@ -409,21 +413,21 @@
 											</div>											
 										</div>
 										<div class="row">
-											<div class="span6">Description:</div>
+											<div class="span6"><h3>Description:</h3></div>
 											<div class="span6">
 												<textarea class="form-control" rows="7" id="des" name="des"></textarea><br>	
 											</div>											
 										</div>
 										<div class="row">
-											<div class="span6">Attachment:</div>
+											<div class="span6"><h3>Attachment:</h3></div>
 											<div class="span6">
 												<input type="file" class="form-control" id="support_file" name="support_file">
 											</div>											
 										</div>
 										<div class="row">
 											<div class="span12">
-												<button type="submit" class="btn btn-default">Submit</button>												
-												<button type="button" onclick="window.history.back();"  class="btn btn-default">Cancel</button>
+												<button type="submit" class="btn btn-small btn-primary btn-info">Submit</button>												
+												<button type="button" onclick="window.history.back();"  class="btn btn-small btn-primary btn-info">Cancel</button>
 											</div>																			
 										</div>
 									</form>		
@@ -558,7 +562,7 @@
 										  <th>
                                                                                       <select name="Gender">
                                                                                           <option <?php if (isset($user[0]['Gender'])): if($user[0]['Gender'] == 'male'){ echo 'selected'; } endif;?>  value="male">Male</option>
-                                                                                          <option <?php if (isset($user[0]['Gender'])): if($user[0]['Gender'] == 'female'){ echo 'selected'; } endif;?> value="female">Fe-Male</option>
+                                                                                          <option <?php if (isset($user[0]['Gender'])): if($user[0]['Gender'] == 'female'){ echo 'selected'; } endif;?> value="female">Female</option>
                                                                                       </select>
                                                                                   </th>
 										</tr>
@@ -862,11 +866,11 @@
 									  	<div class="clear" style="text-align:center;"><a href="<?php echo base_url(); ?>manage/console_menu" class="btn btn-small btn-primary menu-button">Console Menu</a></div>
 									<?php endif; ?>
 								</div>
-								<div class="span3">
+<!--								<div class="span3">
 									<div class="span12">
 										<a class=" btn btn-small btn-primary menu-button menu-logout-button menu-button-small" href="<?php echo base_url(); ?>/manage/sqlserver">SQL Server</a>
 									</div>
-								</div>
+								</div>-->
 							<div>
 						  <?php endif?>
 
@@ -888,6 +892,7 @@
 	  </div><!--/row-->
 	</div>
   </div><!--/.fluid-container-->
+<button onclick="topFunction()" id="myBtn" title="Go to top"><img src="<?php echo base_url();?>public/top.png" /> </button>
 
 
   <!-- basic scripts -->
@@ -927,7 +932,22 @@
         });
     };
 
-  </script>
 
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        document.getElementById("myBtn").style.display = "block";
+    } else {
+        document.getElementById("myBtn").style.display = "none";
+    }
+}
+
+// When the user clicks on the button, scroll to the top of the document
+function topFunction() {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+}    
+</script>
 </body>
 </html>

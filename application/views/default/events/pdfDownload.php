@@ -129,18 +129,25 @@ if (count($event_comment)) {
                 )
         );
         $user_details = json_decode(json_encode($user_details), true);
-        $image = $event_user_details[0]->ProfileImage->url;
+        
         ?>
         <table cellpadding="1" cellspacing="1" border="0" style="text-align:center;">
             <tr>
+                    <?php if(isset($user_details[0]['ProfileImage'])){ 
+                    $image = $user_details[0]['ProfileImage']['url'];
+                    ?>
                 <td style="text-align:left;width: 50px">
-                    <img style="height:50px;"  src="<?php echo $image; ?>" />
+                        <img style="height:50px;"  src="<?php echo $image; ?>" />
+                   
                 </td>
+                 <?php 
+                    }
+                    ?>
                 <td style="text-align:left;">
                     <h4>
                         <?php
-                        if (isset($event_user_details[0]->username)):
-                            echo $event_user_details[0]->username;
+                        if (isset($user_details[0]['username'])):
+                            echo $user_details[0]['username'];
                         endif;
                         ?>
                     </h4>

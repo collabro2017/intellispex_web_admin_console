@@ -1269,7 +1269,7 @@ class events extends CI_Controller_EX {
                 rmdir($base_path);
                 exit;
             }else{
-                $data->function_name = "VIEW OR EDIT GLOBAL EVENT LIST";
+                $data->function_name = "Complete Metadata Download";
                 if (base_url() == 'http://intellispex.com/' || base_url() == 'http://localhost/icymi/') {
                     $regular_user = 'Di56R0ITXB';
                 } else {
