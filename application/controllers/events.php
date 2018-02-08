@@ -303,7 +303,7 @@ class events extends CI_Controller_EX {
                     (
                     "objectId" => "Post",
                     "query" => '{"description":{"$ne": "" }}',
-                    'order' => 'postOrder'
+                    'order' => '-postOrder'
                 )
         );
         $event_posts = json_decode(json_encode($temp), true);
@@ -575,13 +575,22 @@ class events extends CI_Controller_EX {
                                         'order' => '-createdAt'
                                     )
                             ), true));
+            $data->event_post_ama = json_decode(json_encode($this->parserestclient->query
+                                    (
+                                    array
+                                        (
+                                        "objectId" => "Post",
+                                        "query" => '{"thumbnailPost":1,"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}',
+                                        'order' => 'createdAt,-postOrder'
+                                    )
+                            ), true));
             $data->event_post = json_decode(json_encode($this->parserestclient->query
                                     (
                                     array
                                         (
                                         "objectId" => "Post",
-                                        "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}',
-                                        'order' => 'postOrder'
+                                        "query" => '{"thumbnailPost":{"$ne":1},"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}',
+                                        'order' => '-postOrder'
                                     )
                             ), true));
             if (base_url() == 'http://test.intellispex.com/') {
@@ -911,7 +920,7 @@ class events extends CI_Controller_EX {
                                     (
                                     "objectId" => "Post",
                                     "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}',
-                                    'order' => 'postOrder'
+                                    'order' => '-postOrder'
                                 )
                         ), true));
 
@@ -1123,7 +1132,7 @@ class events extends CI_Controller_EX {
                                     (
                                     "objectId" => "Post",
                                     "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $id . '"}}',
-                                    'order' => 'postOrder'
+                                    'order' => '-postOrder'
                                 )
                         ), true));
 
@@ -1756,7 +1765,7 @@ class events extends CI_Controller_EX {
                         //'query'=>'{"deletedAt":null}',	
                         //'query'=>'{"targetEvent":"'.$id.'"}'
                         "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $id . '"}}',
-                        'order' => 'postOrder'
+                        'order' => '-postOrder'
                     )
             );
             $temp_event = $this->parserestclient->query

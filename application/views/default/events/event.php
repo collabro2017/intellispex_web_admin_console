@@ -195,154 +195,26 @@
                                             <div class="span12" style="margin: 0;">
                                                 <ul style="margin:0px; padding: 0px;">
                                                     <?php
-                                                    foreach ($event_post as $post) {
-                                                        ?>
-                                                        <li style="border:1px solid #b2b2b2; border-radius: 3px; margin: 0px;padding: 0;position: relative;margin-top: 20px;">
-                                                            <div style="background: #eee;  border: 1px solid #b2b2b2;padding: 0px;margin: 0;">
-                                                                <div class="span3" style="padding: 0px;background: #FFF;padding-left: 15px;border-right: 1px solid #b2b2b2; ">
-                                                                    <h3><?php echo $post->title; ?></h3>
-                                                                    <?php
-                                                                    if (isset($post->countryLatLong)) {
-                                                                        ?><p><i class="fa fa-map-marker"></i><?php echo $post->countryLatLong; ?></p> <?php
-                                                                    }
-                                                                    ?>
-                                                                    <p>
-                                                                        <?php echo date('Y-m-d g:i', strtotime($post->createdAt)); ?>
-                                                                    </p>
-                                                                </div>
-                                                                <div style="background: #eee;margin: 0;padding: 10px;" class="span9">
-                                                                    <div style="float:left;width: 90%;">
-                                                                        <?php
-                                                                        $commenter = $post->user;
-                                                                        $user_details = $this->parserestclient->query(array(
-                                                                            "objectId" => "_User",
-                                                                            'query' => '{"deletedAt":null,"objectId":"' . $commenter->objectId . '"}',
-                                                                                )
-                                                                        );
-                                                                        $user_details = json_decode(json_encode($user_details), true);
-                                                                        ?>
-                                                                        <p><b>By:  <?php
-                                                                                if (isset($user_details[0]['username'])):
-                                                                                    echo $user_details[0]['username'];
-                                                                                endif;
-                                                                                ?></b> </p>
-                                                                        <p><?php echo $post->description; ?></p></div>
-                                                                    <div style="float:right;">
-                                                                        <a  href="javascript:updatePost('<?php echo $post->objectId; ?>')" style="background: transparent; border: none; font-size: 15px;color:#000;"> <i class="fa fa-pencil"></i> </a> 
-                                                                        <a  href="javascript:deletPost('<?php echo $post->objectId; ?>');" style="background: transparent; border: none; font-size: 15px;color:#000;"> <i class="fa fa-remove"></i> </a>
-                                                                        <a  href="javascript:reportPost('<?php echo $post->objectId; ?>');" style="background: transparent; border: none; font-size: 15px;color:#000;"> <i class="fa fa-flag"></i> </a> 
-                                                                    </div>
-                                                                </div>
-                                                                <div style="clear: both;"></div>
-                                                            </div>
-                                                            <?php
-                                                            if (isset($post->postType)) {
-                                                                if (isset($post->thumbImage) && isset($post->postFile) && $post->postType == 'photo') {
-                                                                    $image = $post->thumbImage;
-                                                                    $imagePost = $post->postFile;
-                                                                    ?>
-                                                                    <style>
-            <?php
-            if (strlen($post->title) > 120 && strlen($post->title) < 180) {
-                ?>
-                                                                            .cboxPhoto{ height: 98% !important; }
-                <?php
-            } elseif (strlen($post->title) > 180) {
-                ?>
-                                                                            .cboxPhoto{ height: 96% !important; }
-                <?php
-            }
-            ?>
-                                                                    </style>
-
-                                                                    <a  class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $post->title; ?>">
-                                                                        <img style="cursor: pointer" id="eventImage" src="<?php echo $imagePost->url; ?>" />
-                                                                    </a>
-                                                                    <?php
-                                                                } elseif ($post->postType == 'video') {
-                                                                    $video = $post->postFile;
-                                                                    $name = explode('.', basename($video->url));
-                                                                    $extension = $name['1'];
-                                                                    ?>
-                                                                    <?php if ($extension == 'mp4' || $extension == 'ogg') { ?>
-                                                                        <video name="<?php echo $post->title; ?>" style="width: 100%;" controls autoplay>
-                                                                            <source src="<?php echo $video->url; ?>" type="video/<?php echo $extension; ?>" />
-                                                                            Sorry, your browser doesn't support the video element.
-                                                                        </video>
-                                                                        <?php
-                                                                    } else {
-                                                                        ?>
-                                                                        <video style="width: 100%;" controls="controls" width="800" height="600" name="<?php echo $post->title; ?>" src="<?php echo $video->url; ?>"></video>
-                                                                        <?php
-                                                                    }
-                                                                    ?>
-                                                                    <?php
-                                                                }elseif ($post->postType == 'audio') {
-                                                                    $audio = $post->postFile;
-                                                                    $name = explode('.', basename($audio->url));
-                                                                    $extension = $name['1'];
-                                                                    ?>
-                                                                    <?php if ($extension == 'mp3' || $extension == 'ogg' || $extension == 'wav') { ?>
-                                                                    <audio name="<?php echo $post->title; ?>" style="width: 100%;" controls autoplay>
-                                                                        <source src="<?php echo $audio->url; ?>" type="audio/<?php echo $extension; ?>">
-                                                                        Your browser does not support the audio element.
-                                                                    </audio>
-                                                                        <?php
-                                                                    } else {
-                                                                        ?>
-                                                                        <audio style="width: 100%;" controls="controls" name="<?php echo $post->title; ?>" src="<?php echo $audio->url; ?>"></audio>
-                                                                        <?php
-                                                                    }
-                                                                }
-                                                            } else {
-                                                                if (isset($post->thumbImage) && isset($post->postFile)) {
-                                                                    $image = $post->thumbImage;
-                                                                    $imagePost = $post->postFile;
-                                                                    ?>
-                                                                    <style>
-            <?php
-            if (strlen($post->title) > 120 && strlen($post->title) < 180) {
-                ?>
-                                                                            .cboxPhoto{ height: 98% !important; }
-                <?php
-            } elseif (strlen($post->title) > 180) {
-                ?>
-                                                                            .cboxPhoto{ height: 96% !important; }
-                <?php
-            }
-            ?>
-                                                                    </style>
-
-                                                                    <a  class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $post->title; ?>">
-                                                                        <img style="cursor: pointer" id="eventImage" src="<?php echo $imagePost->url; ?>" />
-                                                                    </a>
-                                                                    <?php
-                                                                }
-                                                            }
+                                                    if(count($event_post_ama) > 0){
+                                                        foreach ($event_post_ama as $post) {
                                                             ?>
-                                                            <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-                                                            <script type="text/javascript">
-                                                                window.jQuery || document.write("<script src='assets/js/jquery-1.9.1.min.js'>\x3C/script>");
-                                                            </script>
-                                                            <div style="clear:both"></div>
-
-                                                            <div style="width:97.4%;float: right;background: #eee;  border: 1px solid #b2b2b2;margin: 0;padding-left: 20px;">
-                                                                <div style="clear: both;height:20px;"></div>
-                                                                <a class="btn btn-small btn-primary"  href="javascript:add_post_comment('<?php echo $post->objectId; ?>')" class="btn btn-small btn-primary menu-button"> Add </a> 
-                                                                <?php
-                                                                if (isset($post->commentsArray)) {
-                                                                    ?>
-                                                                    <?php
-                                                                    $postComments = $post->commentsArray;
-                                                                    for ($i = 0; $i < count($postComments); $i++) {
-                                                                        $comment = $this->parserestclient->query(array(
-                                                                            "objectId" => "Comments",
-                                                                            'query' => '{"objectId":"' . $postComments[$i]->objectId . '"}',
-                                                                                )
-                                                                        );
-                                                                        $comments = json_decode(json_encode($comment));
-                                                                        foreach ($comments as $data) {
-                                                                            $commenter = $data->Commenter;
+                                                            <li style="border:1px solid #b2b2b2; border-radius: 3px; margin: 0px;padding: 0;position: relative;margin-top: 20px;">
+                                                                <div style="background: #eee;  border: 1px solid #b2b2b2;padding: 0px;margin: 0;">
+                                                                    <div class="span3" style="padding: 0px;background: #FFF;padding-left: 15px;border-right: 1px solid #b2b2b2; ">
+                                                                        <h3><?php echo $post->title; ?></h3>
+                                                                        <?php
+                                                                        if (isset($post->countryLatLong)) {
+                                                                            ?><p><i class="fa fa-map-marker"></i><?php echo $post->countryLatLong; ?></p> <?php
+                                                                        }
+                                                                        ?>
+                                                                        <p>
+                                                                            <?php echo date('Y-m-d g:i', strtotime($post->createdAt)); ?>
+                                                                        </p>
+                                                                    </div>
+                                                                    <div style="background: #eee;margin: 0;padding: 10px;" class="span9">
+                                                                        <div style="float:left;width: 90%;">
+                                                                            <?php
+                                                                            $commenter = $post->user;
                                                                             $user_details = $this->parserestclient->query(array(
                                                                                 "objectId" => "_User",
                                                                                 'query' => '{"deletedAt":null,"objectId":"' . $commenter->objectId . '"}',
@@ -350,22 +222,326 @@
                                                                             );
                                                                             $user_details = json_decode(json_encode($user_details), true);
                                                                             ?>
-                                                                            <p><?php echo date('d-m-Y g:i A', strtotime($data->createdAt)); ?>: <?php
-                                                                                if (isset($user_details[0]['username'])):
-                                                                                    echo '<b>' . $user_details[0]['username'] . ': </b>';
-                                                                                endif;
-                                                                                ?>
-                                                                                <?php echo $data->Comments; ?>
-                                                                            </p>
+                                                                            <p><b>By:  <?php
+                                                                                    if (isset($user_details[0]['username'])):
+                                                                                        echo $user_details[0]['username'];
+                                                                                    endif;
+                                                                                    ?></b> </p>
+                                                                            <p><?php echo $post->description; ?></p></div>
+                                                                        <div style="float:right;">
+                                                                            <a  href="javascript:updatePost('<?php echo $post->objectId; ?>')" style="background: transparent; border: none; font-size: 15px;color:#000;"> <i class="fa fa-pencil"></i> </a> 
+                                                                            <a  href="javascript:deletPost('<?php echo $post->objectId; ?>');" style="background: transparent; border: none; font-size: 15px;color:#000;"> <i class="fa fa-remove"></i> </a>
+                                                                            <a  href="javascript:reportPost('<?php echo $post->objectId; ?>');" style="background: transparent; border: none; font-size: 15px;color:#000;"> <i class="fa fa-flag"></i> </a> 
+                                                                        </div>
+                                                                    </div>
+                                                                    <div style="clear: both;"></div>
+                                                                </div>
+                                                                <?php
+                                                                if (isset($post->postType)) {
+                                                                    if (isset($post->thumbImage) && isset($post->postFile) && $post->postType == 'photo') {
+                                                                        $image = $post->thumbImage;
+                                                                        $imagePost = $post->postFile;
+                                                                        ?>
+                                                                        <style>
+                <?php
+                if (strlen($post->title) > 120 && strlen($post->title) < 180) {
+                    ?>
+                                                                                .cboxPhoto{ height: 98% !important; }
+                    <?php
+                } elseif (strlen($post->title) > 180) {
+                    ?>
+                                                                                .cboxPhoto{ height: 96% !important; }
+                    <?php
+                }
+                ?>
+                                                                        </style>
+
+                                                                        <a  class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $post->title; ?>">
+                                                                            <img style="cursor: pointer" id="eventImage" src="<?php echo $imagePost->url; ?>" />
+                                                                        </a>
+                                                                        <?php
+                                                                    } elseif ($post->postType == 'video') {
+                                                                        $video = $post->postFile;
+                                                                        $name = explode('.', basename($video->url));
+                                                                        $extension = $name['1'];
+                                                                        ?>
+                                                                        <?php if ($extension == 'mp4' || $extension == 'ogg') { ?>
+                                                                            <video name="<?php echo $post->title; ?>" style="width: 100%;" controls autoplay>
+                                                                                <source src="<?php echo $video->url; ?>" type="video/<?php echo $extension; ?>" />
+                                                                                Sorry, your browser doesn't support the video element.
+                                                                            </video>
+                                                                            <?php
+                                                                        } else {
+                                                                            ?>
+                                                                            <video style="width: 100%;" controls="controls" width="800" height="600" name="<?php echo $post->title; ?>" src="<?php echo $video->url; ?>"></video>
+                                                                            <?php
+                                                                        }
+                                                                        ?>
+                                                                        <?php
+                                                                    }elseif ($post->postType == 'audio') {
+                                                                        $audio = $post->postFile;
+                                                                        $name = explode('.', basename($audio->url));
+                                                                        $extension = $name['1'];
+                                                                        ?>
+                                                                        <?php if ($extension == 'mp3' || $extension == 'ogg' || $extension == 'wav') { ?>
+                                                                        <audio name="<?php echo $post->title; ?>" style="width: 100%;" controls autoplay>
+                                                                            <source src="<?php echo $audio->url; ?>" type="audio/<?php echo $extension; ?>">
+                                                                            Your browser does not support the audio element.
+                                                                        </audio>
+                                                                            <?php
+                                                                        } else {
+                                                                            ?>
+                                                                            <audio style="width: 100%;" controls="controls" name="<?php echo $post->title; ?>" src="<?php echo $audio->url; ?>"></audio>
                                                                             <?php
                                                                         }
                                                                     }
+                                                                } else {
+                                                                    if (isset($post->thumbImage) && isset($post->postFile)) {
+                                                                        $image = $post->thumbImage;
+                                                                        $imagePost = $post->postFile;
+                                                                        ?>
+                                                                        <style>
+                <?php
+                if (strlen($post->title) > 120 && strlen($post->title) < 180) {
+                    ?>
+                                                                                .cboxPhoto{ height: 98% !important; }
+                    <?php
+                } elseif (strlen($post->title) > 180) {
+                    ?>
+                                                                                .cboxPhoto{ height: 96% !important; }
+                    <?php
+                }
+                ?>
+                                                                        </style>
+
+                                                                        <a  class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $post->title; ?>">
+                                                                            <img style="cursor: pointer" id="eventImage" src="<?php echo $imagePost->url; ?>" />
+                                                                        </a>
+                                                                        <?php
+                                                                    }
                                                                 }
                                                                 ?>
-                                                            </div>
-                                                            <div style="clear:both"></div>
-                                                        </li>
-                                                        <?php
+                                                                <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+                                                                <script type="text/javascript">
+                                                                    window.jQuery || document.write("<script src='assets/js/jquery-1.9.1.min.js'>\x3C/script>");
+                                                                </script>
+                                                                <div style="clear:both"></div>
+
+                                                                <div style="width:97.4%;float: right;background: #eee;  border: 1px solid #b2b2b2;margin: 0;padding-left: 20px;">
+                                                                    <div style="clear: both;height:20px;"></div>
+                                                                    <a class="btn btn-small btn-primary"  href="javascript:add_post_comment('<?php echo $post->objectId; ?>')" class="btn btn-small btn-primary menu-button"> Add </a> 
+                                                                    <?php
+                                                                    if (isset($post->commentsArray)) {
+                                                                        ?>
+                                                                        <?php
+                                                                        $postComments = $post->commentsArray;
+                                                                        for ($i = 0; $i < count($postComments); $i++) {
+                                                                            $comment = $this->parserestclient->query(array(
+                                                                                "objectId" => "Comments",
+                                                                                'query' => '{"objectId":"' . $postComments[$i]->objectId . '"}',
+                                                                                    )
+                                                                            );
+                                                                            $comments = json_decode(json_encode($comment));
+                                                                            foreach ($comments as $data) {
+                                                                                $commenter = $data->Commenter;
+                                                                                $user_details = $this->parserestclient->query(array(
+                                                                                    "objectId" => "_User",
+                                                                                    'query' => '{"deletedAt":null,"objectId":"' . $commenter->objectId . '"}',
+                                                                                        )
+                                                                                );
+                                                                                $user_details = json_decode(json_encode($user_details), true);
+                                                                                ?>
+                                                                                <p><?php echo date('d-m-Y g:i A', strtotime($data->createdAt)); ?>: <?php
+                                                                                    if (isset($user_details[0]['username'])):
+                                                                                        echo '<b>' . $user_details[0]['username'] . ': </b>';
+                                                                                    endif;
+                                                                                    ?>
+                                                                                    <?php echo $data->Comments; ?>
+                                                                                </p>
+                                                                                <?php
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    ?>
+                                                                </div>
+                                                                <div style="clear:both"></div>
+                                                            </li>
+                                                            <?php
+                                                        }
+                                                    }
+                                                    if(count($event_post) > 0){
+                                                        foreach ($event_post as $post) {
+                                                            ?>
+                                                            <li style="border:1px solid #b2b2b2; border-radius: 3px; margin: 0px;padding: 0;position: relative;margin-top: 20px;">
+                                                                <div style="background: #eee;  border: 1px solid #b2b2b2;padding: 0px;margin: 0;">
+                                                                    <div class="span3" style="padding: 0px;background: #FFF;padding-left: 15px;border-right: 1px solid #b2b2b2; ">
+                                                                        <h3><?php echo $post->title; ?></h3>
+                                                                        <?php
+                                                                        if (isset($post->countryLatLong)) {
+                                                                            ?><p><i class="fa fa-map-marker"></i><?php echo $post->countryLatLong; ?></p> <?php
+                                                                        }
+                                                                        ?>
+                                                                        <p>
+                                                                            <?php echo date('Y-m-d g:i', strtotime($post->createdAt)); ?>
+                                                                        </p>
+                                                                    </div>
+                                                                    <div style="background: #eee;margin: 0;padding: 10px;" class="span9">
+                                                                        <div style="float:left;width: 90%;">
+                                                                            <?php
+                                                                            $commenter = $post->user;
+                                                                            $user_details = $this->parserestclient->query(array(
+                                                                                "objectId" => "_User",
+                                                                                'query' => '{"deletedAt":null,"objectId":"' . $commenter->objectId . '"}',
+                                                                                    )
+                                                                            );
+                                                                            $user_details = json_decode(json_encode($user_details), true);
+                                                                            ?>
+                                                                            <p><b>By:  <?php
+                                                                                    if (isset($user_details[0]['username'])):
+                                                                                        echo $user_details[0]['username'];
+                                                                                    endif;
+                                                                                    ?></b> </p>
+                                                                            <p><?php echo $post->description; ?></p></div>
+                                                                        <div style="float:right;">
+                                                                            <a  href="javascript:updatePost('<?php echo $post->objectId; ?>')" style="background: transparent; border: none; font-size: 15px;color:#000;"> <i class="fa fa-pencil"></i> </a> 
+                                                                            <a  href="javascript:deletPost('<?php echo $post->objectId; ?>');" style="background: transparent; border: none; font-size: 15px;color:#000;"> <i class="fa fa-remove"></i> </a>
+                                                                            <a  href="javascript:reportPost('<?php echo $post->objectId; ?>');" style="background: transparent; border: none; font-size: 15px;color:#000;"> <i class="fa fa-flag"></i> </a> 
+                                                                        </div>
+                                                                    </div>
+                                                                    <div style="clear: both;"></div>
+                                                                </div>
+                                                                <?php
+                                                                if (isset($post->postType)) {
+                                                                    if (isset($post->thumbImage) && isset($post->postFile) && $post->postType == 'photo') {
+                                                                        $image = $post->thumbImage;
+                                                                        $imagePost = $post->postFile;
+                                                                        ?>
+                                                                        <style>
+                <?php
+                if (strlen($post->title) > 120 && strlen($post->title) < 180) {
+                    ?>
+                                                                                .cboxPhoto{ height: 98% !important; }
+                    <?php
+                } elseif (strlen($post->title) > 180) {
+                    ?>
+                                                                                .cboxPhoto{ height: 96% !important; }
+                    <?php
+                }
+                ?>
+                                                                        </style>
+
+                                                                        <a  class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $post->title; ?>">
+                                                                            <img style="cursor: pointer" id="eventImage" src="<?php echo $imagePost->url; ?>" />
+                                                                        </a>
+                                                                        <?php
+                                                                    } elseif ($post->postType == 'video') {
+                                                                        $video = $post->postFile;
+                                                                        $name = explode('.', basename($video->url));
+                                                                        $extension = $name['1'];
+                                                                        ?>
+                                                                        <?php if ($extension == 'mp4' || $extension == 'ogg') { ?>
+                                                                            <video name="<?php echo $post->title; ?>" style="width: 100%;" controls autoplay>
+                                                                                <source src="<?php echo $video->url; ?>" type="video/<?php echo $extension; ?>" />
+                                                                                Sorry, your browser doesn't support the video element.
+                                                                            </video>
+                                                                            <?php
+                                                                        } else {
+                                                                            ?>
+                                                                            <video style="width: 100%;" controls="controls" width="800" height="600" name="<?php echo $post->title; ?>" src="<?php echo $video->url; ?>"></video>
+                                                                            <?php
+                                                                        }
+                                                                        ?>
+                                                                        <?php
+                                                                    }elseif ($post->postType == 'audio') {
+                                                                        $audio = $post->postFile;
+                                                                        $name = explode('.', basename($audio->url));
+                                                                        $extension = $name['1'];
+                                                                        ?>
+                                                                        <?php if ($extension == 'mp3' || $extension == 'ogg' || $extension == 'wav') { ?>
+                                                                        <audio name="<?php echo $post->title; ?>" style="width: 100%;" controls autoplay>
+                                                                            <source src="<?php echo $audio->url; ?>" type="audio/<?php echo $extension; ?>">
+                                                                            Your browser does not support the audio element.
+                                                                        </audio>
+                                                                            <?php
+                                                                        } else {
+                                                                            ?>
+                                                                            <audio style="width: 100%;" controls="controls" name="<?php echo $post->title; ?>" src="<?php echo $audio->url; ?>"></audio>
+                                                                            <?php
+                                                                        }
+                                                                    }
+                                                                } else {
+                                                                    if (isset($post->thumbImage) && isset($post->postFile)) {
+                                                                        $image = $post->thumbImage;
+                                                                        $imagePost = $post->postFile;
+                                                                        ?>
+                                                                        <style>
+                <?php
+                if (strlen($post->title) > 120 && strlen($post->title) < 180) {
+                    ?>
+                                                                                .cboxPhoto{ height: 98% !important; }
+                    <?php
+                } elseif (strlen($post->title) > 180) {
+                    ?>
+                                                                                .cboxPhoto{ height: 96% !important; }
+                    <?php
+                }
+                ?>
+                                                                        </style>
+
+                                                                        <a  class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $post->title; ?>">
+                                                                            <img style="cursor: pointer" id="eventImage" src="<?php echo $imagePost->url; ?>" />
+                                                                        </a>
+                                                                        <?php
+                                                                    }
+                                                                }
+                                                                ?>
+                                                                <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+                                                                <script type="text/javascript">
+                                                                    window.jQuery || document.write("<script src='assets/js/jquery-1.9.1.min.js'>\x3C/script>");
+                                                                </script>
+                                                                <div style="clear:both"></div>
+
+                                                                <div style="width:97.4%;float: right;background: #eee;  border: 1px solid #b2b2b2;margin: 0;padding-left: 20px;">
+                                                                    <div style="clear: both;height:20px;"></div>
+                                                                    <a class="btn btn-small btn-primary"  href="javascript:add_post_comment('<?php echo $post->objectId; ?>')" class="btn btn-small btn-primary menu-button"> Add </a> 
+                                                                    <?php
+                                                                    if (isset($post->commentsArray)) {
+                                                                        ?>
+                                                                        <?php
+                                                                        $postComments = $post->commentsArray;
+                                                                        for ($i = 0; $i < count($postComments); $i++) {
+                                                                            $comment = $this->parserestclient->query(array(
+                                                                                "objectId" => "Comments",
+                                                                                'query' => '{"objectId":"' . $postComments[$i]->objectId . '"}',
+                                                                                    )
+                                                                            );
+                                                                            $comments = json_decode(json_encode($comment));
+                                                                            foreach ($comments as $data) {
+                                                                                $commenter = $data->Commenter;
+                                                                                $user_details = $this->parserestclient->query(array(
+                                                                                    "objectId" => "_User",
+                                                                                    'query' => '{"deletedAt":null,"objectId":"' . $commenter->objectId . '"}',
+                                                                                        )
+                                                                                );
+                                                                                $user_details = json_decode(json_encode($user_details), true);
+                                                                                ?>
+                                                                                <p><?php echo date('d-m-Y g:i A', strtotime($data->createdAt)); ?>: <?php
+                                                                                    if (isset($user_details[0]['username'])):
+                                                                                        echo '<b>' . $user_details[0]['username'] . ': </b>';
+                                                                                    endif;
+                                                                                    ?>
+                                                                                    <?php echo $data->Comments; ?>
+                                                                                </p>
+                                                                                <?php
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    ?>
+                                                                </div>
+                                                                <div style="clear:both"></div>
+                                                            </li>
+                                                            <?php
+                                                        }
                                                     }
                                                     ?>
                                                 </ul>
