@@ -420,7 +420,8 @@ class events extends CI_Controller_EX {
             $user = $this->parserestclient->query(
                     array(
                         "objectId" => "_User",
-                        'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"' . $regular_user . '"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $session_data['mongodb_id'] . '"}}',
+//                        'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"' . $regular_user . '"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $session_data['mongodb_id'] . '"}}',
+                        'query' => '{"user_type":{"__type":"Pointer","className":"_Role","objectId":"' . $regular_user . '"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $session_data['mongodb_id'] . '"}}',
                     )
             );
             $associated_user = json_decode(json_encode($user), true);
@@ -438,7 +439,7 @@ class events extends CI_Controller_EX {
                         array
                             (
                             "objectId" => "Event",
-                            'query' => '{"deletedAt":null, "TagFriends":{"$in":' . json_encode($userArr, true) . '}}',
+                            'query' => '{ "TagFriends":{"$in":' . json_encode($userArr, true) . '}}',
                             'order' => $asc,
                             'limit' => '10000000',
                         )
@@ -451,7 +452,7 @@ class events extends CI_Controller_EX {
                         array
                             (
                             "objectId" => "Event",
-                            'query' => '{"deletedAt":null,"createdAt":{"$gte":{"__type":"Date","iso":"' . $date . '"}}, "TagFriends":{"$in":' . json_encode($userArr, true) . '}}',
+                            'query' => '{"createdAt":{"$gte":{"__type":"Date","iso":"' . $date . '"}}, "TagFriends":{"$in":' . json_encode($userArr, true) . '}}',
                             'order' => $asc,
                             'limit' => '10000000',
                         )
@@ -459,6 +460,11 @@ class events extends CI_Controller_EX {
             }
             $event = json_decode(json_encode($temp), true);
             foreach ($event as $ev) {
+                if(isset($ev['deletedAt'])){
+                    if($ev['deletedAt'] != ''){
+                        continue;
+                    }
+                }
                 if (isset($ev)) {
                     if ($i == 0) {
                         $eventId[$i] = $ev['objectId'];
@@ -478,7 +484,7 @@ class events extends CI_Controller_EX {
                             array
                                 (
                                 "objectId" => "Event",
-                                'query' => '{"deletedAt":null ,"user":{"__type":"Pointer","className":"_User","objectId":"' . $user['objectId'] . '"}}',
+                                'query' => '{"user":{"__type":"Pointer","className":"_User","objectId":"' . $user['objectId'] . '"}}',
                                 'order' => $asc,
                                 'limit' => 1000000
                             )
@@ -486,6 +492,11 @@ class events extends CI_Controller_EX {
                     $event = json_decode(json_encode($temp), true);
                     foreach ($event as $ev) {
                         if (isset($ev)) {
+                            if(isset($ev['deletedAt'])){
+                                if($ev['deletedAt'] != ''){
+                                    continue;
+                                }
+                            }
                             if ($i == 0) {
                                 $eventId[$i] = $ev['objectId'];
                                 $events[$i] = $ev;
@@ -517,6 +528,11 @@ class events extends CI_Controller_EX {
                     );
                     $event = json_decode(json_encode($temp), true);
                     foreach ($event as $ev) {
+                        if(isset($ev['deletedAt'])){
+                            if($ev['deletedAt'] != ''){
+                                continue;
+                            }
+                        }
                         if (isset($ev)) {
                             if ($i == 0) {
                                 $eventId[$i] = $ev['objectId'];
@@ -703,7 +719,7 @@ class events extends CI_Controller_EX {
                 array
                     (
                     "objectId" => "Event",
-                    'object' => ['deletedAt' => "", 'openStatus' => 1],
+                    'object' => ['deletedAt' => ""],
                     'where' => $deleteId
                 )
         );
@@ -1581,6 +1597,11 @@ class events extends CI_Controller_EX {
             );
             $event = json_decode(json_encode($temp), true);
             foreach ($event as $ev) {
+                if(isset($ev['deletedAt'])){
+                    if($ev['deletedAt'] == ''){
+                        continue;
+                    }
+                }
                 if (isset($ev)) {
                     if ($i == 0) {
                         $eventId[$i] = $ev['objectId'];
@@ -1603,6 +1624,11 @@ class events extends CI_Controller_EX {
                 );
                 $event = json_decode(json_encode($temp), true);
                 foreach ($event as $ev) {
+                    if(isset($ev['deletedAt'])){
+                        if($ev['deletedAt'] == ''){
+                            continue;
+                        }
+                    }
                     if (isset($ev)) {
                         if ($i == 0) {
                             $eventId[$i] = $ev['objectId'];

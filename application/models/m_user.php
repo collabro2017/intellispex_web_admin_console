@@ -15,7 +15,7 @@ class M_user extends CI_Model {
         $this->db->from('res_users');
         $this->db->join('res_groups', 'res_groups.id = res_users.user_type', 'left');
         $sanitize_username = $this->db->escape($username);
-        $where = "( username=" . $sanitize_username . " OR  email=" . $sanitize_username . ")";
+        $where = "( LOWER(username)=LOWER(" . strtolower($sanitize_username) . ") OR  LOWER(email)=LOWER(" . strtolower($sanitize_username) . "))";
         $this->db->where($where);
         $this->db->where('password', md5($password));
         if(SERVER_LIVE == 0){
@@ -28,7 +28,6 @@ class M_user extends CI_Model {
         $this->db->limit(1);
 
         $query = $this->db->get();
-
         if ($query->num_rows() == 1) {
             return $query->result();
         } else {
@@ -146,7 +145,7 @@ class M_user extends CI_Model {
         $postal = $this->input->post('postal');
         $phone = $this->input->post('phone_number');
         $mobile = $this->input->post('mobile');
-        $email = $this->input->post('email');
+        $email = strtolower($this->input->post('email'));
         $client_mongo_role = $this->m_user->getMongoRoleById(3);
         if(base_url() == 'http://test.intellispex.com/'){
             $client_mongo_role = $client_mongo_role->mongodb_role_id;
@@ -218,7 +217,7 @@ class M_user extends CI_Model {
         $postal = $this->input->post('postal');
         $phone = $this->input->post('phone_number');
         $mobile = $this->input->post('mobile');
-        $email = $this->input->post('email');
+        $email = strtolower($this->input->post('email'));
         $client_mongo_role = $this->m_user->getMongoRoleById(3);
         if(base_url() == 'http://test.intellispex.com/'){
             $client_mongo_role = $client_mongo_role->mongodb_role_id;

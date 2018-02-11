@@ -23,7 +23,9 @@
                                     <li> <div class="label-text">File Type: </div> </li>
                                     <li>
                                         <div class="styled">
-                                            <select name="select_meta_file_type" class="file_type">
+                                            <select required="" name="select_meta_file_type" class="file_type">
+                                                
+                                                <option value="">Select</option>
                                                 <option value="csv">CSV</option>
                                                 <option value="xls">Excel</option>
                                                 <option value="pdf">PDF</option>

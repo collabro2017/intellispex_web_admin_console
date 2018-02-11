@@ -101,6 +101,9 @@
 		input[type="file"]{
 			display:flex;			
 		}
+                #support_request h3{
+                    color:#000 !important;
+                }
 	</style>
 
   </head>
@@ -381,7 +384,7 @@
 					  		}
 								else if($function_name == "SUPPORT REQUEST"){									
 							?>	
-							<div class="row">
+                                                            <div class="row" id="support_request">
 								<div class="span3"></div>
 								<div class="span6">
 									<!--form action="<?php echo base_url(); ?>manage/supportmsg" id="frm_support" method="post" enctype="multipart/form-data"-->
@@ -425,7 +428,8 @@
 											</div>											
 										</div>
 										<div class="row">
-											<div class="span12">
+											<div class="span6"></div>
+											<div class="span6">
 												<button type="submit" class="btn btn-small btn-primary btn-info">Submit</button>												
 												<button type="button" onclick="window.history.back();"  class="btn btn-small btn-primary btn-info">Cancel</button>
 											</div>																			
