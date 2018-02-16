@@ -477,14 +477,13 @@ class events extends CI_Controller_EX {
                 $i++;
             }
             if (!$day || is_null($day) || $day == "") {
-
-                foreach ($associated_user as $user) {
+                foreach ($userArr as $user) {
                     $temp = $this->parserestclient->query
                             (
                             array
                                 (
                                 "objectId" => "Event",
-                                'query' => '{"user":{"__type":"Pointer","className":"_User","objectId":"' . $user['objectId'] . '"}}',
+                                'query' => '{"user":{"__type":"Pointer","className":"_User","objectId":"' . $user . '"}}',
                                 'order' => $asc,
                                 'limit' => 1000000
                             )
@@ -514,14 +513,14 @@ class events extends CI_Controller_EX {
                 $date = date('Y-m-d', strtotime('-' . $day . ' days'));
                 $date = date(DateTime::ISO8601, strtotime($date));
                 //$date = "2017-06-01T00:00:00.000Z";
-                foreach ($associated_user as $user) {
+                foreach ($userArr as $user) {
                     $temp = $this->parserestclient->query
                             (
                             array
                                 (
                                 "objectId" => "Event",
                                 //'query'=>'{"deletedAt":null, "createdAt":{"$gt":"'.$date.'"}}',
-                                'query' => '{"deletedAt":null,"createdAt":{"$gte":{"__type":"Date","iso":"' . $date . '"}},"user":{"__type":"Pointer","className":"_User","objectId":"' . $user['objectId'] . '"}}',
+                                'query' => '{"deletedAt":null,"createdAt":{"$gte":{"__type":"Date","iso":"' . $date . '"}},"user":{"__type":"Pointer","className":"_User","objectId":"' . $user . '"}}',
                                 'order' => $asc,
                             //'limit'=>intval($day),
                             )
