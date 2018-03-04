@@ -58,14 +58,25 @@ li.selected
     float: right;
 }
 .list-group-item:hover{
-    background-color: aqua !important;
-    color:#000 !important;
+    background-color: #49afcd !important;
+    color:#FFF !important;
+}
+.showPostP{
+    display:block !important;
+}
+#imagePost p{
+    color: #FF0F46;font-size: 16px;margin-left: 15px;position: absolute;bottom: 95px;display: none;
 }
 .list-group selected{
     background-color: #2e3192;
     color:#FFF;
 }
-
+a{
+    text-decoration: none;
+}
+a:hover{
+    text-decoration: none !important;
+}
 .list-group-item ul.children{
     display:none;
     position: absolute;
@@ -77,13 +88,17 @@ li.selected
 
 .list-group-item ul.children li{
     /*border:1px solid #ccc;*/
-    background-color: aqua !important;
+    background-color: #49afcd !important;
     border-radius: 2px;
-    color:#000;
+    color:#FFF;
     margin-top: 0px !important;
     margin-bottom: 0px !important;
 }
-
+a:hover, a:focus {
+	color: #49afcd;
+	text-decoration: underline;
+	color: #FFF !important;
+}
 /* The Modal (background) */
 .modal {
     display: none; /* Hidden by default */

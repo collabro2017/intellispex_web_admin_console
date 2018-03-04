@@ -42,6 +42,7 @@ class ParsePushStatus extends ParseObject
         try {
             // return the associated PushStatus object
             $query = new ParseQuery(self::$parseClassName);
+            print_r($query->get($id, true));exit;
             return $query->get($id, true);
         } catch (ParseException $pe) {
             // no push found

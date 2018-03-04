@@ -112,14 +112,14 @@ class ParsePush
         }
 
         $headers = $response['_headers'];
-
+        
         if (!isset($headers['X-Parse-Push-Status-Id'])) {
             // missing push status id
             return null;
         }
 
         // get our push status id
-        $pushStatusId = $response['_headers']['X-Parse-Push-Status-Id'];
+        echo $pushStatusId = $response['_headers']['X-Parse-Push-Status-Id'];
 
         // return our push status if it exists
         return ParsePushStatus::getFromId($pushStatusId);

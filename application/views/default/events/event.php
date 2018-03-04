@@ -26,13 +26,17 @@
         .list-group-item > .badge {
             float: right;
         }
-        .list-group-item:hover{
-            background-color: #2e3192;
-            color:#FFF;
+        .list-group-item:hover {
+            background-color: #49afcd !important;
+            color: #FFF !important;
+        }
+        
+        .list-group-item:hover a{
+            color: #FFF !important;
         }
         .list-group selected{
-            background-color: #2e3192;
-            color:#FFF;
+            background-color: #49afcd !important;
+            color: #FFF !important;
         }
     </style>
     <body class="login-layout admin-body">
@@ -56,11 +60,11 @@
                                                 <?php
                                             } else {
                                                 ?>
-                                                <div style="position: relative; padding:20px;padding-top:50px; width:95%; min-height: 400px;border: 1px solid #b2b2b2; border-radius: 3px; ">
+                                                <div style="background: #FFF; position: relative; padding:20px;padding-top:50px; width:95%; min-height: 400px;border: 1px solid #b2b2b2; border-radius: 3px; ">
                                                     <?php
                                                 }
                                                 ?>
-                                                <div style="background: #FFF;opacity: 0.7;padding: 10px;padding-left: 20px;width: 40%; margin: auto;text-align: center;border-radius: 3px;">
+                                                <div style="padding: 10px;padding-left: 20px;width: 40%; margin: auto;text-align: center;border-radius: 3px;">
                                                     <h3 style="font-size:20px"><?php echo $event->eventname; ?></h3>
                                                     <?php if (isset($event->company)) { ?>
                                                         <p style="font-size:16px"><?php echo $event->company; ?></p>
@@ -77,7 +81,10 @@
                                                         <p style="font-size:16px"><?php echo $event->country; ?></p>
                                                     <?php } ?>
                                                 </div>
-                                                <ul style="left:10px; position: absolute; bottom: 15px; background: #FFF;opacity: 0.7;width: 111px;height: 38px;border-radius: 3px;">
+                                                <div style="right:10px; position: absolute; bottom: 15px;width: 111px;height: 38px;border-radius: 3px;">
+                                                    <img src="<?php echo base_url()."public/assets/intellispex.png"; ?>" />
+                                                </div>
+                                                <ul style="left:10px; position: absolute; bottom: 15px;width: 111px;height: 38px;border-radius: 3px;">
                                                     <li style="float: left;margin-top: 0px;">
                                                         <img align="middle"  src="<?php echo base_url() ?>public/like.png" style="width:20px;" />&nbsp;&nbsp;<span><?php
                                                             if (isset($event->likeUserArray)) {
@@ -255,10 +262,13 @@
                 }
                 ?>
                                                                         </style>
-
-                                                                        <a  class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $post->title; ?>">
-                                                                            <img style="cursor: pointer" id="eventImage" src="<?php echo $imagePost->url; ?>" />
-                                                                        </a>
+                                                                        <!--<a  class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $post->title; ?>">-->
+                                                                        <div id="imagePost" style="cursor: pointer;background: url('<?php echo $imagePost->url; ?>');height: 400px;width: 100%;background-size: 100% 400px;">
+                                                                            <p>
+                                                                                <?php echo date('Y/m/d H:i', strtotime($post->createdAt)); ?>
+                                                                            </p>
+                                                                        </div>
+                                                                        <!--</a>-->
                                                                         <?php
                                                                     } elseif ($post->postType == 'video') {
                                                                         $video = $post->postFile;
@@ -313,10 +323,14 @@
                 }
                 ?>
                                                                         </style>
-
-                                                                        <a  class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $post->title; ?>">
-                                                                            <img style="cursor: pointer" id="eventImage" src="<?php echo $imagePost->url; ?>" />
-                                                                        </a>
+                                                                        <!--<a  class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $post->title; ?>">-->
+                                                                            
+                                                                        <div id="imagePost" style="cursor: pointer;background: url('<?php echo $imagePost->url; ?>');height: 400px;width: 100%;background-size: 100% 400px;">
+                                                                            <p>
+                                                                                <?php echo date('Y/m/d H:i', strtotime($post->createdAt)); ?>
+                                                                            </p>
+                                                                        </div>
+                                                                        <!--</a>-->
                                                                         <?php
                                                                     }
                                                                 }
@@ -429,10 +443,13 @@
                 }
                 ?>
                                                                         </style>
-
-                                                                        <a  class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $post->title; ?>">
-                                                                            <img style="cursor: pointer" id="eventImage" src="<?php echo $imagePost->url; ?>" />
-                                                                        </a>
+                                                                        <!--<a  class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $post->title; ?>">-->
+                                                                        <div id="imagePost" style="cursor: pointer;background: url('<?php echo $imagePost->url; ?>');height: 400px;width: 100%;background-size: 100% 400px;">
+                                                                            <p>
+                                                                                <?php echo date('Y/m/d H:i', strtotime($post->createdAt)); ?>
+                                                                            </p>
+                                                                        </div>
+                                                                        <!--</a>-->
                                                                         <?php
                                                                     } elseif ($post->postType == 'video') {
                                                                         $video = $post->postFile;
@@ -488,9 +505,17 @@
                 ?>
                                                                         </style>
 
-                                                                        <a  class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $post->title; ?>">
+<!--                                                                        <a  class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $post->title; ?>">
                                                                             <img style="cursor: pointer" id="eventImage" src="<?php echo $imagePost->url; ?>" />
                                                                         </a>
+                                                                        -->
+                                                                        <!--<a  class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $post->title; ?>">-->
+                                                                        <div id="eventImage" style="cursor: pointer;background: url('<?php echo $imagePost->url; ?>');height: 400px;width: 100%;background-size: 100% 400px;">
+                                                                            <p>
+                                                                                <?php echo date('Y/m/d H:i', strtotime($post->createdAt)); ?>
+                                                                            </p>
+                                                                        </div>
+                                                                        <!--</a>-->
                                                                         <?php
                                                                     }
                                                                 }
@@ -659,6 +684,9 @@
                                                     </ul>
                                                 </li>
                                             <?php } ?>
+                                                <li class="list-group-item">
+                                                    <a id="showImagePost" href="#imagePost">Time Stamp</a>
+                                                </li>
                                         </ul>
                                     </div>
                                     <div class="span2">
@@ -901,6 +929,9 @@
         });
         $('#close').on('click', function () {
             $('#update_post_modal').fadeOut();
+        });
+        $('#showImagePost').on('click',function(){
+            $('#imagePost p').toggleClass('showPostP');
         });
         function updatePost(post_id) {
             $('#postId').val(post_id);

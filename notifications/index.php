@@ -32,12 +32,11 @@ $d = new DateTime();
 // Output the date with microseconds.
 $push_time =  $d->format('Y-m-d\TH:i:s.u'); // 2011-01-01T15:03:01.012345
 
+    
     $response = ParsePush::send(array(
         "where" => $query,
         "data" => array(
-          "push_time" => $d->format('Y-m-d\TH:i:s'),
-          "timeZone" => 'America/Chicago',
-          "alert" => "Test Notifications Intellispex 2"
+          "alert" => "Hello, how are you?"
         )
     ),true);
     echo '<pre>';
@@ -46,6 +45,7 @@ $push_time =  $d->format('Y-m-d\TH:i:s.u'); // 2011-01-01T15:03:01.012345
 
         // Retrieve PushStatus object
         $pushStatus = ParsePush::getStatus($response);
+        print_r($pushStatus);
         // get push status string
         $status = $pushStatus->getPushStatus();
         print_r($status);

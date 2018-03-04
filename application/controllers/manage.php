@@ -20,6 +20,19 @@ class manage extends CI_Controller_EX {
         $this->load->library('ParseRestClient');
     }
 
+    public function notifications(){
+        $data['object'] = array(
+                                        'data' => [
+                                            "alert" => "Hi, you there!!!"
+                                        ], 
+                                        'where' => [ "user" => "BA0mmVAiBP" ] 
+                                );
+         $user = $this->parserestclient->notification(
+                $data
+        );
+         print_r($user);
+    }
+
     public function check_login($data = '', $function_name = ' ') {
 
         $session_data = $this->session->userdata('logged_in');

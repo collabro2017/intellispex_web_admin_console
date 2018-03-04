@@ -384,6 +384,16 @@
 					  		}
 								else if($function_name == "SUPPORT REQUEST"){									
 							?>	
+<style>
+    #support_request h3 {
+	font-weight: bold;
+	font-size: 18px;
+	margin: 0;
+    }
+    .buttons{
+        margin-top: 20px;
+    }
+</style>
                                                             <div class="row" id="support_request">
 								<div class="span3"></div>
 								<div class="span6">
@@ -429,7 +439,7 @@
 										</div>
 										<div class="row">
 											<div class="span6"></div>
-											<div class="span6">
+											<div class="span6 buttons">
 												<button type="submit" class="btn btn-small btn-primary btn-info">Submit</button>												
 												<button type="button" onclick="window.history.back();"  class="btn btn-small btn-primary btn-info">Cancel</button>
 											</div>																			

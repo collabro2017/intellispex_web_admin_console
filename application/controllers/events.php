@@ -929,16 +929,34 @@ class events extends CI_Controller_EX {
                                 )
                         ), true));
 
-        $data->event_post = json_decode(json_encode($this->parserestclient->query
-                                (
-                                array
+//        $data->event_post = json_decode(json_encode($this->parserestclient->query
+//                                (
+//                                array
+//                                    (
+//                                    "objectId" => "Post",
+//                                    "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}',
+//                                    'order' => '-postOrder'
+//                                )
+//                        ), true));
+        $data->event_post_ama = json_decode(json_encode($this->parserestclient->query
                                     (
-                                    "objectId" => "Post",
-                                    "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}',
-                                    'order' => '-postOrder'
-                                )
-                        ), true));
-
+                                    array
+                                        (
+                                        "objectId" => "Post",
+                                        "query" => '{"thumbnailPost":1,"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}',
+                                        'order' => 'createdAt,-postOrder'
+                                    )
+                            ), true));
+            $data->event_post = json_decode(json_encode($this->parserestclient->query
+                                    (
+                                    array
+                                        (
+                                        "objectId" => "Post",
+                                        "query" => '{"thumbnailPost":{"$ne":1},"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}',
+                                        'order' => '-postOrder'
+                                    )
+                            ), true));
+            
         $this->load->library('Pdf');
         $pdf = new Pdf(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
@@ -956,7 +974,7 @@ class events extends CI_Controller_EX {
             $html = $this->load->view('default/events/pdfDownload', $data, true);
         }
 // output the HTML content
-
+//echo $html;exit;
         $pdf->setFooterFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
 //            $pdf->SetY($event[0]['eventname']);
 //            $pdf->Cell(0, 10, $event[0]['eventname'], 0, 0, 'C');
@@ -964,7 +982,7 @@ class events extends CI_Controller_EX {
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
         $pdf->setPrintFooter(true);
         $_SESSION['RightText'] = $event->eventname;
-        $_SESSION['CenterText'] = date('Y-m-d', strtotime($event->createdAt));
+        $_SESSION['CenterText'] = date('m-d-Y', strtotime($event->createdAt));
 
         $pdf->writeHTML($html, true, false, true, false, '');
 
@@ -1793,6 +1811,24 @@ class events extends CI_Controller_EX {
                         'order' => '-postOrder'
                     )
             );
+            $data->event_post_ama = json_decode(json_encode($this->parserestclient->query
+                                    (
+                                    array
+                                        (
+                                        "objectId" => "Post",
+                                        "query" => '{"thumbnailPost":1,"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}',
+                                        'order' => 'createdAt,-postOrder'
+                                    )
+                            ), true));
+            $data->event_post = json_decode(json_encode($this->parserestclient->query
+                                    (
+                                    array
+                                        (
+                                        "objectId" => "Post",
+                                        "query" => '{"thumbnailPost":{"$ne":1},"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}',
+                                        'order' => '-postOrder'
+                                    )
+                            ), true));
             $temp_event = $this->parserestclient->query
                     (
                     array
@@ -1815,6 +1851,7 @@ class events extends CI_Controller_EX {
                         "query" => '{"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $id . '","__op":"Add","objects":["totalCount","location"]}}'
                     )
             );
+            
             $data->username = $session_data['username'];
             $data->role = $session_data['role'];
             $data->id = $session_data['id'];

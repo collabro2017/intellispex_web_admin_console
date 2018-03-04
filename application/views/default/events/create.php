@@ -292,7 +292,7 @@
                                                 <td>
                                                     <label class="fileContainer">
                                                         Thumbnail Photo &nbsp;&nbsp; <i class="fa fa-upload"></i>
-                                                        <input required="" name="postImage" id="postImage" onchange="readURL(this);" type="file"/>
+                                                        <input name="postImage" id="postImage" onchange="readURL(this);" type="file"/>
                                                     </label>
                                                 </td>
                                                 <td><img src="#" style="display:none;" id="viewEvent"/></td>
