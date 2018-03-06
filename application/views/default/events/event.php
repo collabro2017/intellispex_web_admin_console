@@ -38,7 +38,16 @@
             background-color: #49afcd !important;
             color: #FFF !important;
         }
+        #imgEvent h3{
+            color:#FFF;
+        }
+        #imgEvent p{
+            color:#FFF;
+        }
     </style>
+    <?php 
+    error_reporting(0)
+    ?>
     <body class="login-layout admin-body">
         <?php $this->load->view('default/nav/console_page.php'); ?>
         <div class="container" id="main-container">
@@ -56,11 +65,11 @@
                                             $image = $event->thumbImage;
                                             $imagePost = $event->postImage;
                                             ?>
-                                            <div style="position: relative; background-size: 100% 100% !important;padding:20px; background: url('<?php echo $imagePost->url; ?>');padding-top:50px; width:94.6%; min-height: 400px;">
+                                            <div id='imgEvent' style="position: relative; background-size: 100% 100% !important;padding:20px; background: url('<?php echo $imagePost->url; ?>');padding-top:50px; width:94.6%; min-height: 400px;">
                                                 <?php
                                             } else {
                                                 ?>
-                                                <div style="background: #FFF; position: relative; padding:20px;padding-top:50px; width:95%; min-height: 400px;border: 1px solid #b2b2b2; border-radius: 3px; ">
+                                                <div id="whiteEvent" style="background: #FFF; position: relative; padding:20px;padding-top:50px; width:95%; min-height: 400px;border: 1px solid #b2b2b2; border-radius: 3px; ">
                                                     <?php
                                                 }
                                                 ?>
@@ -262,14 +271,19 @@
                 }
                 ?>
                                                                         </style>
+                                                                        <?php
+                                                                        list($width, $height, $type, $attr) = getimagesize($imagePost->url);
+                                                                        if(isset($height)){
+                                                                        ?>
                                                                         <!--<a  class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $post->title; ?>">-->
-                                                                        <div id="imagePost" style="cursor: pointer;background: url('<?php echo $imagePost->url; ?>');height: 400px;width: 100%;background-size: 100% 400px;">
+                                                                        <div id="imagePost" style="cursor: pointer;background: url('<?php echo $imagePost->url; ?>');height:  <?php echo $height; ?>px;width: 100%;background-size: 100%  <?php echo $height; ?>px;">
                                                                             <p>
                                                                                 <?php echo date('Y/m/d H:i', strtotime($post->createdAt)); ?>
                                                                             </p>
                                                                         </div>
                                                                         <!--</a>-->
                                                                         <?php
+                                                                        }
                                                                     } elseif ($post->postType == 'video') {
                                                                         $video = $post->postFile;
                                                                         $name = explode('.', basename($video->url));
@@ -324,14 +338,20 @@
                 ?>
                                                                         </style>
                                                                         <!--<a  class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $post->title; ?>">-->
+                                                                            <?php
                                                                             
-                                                                        <div id="imagePost" style="cursor: pointer;background: url('<?php echo $imagePost->url; ?>');height: 400px;width: 100%;background-size: 100% 400px;">
+                                                                        list($width, $height, $type, $attr) = getimagesize($imagePost->url);
+                                                                        
+                                                                        if(isset($height)){
+                                                                            ?>
+                                                                        <div id="imagePost" style="cursor: pointer;background: url('<?php echo $imagePost->url; ?>');height:  <?php echo $height; ?>px;width: 100%;background-size: 100%  <?php echo $height; ?>px;">
                                                                             <p>
                                                                                 <?php echo date('Y/m/d H:i', strtotime($post->createdAt)); ?>
                                                                             </p>
                                                                         </div>
                                                                         <!--</a>-->
                                                                         <?php
+                                                                        }
                                                                     }
                                                                 }
                                                                 ?>
@@ -443,14 +463,20 @@
                 }
                 ?>
                                                                         </style>
+                                                                        <?php
+                                                                            
+                                                                        list($width, $height, $type, $attr) = getimagesize($imagePost->url);
+                                                                        if(isset($height)){
+                                                                            ?>
                                                                         <!--<a  class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $post->title; ?>">-->
-                                                                        <div id="imagePost" style="cursor: pointer;background: url('<?php echo $imagePost->url; ?>');height: 400px;width: 100%;background-size: 100% 400px;">
+                                                                        <div id="imagePost" style="cursor: pointer;background: url('<?php echo $imagePost->url; ?>');height:  <?php echo $height; ?>px;width: 100%;background-size: 100%  <?php echo $height; ?>px;">
                                                                             <p>
                                                                                 <?php echo date('Y/m/d H:i', strtotime($post->createdAt)); ?>
                                                                             </p>
                                                                         </div>
                                                                         <!--</a>-->
                                                                         <?php
+                                                                        }
                                                                     } elseif ($post->postType == 'video') {
                                                                         $video = $post->postFile;
                                                                         $name = explode('.', basename($video->url));
@@ -509,14 +535,20 @@
                                                                             <img style="cursor: pointer" id="eventImage" src="<?php echo $imagePost->url; ?>" />
                                                                         </a>
                                                                         -->
+                                                                        <?php
+                                                                            
+                                                                        list($width, $height, $type, $attr) = getimagesize($imagePost->url);
+                                                                        if(isset($height)){
+                                                                            ?>
                                                                         <!--<a  class="groupPhoto"  href="<?php echo $imagePost->url; ?>" title="<?php echo $post->title; ?>">-->
-                                                                        <div id="eventImage" style="cursor: pointer;background: url('<?php echo $imagePost->url; ?>');height: 400px;width: 100%;background-size: 100% 400px;">
+                                                                        <div id="imagePost" style="cursor: pointer;background: url('<?php echo $imagePost->url; ?>');height: <?php echo $height; ?>px;width: 100%;background-size: 100%  <?php echo $height; ?>px;">
                                                                             <p>
                                                                                 <?php echo date('Y/m/d H:i', strtotime($post->createdAt)); ?>
                                                                             </p>
                                                                         </div>
                                                                         <!--</a>-->
                                                                         <?php
+                                                                        }
                                                                     }
                                                                 }
                                                                 ?>
