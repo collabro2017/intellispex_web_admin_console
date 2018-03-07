@@ -38,15 +38,16 @@
             background-color: #49afcd !important;
             color: #FFF !important;
         }
-        #imgEvent h3{
-            color:#FFF;
+        #imgEvent .event-main-text{
+            background:#FFF;
+            opacity: 0.9;
         }
-        #imgEvent p{
+/*        #imgEvent p{
             color:#FFF;
-        }
+        }*/
     </style>
     <?php 
-    error_reporting(0)
+    error_reporting(0);
     ?>
     <body class="login-layout admin-body">
         <?php $this->load->view('default/nav/console_page.php'); ?>
@@ -73,7 +74,7 @@
                                                     <?php
                                                 }
                                                 ?>
-                                                <div style="padding: 10px;padding-left: 20px;width: 40%; margin: auto;text-align: center;border-radius: 3px;">
+                                                <div class="event-main-text" style="padding: 10px;padding-left: 20px;width: 40%; margin: auto;text-align: center;border-radius: 3px;">
                                                     <h3 style="font-size:20px"><?php echo $event->eventname; ?></h3>
                                                     <?php if (isset($event->company)) { ?>
                                                         <p style="font-size:16px"><?php echo $event->company; ?></p>
@@ -93,7 +94,7 @@
                                                 <div style="right:10px; position: absolute; bottom: 15px;width: 111px;height: 38px;border-radius: 3px;">
                                                     <img src="<?php echo base_url()."public/assets/intellispex.png"; ?>" />
                                                 </div>
-                                                <ul style="left:10px; position: absolute; bottom: 15px;width: 111px;height: 38px;border-radius: 3px;">
+                                                <ul class="event-main-text" style="left:10px; position: absolute; bottom: 15px;width: 111px;height: 38px;border-radius: 3px;">
                                                     <li style="float: left;margin-top: 0px;">
                                                         <img align="middle"  src="<?php echo base_url() ?>public/like.png" style="width:20px;" />&nbsp;&nbsp;<span><?php
                                                             if (isset($event->likeUserArray)) {
@@ -720,6 +721,17 @@
                                                     <a id="showImagePost" href="#imagePost">Time Stamp</a>
                                                 </li>
                                         </ul>
+                                        
+                                        <h3>Organization<?php echo $postOrder;?></h3>
+                                        <form action="<?php echo base_url(); ?>events/event/<?php echo $event->objectId; ?>" method="post">
+                                            <div class="styled" style="right:0;">
+                                                <select name="postOrder" onchange="this.form.submit();">
+                                                    <option value=""> Select </option>
+                                                    <option <?php if($postOrder == 'desc' || $postOrder == ''){ echo 'selected'; }?> value="desc"> Descending </option>
+                                                    <option <?php if($postOrder == 'asc'){ echo 'selected'; }?> value="asc"> Ascending </option>
+                                                </select>
+                                            </div>
+                                        </form>
                                     </div>
                                     <div class="span2">
                                         <a class="btn btn-small btn-primary menu-button menu-logout-button" href="<?php echo base_url(); ?>manage/logout">

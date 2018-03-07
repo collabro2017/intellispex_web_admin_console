@@ -37,7 +37,7 @@ $imagePost = $event->postImage->url;
 <h4><?php echo $event->eventname; ?></h4>
 <p><?php $event->description; ?></p>
 <img width="800" src="<?php echo $imagePost; ?>" alt="<?php echo $event->eventname; ?>" border="0" />
-<div class="span12" style="background: url('<?php echo $imagePost; ?>');height: 400px;width: 600px">
+<div class="span12">
     <?php if (count($event_comment)) { ?>
         <h4> Comments</h4>
         <?php
@@ -63,8 +63,7 @@ $imagePost = $event->postImage->url;
     }
     ?>
 </div>
-
-<div class="span12" style="background: url('<?php echo $imagePost; ?>');height: 400px;width: 600px">
+<div class="span12">
 <?php if(count($event_post_ama) > 0 ){ foreach ($event_post_ama as $post) { ?>
     <h4><?php echo $post->title; ?></h4>
     <?php

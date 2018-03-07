@@ -1,5 +1,6 @@
 <?php
 $imagePost = $event->postImage->url;
+//print_r($event_post);
 ?>
 <style>
     *{
@@ -331,7 +332,7 @@ if (count($event_comment)) {
         }
         ?>
     <?php } } ?><br/><br/>
-<?php if(count($event_post_ama) > 0 ){ foreach ($event_post_ama as $post) { ?>
+<?php if(count($event_post) > 0 ){ foreach ($event_post as $post) { ?>
     <?php
     $event_user = $post->user->objectId;
     $event_user_details = json_decode(json_encode($this->parserestclient->query(array(

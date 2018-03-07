@@ -558,6 +558,17 @@ class events extends CI_Controller_EX {
         $data = new stdClass;
         $session_data = $this->session->userdata('logged_in');
         if ($session_data) {
+            if(isset($_POST['postOrder'])){
+                if($_POST['postOrder'] == 'asc'){
+                    $post_rder = 'postOrder';
+                }else{
+                    $post_rder = '-postOrder';
+                }
+                $data->postOrder = $_POST['postOrder'];
+            }else{
+                $post_rder = '-postOrder';
+                $data->postOrder = '';
+            }
             $data->username = $session_data['username'];
             $data->role = $session_data['role'];
             $data->id = $session_data['id'];
@@ -596,7 +607,7 @@ class events extends CI_Controller_EX {
                                         (
                                         "objectId" => "Post",
                                         "query" => '{"thumbnailPost":1,"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}',
-                                        'order' => 'createdAt,-postOrder'
+                                        'order' => 'createdAt,'.$post_rder
                                     )
                             ), true));
             $data->event_post = json_decode(json_encode($this->parserestclient->query
@@ -605,7 +616,7 @@ class events extends CI_Controller_EX {
                                         (
                                         "objectId" => "Post",
                                         "query" => '{"thumbnailPost":{"$ne":1},"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}',
-                                        'order' => '-postOrder'
+                                        'order' => $post_rder
                                     )
                             ), true));
             if (base_url() == 'http://test.intellispex.com/') {
@@ -938,13 +949,14 @@ class events extends CI_Controller_EX {
 //                                    'order' => '-postOrder'
 //                                )
 //                        ), true));
-        $data->event_post_ama = json_decode(json_encode($this->parserestclient->query
+        $post_rder = '-postOrder';
+$data->event_post_ama = json_decode(json_encode($this->parserestclient->query
                                     (
                                     array
                                         (
                                         "objectId" => "Post",
                                         "query" => '{"thumbnailPost":1,"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}',
-                                        'order' => 'createdAt,-postOrder'
+                                        'order' => 'createdAt,'.$post_rder
                                     )
                             ), true));
             $data->event_post = json_decode(json_encode($this->parserestclient->query
@@ -953,10 +965,10 @@ class events extends CI_Controller_EX {
                                         (
                                         "objectId" => "Post",
                                         "query" => '{"thumbnailPost":{"$ne":1},"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}',
-                                        'order' => '-postOrder'
+                                        'order' => $post_rder
                                     )
                             ), true));
-            
+            ;
         $this->load->library('Pdf');
         $pdf = new Pdf(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
@@ -1313,56 +1325,77 @@ class events extends CI_Controller_EX {
             }else{
                 $data->function_name = "Complete Metadata Download";
                 if (base_url() == 'http://intellispex.com/' || base_url() == 'http://localhost/icymi/') {
-                    $regular_user = 'Di56R0ITXB';
-                } else {
-                    $regular_user = 'XVr1sAmAQl';
-                }
-                $user = $this->parserestclient->query(
-                        array(
-                            "objectId" => "_User",
-                            'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"' . $regular_user . '"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $session_data['mongodb_id'] . '"}}',
-                        )
-                );
-                $associated_user = json_decode(json_encode($user), true);
-                $events = array();
-                $eventId = array();
-                $i = 0;
-                $userArr = array();
-                foreach ($associated_user as $user) {
-                    $userArr[] = $user['objectId'];
-                }
-                $userArr[] = $session_data['mongodb_id'];
+                $regular_user = 'Di56R0ITXB';
+            } else {
+                $regular_user = 'XVr1sAmAQl';
+            }
+            $user = $this->parserestclient->query(
+                    array(
+                        "objectId" => "_User",
+//                        'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"' . $regular_user . '"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $session_data['mongodb_id'] . '"}}',
+                        'query' => '{"user_type":{"__type":"Pointer","className":"_Role","objectId":"' . $regular_user . '"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $session_data['mongodb_id'] . '"}}',
+                    )
+            );
+            $associated_user = json_decode(json_encode($user), true);
+            $events = array();
+            $eventId = array();
+            $i = 0;
+            $userArr = array();
+            foreach ($associated_user as $user) {
+                $userArr[] = $user['objectId'];
+            }
+            $userArr[] = $session_data['mongodb_id'];
+            if (!$day || is_null($day) || $day == "") {
                 $temp = $this->parserestclient->query
                         (
                         array
                             (
                             "objectId" => "Event",
-                            'query' => '{"deletedAt":null, "TagFriends":{"$in":' . json_encode($userArr, true) . '}}',
+                            'query' => '{ "TagFriends":{"$in":' . json_encode($userArr, true) . '}}',
                             'order' => $asc,
                             'limit' => '10000000',
                         )
                 );
-                $event = json_decode(json_encode($temp), true);
-                foreach ($event as $ev) {
-                    if (isset($ev)) {
-                        if ($i == 0) {
-                            $eventId[$i] = $ev['objectId'];
-                            $events[$i] = $ev;
-                        } elseif (!(in_array($ev['objectId'], $eventId))) {
-                            $eventId[$i] = $ev['objectId'];
-                            $events[$i] = $ev;
-                        }
+            } else {
+                $date = date('Y-m-d', strtotime('-' . $day . ' days'));
+                $date = date(DateTime::ISO8601, strtotime($date));
+                $temp = $this->parserestclient->query
+                        (
+                        array
+                            (
+                            "objectId" => "Event",
+                            'query' => '{"createdAt":{"$gte":{"__type":"Date","iso":"' . $date . '"}}, "TagFriends":{"$in":' . json_encode($userArr, true) . '}}',
+                            'order' => $asc,
+                            'limit' => '10000000',
+                        )
+                );
+            }
+            $event = json_decode(json_encode($temp), true);
+            foreach ($event as $ev) {
+                if(isset($ev['deletedAt'])){
+                    if($ev['deletedAt'] != ''){
+                        continue;
                     }
-                    $i++;
                 }
-
-                foreach ($associated_user as $user) {
+                if (isset($ev)) {
+                    if ($i == 0) {
+                        $eventId[$i] = $ev['objectId'];
+                        $events[$i] = $ev;
+                    } elseif (!(in_array($ev['objectId'], $eventId))) {
+                        $eventId[$i] = $ev['objectId'];
+                        $events[$i] = $ev;
+                    }
+                }
+                $i++;
+            }
+            if (!$day || is_null($day) || $day == "") {
+                foreach ($userArr as $user) {
                     $temp = $this->parserestclient->query
                             (
                             array
                                 (
                                 "objectId" => "Event",
-                                'query' => '{"deletedAt":null ,"user":{"__type":"Pointer","className":"_User","objectId":"' . $user['objectId'] . '"}}',
+                                'query' => '{"user":{"__type":"Pointer","className":"_User","objectId":"' . $user . '"}}',
                                 'order' => $asc,
                                 'limit' => 1000000
                             )
@@ -1370,6 +1403,11 @@ class events extends CI_Controller_EX {
                     $event = json_decode(json_encode($temp), true);
                     foreach ($event as $ev) {
                         if (isset($ev)) {
+                            if(isset($ev['deletedAt'])){
+                                if($ev['deletedAt'] != ''){
+                                    continue;
+                                }
+                            }
                             if ($i == 0) {
                                 $eventId[$i] = $ev['objectId'];
                                 $events[$i] = $ev;
@@ -1382,6 +1420,114 @@ class events extends CI_Controller_EX {
                     }
                 }
                 $data->day = "";
+            } else {
+
+                $date = date('Y-m-d', strtotime('-' . $day . ' days'));
+                $date = date(DateTime::ISO8601, strtotime($date));
+                //$date = "2017-06-01T00:00:00.000Z";
+                foreach ($userArr as $user) {
+                    $temp = $this->parserestclient->query
+                            (
+                            array
+                                (
+                                "objectId" => "Event",
+                                //'query'=>'{"deletedAt":null, "createdAt":{"$gt":"'.$date.'"}}',
+                                'query' => '{"deletedAt":null,"createdAt":{"$gte":{"__type":"Date","iso":"' . $date . '"}},"user":{"__type":"Pointer","className":"_User","objectId":"' . $user . '"}}',
+                                'order' => $asc,
+                            //'limit'=>intval($day),
+                            )
+                    );
+                    $event = json_decode(json_encode($temp), true);
+                    foreach ($event as $ev) {
+                        if(isset($ev['deletedAt'])){
+                            if($ev['deletedAt'] != ''){
+                                continue;
+                            }
+                        }
+                        if (isset($ev)) {
+                            if ($i == 0) {
+                                $eventId[$i] = $ev['objectId'];
+                                $events[$i] = $ev;
+                            } elseif (!(in_array($ev['objectId'], $eventId))) {
+                                $eventId[$i] = $ev['objectId'];
+                                $events[$i] = $ev;
+                            }
+                        }
+                        $i++;
+                    }
+                }
+                $data->day = $day;
+            }
+//                if (base_url() == 'http://intellispex.com/' || base_url() == 'http://localhost/icymi/') {
+//                    $regular_user = 'Di56R0ITXB';
+//                } else {
+//                    $regular_user = 'XVr1sAmAQl';
+//                }
+//                $user = $this->parserestclient->query(
+//                        array(
+//                            "objectId" => "_User",
+//                            'query' => '{"deletedAt":null,"user_type":{"__type":"Pointer","className":"_Role","objectId":"' . $regular_user . '"},"associated_with":{"__type":"Pointer","className":"_User","objectId":"' . $session_data['mongodb_id'] . '"}}',
+//                        )
+//                );
+//                $associated_user = json_decode(json_encode($user), true);
+//                $events = array();
+//                $eventId = array();
+//                $i = 0;
+//                $userArr = array();
+//                foreach ($associated_user as $user) {
+//                    $userArr[] = $user['objectId'];
+//                }
+//                $userArr[] = $session_data['mongodb_id'];
+//                $temp = $this->parserestclient->query
+//                        (
+//                        array
+//                            (
+//                            "objectId" => "Event",
+//                            'query' => '{"deletedAt":null, "TagFriends":{"$in":' . json_encode($userArr, true) . '}}',
+//                            'order' => $asc,
+//                            'limit' => '10000000',
+//                        )
+//                );
+//                $event = json_decode(json_encode($temp), true);
+//                foreach ($event as $ev) {
+//                    if (isset($ev)) {
+//                        if ($i == 0) {
+//                            $eventId[$i] = $ev['objectId'];
+//                            $events[$i] = $ev;
+//                        } elseif (!(in_array($ev['objectId'], $eventId))) {
+//                            $eventId[$i] = $ev['objectId'];
+//                            $events[$i] = $ev;
+//                        }
+//                    }
+//                    $i++;
+//                }
+//
+//                foreach ($associated_user as $user) {
+//                    $temp = $this->parserestclient->query
+//                            (
+//                            array
+//                                (
+//                                "objectId" => "Event",
+//                                'query' => '{"deletedAt":null ,"user":{"__type":"Pointer","className":"_User","objectId":"' . $user['objectId'] . '"}}',
+//                                'order' => $asc,
+//                                'limit' => 1000000
+//                            )
+//                    );
+//                    $event = json_decode(json_encode($temp), true);
+//                    foreach ($event as $ev) {
+//                        if (isset($ev)) {
+//                            if ($i == 0) {
+//                                $eventId[$i] = $ev['objectId'];
+//                                $events[$i] = $ev;
+//                            } elseif (!(in_array($ev['objectId'], $eventId))) {
+//                                $eventId[$i] = $ev['objectId'];
+//                                $events[$i] = $ev;
+//                            }
+//                        }
+//                        $i++;
+//                    }
+//                }
+//                $data->day = "";
 
                 $data->page = 'events/index';
                 $data->info = $events; //json_decode(json_encode($temp), true);
@@ -1816,7 +1962,7 @@ class events extends CI_Controller_EX {
                                     array
                                         (
                                         "objectId" => "Post",
-                                        "query" => '{"thumbnailPost":1,"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}',
+                                        "query" => '{"thumbnailPost":1,"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $id . '"}}',
                                         'order' => 'createdAt,-postOrder'
                                     )
                             ), true));
@@ -1825,7 +1971,7 @@ class events extends CI_Controller_EX {
                                     array
                                         (
                                         "objectId" => "Post",
-                                        "query" => '{"thumbnailPost":{"$ne":1},"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $event_id . '"}}',
+                                        "query" => '{"thumbnailPost":{"$ne":1},"targetEvent":{"__type":"Pointer","className":"Event","objectId":"' . $id . '"}}',
                                         'order' => '-postOrder'
                                     )
                             ), true));
